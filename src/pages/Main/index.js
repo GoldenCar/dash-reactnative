@@ -2065,7 +2065,7 @@ export default class App extends React.Component {
                 paddingLeft: 16,
                 paddingRight: 16,
               }} onPress={() => {
-                Actions.ScrollAnimation()
+                Actions.Workout()
               }}>
               <LinearGradient
                 colors={['#007BFF', '#00A1FF']}

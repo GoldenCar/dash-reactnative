@@ -50,6 +50,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     elevation: 1,
     borderRadius: 50,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowRadius: 2,
+    shadowOpacity: 0.5,
   },
   dotsIcon: {
     marginLeft: 5,

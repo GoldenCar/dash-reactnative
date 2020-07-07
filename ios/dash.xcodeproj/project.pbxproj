@@ -21,7 +21,6 @@
 		847835BE84EF4413A96AC41D /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 93E39DC4D2E4458AA439E1B8 /* Poppins-Bold.ttf */; };
 		C7865B9C8EF0620702A49F89 /* libPods-dash.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 015F7BA052207C76121A5DB4 /* libPods-dash.a */; };
 		DE296193DA204B79B86C8901 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E68CFFC9F5C842BDBD8289C8 /* Poppins-Regular.ttf */; };
-		E7BFDBB12404448A86F2C144 /* Summer Loving Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9DA916AF5BF1402A8C131AB2 /* Summer Loving Regular.otf */; };
 		E95737346B97A77CDE77BC07 /* libPods-dash-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F236C56E910AAB9BC348737 /* libPods-dash-tvOSTests.a */; };
 		F630CF34306A16C3D8D84262 /* libPods-dash-dashTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 39F8BAF235C5AE79173C06D2 /* libPods-dash-dashTests.a */; };
 /* End PBXBuildFile section */
@@ -50,7 +49,7 @@
 		015F7BA052207C76121A5DB4 /* libPods-dash.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dash.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		03ABB73B010340C683B14EB2 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		0B3EF97C065B4B1192BB9F65 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* dash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = dash.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* Dash-Fitness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dash-Fitness.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = dash/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = dash/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -83,6 +82,7 @@
 		BBB258584F9A4298A019658F /* Pods-dash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dash.debug.xcconfig"; path = "Target Support Files/Pods-dash/Pods-dash.debug.xcconfig"; sourceTree = "<group>"; };
 		CAD5ECC71D1DDFCFEB3DA998 /* Pods-dash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dash.release.xcconfig"; path = "Target Support Files/Pods-dash/Pods-dash.release.xcconfig"; sourceTree = "<group>"; };
 		D25658DB9B46460EA98B1925 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
+		D96C29C0246805990003766B /* dash.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = dash.entitlements; path = dash/dash.entitlements; sourceTree = "<group>"; };
 		DB2994FDBCEF428E8DCC4AC3 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		E1A436C1DFD145D2AAF72821 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		E23E2BB58F0240E59A462B9B /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
@@ -149,6 +149,7 @@
 		13B07FAE1A68108700A75B9A /* dash */ = {
 			isa = PBXGroup;
 			children = (
+				D96C29C0246805990003766B /* dash.entitlements */,
 				8462DC2E245BC31A00E6A324 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -241,7 +242,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* dash.app */,
+				13B07F961A680F5B00A75B9A /* Dash-Fitness.app */,
 				00E356EE1AD99517003FC87E /* dashTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* dash-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* dash-tvOSTests.xctest */,
@@ -290,7 +291,7 @@
 			);
 			name = dash;
 			productName = dash;
-			productReference = 13B07F961A680F5B00A75B9A /* dash.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* Dash-Fitness.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* dash-tvOS */ = {
@@ -398,7 +399,6 @@
 				847835BE84EF4413A96AC41D /* Poppins-Bold.ttf in Resources */,
 				539FED7AC051424FBD66914F /* Poppins-Medium.ttf in Resources */,
 				DE296193DA204B79B86C8901 /* Poppins-Regular.ttf in Resources */,
-				E7BFDBB12404448A86F2C144 /* Summer Loving Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -499,6 +499,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-dash-dashTests/Pods-dash-dashTests-resources.sh",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -518,6 +519,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
@@ -569,6 +571,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-dash/Pods-dash-resources.sh",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -588,6 +591,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
@@ -784,9 +788,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = dash/dash.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = RZQPL3JSK5;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -794,6 +799,7 @@
 					"FB_SONARKIT_ENABLED=1",
 				);
 				INFOPLIST_FILE = dash/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -801,7 +807,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.test.gtech.org.reactjs.native.example.dash;
-				PRODUCT_NAME = dash;
+				PRODUCT_NAME = "Dash-Fitness";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -815,11 +821,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = dash/dash.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = RZQPL3JSK5;
 				INFOPLIST_FILE = dash/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -827,7 +835,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.test.gtech.org.reactjs.native.example.dash;
-				PRODUCT_NAME = dash;
+				PRODUCT_NAME = "Dash-Fitness";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
