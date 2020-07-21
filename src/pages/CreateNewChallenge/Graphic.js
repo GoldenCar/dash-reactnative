@@ -6,6 +6,7 @@ import {
   Image,
   Text,
   TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 
 import {Add, Check} from 'dash/src/components/Icons';
@@ -17,22 +18,26 @@ const array = [
   {
     default: true,
     value: '1',
-    uri: require('dash/src/res/graphic/1.jpg'),
+    //uri: require('dash/src/res/graphic/1.jpg'),
+    uri:"https://dashchallengesapi.com/static/media/2020-6-10-5-14-33-1.jpg",
   },
   {
     default: true,
     value: '2',
-    uri: require('dash/src/res/graphic/2.jpg'),
+    uri:"https://dashchallengesapi.com/static/media/2020-6-10-5-14-38-2.jpg",
+   // uri: require('dash/src/res/graphic/2.jpg'),
   },
   {
     default: true,
     value: '3',
-    uri: require('dash/src/res/graphic/3.jpg'),
+    uri:"https://dashchallengesapi.com/static/media/2020-6-10-5-14-39-3.jpg",
+    //uri: require('dash/src/res/graphic/3.jpg'),
   },
   {
     default: true,
     value: '4',
-    uri: require('dash/src/res/graphic/4.jpg'),
+    uri:"https://dashchallengesapi.com/static/media/2020-6-10-5-14-40-4.jpg",
+   // uri: require('dash/src/res/graphic/4.jpg'),
   },
 ];
 
@@ -63,16 +68,23 @@ export default function Component(props) {
           <Text style={styles.addText}>Upload</Text>
         </View>
       </TouchableOpacity>
+
+
       {arr.map((value, index) => {
+
+       // console.log(" vale uri ", value.default, value.uri); 
+
         return (
           <TouchableOpacity
             key={index}
             style={styles.item}
             onPress={() => onPress(value)}>
             <Image
-              source={value.default ? value.uri : {uri: value.uri}}
+            // source={value.default ? value.uri : {uri: value.uri}}
+             source={{uri: value.uri}}
               resizeMode="cover"
               style={styles.picture}
+              PlaceholderContent={<ActivityIndicator />}
             />
             {challenge.graphic &&
               ((value.filename &&

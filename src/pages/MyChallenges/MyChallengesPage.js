@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, ScrollView, RefreshControl, Animated} from 'react-native';
+import {View, Text, ScrollView, RefreshControl, Animated, Keyboard} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import _ from 'lodash';
 
@@ -15,6 +15,7 @@ export default class Component extends React.Component {
 
     }
   };
+  
 
   render() {
     const {

@@ -9,11 +9,12 @@ import {
   TouchableWithoutFeedback,
   PanResponder,
   Text,
+  ScrollView
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-
+// import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+//
 import _ from 'lodash';
 
 import FriendItem from 'dash/src/components/FriendItem';
@@ -204,7 +205,7 @@ export default class Component extends React.Component {
                 />
               </Animated.View>
             </Animated.View>
-            <KeyboardAwareScrollView
+            <ScrollView
               contentContainerStyle={{paddingBottom: 20, paddingTop: 40}}
               onScroll={Animated.event(
                 [
@@ -254,7 +255,7 @@ export default class Component extends React.Component {
                   />
                 ))}
               </View>
-            </KeyboardAwareScrollView>
+            </ScrollView>
           </Animated.View>
         </View>
       )

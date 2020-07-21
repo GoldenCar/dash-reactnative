@@ -7,7 +7,8 @@ export default function Component(props) {
   return (
     <View style={styles.container}>
       <SearchTextInput />
-      <TextInput style={[styles.textInput, Platform.OS === 'ios' ? {paddingVertical: 10} :{}]} placeholder={props.placeholder} />
+      <TextInput style={[styles.textInput, Platform.OS === 'ios' ? {paddingVertical: 10} :{}]} 
+      placeholder={props.placeholder} />
     </View>
   );
 }

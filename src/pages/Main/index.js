@@ -14,9 +14,12 @@ import {
   FlatList,
   TouchableHighlight,
   Platform,
+  ImageBackground,
+  ActivityIndicator,
+
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import WorkoutCell from '../../components/WorkoutCell';
 import WorkoutCollapsedCell from '../../components/WorkoutCollapsedCell';
 import WorkoutRestCell from '../../components/WorkoutRestCell';
@@ -24,13 +27,25 @@ import WorkoutIntroCell from '../../components/WorkoutIntroCell';
 import WorkoutCompleteCell from '../../components/WorkoutCompleteCell';
 // import { NavigationContainer } from '@react-navigation/native';
 // import { createStackNavigator } from '@react-navigation/stack';
+import * as planActions from '../../actions/plans';
+import { mediaHost } from '../../config';
+import AsyncStorage from '@react-native-community/async-storage';
 
+console.disableYellowBox = true;
 export const SCREEN_HEIGHT = Dimensions.get('window').height;
 export const SCREEN_WIDTH = Dimensions.get('window').width;
 export const SCREEN_SCALE = Dimensions.get('window').scale;
 
 export const DEFAULT_WINDOW_MULTIPLIER = 0.5;
 export const DEFAULT_NAVBAR_HEIGHT = 65;
+
+const thumbnail_rest_inside_circuit = require('../../res/workout/rest_inside_circuit.png');
+const bgimage_rest_inside_circuit = require('../../res/workoutimage.png');
+
+const thumbnail_rest_outside_circuit = require('../../res/workout/rest_outside_circuit.png');
+const thumbnail_note_card = require('../../res/workout/note_thumbnail.png');
+const thumbnail_old = require('../../res/list_image.png');
+
 
 // const Stack = createStackNavigator();
 
@@ -48,8 +63,34 @@ export default class App extends React.Component {
       showComplete: false,
       ReplaceExcerciseSelectedItem: 1,
       scrollY: new Animated.Value(0),
+      dictTaskDescription: {},
+      loading: false,
+      storiesArray: [],
+      arrayVersionTask: [],
     };
+    this.arrayTasks = [];
+    this.arraySingleTask = [];
+    // this.storiesArray = [];
+    // this.arrayVersionTask = [];
+    this.userSelectedVersion = '';
   }
+
+  componentDidMount = () => {
+    this.getAllTasksOfPlan();
+  }
+
+  getVersion = async () => {
+    let version = '';
+    try {
+      this.userSelectedVersion = await AsyncStorage.getItem('version');
+
+    } catch (error) {
+      // Error retrieving data
+
+    }
+    return version;
+  }
+
   scrollTo(where) {
     if (!this._scrollView) return;
     this._scrollView.scrollTo(where);
@@ -57,41 +98,257 @@ export default class App extends React.Component {
 
   ShowHideComponent = () => {
     if (this.state.show == true) {
-      this.setState({show: false});
+      this.setState({ show: false });
     } else {
-      this.setState({show: true});
+      this.setState({ show: true });
     }
   };
 
   ChangeSwitch = () => {
     if (this.state.isSwitchOn == true) {
-      this.setState({isSwitchOn: false});
+      this.setState({ isSwitchOn: false });
     } else {
-      this.setState({isSwitchOn: true});
+      this.setState({ isSwitchOn: true });
     }
   };
   ShowCoolDownHideComponent = () => {
     if (this.state.showCoolDown == true) {
-      this.setState({showCoolDown: false});
+      this.setState({ showCoolDown: false });
     } else {
-      this.setState({showCoolDown: true});
+      this.setState({ showCoolDown: true });
     }
   };
 
   ChangeCoolDownSwitch = () => {
     if (this.state.isCoolDownSwitchOn == true) {
-      this.setState({isCoolDownSwitchOn: false});
+      this.setState({ isCoolDownSwitchOn: false });
     } else {
-      this.setState({isCoolDownSwitchOn: true});
+      this.setState({ isCoolDownSwitchOn: true });
     }
   };
+
+  getAllTasksOfPlan = async () => {
+    if (this.props.challenge && this.props.challenge.PlanID) {
+
+      this.setState({ loading: true });
+      const arrayResponse = await planActions.getPlanTasks(this.props.challenge.PlanID);
+      this.setState({ loading: false });
+
+      for (let index = 0; index < arrayResponse.planTypeData.length; index++) {
+        const element = arrayResponse.planTypeData[index];
+        //  get the data of user preselected version.
+        if (element.version === this.props.challenge.Version) {
+          this.arrayTasks = element.versionData[0].planVersionDayTaskData;
+          this.setState({ dictTaskDescription: element.versionData[0].planVersionDayTaskData[0] });
+          break;
+        }
+      }
+      if (this.arrayTasks.length > 0) {
+        this.setState({ dictTaskDescription: this.arrayTasks[0] });
+        this.initializeData();
+      }
+    }
+  }
+  getExerciseInformation = async (cardId) => {
+
+    const arrayResponse = await planActions.getExerciseData(cardId)
+    return arrayResponse;
+  }
+
+  initializeData = async () => {
+
+    let arrayCircuitVideos = [];
+    let arrayVideoTimerCircuit = []; // gett the original video time 
+
+    let arrayNormalVideos = [];
+    let arrayVideoTimerNormal = [];
+
+    let dayTasks = this.arrayTasks;
+    let dataTask1 = dayTasks[0];
+    this.setState({ arrayVersionTask: dataTask1 });
+    // this.arrayVersionTask = dataTask1;
+
+    //  Getting videos and set them in the story 
+    for (let index = 0; index < dataTask1.versionDayTaskCard.length; index++) {
+      const element = dataTask1.versionDayTaskCard[index];
+
+      if (element.flag === "circuit") {
+        for (let index = 0; index < element.exeerciseCards.length; index++) {
+          const temp = element.exeerciseCards[index];
+
+          if (temp.flag === "video" && temp.fileName) {
+            let dict = {
+              'fileName': temp.fileName ? temp.fileName : '',
+              "AutoPlay": temp.AutoPlay ? temp.AutoPlay : true,
+              "AutoPlayShowFlag": temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : true, 'flag': temp.flag
+            }
+            arrayCircuitVideos.push(dict);
+            arrayVideoTimerCircuit.push(15);
+
+          } else if (temp.flag === "rest") {
+
+            let dict = { 'flag': temp.flag, 'thumbnailImage': bgimage_rest_inside_circuit, 'RestTime': temp.RestTime, 'title': temp.title }
+            arrayCircuitVideos.push(dict);
+            arrayVideoTimerCircuit.push(15);
+
+          } else if (temp.flag === "note") {
+            let dict = { 'flag': temp.flag, 'thumbnailImage': thumbnail_note_card, 'title': temp.title }
+            arrayCircuitVideos.push(dict);
+            arrayVideoTimerCircuit.push(15);
+
+          }
+          else if (temp.flag === "exercise") {
+
+            this.getExerciseInformation(temp.cardUUID).then((exResponse) => {
+              if (exResponse.exercisesData) {
+
+                for (let index = 0; index < exResponse.exercisesData.length; index++) {
+                  const dict1 = exResponse.exercisesData[index];
+                  if (dict1.EasierVideo_fileName && dict1.EasierVideo_fileName != "") {
+                    let dict = {
+                      'fileName': dict1.EasierVideo_fileName ? dict1.EasierVideo_fileName : '',
+                      "AutoPlay": false,
+                      "AutoPlayShowFlag": false,
+                      'flag': 'video'
+                    }
+                    arrayCircuitVideos.push(dict);
+                    arrayVideoTimerCircuit.push(15);
+
+                  }
+                }
+              }
+            });
+          }
+        }
+      } else {
+
+        if (element.flag === "exercise") {
+
+          console.log(" elem car-------", element.cardUUID);
+          this.getExerciseInformation(element.cardUUID).then((exResponse1) => {
+
+
+            if (exResponse1.exercisesData) {
+
+              console.log(" 233-------", exResponse1.exercisesData.length);
+
+              for (let index = 0; index < exResponse1.exercisesData.length; index++) {
+
+
+                let dict1 = exResponse1.exercisesData[index];
+                console.log(" 239-------", dict1);
+                if (dict1.EasierVideo_fileName && dict1.EasierVideo_fileName != "") {
+
+                  let tempVar = {
+                    'fileName': dict1.EasierVideo_fileName ? dict1.EasierVideo_fileName : '',
+                    "AutoPlay": false,
+                    "AutoPlayShowFlag": false,
+                    'flag': 'video'
+                  }
+
+                  arrayCircuitVideos.push(tempVar);
+                  arrayVideoTimerCircuit.push(15);
+
+                }
+              }
+            }
+
+
+          });
+
+
+        }
+        else if (element.flag === "video" && element.fileName) {
+
+          let dict = {
+            'fileName': element.fileName ? element.fileName : '',
+            "AutoPlay": element.AutoPlay ? element.AutoPlay : '',
+            "AutoPlayShowFlag": element.AutoPlayShowFlag ? element.AutoPlayShowFlag : ''
+          }
+
+          arrayNormalVideos.push(dict);
+          arrayVideoTimerNormal.push(15)
+
+        } else if (element.flag === 'note') {
+          let dict = { 'flag': element.flag, 'thumbnailImage': thumbnail_note_card, 'RestTime': element.RestTime, 'title': element.title }
+          arrayNormalVideos.push(dict);
+          arrayVideoTimerNormal.push(15);
+        }
+        else if (element.flag === "rest") {
+          let dict = { 'flag': element.flag, 'thumbnailImage': thumbnail_rest_outside_circuit, 'RestTime': element.RestTime, 'title': element.title }
+          arrayNormalVideos.push(dict);
+          arrayVideoTimerNormal.push(15);
+
+        }
+      }
+    }
+
+    let stories = [];
+    let userDisplayName = this.props.navigation.state.params.user && this.props.navigation.state.params.user.displayname ? this.props.navigation.state.params.user.displayname : '';
+
+
+    if (arrayCircuitVideos.length > 0 && arrayNormalVideos.length > 0) {
+      stories = [
+        {
+          id: '2',
+          source: require('dash/src/res/friends/friend1.png'),
+          user: userDisplayName,
+          avatar: require('dash/src/res/friends/friend1.png'),
+          timer: arrayVideoTimerCircuit,
+          videos: arrayCircuitVideos,
+          flag: 'circuit'
+        },
+        {
+          id: '4',
+          source: require('dash/src/res/friends/friend1.png'),
+          user: userDisplayName,
+          avatar: require('dash/src/res/friends/friend1.png'),
+          timer: arrayVideoTimerNormal,
+          videos: arrayNormalVideos,
+          flag: 'video'
+        },
+      ]
+    } else if (arrayNormalVideos.length > 0) {
+      stories = [
+
+        {
+          id: '4',
+          source: require('dash/src/res/friends/friend1.png'),
+          user: userDisplayName,
+          avatar: require('dash/src/res/friends/friend1.png'),
+          timer: arrayVideoTimerNormal,
+          videos: arrayNormalVideos,
+          flag: 'video'
+        },
+      ]
+    } else if (arrayCircuitVideos.length > 0) {
+      stories = [
+        {
+          id: '2',
+          source: require('dash/src/res/friends/friend1.png'),
+          user: userDisplayName,
+          avatar: require('dash/src/res/friends/friend1.png'),
+          timer: arrayVideoTimerCircuit,
+          videos: arrayCircuitVideos,
+          flag: 'circuit'
+        },
+      ]
+    } else {
+      // When both are not present 
+      // need to ask client
+    }
+
+    this.setState({ storiesArray: stories });
+
+
+  }
 
   renderReplaceExcercise() {
     return (
       <Modal
         animationType="slide"
         visible={this.state.showReplaceExcercise}
-        onRequestClose={() => this.setState({showReplaceExcercise: false})}
+        onRequestClose={() => this.setState({ showReplaceExcercise: false })}
         transparent>
         <View style={styles.modalContainer}>
           <View
@@ -133,11 +390,11 @@ export default class App extends React.Component {
                   backgroundColor: '',
                 }}
                 onPress={() => {
-                  this.setState({showReplaceExcercise: false});
+                  this.setState({ showReplaceExcercise: false });
                 }}>
                 <Image
                   source={require('../../res/close.png')}
-                  style={{height: 13, width: 13, marginLeft: 16}}></Image>
+                  style={{ height: 13, width: 13, marginLeft: 16 }}></Image>
               </TouchableOpacity>
             </View>
             <View
@@ -148,12 +405,12 @@ export default class App extends React.Component {
               }}
             />
 
-            <View style={{marginTop: 26, marginLeft: 16, marginRight: 16}}>
+            <View style={{ marginTop: 26, marginLeft: 16, marginRight: 16 }}>
               <TouchableOpacity
                 onPress={() =>
-                  this.setState({ReplaceExcerciseSelectedItem: 1})
+                  this.setState({ ReplaceExcerciseSelectedItem: 1 })
                 }>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   <View>
                     <Image
                       style={{
@@ -184,7 +441,7 @@ export default class App extends React.Component {
                       Swiss Ball Torso Twist
                     </Text>
 
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                       <Text
                         style={{
                           color: '#1AA0FF',
@@ -211,13 +468,13 @@ export default class App extends React.Component {
                       }}>
                       <LinearGradient
                         colors={['rgba(0,123,255, 1)', 'rgba(0,161,255, 1)']}
-                        start={{x: 0, y: 1}}
-                        end={{x: 1, y: 1}}
+                        start={{ x: 0, y: 1 }}
+                        end={{ x: 1, y: 1 }}
                         useAngle
                         angle={189.97}
-                        style={{height: 26, width: 26, borderRadius: 13}}>
+                        style={{ height: 26, width: 26, borderRadius: 13 }}>
                         <Image
-                          style={{height: 24, width: 24}}
+                          style={{ height: 24, width: 24 }}
                           source={require('../../res/tick.png')}
                           resizeMode="center"
                         />
@@ -238,9 +495,9 @@ export default class App extends React.Component {
               />
               <TouchableOpacity
                 onPress={() =>
-                  this.setState({ReplaceExcerciseSelectedItem: 2})
+                  this.setState({ ReplaceExcerciseSelectedItem: 2 })
                 }>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   <View>
                     <Image
                       style={{
@@ -271,7 +528,7 @@ export default class App extends React.Component {
                       Swiss Ball Torso Twist
                     </Text>
 
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                       <Text
                         style={{
                           color: '#96AAC6',
@@ -298,13 +555,13 @@ export default class App extends React.Component {
                       }}>
                       <LinearGradient
                         colors={['rgba(0,123,255, 1)', 'rgba(0,161,255, 1)']}
-                        start={{x: 0, y: 1}}
-                        end={{x: 1, y: 1}}
+                        start={{ x: 0, y: 1 }}
+                        end={{ x: 1, y: 1 }}
                         useAngle
                         angle={189.97}
-                        style={{height: 26, width: 26, borderRadius: 13}}>
+                        style={{ height: 26, width: 26, borderRadius: 13 }}>
                         <Image
-                          style={{height: 24, width: 24}}
+                          style={{ height: 24, width: 24 }}
                           source={require('../../res/tick.png')}
                           resizeMode="center"
                         />
@@ -325,9 +582,9 @@ export default class App extends React.Component {
               />
               <TouchableOpacity
                 onPress={() =>
-                  this.setState({ReplaceExcerciseSelectedItem: 3})
+                  this.setState({ ReplaceExcerciseSelectedItem: 3 })
                 }>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                   <View>
                     <Image
                       style={{
@@ -358,7 +615,7 @@ export default class App extends React.Component {
                       Swiss Ball Torso Twist
                     </Text>
 
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                       <Text
                         style={{
                           color: '#96AAC6',
@@ -384,13 +641,13 @@ export default class App extends React.Component {
                       }}>
                       <LinearGradient
                         colors={['rgba(0,123,255, 1)', 'rgba(0,161,255, 1)']}
-                        start={{x: 0, y: 1}}
-                        end={{x: 1, y: 1}}
+                        start={{ x: 0, y: 1 }}
+                        end={{ x: 1, y: 1 }}
                         useAngle
                         angle={189.97}
-                        style={{height: 26, width: 26, borderRadius: 13}}>
+                        style={{ height: 26, width: 26, borderRadius: 13 }}>
                         <Image
-                          style={{height: 24, width: 24}}
+                          style={{ height: 24, width: 24 }}
                           source={require('../../res/tick.png')}
                           resizeMode="center"
                         />
@@ -421,7 +678,7 @@ export default class App extends React.Component {
       <Modal
         animationType="slide"
         visible={this.state.showPyramidSet}
-        onRequestClose={() => this.setState({showPyramidSet: false})}
+        onRequestClose={() => this.setState({ showPyramidSet: false })}
         transparent>
         <View style={styles.modalContainer}>
           <View
@@ -463,11 +720,11 @@ export default class App extends React.Component {
                   backgroundColor: '',
                 }}
                 onPress={() => {
-                  this.setState({showPyramidSet: false});
+                  this.setState({ showPyramidSet: false });
                 }}>
                 <Image
                   source={require('../../res/close.png')}
-                  style={{height: 13, width: 13, marginLeft: 16}}></Image>
+                  style={{ height: 13, width: 13, marginLeft: 16 }}></Image>
               </TouchableOpacity>
             </View>
             <View
@@ -545,7 +802,7 @@ export default class App extends React.Component {
       <Modal
         animationType="slide"
         visible={this.state.showDetail}
-        onRequestClose={() => this.setState({showDetail: false})}
+        onRequestClose={() => this.setState({ showDetail: false })}
         transparent>
         <View style={styles.modalDetailContainer}>
           <View
@@ -575,14 +832,14 @@ export default class App extends React.Component {
                   backgroundColor: '',
                 }}
                 onPress={() => {
-                  this.setState({showDetail: false});
+                  this.setState({ showDetail: false });
                 }}>
                 <Image
                   source={require('../../res/close.png')}
-                  style={{height: 13, width: 13}}></Image>
+                  style={{ height: 13, width: 13 }}></Image>
               </TouchableOpacity>
             </View>
-            <View style={{alignItems: 'center'}}>
+            <View style={{ alignItems: 'center' }}>
               <Text
                 style={{
                   color: '#00A1FF',
@@ -627,11 +884,11 @@ export default class App extends React.Component {
                   backgroundColor: '',
                 }}
                 onPress={() => {
-                  this.setState({showDetail: false});
+                  this.setState({ showDetail: false });
                 }}>
                 <Image
                   source={require('../../res/threeline.png')}
-                  style={{height: 13, width: 18}}></Image>
+                  style={{ height: 13, width: 18 }}></Image>
               </TouchableOpacity>
             </View>
           </View>
@@ -661,7 +918,7 @@ export default class App extends React.Component {
             {/* <WorkoutCompleteCell onPress={this.renderWorkoutComplete} /> */}
             <WorkoutCompleteCell
               onPress={() => {
-                this.setState({showComplete: true});
+                this.setState({ showComplete: true });
               }}
             />
           </ScrollView>
@@ -782,12 +1039,13 @@ export default class App extends React.Component {
   //     </Modal>
   //   )
   // }
+
   renderDetail() {
     return (
       <Modal
         animationType="slide"
         visible={this.state.showDetail}
-        onRequestClose={() => this.setState({showDetail: false})}
+        onRequestClose={() => this.setState({ showDetail: false })}
         transparent>
         <View style={styles.modalDetailContainer}>
           <Image
@@ -803,11 +1061,11 @@ export default class App extends React.Component {
 
           <LinearGradient
             colors={['rgba(196,196,196, .70)', 'rgba(0,0,0, .50)']}
-            start={{x: 0, y: 1}}
-            end={{x: 1, y: 1}}
+            start={{ x: 0, y: 1 }}
+            end={{ x: 1, y: 1 }}
             useAngle
             angle={270.07}
-            style={{flex: 1}}>
+            style={{ flex: 1 }}>
             <View
               style={{
                 flex: 1,
@@ -835,14 +1093,14 @@ export default class App extends React.Component {
                     backgroundColor: '',
                   }}
                   onPress={() => {
-                    this.setState({showDetail: false});
+                    this.setState({ showDetail: false });
                   }}>
                   <Image
                     source={require('../../res/close.png')}
-                    style={{height: 13, width: 13}}></Image>
+                    style={{ height: 13, width: 13 }}></Image>
                 </TouchableOpacity>
               </View>
-              <View style={{alignItems: 'center'}}>
+              <View style={{ alignItems: 'center' }}>
                 <Text
                   style={{
                     color: '#00A1FF',
@@ -887,19 +1145,19 @@ export default class App extends React.Component {
                     backgroundColor: '',
                   }}
                   onPress={() => {
-                    this.setState({showDetail: false});
+                    this.setState({ showDetail: false });
                   }}>
                   <Image
                     source={require('../../res/threeline.png')}
-                    style={{height: 13, width: 18}}></Image>
+                    style={{ height: 13, width: 18 }}></Image>
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={{flex: 5}}>
+            <View style={{ flex: 5 }}>
               <LinearGradient
                 colors={['rgba(0,123,255, 1)', 'rgba(0,161,255, 1)']}
-                start={{x: 0, y: 1}}
-                end={{x: 1, y: 1}}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 1 }}
                 useAngle
                 angle={192.45}
                 style={{
@@ -911,7 +1169,7 @@ export default class App extends React.Component {
                 {/* <WorkoutCell exercise="Rear Dumbell Flies" time="00:22"/> */}
               </LinearGradient>
             </View>
-            <View style={{flex: 1, justifyContent: 'center'}}>
+            <View style={{ flex: 1, justifyContent: 'center' }}>
               {/* <Text  style={{color:"#ffffff",fontSize:18,lineHeight:25,fontStyle:"normal",fontWeight:"bold",fontFamily:"Poppins"}}>Reverse Grip Pull Ups</Text>
                  <Text  style={{color:"#ffffff", marginTop:5,fontSize:18,lineHeight:25,fontStyle:"normal",fontWeight:"bold",fontFamily:"Poppins" }}>15 Reps</Text> */}
               <WorkoutCollapsedCell
@@ -925,17 +1183,226 @@ export default class App extends React.Component {
     );
   }
 
-  render() {
-    // console.disableYellowBox = true;
-    const windowHeight = SCREEN_HEIGHT * DEFAULT_WINDOW_MULTIPLIER;
-    var {scrollY} = this.state;
+
+  returnCellView = (item, isCircuit) => {
+
+    let thumbnailUrl = "";
+
+    if (item.item.flag === "note") {
+      thumbnailUrl = thumbnail_note_card;
+    } else if (item.item.flag === 'rest' && isCircuit) {
+      thumbnailUrl = thumbnail_rest_inside_circuit;
+    } else if (item.item.flag === 'rest') {
+      thumbnailUrl = thumbnail_rest_outside_circuit;
+    } else if (item.item.flag === 'video' && item.item.thumbnailFileName && item.item.thumbnailFileName != "") {
+      thumbnailUrl = { uri: mediaHost + item.item.thumbnailFileName }
+    } else if (item.item.flag === "exercise" && item.item.fileName && item.item.fileName != "") {
+      thumbnailUrl = { uri: mediaHost + item.item.fileName }
+    } else {
+      thumbnailUrl = thumbnail_old;
+    }
+
     return (
-      <View style={styles.mainContainer}>
-        {
- 
-        Platform.OS === 'android' &&        <StatusBar backgroundColor="#0183ff" barStyle="light-content" />
+      <View>
+        <TouchableOpacity
+          onPress={() => this.setState({ showReplaceExcercise: true })}>
+          <View style={{ flexDirection: 'row' }}>
+            <View>
+              <ImageBackground
+                style={{
+                  width: 72,
+                  height: 72,
+                  marginLeft: 16,
+                  marginTop: 11,
+                }}
+                source={thumbnailUrl}
+                PlaceholderContent={<ActivityIndicator />}
+              >
+                {isCircuit ? <View
+                  style={{
+                    backgroundColor: 'white',
+                    width: 20,
+                    height: 20,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 10
+                  }}>
+                  <Text style={{
+                    fontSize: 12,
+                    fontFamily: 'Poppins-Medium',
+                  }}>{item.index + 1}</Text>
+                </View> : null}
+              </ImageBackground>
+            </View>
+
+            <View
+              style={{
+                marginLeft: 16,
+                flexDirection: 'column',
+                marginTop: 11,
+                alignSelf: 'center',
+
+                flexShrink: 1,
+              }}>
+              <Text
+                style={{
+                  color: '#292E3A',
+                  fontSize: 16,
+                  fontFamily: 'Poppins-Bold',
+                  lineHeight: 24,
+                  paddingRight: '2%'
+                }}>
+                {item.item.title}
+              </Text>
+
+              {item.item.RepsCount ? <View style={{ flexDirection: 'row' }}>
+                <Text
+                  style={{
+                    color: '#96AAC6',
+                    fontSize: 15,
+                    fontFamily: 'Poppins-Medium',
+                    lineHeight: 24,
+
+                  }}>
+                  {/* 4 Rounds */}
+                </Text>
+                <Text
+                  style={{
+                    color: '#1AA0FF',
+                    fontSize: 15,
+                    fontFamily: 'Poppins-Medium',
+                    marginLeft: 12,
+                    lineHeight: 24,
+                  }}>
+                  {item.item.RepsCount + " " + item.item.Reps}
+                </Text>
+              </View> : null}
+            </View>
+
+            <View
+              style={{
+                marginLeft: 16,
+                marginTop: 11,
+                height: 20,
+                flex: 1,
+                alignItems: 'flex-end',
+                marginRight: 16,
+                alignSelf: 'center',
+              }}>
+              <Image
+                style={{ height: 20, width: 20 }}
+                source={require('../../res/setticon.png')}
+              />
+            </View>
+          </View>
+        </TouchableOpacity>
+      </View >
+    )
+  }
+
+  renderSubItem = (item, index) => {
+
+    return (
+      <View>
+        {this.returnCellView(item, true)}
+      </View>
+    )
+  }
+
+
+  renderItemTasks = (item, index) => {
+
+    // console.log("renderItemTasks-", item);
+
+    return (
+      <View>
+        {item.item.exeerciseCards && item.item.exeerciseCards.length > 0 ?
+
+          <View style={{ flexDirection: 'row' }}>
+
+            <Image
+              style={{
+                marginLeft: 16, marginTop: 15,
+              }}
+              source={require('../../res/arrowline.png')}
+            />
+            <View style={{ flex: 0.98 }}>
+              <View style={{ flexDirection: 'row' }}>
+                <Text
+                  style={{
+                    fontFamily: 'Poppins-Bold',
+                    lineHeight: 28,
+                    fontSize: 22,
+                    fontStyle: 'normal',
+                    marginLeft: 22,
+                    marginTop: 15,
+                  }}>
+                  Circuit
+                    </Text>
+                <TouchableOpacity
+                  onPress={() => this.setState({ showPyramidSet: true })}>
+                  <Text
+                    style={{
+                      fontFamily: 'Poppins-Bold',
+                      color: '#1AA0FF',
+                      textAlign: 'center',
+                      paddingTop: 3,
+                      width: 28,
+                      height: 28,
+                      borderRadius: 40,
+                      marginLeft: 10,
+                      fontSize: 16,
+                      // fontWeight: 'bold',
+                      marginTop: 14,
+                      backgroundColor: '#F0F5FA',
+                    }}>
+                    ?
+                      </Text>
+                </TouchableOpacity>
+              </View>
+              {item.item.Cycles && item.item.Cycles > 0 ? <Text
+                style={{
+                  fontFamily: 'Poppins-Medium',
+                  fontSize: 17,
+                  fontStyle: 'normal',
+                  marginLeft: 22,
+                  color: 'rgb(129,147,177)',
+                  fontWeight: 'bold'
+                }}>{item.item.Cycles + " "}Rounds</Text> : null}
+              <FlatList
+                data={item.item.exeerciseCards}
+                renderItem={this.renderSubItem}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </View>
+          </View>
+          :
+          <View>
+            {this.returnCellView(item, false)}
+          </View>
         }
 
+        <View
+          style={{
+            borderBottomColor: '#F0F5FA',
+            borderBottomWidth: 1,
+            marginTop: 29,
+          }}
+        />
+      </View>
+    )
+
+  }
+
+
+  render() {
+    const windowHeight = SCREEN_HEIGHT * DEFAULT_WINDOW_MULTIPLIER;
+    var { scrollY, loading } = this.state;
+    //console.log(" this.st---", this.storiesArray); 
+    console.log(this.state.storiesArray)
+
+    return (
+      <View style={styles.mainContainer}>
         <View style={styles.header}>
           <Animated.Image
             style={[
@@ -959,34 +1426,33 @@ export default class App extends React.Component {
               },
             ]}
             resizeMode="cover"
-            source={require('../../res/header_img.png')}>
-            {/* <Image source={require('./res/header_img.png')} style={styles.header} /> */}
+            backgroundColor={"#22B3FF"}
+
+          >
           </Animated.Image>
+
           <TouchableOpacity style={styles.back} onPress={() => Actions.pop()}>
             <Image
               style={styles.backButton}
               source={require('../../res/back.png')}
             />
           </TouchableOpacity>
-          <View style={styles.save}>
-            <Image
-              style={styles.saveButton}
-              source={require('../../res/save.png')}
-            />
-          </View>
+
         </View>
 
-        <ScrollView
+        {!loading ? <ScrollView
           ref={(component) => {
             this._scrollView = component;
           }}
           onScroll={Animated.event([
-            {nativeEvent: {contentOffset: {y: this.state.scrollY}}},
+            { nativeEvent: { contentOffset: { y: this.state.scrollY } } },
           ])}
           scrollEventThrottle={16}
-          style={{position: 'absolute', top: 0, bottom: 0, width: '100%'}}
+          style={{ position: 'absolute', top: 0, bottom: 0, width: '100%' }}
           showsVerticalScrollIndicator={false}>
-          <View style={{flexDirection: 'column', flex: 1, paddingBottom: 116}}>
+
+          <View style={{ flexDirection: 'column', flex: 1, paddingBottom: 116 }}>
+
             <Animated.View
               style={{
                 opacity: scrollY.interpolate({
@@ -998,21 +1464,9 @@ export default class App extends React.Component {
                   outputRange: [1, 1, 0],
                 }),
               }}>
-              <View style={{marginTop: 180}}>
-                <Text
-                  style={{
-                    color: '#FDFDFD',
-                    fontSize: 14,
-                    fontStyle: 'normal',
-                    letterSpacing: 1.6,
-                    fontWeight: 'bold',
-                    fontFamily: 'Poppins',
-                    fontStyle: 'normal',
-                    fontWeight: 'bold',
-                    marginLeft: 16,
-                  }}>
-                  TODAY'S WORKOUT
-                </Text>
+
+              <View style={{ marginTop: 80, }}>
+
                 <Text
                   style={{
                     color: '#FDFDFD',
@@ -1021,50 +1475,27 @@ export default class App extends React.Component {
                     marginLeft: 16,
                     marginTop: 8,
                   }}>
-                  Full Body Attack
+                  Day 1
                 </Text>
-                <View style={{flex: 1, flexDirection: 'row', marginTop: 10}}>
-                  <Text
-                    style={{
-                      color: '#FFFFFF',
-                      fontSize: 12,
-                      fontWeight: '600',
-                      fontStyle: 'normal',
-                      lineHeight: 30,
-                      fontFamily: 'Poppins',
-                      marginLeft: 16,
-                      backgroundColor: 'rgba(11,11,11,.32)',
-                      paddingLeft: 12,
-                      paddingRight: 13,
-                      textAlign: 'center',
-                      borderRadius: 40,
-                      paddingTop: 1,
-                    }}>
-                    25 Mins
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#FFFFFF',
-                      fontSize: 12,
-                      fontWeight: '600',
-                      fontStyle: 'normal',
-                      lineHeight: 30,
-                      fontFamily: 'Poppins',
-                      marginLeft: 16,
-                      backgroundColor: 'rgba(11,11,11,.32)',
-                      paddingLeft: 12,
-                      paddingRight: 13,
-                      textAlign: 'center',
-                      paddingTop: 1,
-                      borderRadius: 40,
-                    }}>
-                    Intesity {'\u25cf'}
-                    {'\u25cf'}
-                    {'\u25cf'}
-                  </Text>
-                </View>
+
+                <Text
+                  style={{
+                    color: '#FDFDFD',
+                    fontSize: 16,
+                    fontStyle: 'normal',
+                    fontFamily: 'Poppins',
+                    fontStyle: 'normal',
+                    marginLeft: 16,
+                    marginTop: -1
+                  }}>
+                  {this.state.dictTaskDescription &&
+                    this.state.dictTaskDescription.taskTitle ?
+                    this.state.dictTaskDescription.taskTitle : ''}
+                </Text>
+
               </View>
             </Animated.View>
+
             <View
               style
               style={{
@@ -1075,100 +1506,16 @@ export default class App extends React.Component {
                 borderTopRightRadius: 30,
                 marginTop: 33,
               }}>
-              <View style style={{marginTop: 31, flexDirection: 'row'}}>
-                <Text
-                  style={{
-                    fontFamily: 'Poppins',
-                    color: '#25292E',
-                    marginLeft: 16,
-                    fontWeight: 'bold',
-                    fontSize: 22,
-                    lineHeight: 28,
-                  }}>
-                  Warm Up
-                </Text>
 
-                <TouchableOpacity
-                  style={{width: 22, height: 22, top: 5, left: 15}}
-                  onPress={this.ShowHideComponent}>
-                  {this.state.show ? (
-                    <Image
-                      style={{
-                        tintColor: '#586178',
-                        width: 22,
-                        height: 22,
-                        transform: [{rotate: '180deg'}],
-                      }}
-                      source={require('../../res/down.png')}
-                    />
-                  ) : (
-                    <Image
-                      style={{tintColor: '#586178', width: 22, height: 22}}
-                      source={require('../../res/down.png')}
-                    />
-                  )}
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={this.ChangeSwitch}
-                  style={{
-                    alignContent: 'center',
-                    width: 57,
-                    height: 32,
-                    borderRadius: 120,
-                    right: 0,
-                    position: 'absolute',
-                    alignSelf: 'center',
-                    marginRight: 16,
-                  }}>
-                  {this.state.isSwitchOn ? (
-                    <View
-                      style={{
-                        backgroundColor: '#0181ff',
-                        alignContent: 'center',
-                        width: 57,
-                        height: 32,
-                        borderRadius: 120,
-                        right: 0,
-                        position: 'absolute',
-                        alignSelf: 'center',
-                      }}>
-                      <View
-                        style={{
-                          width: 28,
-                          height: 28,
-                          backgroundColor: '#FFFFFF',
-                          borderRadius: 14,
-                          alignSelf: 'flex-end',
-                          marginRight: 2,
-                          marginTop: 2,
-                        }}></View>
-                    </View>
-                  ) : (
-                    <View
-                      style={{
-                        backgroundColor: '#BDBDBD',
-                        alignContent: 'center',
-                        width: 57,
-                        height: 32,
-                        borderRadius: 120,
-                        right: 0,
-                        position: 'absolute',
-                        alignSelf: 'center',
-                      }}>
-                      <View
-                        style={{
-                          width: 28,
-                          height: 28,
-                          backgroundColor: '#FFFFFF',
-                          borderRadius: 14,
-                          alignSelf: 'flex-start',
-                          marginLeft: 2,
-                          marginTop: 2,
-                        }}></View>
-                    </View>
-                  )}
-                </TouchableOpacity>
+              <View>
+                {/* First all tasks  */}
+                <View>
+                  <FlatList
+                    data={this.state.dictTaskDescription.versionDayTaskCard}
+                    renderItem={this.renderItemTasks}
+                    keyExtractor={(item, index) => index.toString()}
+                  />
+                </View>
               </View>
 
               <View
@@ -1178,866 +1525,19 @@ export default class App extends React.Component {
                   marginTop: 29,
                 }}
               />
-
-              {this.state.show ? (
-                <View>
-                  <TouchableOpacity
-                    onPress={() => this.setState({showReplaceExcercise: true})}>
-                    <View style={{flexDirection: 'row', marginTop: 16}}>
-                      <View>
-                        <Image
-                          style={{
-                            width: 72,
-                            height: 72,
-                            marginLeft: 16,
-                            marginTop: 11,
-                          }}
-                          source={require('../../res/list_image.png')}
-                        />
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          flexDirection: 'column',
-                          marginTop: 11,
-                          alignSelf: 'center',
-                        }}>
-                        <Text
-                          style={{
-                            color: '#292E3A',
-                            fontSize: 16,
-                            fontFamily: 'Poppins-Bold',
-                            lineHeight: 24,
-                          }}>
-                          Swiss Ball Torso Twist
-                        </Text>
-
-                        <View style={{flexDirection: 'row'}}>
-                          <Text
-                            style={{
-                              color: '#96AAC6',
-                              fontSize: 15,
-                              fontFamily: 'Poppins-Medium',
-                              lineHeight: 24,
-                            }}>
-                            4 Rounds
-                          </Text>
-                          <Text
-                            style={{
-                              color: '#1AA0FF',
-                              fontSize: 15,
-                              fontFamily: 'Poppins-Medium',
-                              marginLeft: 12,
-                              lineHeight: 24,
-                            }}>
-                            15 Reps
-                          </Text>
-                        </View>
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          marginTop: 11,
-                          height: 20,
-                          flex: 1,
-                          alignItems: 'flex-end',
-                          marginRight: 16,
-                          alignSelf: 'center',
-                        }}>
-                        <Image
-                          style={{height: 20, width: 20}}
-                          source={require('../../res/setticon.png')}
-                        />
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                  <View
-                    style={{
-                      marginLeft: 16,
-                      marginRight: 16,
-                      borderBottomColor: '#F0F5FA',
-                      borderBottomWidth: 1,
-                      marginTop: 16,
-                      marginBottom: 16,
-                    }}
-                  />
-                  <TouchableOpacity
-                    onPress={() => this.setState({showReplaceExcercise: true})}>
-                    <View style={{flexDirection: 'row'}}>
-                      <View>
-                        <Image
-                          style={{
-                            width: 72,
-                            height: 72,
-                            marginLeft: 16,
-                            marginTop: 11,
-                          }}
-                          source={require('../../res/list_image.png')}
-                        />
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          flexDirection: 'column',
-                          marginTop: 11,
-                          alignSelf: 'center',
-                        }}>
-                        <Text
-                          style={{
-                            color: '#292E3A',
-                            fontSize: 16,
-                            fontFamily: 'Poppins-Bold',
-                            lineHeight: 24,
-                          }}>
-                          Swiss Ball Torso Twist
-                        </Text>
-
-                        <View style={{flexDirection: 'row'}}>
-                          <Text
-                            style={{
-                              color: '#96AAC6',
-                              fontSize: 15,
-                              fontFamily: 'Poppins-Medium',
-                              lineHeight: 24,
-                            }}>
-                            4 Rounds
-                          </Text>
-                          <Text
-                            style={{
-                              color: '#1AA0FF',
-                              fontSize: 15,
-                              fontFamily: 'Poppins-Medium',
-                              marginLeft: 12,
-                              lineHeight: 24,
-                            }}>
-                            15 Reps
-                          </Text>
-                        </View>
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          marginTop: 11,
-                          height: 20,
-                          flex: 1,
-                          alignItems: 'flex-end',
-                          marginRight: 16,
-                          alignSelf: 'center',
-                        }}>
-                        <Image
-                          style={{height: 20, width: 20}}
-                          source={require('../../res/setticon.png')}
-                        />
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                  <View
-                    style={{
-                      marginLeft: 16,
-                      marginRight: 16,
-                      borderBottomColor: '#F0F5FA',
-                      borderBottomWidth: 1,
-                      marginTop: 16,
-                      marginBottom: 16,
-                    }}
-                  />
-                  <TouchableOpacity
-                    onPress={() => this.setState({showReplaceExcercise: true})}>
-                    <View style={{flexDirection: 'row'}}>
-                      <View>
-                        <Image
-                          style={{
-                            width: 72,
-                            height: 72,
-                            marginLeft: 16,
-                            marginTop: 11,
-                          }}
-                          source={require('../../res/list_image.png')}
-                        />
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          flexDirection: 'column',
-                          marginTop: 11,
-                          alignSelf: 'center',
-                        }}>
-                        <Text
-                          style={{
-                            color: '#292E3A',
-                            fontSize: 16,
-                            fontFamily: 'Poppins-Bold',
-                            lineHeight: 24,
-                          }}>
-                          Swiss Ball Torso Twist
-                        </Text>
-
-                        <View style={{flexDirection: 'row'}}>
-                          <Text
-                            style={{
-                              color: '#96AAC6',
-                              fontSize: 15,
-                              fontFamily: 'Poppins-Medium',
-                              lineHeight: 24,
-                            }}>
-                            4 Rounds
-                          </Text>
-                          <Text
-                            style={{
-                              color: '#1AA0FF',
-                              fontSize: 15,
-                              fontFamily: 'Poppins-Medium',
-                              marginLeft: 12,
-                              lineHeight: 24,
-                            }}>
-                            15 Reps
-                          </Text>
-                        </View>
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          marginTop: 11,
-                          height: 20,
-                          flex: 1,
-                          alignItems: 'flex-end',
-                          marginRight: 16,
-                          alignSelf: 'center',
-                        }}>
-                        <Image
-                          style={{height: 20, width: 20}}
-                          source={require('../../res/setticon.png')}
-                        />
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                  <View
-                    style={{
-                      marginLeft: 16,
-                      marginRight: 16,
-                      borderBottomColor: '#F0F5FA',
-                      borderBottomWidth: 2,
-                      marginTop: 16,
-                      marginBottom: 16,
-                    }}
-                  />
-                </View>
-              ) : null}
-
-              <View
-                style={{
-                  borderBottomColor: '#F0F5FA',
-                  borderBottomWidth: 16,
-                  marginTop: 16,
-                  marginBottom: 16,
-                }}
-              />
-
-              <View style={{flexDirection: 'row'}}>
-                <Image
-                  style={{marginLeft: 16, marginTop: 15, resizeMode: 'stretch'}}
-                  source={require('../../res/arrowline.png')}
-                />
-                <View style={{flexDirection: 'column', flex: 1}}>
-                  <View style={{flexDirection: 'row'}}>
-                    <Text
-                      style={{
-                        fontFamily: 'Poppins-Medium',
-                        lineHeight: 28,
-                        fontSize: 22,
-                        fontStyle: 'normal',
-                        marginLeft: 22,
-                        marginTop: 15,
-                      }}>
-                      Pyramid Set
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => this.setState({showPyramidSet: true})}>
-                      <Text
-                        style={{
-                          fontFamily: 'Poppins',
-                          color: '#1AA0FF',
-                          textAlign: 'center',
-                          paddingTop: 3,
-                          width: 22,
-                          height: 22,
-                          borderRadius: 40,
-                          marginLeft: 10,
-                          fontSize: 12,
-                          marginTop: 17,
-                          backgroundColor: '#F0F5FA',
-                        }}>
-                        ?
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  <Text
-                    style={{
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      marginTop: 4,
-                      lineHeight: 24,
-                      color: '#6F80A7',
-                      marginLeft: 22,
-                      fontSize: 12,
-                    }}>
-                    5 Rounds
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => this.setState({showReplaceExcercise: true})}
-                    style={{
-                      shadowColor: '#000',
-                      shadowOffset: {width: 0, height: 1},
-                      shadowOpacity: 0.8,
-                      shadowRadius: 2,
-                      elevation: 6,
-                    }}>
-                    <View style={{flexDirection: 'row'}}>
-                      <View>
-                        <Image
-                          style={{
-                            width: 72,
-                            height: 72,
-                            marginLeft: 22,
-                            marginTop: 11,
-                          }}
-                          source={require('../../res/list_image.png')}
-                        />
-                        <Text
-                          style={{
-                            fontFamily: 'Poppins',
-                            position: 'absolute',
-                            marginLeft: 14,
-                            marginTop: 4,
-                            fontWeight: 'bold',
-                            color: '#292E3A',
-                            textAlign: 'center',
-                            paddingTop: 3,
-                            width: 22,
-                            height: 22,
-                            borderRadius: 40,
-                            fontSize: 12,
-                            backgroundColor: '#FFFFFF',
-                          }}>
-                          1
-                        </Text>
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          flexDirection: 'column',
-                          marginTop: 11,
-                          alignSelf: 'center',
-                        }}>
-                        <Text
-                          style={{
-                            color: '#292E3A',
-                            fontSize: 16,
-                            fontFamily: 'Poppins-Bold',
-                            lineHeight: 24,
-                          }}>
-                          Treadmill Walk 2
-                        </Text>
-                        <Text
-                          style={{
-                            color: '#1AA0FF',
-                            fontSize: 15,
-                            fontFamily: 'Poppins-Medium',
-                            lineHeight: 24,
-                          }}>
-                          12-15 Reps
-                        </Text>
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          marginTop: 11,
-                          height: 20,
-                          flex: 1,
-                          alignItems: 'flex-end',
-                          marginRight: 16,
-                          alignSelf: 'center',
-                        }}>
-                        <Image
-                          style={{height: 20, width: 20}}
-                          source={require('../../res/setticon.png')}
-                        />
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                  <View
-                    style={{
-                      marginLeft: 16,
-                      marginRight: 16,
-                      borderBottomColor: '#F0F5FA',
-                      borderBottomWidth: 1,
-                      marginTop: 16,
-                      marginBottom: 16,
-                    }}
-                  />
-                  <TouchableOpacity
-                    onPress={() => this.setState({showReplaceExcercise: true})}>
-                    <View style={{flexDirection: 'row'}}>
-                      <View>
-                        <Image
-                          style={{width: 72, height: 72, marginLeft: 22}}
-                          source={require('../../res/list_image.png')}
-                        />
-                        <Text
-                          style={{
-                            fontFamily: 'Poppins',
-                            position: 'absolute',
-                            marginLeft: 14,
-                            fontWeight: 'bold',
-                            marginTop: -4,
-                            color: '#292E3A',
-                            textAlign: 'center',
-                            paddingTop: 3,
-                            width: 22,
-                            height: 22,
-                            borderRadius: 40,
-                            fontSize: 12,
-                            backgroundColor: '#FFFFFF',
-                          }}>
-                          2
-                        </Text>
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          flexDirection: 'column',
-                          alignSelf: 'center',
-                        }}>
-                        <Text
-                          style={{
-                            color: '#292E3A',
-                            fontSize: 16,
-                            fontFamily: 'Poppins-Bold',
-                            lineHeight: 24,
-                          }}>
-                          Reverse EZ-bar Curl
-                        </Text>
-                        <Text
-                          style={{
-                            color: '#1AA0FF',
-                            fontSize: 15,
-                            fontFamily: 'Poppins-Medium',
-                            lineHeight: 24,
-                          }}>
-                          12-15 Reps
-                        </Text>
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          height: 20,
-                          flex: 1,
-                          alignItems: 'flex-end',
-                          marginRight: 16,
-                          alignSelf: 'center',
-                        }}>
-                        <Image
-                          style={{height: 20, width: 20}}
-                          source={require('../../res/setticon.png')}
-                        />
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                  <View
-                    style={{
-                      marginLeft: 16,
-                      marginRight: 16,
-                      borderBottomColor: '#F0F5FA',
-                      borderBottomWidth: 1,
-                      marginTop: 16,
-                      marginBottom: 16,
-                    }}
-                  />
-                  <TouchableOpacity
-                    onPress={() => this.setState({showReplaceExcercise: true})}>
-                    <View style={{flexDirection: 'row'}}>
-                      <View>
-                        <Image
-                          style={{width: 72, height: 72, marginLeft: 22}}
-                          source={require('../../res/list_image.png')}
-                        />
-                        <Text
-                          style={{
-                            fontFamily: 'Poppins',
-                            position: 'absolute',
-                            marginLeft: 14,
-                            marginTop: -4,
-                            fontWeight: 'bold',
-                            color: '#292E3A',
-                            textAlign: 'center',
-                            paddingTop: 3,
-                            width: 22,
-                            height: 22,
-                            borderRadius: 40,
-                            fontSize: 12,
-                            backgroundColor: '#FFFFFF',
-                          }}>
-                          3
-                        </Text>
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          flexDirection: 'column',
-                          alignSelf: 'center',
-                        }}>
-                        <Text
-                          style={{
-                            color: '#292E3A',
-                            fontSize: 16,
-                            fontFamily: 'Poppins-Bold',
-                            lineHeight: 24,
-                          }}>
-                          Swiss Ball Torso Twist
-                        </Text>
-                        <Text
-                          style={{
-                            color: '#1AA0FF',
-                            fontSize: 15,
-                            fontFamily: 'Poppins-Medium',
-                            lineHeight: 24,
-                          }}>
-                          12-15 Reps
-                        </Text>
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          marginTop: 11,
-                          height: 20,
-                          flex: 1,
-                          alignItems: 'flex-end',
-                          marginRight: 16,
-                          alignSelf: 'center',
-                        }}>
-                        <Image
-                          style={{height: 20, width: 20}}
-                          source={require('../../res/setticon.png')}
-                        />
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View
-                style={{
-                  marginLeft: 20,
-                  marginRight: 16,
-                  borderBottomColor: '#F0F5FA',
-                  borderBottomWidth: 1,
-                  marginTop: 16,
-                }}
-              />
-              <View
-                style={{
-                  borderBottomColor: '#F0F5FA',
-                  borderBottomWidth: 16,
-                  marginTop: 16,
-                  marginBottom: 16,
-                }}
-              />
-              <View
-                style
-                style={{
-                  marginTop: 31,
-                  flexDirection: 'row',
-                  alignContent: 'center',
-                }}>
-                <Text
-                  style={{
-                    fontFamily: 'Poppins-Medium',
-                    color: '#25292E',
-                    marginLeft: 16,
-                    fontWeight: 'bold',
-                    fontSize: 22,
-                    lineHeight: 28,
-                  }}>
-                  Cool Down
-                </Text>
-
-                <TouchableOpacity
-                  style={{width: 28, height: 28, top: 3, left: 15}}
-                  onPress={this.ShowCoolDownHideComponent}>
-                  {this.state.showCoolDown ? (
-                    <Image
-                      style={{
-                        tintColor: '#586178',
-                        width: 22,
-                        height: 22,
-                        transform: [{rotate: '180deg'}],
-                      }}
-                      source={require('../../res/down.png')}
-                    />
-                  ) : (
-                    <Image
-                      style={{tintColor: '#586178', width: 22, height: 22}}
-                      source={require('../../res/down.png')}
-                    />
-                  )}
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={this.ChangeCoolDownSwitch}
-                  style={{
-                    alignContent: 'center',
-                    width: 57,
-                    height: 32,
-                    borderRadius: 120,
-                    right: 0,
-                    position: 'absolute',
-                    alignSelf: 'center',
-                    marginRight: 16,
-                  }}>
-                  {this.state.isCoolDownSwitchOn ? (
-                    <View
-                      style={{
-                        backgroundColor: '#0181ff',
-                        alignContent: 'center',
-                        width: 57,
-                        height: 32,
-                        borderRadius: 120,
-                        right: 0,
-                        position: 'absolute',
-                        alignSelf: 'center',
-                      }}>
-                      <View
-                        style={{
-                          width: 28,
-                          height: 28,
-                          backgroundColor: '#FFFFFF',
-                          borderRadius: 14,
-                          alignSelf: 'flex-end',
-                          marginRight: 2,
-                          marginTop: 2,
-                        }}></View>
-                    </View>
-                  ) : (
-                    <View
-                      style={{
-                        backgroundColor: '#BDBDBD',
-                        alignContent: 'center',
-                        width: 57,
-                        height: 32,
-                        borderRadius: 120,
-                        right: 0,
-                        position: 'absolute',
-                        alignSelf: 'center',
-                      }}>
-                      <View
-                        style={{
-                          width: 28,
-                          height: 28,
-                          backgroundColor: '#FFFFFF',
-                          borderRadius: 14,
-                          alignSelf: 'flex-start',
-                          marginLeft: 2,
-                          marginTop: 2,
-                        }}></View>
-                    </View>
-                  )}
-                </TouchableOpacity>
-              </View>
-
-              <View
-                style={{
-                  borderBottomColor: '#F0F5FA',
-                  borderBottomWidth: 1,
-                  marginTop: 29,
-                }}
-              />
-
-              {this.state.showCoolDown ? (
-                <View>
-                  <TouchableOpacity
-                    onPress={() => this.setState({showReplaceExcercise: true})}>
-                    <View style={{flexDirection: 'row', marginTop: 16}}>
-                      <View>
-                        <Image
-                          style={{
-                            width: 72,
-                            height: 72,
-                            marginLeft: 16,
-                            marginTop: 11,
-                          }}
-                          source={require('../../res/list_image.png')}
-                        />
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          flexDirection: 'column',
-                          marginTop: 11,
-                          alignSelf: 'center',
-                        }}>
-                        <Text
-                          style={{
-                            color: '#292E3A',
-                            fontSize: 16,
-                            fontFamily: 'Poppins-Bold',
-                            lineHeight: 24,
-                          }}>
-                          Swiss Ball Torso Twist
-                        </Text>
-
-                        <View style={{flexDirection: 'row'}}>
-                          <Text
-                            style={{
-                              color: '#96AAC6',
-                              fontSize: 15,
-                              fontFamily: 'Poppins-Medium',
-                              lineHeight: 24,
-                            }}>
-                            4 Rounds
-                          </Text>
-                          <Text
-                            style={{
-                              color: '#1AA0FF',
-                              fontSize: 15,
-                              fontFamily: 'Poppins-Medium',
-                              marginLeft: 12,
-                              lineHeight: 24,
-                            }}>
-                            15 Reps
-                          </Text>
-                        </View>
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          marginTop: 11,
-                          height: 20,
-                          flex: 1,
-                          alignItems: 'flex-end',
-                          marginRight: 16,
-                          alignSelf: 'center',
-                        }}>
-                        <Image
-                          style={{height: 20, width: 20}}
-                          source={require('../../res/setticon.png')}
-                        />
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                  <View
-                    style={{
-                      marginLeft: 16,
-                      marginRight: 16,
-                      borderBottomColor: '#F0F5FA',
-                      borderBottomWidth: 1,
-                      marginTop: 16,
-                      marginBottom: 16,
-                    }}
-                  />
-                  <TouchableOpacity
-                    onPress={() => this.setState({showReplaceExcercise: true})}>
-                    <View style={{flexDirection: 'row'}}>
-                      <View>
-                        <Image
-                          style={{
-                            width: 72,
-                            height: 72,
-                            marginLeft: 16,
-                            marginTop: 11,
-                          }}
-                          source={require('../../res/list_image.png')}
-                        />
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          flexDirection: 'column',
-                          marginTop: 11,
-                          alignSelf: 'center',
-                        }}>
-                        <Text
-                          style={{
-                            color: '#292E3A',
-                            fontSize: 16,
-                            fontFamily: 'Poppins-Bold',
-                            lineHeight: 24,
-                          }}>
-                          Swiss Ball Torso Twist
-                        </Text>
-
-                        <View style={{flexDirection: 'row'}}>
-                          <Text
-                            style={{
-                              color: '#96AAC6',
-                              fontSize: 15,
-                              fontFamily: 'Poppins-Medium',
-                              lineHeight: 24,
-                            }}>
-                            4 Rounds
-                          </Text>
-                          <Text
-                            style={{
-                              color: '#1AA0FF',
-                              fontSize: 15,
-                              fontFamily: 'Poppins-Medium',
-                              marginLeft: 12,
-                              lineHeight: 24,
-                            }}>
-                            15 Reps
-                          </Text>
-                        </View>
-                      </View>
-
-                      <View
-                        style={{
-                          marginLeft: 16,
-                          marginTop: 11,
-                          height: 20,
-                          flex: 1,
-                          alignItems: 'flex-end',
-                          marginRight: 16,
-                          alignSelf: 'center',
-                        }}>
-                        <Image
-                          style={{height: 20, width: 20}}
-                          source={require('../../res/setticon.png')}
-                        />
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                  <View
-                    style={{
-                      marginLeft: 16,
-                      marginRight: 16,
-                      borderBottomColor: '#F0F5FA',
-                      borderBottomWidth: 1,
-                      marginTop: 16,
-                      marginBottom: 16,
-                    }}
-                  />
-                </View>
-              ) : null}
             </View>
           </View>
+
         </ScrollView>
+          :
+          <View style={{ marginTop: 30 }}>
+            <ActivityIndicator size="large" color="#1AA0FF" />
+          </View>
+        }
         <LinearGradient
           colors={['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 1)']}
-          start={{x: 0, y: 1}}
-          end={{x: 1, y: 1}}
+          start={{ x: 0, y: 1 }}
+          end={{ x: 1, y: 1 }}
           useAngle
           angle={180}
           style={{
@@ -2049,24 +1549,36 @@ export default class App extends React.Component {
             height: 120,
           }}>
           <TouchableOpacity
-            onPress={() => this.setState({showDetail: true})}
+            onPress={() => {
+             
+              this.setState({ showDetail: true })
+            }
+            }
             style={{
               position: 'absolute',
               bottom: 0,
               left: 0,
               right: 0,
+              zIndex: 999,
               height: 64,
             }}>
-              <TouchableOpacity  style={{
-                height: 64,
-                alignItems: 'center',
-                bottom: 26,
-                width: '100%',
-                paddingLeft: 16,
-                paddingRight: 16,
-              }} onPress={() => {
-                Actions.Workout()
-              }}>
+            <TouchableOpacity style={{
+              height: 64,
+              alignItems: 'center',
+              bottom: 26,
+              width: '100%',
+              zIndex: 999,
+              paddingLeft: 16,
+              paddingRight: 16,
+            }} onPress={() => {
+             
+              Actions.Workout({
+                arrayVersionTask:this.state.arrayVersionTask,
+                stories: this.state.storiesArray,
+                challenge: this.props.challenge,
+                user: this.props.user
+              })
+            }}>
               <LinearGradient
                 colors={['#007BFF', '#00A1FF']}
                 style={{
@@ -2100,9 +1612,10 @@ export default class App extends React.Component {
           //this.renderWorkoutComplete()
         }
       </View>
-    );
+    )
   }
 }
+
 
 const styles = StyleSheet.create({
   mainContainer: {

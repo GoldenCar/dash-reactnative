@@ -22,6 +22,7 @@ export default class Component extends React.Component {
     visible: false,
   };
   open = () => {
+   
     this.setState(
       {
         visible: true,

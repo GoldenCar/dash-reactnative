@@ -58,7 +58,7 @@ function Component(props) {
     if (commit) {
       try {
         setLoading(true);
-        Keyboard.dismiss();
+       
         await PostsActions.addCommit({
           editPostID: value._id,
           commitDetails: text,

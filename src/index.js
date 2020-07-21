@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView} from 'react-native';
+import {SafeAreaView, Keyboard} from 'react-native';
 import {Router, Scene, Reducer} from 'react-native-router-flux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -28,6 +28,7 @@ import InviteFriends from 'dash/src/pages/ChallengeDetail/InviteFriends';
 
 import PostPage from 'dash/src/pages/ChallengeDetail/Social/PostPage';
 import CreatePost from 'dash/src/pages/ChallengeDetail/Social/CreatePost';
+import Completed from './pages/Workout/Completed';
 
 import Workout from 'dash/src/pages/Workout/index';
 
@@ -40,6 +41,7 @@ import ProfileDetailPopup from './pages/MyChallenges/ProfileDetailPopup';
 
 import * as settingsActions from 'dash/src/actions/settings';
 import * as userActions from 'dash/src/actions/user';
+import NewView from './pages/Workout/NewView';
 
 import themes from './themes';
 EStyleSheet.build(themes.light);
@@ -65,6 +67,7 @@ export default () => {
         userActions.getCurrentUser();
       }
       setLoading(false);
+     
     };
     init();
   }, []);
@@ -75,11 +78,18 @@ export default () => {
           <>
             <Router createReducer={createReducer}>
               <Scene key="root" hideNavBar>
+              {/* <Scene 
+                     initial 
+                     key="HomePage1" 
+                     component={NewView} 
+                      /> */}
                 <Scene
-                  initial
+                    initial
                   key="HomePage"
                   tabs={true}
                   tabBarComponent={CustomTabBar}>
+                   
+
                   <Scene key="MyProfile">
                     <Scene key="Profile" component={Profile} hideNavBar />
                     <Scene key="Friends" component={Friends} hideNavBar />
@@ -147,6 +157,7 @@ export default () => {
                 <Scene key="PostPage" component={PostPage} hideNavBar />
                 <Scene key="CreatePost" component={CreatePost} hideNavBar />
                 <Scene key="Workout" component={Workout} hideNavBar />
+                <Scene key="Completed" component={Completed} hideNavBar />
               </Scene>
             </Router>
             <ProfileDetailPopup ref={(e) => (ProfileDetailPopupRef = e)} />

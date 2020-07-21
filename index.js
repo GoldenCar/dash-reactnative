@@ -1,10 +1,12 @@
 /**
  * @format
  */
-
-import {AppRegistry} from 'react-native';
+// apk pwd dash123
+import { AppRegistry, FlatList, Platform } from 'react-native';
 import Application from './src';
 
-import {name as appName} from './app.json';
+import { name as appName } from './app.json';
 
 AppRegistry.registerComponent(appName, () => Application);
+
+//AppRegistry.registerComponent(appName, () => App);

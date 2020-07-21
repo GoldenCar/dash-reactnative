@@ -40,12 +40,14 @@ class Component extends React.Component {
       outputRange: [-10, 0],
       extrapolate: 'clamp',
     });
+
     return (
       <TouchableWithoutFeedback onPress={() => Actions.MyChallengesTab()}>
         <Animated.View
           style={[
             styles.addContainer,
             {
+              transform: [{scale}],
               transform: [{scale}, {translateY}],
             },
           ]}>

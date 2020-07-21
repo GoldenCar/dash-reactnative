@@ -5,6 +5,8 @@ import {Actions} from 'react-native-router-flux';
 import Challenge from 'dash/src/components/Challenge';
 
 export default function Component(props) {
+ 
+
   return props.array.map((value) => (
     <TouchableWithoutFeedback
       key={value._id}

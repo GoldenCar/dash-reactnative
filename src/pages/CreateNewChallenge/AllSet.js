@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -23,25 +23,34 @@ export default function Component(props) {
     loading,
     createdChallenge,
   } = props;
+  useEffect(() => {
+    // console.log('user:', user);
+    // console.log('createdChallenge:', createdChallenge);
+    // console.log('createdChallenge:', createdChallenge);
+    // console.log('challenge:', challenge);
+  }, []);
   const callback = () => {
     createChallenge();
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.item}>
         {challenge.graphic && (
           <Image
-            source={
-              challenge.graphic.default
-                ? challenge.graphic.uri
-                : {uri: challenge.graphic.uri}
-            }
+            // source={
+            //   challenge.graphic.default
+            //     ? challenge.graphic.uri
+            //     : {uri: challenge.graphic.uri}
+            // }
+            source={{uri: challenge.graphic.uri}}
             resizeMode="cover"
             style={styles.picture}
+            PlaceholderContent={<ActivityIndicator />}
           />
         )}
       </View>
-      <Text style={styles.title}>Laurens 30 Day Workout</Text>
+      <Text style={styles.title}>{user && user.displayname? user.displayname:''} 30 Day Workout</Text>
       <Text style={styles.title}>Challenge</Text>
       {!user && (
         <>

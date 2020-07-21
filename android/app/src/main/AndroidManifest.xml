@@ -15,10 +15,10 @@
       <activity
         android:name="com.fitnessfer.MainActivity"
         android:label="@string/app_name"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-        android:launchMode="singleTask"
-        android:screenOrientation="portrait"
-        android:windowSoftInputMode="stateVisible|adjustResize">
+          android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+          android:launchMode="singleTask"
+          android:screenOrientation="portrait"
+          android:windowSoftInputMode="stateAlwaysHidden">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />

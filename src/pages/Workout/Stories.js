@@ -9,8 +9,9 @@ import {
 } from 'react-native';
 
 import Story from './Story';
+import { Actions } from 'react-native-router-flux';
 
-const {width} = Dimensions.get('screen');
+const { width } = Dimensions.get('screen');
 const height = Dimensions.get('screen').height - StatusBar.currentHeight;
 const perspective = width;
 const angle = Math.atan(perspective / (width / 2));
@@ -32,7 +33,7 @@ export default class Stories extends React.PureComponent {
   }
 
   componentDidMount() {
-    const {x} = this.state;
+    const { x } = this.state;
     this.storiesItem[0]?.current.countDown();
     x.addListener(() =>
       this.stories.forEach((story, index) => {
@@ -66,10 +67,10 @@ export default class Stories extends React.PureComponent {
 
         const style = {
           transform: [
-            {perspective},
-            {translateX},
-            {rotateY},
-            {translateX: translateX2},
+            { perspective },
+            { translateX },
+            { rotateY },
+            { translateX: translateX2 },
           ],
         };
         const translateXContainer = x
@@ -79,32 +80,64 @@ export default class Stories extends React.PureComponent {
             extrapolate: 'clamp',
           })
           .__getValue();
-        this.storiesContainer.current.setNativeProps({
-          style: {
-            transform: [
-              {
-                translateX: translateXContainer,
-              },
-            ],
-          },
-        });
-        story.current.setNativeProps({style});
+
+          console.log("this.props.stories. ", this.props.stories);
+        if (this.props.stories.length>1) {
+          this.storiesContainer.current.setNativeProps({
+            style: {
+              transform: [
+                {
+                  translateX: translateXContainer,
+                },
+              ],
+            },
+          });
+        } else {
+          this.storiesContainer.current.setNativeProps({
+            style: {
+              transform: [
+                {
+                  translateX: 0,
+                },
+              ],
+            },
+          });
+        }
+        story.current.setNativeProps({ style });
       }),
     );
   }
 
   nextStory = () => {
-    if (this.currentStory === this.stories.length - 1) return;
+
+    console.log(" in nextStory story ===",  this.props.stories[this.currentStory]);
+  
+    if (this.currentStory === this.stories.length - 1) {
+      Actions.Completed({challenge: this.props.challenge, user: this.props.user, isTaskCompleted: true})
+      return;
+    }
+
     this.currentStory = this.currentStory + 1;
-    this.storiesItem[this.currentStory]?.current.countDown();
-    this.scroll.current.scrollTo({
-      x: this.currentStory * width,
-      animated: true,
-    });
-    this.storiesItem[this.currentStory - 1]?.current.stop();
+// If next video is empty 
+    if (this.props.stories[this.currentStory].videos.length>0) {
+      this.storiesItem[this.currentStory]?.current.countDown();
+      this.scroll.current.scrollTo({
+        x: this.currentStory * width,
+        animated: true,
+      });
+      this.storiesItem[this.currentStory - 1]?.current.stop();
+    }else{
+      Actions.Completed({challenge: this.props.challenge, user: this.props.user, isTaskCompleted: true})
+      return;
+    }
+
+   
   };
 
   prevStory = () => {
+
+    console.log(" in pre story ===", this.currentStory);
+
     if (this.currentStory === 0) return;
     this.currentStory = this.currentStory - 1;
     this.storiesItem[this.currentStory]?.current.countDown();
@@ -115,9 +148,11 @@ export default class Stories extends React.PureComponent {
     this.storiesItem[this.currentStory + 1]?.current.stop();
   };
 
-  render() {
-    const {x} = this.state;
-    const {stories} = this.props;
+  render()
+   {
+    const { x } = this.state;
+    const { stories } = this.props;
+      console.log(" stories ,me ", this.props.stories ); 
     return (
       <View style={styles.container}>
         <Animated.ScrollView
@@ -135,41 +170,46 @@ export default class Stories extends React.PureComponent {
               this.storiesItem[prevStoryIndex]?.current.stop();
             }
           }}
-          contentContainerStyle={{width: width * stories.length}}
+          contentContainerStyle={{ width: width * stories.length }}
           onScroll={Animated.event(
             [
               {
                 nativeEvent: {
-                  contentOffset: {x},
+                  contentOffset: { x },
                 },
               },
             ],
-            {useNativeDriver: true},
+            { useNativeDriver: true },
           )}
           decelerationRate={0.99}
           horizontal>
+         
           <View
-            ref={this.storiesContainer}
+           ref={this.storiesContainer}
             style={{
               position: 'absolute',
               width,
               height,
+              
             }}>
             {stories
               .map((story, i) => (
                 <Animated.View
                   ref={this.stories[i]}
-                  style={{...StyleSheet.absoluteFillObject, width, height}}
+                 style={{ ...StyleSheet.absoluteFillObject, width, height }}
                   key={story.id}>
                   <Story
                     ref={this.storiesItem[i]}
-                    {...{story}}
+                    story={story}
+                    isCircuit={story.flag === 'circuit' ? true : false}
+                    dayTasks={this.props.dayTasks}
                     nextStory={this.nextStory}
                     prevStory={this.prevStory}
                   />
                 </Animated.View>
               ))
-              .reverse()}
+               .reverse()
+              }
           </View>
         </Animated.ScrollView>
       </View>

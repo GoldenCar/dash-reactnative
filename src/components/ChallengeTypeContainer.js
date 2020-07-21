@@ -11,7 +11,7 @@ import Video from 'react-native-video';
 const {height, width} = Dimensions.get('screen');
 
 export default function Component(props) {
-  const {item, containerStyle, onPress} = props;
+  const {item, containerStyle, onPress, nextTitle = 'Select Plan'} = props;
   const Touch = onPress ? TouchableOpacity : View;
   const [play, setPlay] = useState(false);
   const [load, setLoad] = useState(false);
@@ -49,12 +49,13 @@ export default function Component(props) {
             }
 
             <View style={styles.videoBox}>
-              {!load?
+              {
+              console.log(" item.planVideo=====", item.planVideo),
+              !load?
                 <View style={styles.videoLoaded}>
                   <ActivityIndicator size="large" color="#ffffff"/>
                   <Text style={styles.loadingText}>Loading...</Text>
                 </View>
-
               :
                 null
               }
@@ -77,7 +78,7 @@ export default function Component(props) {
               <View style={styles.bottomBox}>
                 <Text style={styles.itemTitle}>{item.title}</Text>
                 <TouchableOpacity style={styles.selectPlanBox} onPress={onPress}>
-                  <Text style={styles.selectText}>Select Plan</Text>
+                  <Text style={styles.selectText}>{nextTitle}</Text>
                   <Ionicon name={'md-arrow-forward'} color="#000000" size={20} />
                 </TouchableOpacity>
               </View>
@@ -97,6 +98,7 @@ export default function Component(props) {
         <Text style={styles.typeName}>{item.title}</Text>
         <Text style={styles.typeDescription}>{item.description}</Text>
       </View>
+      {props.children}
     </Touch>
   );
 }

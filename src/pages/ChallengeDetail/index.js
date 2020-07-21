@@ -6,28 +6,30 @@ import {
   Text,
   TouchableOpacity,
   Easing,
+  BackHandler,
   ScrollView,
 } from 'react-native';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 
-import {BackArrow, AddUser} from 'dash/src/components/Icons';
-import {InviteFriendsRef} from 'dash/src/index';
+import { BackArrow, AddUser } from 'dash/src/components/Icons';
+import { InviteFriendsRef } from 'dash/src/index';
 
 import * as UserActions from 'dash/src/actions/user';
 
 import Challenge from './Challenge';
 import Social from './Social';
 import PopupPost from './Social/PopupPost';
+import IconEntypo from 'react-native-vector-icons/Entypo';
 
-const {width, height} = Dimensions.get('screen');
+const { width, height } = Dimensions.get('screen');
 
 class Component extends React.Component {
   constructor(props) {
     super(props);
-    const {challenge, user} = this.props;
+    const { challenge, user } = this.props;
 
     this.state = {
       index: 0,
@@ -38,18 +40,34 @@ class Component extends React.Component {
   PopupPostRef;
   position = new Animated.Value(0);
   HorizontalScrollRef;
+
+  backAction = () => {
+    Actions.MyChallengesTab();
+    return false;
+  };
+
+  componentWillUnmount() {
+    this.backHandler.remove();
+  }
+
   componentDidMount = async () => {
     try {
-      const {challenge, user} = this.props;
+      const { challenge, user } = this.props;
       if (user._id !== challenge.createdBy) {
         const userData = await UserActions.getUserById(challenge.createdBy);
-        this.setState({user: userData});
+        this.setState({ user: userData });
       }
-    } catch (e) {}
+    } catch (e) { }
+
+    //  Android back button 
+    this.backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      this.backAction
+    );
   };
   onChangeTab = (index) => {
     if (this.state.index !== index) {
-      this.setState({index}, () => {
+      this.setState({ index }, () => {
         if (index !== 0) {
           this.position.setValue(0);
           Animated.timing(this.position, {
@@ -67,12 +85,12 @@ class Component extends React.Component {
             useNativeDriver: false,
           }).start();
         }
-        this.HorizontalScrollRef.scrollTo({x: index * width, animated: true});
+        this.HorizontalScrollRef.scrollTo({ x: index * width, animated: true });
       });
     }
   };
   onScrollEndDrag = (e) => {
-    const {index} = this.state;
+    const { index } = this.state;
     if (index === 0) {
       if (e.nativeEvent.contentOffset.x < 75) {
         this.onChangeTab(0);
@@ -94,7 +112,7 @@ class Component extends React.Component {
     if (press) {
       this.onChangeTab(index);
     }
-    this.setState({index}, () => {
+    this.setState({ index }, () => {
       if (this.position._value === 0) {
         this.position.setValue(0);
         Animated.timing(this.position, {
@@ -115,8 +133,10 @@ class Component extends React.Component {
     });
   };
   render() {
-    const {index, user} = this.state;
-    const {challenge} = this.props;
+    const { index, user } = this.state;
+    const { challenge } = this.props;
+    console.log(" challenge is ", challenge);
+
     const right = this.position.interpolate({
       inputRange: [0, 1],
       outputRange: ['50%', '0%'],
@@ -130,7 +150,9 @@ class Component extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.back} onPress={() => Actions.pop()}>
+          <TouchableOpacity style={styles.back} onPress={() => {
+            Actions.MyChallengesTab();
+          }}>
             <BackArrow />
           </TouchableOpacity>
           <View style={styles.containerHeader}>
@@ -144,7 +166,7 @@ class Component extends React.Component {
               ]}
             />
 
-            {[{title: 'Challenge'}, {title: 'Social'}].map((value, i) => (
+            {[{ title: 'Challenge' }, { title: 'Social' }].map((value, i) => (
               <TouchableOpacity
                 key={i}
                 style={[styles.item]}
@@ -154,8 +176,8 @@ class Component extends React.Component {
                     styles.tabText,
                     i === index
                       ? {
-                          color: 'black',
-                        }
+                        color: 'black',
+                      }
                       : {},
                   ]}>
                   {value.title}
@@ -179,10 +201,10 @@ class Component extends React.Component {
           onScrollEndDrag={this.onScrollEndDrag}
           showsHorizontalScrollIndicator={false}
           ref={(e) => (this.HorizontalScrollRef = e)}>
-          <View style={{width, height}}>
+          <View style={{ width, height }}>
             <Challenge challenge={challenge} user={user} />
           </View>
-          <View style={{width, height}}>
+          <View style={{ width, height }}>
             <Social
               user={user}
               challenge={challenge}
@@ -195,11 +217,18 @@ class Component extends React.Component {
             <Text style={styles.nextDayTitle}>Your NEXT TASK</Text>
             <Text style={styles.nextDaySubtitle}>Day 23: Arm Day</Text>
           </View>
-          <TouchableOpacity
-            style={styles.startContainer}
-            onPress={() => Actions.Main()}>
-            <Text style={styles.start}>Start</Text>
-          </TouchableOpacity>
+          {this.props.isTaskCompleted ?
+            <View
+              style={styles.circleButton}>
+              <IconEntypo name="check"
+                color="white"
+                style={{ fontSize: 20, fontFamily: 'Poppins-Bold', }} />
+            </View>
+            : <TouchableOpacity
+              style={styles.startContainer}
+              onPress={() => Actions.Main({ challenge: challenge, user: user })}>
+              <Text style={styles.start}>Start</Text>
+            </TouchableOpacity>}
         </View>
         <PopupPost ref={(e) => (this.PopupPostRef = e)} />
       </View>
@@ -207,7 +236,7 @@ class Component extends React.Component {
   }
 }
 
-export default connect(({user}) => ({
+export default connect(({ user }) => ({
   user,
 }))(Component);
 
@@ -216,6 +245,14 @@ const styles = EStyleSheet.create({
     fontSize: 16,
     fontFamily: 'Poppins-Bold',
     color: 'black',
+  },
+  circleButton: {
+    width: 40, height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '$lightBlue',
+
   },
   nextDayTitle: {
     fontSize: 14,

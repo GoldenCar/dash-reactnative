@@ -6,6 +6,7 @@ import {
   Text,
   Animated,
   TouchableOpacity,
+  
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -15,6 +16,7 @@ import LightButton from 'dash/src/components/LightButton';
 
 import Header from './Header';
 import TimeTillChallenge from './TimeTillChallenge';
+
 
 const {height} = Dimensions.get('window');
 
@@ -40,9 +42,11 @@ const array = [
 export default class Component extends React.Component {
   AuthPopupRef;
   ScrollViewAnimation = new Animated.Value(0);
-  componentDidMount() {}
+
+  
   render() {
     const {challenge, user} = this.props;
+   
     return (
       <View style={styles.container}>
         <Header
@@ -69,6 +73,7 @@ export default class Component extends React.Component {
                 marginTop: height / 2 - 20,
               },
             ]}>
+              
             <View style={[styles.paddingHorizontal, {paddingTop: 10}]}>
               <Text style={styles.title}>{challenge.title}</Text>
               <View style={styles.hostedByContainer}>

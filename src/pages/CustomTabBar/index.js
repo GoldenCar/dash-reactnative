@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, TouchableOpacity, Image} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, TouchableOpacity, Image, Keyboard} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -29,6 +29,8 @@ function Component(props) {
   const {user} = props;
   const {state} = props.navigation;
   const activeTabIndex = state.index;
+  
+
   const getUserAvatar = () => {
     if (user && user.profileImage && user.profileImage.length > 0) {
       return (
@@ -80,6 +82,7 @@ function Component(props) {
                 ScrollViewRef.scrollTo({x: 0, y: 0, animated: true});
               Actions.MyProfile();
             } else {
+              console.log(" elese osmsfsmf")
               AuthPopupRef.open();
             }
           }}>

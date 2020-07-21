@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const host = 'https://www.dashchallengesapi.com/mobileapi';
+export const host = 'https://www.dashchallengesapi.com/mobileapi';
 const adminHost = 'https://www.dashchallengesapi.com/adminapi'
 
 export const mediaHost = 'https://www.dashchallengesapi.com/static/media/';

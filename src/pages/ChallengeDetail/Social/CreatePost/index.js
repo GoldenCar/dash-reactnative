@@ -6,9 +6,10 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+// import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {connect} from 'react-redux';
 
 import NavBar from 'dash/src/components/NavBar';
@@ -107,7 +108,7 @@ class Component extends React.Component {
             </View>
           }
         />
-        <KeyboardAwareScrollView
+        <ScrollView
           contentContainerStyle={styles.contentContainerStyle}
           enableOnAndroid={true}
           extraScrollHeight={100}>
@@ -149,7 +150,7 @@ class Component extends React.Component {
               </TouchableOpacity>
             </View>
           )}
-        </KeyboardAwareScrollView>
+        </ScrollView>
         {!picture && (
           <AddFile
             onPress={(picture) => {

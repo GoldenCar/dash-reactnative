@@ -53,6 +53,9 @@ export const loginGoogleUser = async ({id_token, username}) => {
     id_token,
     username,
   });
+  
+  console.log(" id_token ------", id_token, " user name ======", username); 
+
   api.defaults.headers.common.Authorization = `Bearer ${response.data.user_token}`;
   AsyncStorage.setItem('@user', JSON.stringify(response.data.data));
   AsyncStorage.setItem('@token', `Bearer ${response.data.user_token}`);

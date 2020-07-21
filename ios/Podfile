@@ -81,6 +81,10 @@ pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
   pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary.podspec"
 
 
+  pod 'RNCPicker', :path => '../node_modules/@react-native-community/picker'
+
+  pod 'react-native-video', :path => '../node_modules/react-native-video'
+
   target 'dashTests' do
     inherit! :complete
     # Pods for testing

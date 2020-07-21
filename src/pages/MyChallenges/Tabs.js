@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Image, Keyboard} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import SearchIcon from './Icons/SearchIcon';
@@ -7,6 +7,7 @@ import UserIcon from './Icons/UserIcon';
 
 export default function Component(props) {
   const authorized = props.authorized;
+ 
   return (
     <View style={styles.container}>
       <TouchableOpacity

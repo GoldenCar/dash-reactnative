@@ -15,7 +15,8 @@ import * as userActions from 'dash/src/actions/user';
 if (Platform.OS === 'android') {
   GoogleSignin.configure({
     webClientId:
-      '942215840003-l4kldjpp92k91f1q07srekvunfpff3qt.apps.googleusercontent.com',
+       //'942215840003-l4kldjpp92k91f1q07srekvunfpff3qt.apps.googleusercontent.com', // Debug
+      '799774940481-vfnnqtmfelum6v08o96r6vdm719qf906.apps.googleusercontent.com', // Live 
     offlineAccess: false,
   });
 }

@@ -11,9 +11,9 @@ import {
   StatusBar,
 } from 'react-native';
 
-const {height, width} = Dimensions.get('screen');
+const {height, width} = Dimensions.get('window');
 
-const MODAL_HEIGHT = height - StatusBar.currentHeight
+const MODAL_HEIGHT = height;
 
 export default class Component extends React.Component {
   translateY = new Animated.Value(MODAL_HEIGHT);
@@ -85,9 +85,6 @@ export default class Component extends React.Component {
     return (
       this.state.visible && (
         <View style={styles.overlay}>
-          <TouchableWithoutFeedback onPress={this.close}>
-            <Animated.View style={[styles.container, {backgroundColor}]} />
-          </TouchableWithoutFeedback>
           <Animated.View
             style={[
               {
@@ -98,21 +95,20 @@ export default class Component extends React.Component {
                 height: MODAL_HEIGHT,
               },
             ]}>
-   
-            {this.props.children}
             <Animated.View
               {...this.panResponder.panHandlers}
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                zIndex: 1000,
-                height: 80
+                height: 90
               }}>
               {this.props.header}
             </Animated.View>
+            <View style={{flex: 1}}>
+              {this.props.children}
+            </View>
           </Animated.View>
+          <TouchableWithoutFeedback onPress={this.close}>
+            <Animated.View style={[styles.container, {backgroundColor}]} />
+          </TouchableWithoutFeedback>
         </View>
       )
     );
@@ -122,9 +118,9 @@ export default class Component extends React.Component {
 const styles = StyleSheet.create({
   overlay: {
     width,
-    height,
-    position: 'absolute',
+    height: height - 24,
     zIndex: 1000,
+    flex: 1001,
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: {
@@ -146,10 +142,12 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   modalContainer: {
-    backgroundColor: 'white',
+    backgroundColor: '#F0F5FA',
     marginHorizontal: 0,
     overflow: 'hidden',
     zIndex: 1001,
+    flex: 1,
+    flexDirection: 'column'
   },
   header: {
     flexDirection: 'row',

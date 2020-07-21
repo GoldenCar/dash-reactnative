@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, Animated, Dimensions, Easing} from 'react-native';
-import {connect} from 'react-redux';
+import { View, Animated, Dimensions, Easing, Keyboard } from 'react-native';
+import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import _ from 'lodash';
@@ -9,10 +9,12 @@ import Top from './Top';
 
 import MyChallengesPage from './MyChallengesPage';
 
-import * as challengesActions from 'dash/src/actions/challenges';
-import {ScrollView} from 'react-native-gesture-handler';
+//import { getAllChallengesOfDB, getMyChallenges } from '../../actions/challenges';
 
-const {width, height} = Dimensions.get('window');
+import * as challenegesActions from '../../actions/challenges';
+import { ScrollView } from 'react-native-gesture-handler';
+
+const { width, height } = Dimensions.get('window');
 
 const PureView = (props) => {
   return <View style={styles.challengeExistContainer}>{props.children}</View>;
@@ -39,23 +41,44 @@ class Component extends React.Component {
   TopRef;
   position = new Animated.Value(0);
   ScrollViewAnimation = new Animated.Value(0);
+
   state = {
     index: 0,
     refresh: true,
+    arrayAllChallenges: [],
   };
   currentIndex = 0;
   currentInnersPosition = 'open';
-  componentDidMount = () => {
+
+  componentDidMount = async () => {
+
     this.getData();
+    this.props.navigation.addListener('willFocus', () => {
+
+      this.callApiToGetChallenges();
+    });
+    this.callApiToGetChallenges();
+
   };
+
+  callApiToGetChallenges = async () => {
+    this.setState({ refresh: true });
+    const response = await challenegesActions.getAllChallengesOfDB();
+    this.setState({ 
+      arrayAllChallenges: response,
+      refresh: false
+     });
+
+  }
+
   getData = async () => {
-    const {user} = this.props;
+    const { user } = this.props;
     if (user) {
-      this.setState({refresh: true});
-      await challengesActions.getMyChallenges();
-      this.setState({refresh: false});
+      this.setState({ refresh: true });
+      await challenegesActions.getMyChallenges();
+      this.setState({ refresh: false });
     } else {
-      this.setState({refresh: false});
+      this.setState({ refresh: false });
     }
   };
   onScrollEndDrag = (e) => {
@@ -78,45 +101,45 @@ class Component extends React.Component {
   };
 
   onScrollEndDragInnerScrolls = (e) => {
-      if (this.currentInnersPosition === 'open') {
-        if (
-          e.nativeEvent.contentOffset.y >= 0 &&
-          e.nativeEvent.contentOffset.y < 50
-        ) {
-          this.MyChallengesPageRef.scrollTo({x: 0, y: 0, animated: true});
-          this.MyChallengesPageRef2.scrollTo({x: 0, y: 0, animated: true});
-  
-          return;
-        }
-        if (
-          e.nativeEvent.contentOffset.y >= 50 &&
-          e.nativeEvent.contentOffset.y <= 180
-        ) {
-          this.MyChallengesPageRef.scrollTo({x: 0, y: 180, animated: true});
-          this.MyChallengesPageRef2.scrollTo({x: 0, y: 180, animated: true});
-          this.currentInnersPosition = 'close';
-          return;
-        }
+    if (this.currentInnersPosition === 'open') {
+      if (
+        e.nativeEvent.contentOffset.y >= 0 &&
+        e.nativeEvent.contentOffset.y < 50
+      ) {
+        this.MyChallengesPageRef.scrollTo({ x: 0, y: 0, animated: true });
+        this.MyChallengesPageRef2.scrollTo({ x: 0, y: 0, animated: true });
+
+        return;
       }
-      if (this.currentInnersPosition === 'close') {
-        if (
-          e.nativeEvent.contentOffset.y > 0 &&
-          e.nativeEvent.contentOffset.y <= 180
-        ) {
-          this.MyChallengesPageRef.scrollTo({x: 0, y: 0, animated: true});
-          this.MyChallengesPageRef2.scrollTo({x: 0, y: 0, animated: true});
-          this.currentInnersPosition = 'open';
-          return;
-        }
-      }
-      if (e.nativeEvent.contentOffset.y >= 180) {
+      if (
+        e.nativeEvent.contentOffset.y >= 50 &&
+        e.nativeEvent.contentOffset.y <= 180
+      ) {
+        this.MyChallengesPageRef.scrollTo({ x: 0, y: 180, animated: true });
+        this.MyChallengesPageRef2.scrollTo({ x: 0, y: 180, animated: true });
         this.currentInnersPosition = 'close';
+        return;
       }
+    }
+    if (this.currentInnersPosition === 'close') {
+      if (
+        e.nativeEvent.contentOffset.y > 0 &&
+        e.nativeEvent.contentOffset.y <= 180
+      ) {
+        this.MyChallengesPageRef.scrollTo({ x: 0, y: 0, animated: true });
+        this.MyChallengesPageRef2.scrollTo({ x: 0, y: 0, animated: true });
+        this.currentInnersPosition = 'open';
+        return;
+      }
+    }
+    if (e.nativeEvent.contentOffset.y >= 180) {
+      this.currentInnersPosition = 'close';
+    }
   };
   onChangeTab = (index) => {
     this.currentIndex = index;
-    if(this.HorizontalScrollRef){
-      this.HorizontalScrollRef.scrollTo({x: index * width, animated: true});
+    if (this.HorizontalScrollRef) {
+      this.HorizontalScrollRef.scrollTo({ x: index * width, animated: true });
     }
     Animated.timing(this.position, {
       toValue: index,
@@ -127,11 +150,17 @@ class Component extends React.Component {
     this.TopRef.onChangeCurrentIndex(index);
   };
   render() {
-    const {index, refresh} = this.state;
-    const {user} = this.props;
-    const challenges = this.props.challenges.filter(
-      (v) => v.createdBy === user._id,
-    );
+    const { index, refresh } = this.state;
+    const { user } = this.props;
+    
+    let challenges = [];
+    if (user && user._id) {
+       challenges = this.state.arrayAllChallenges.filter(
+        (v) => v.createdBy === user._id && v.status === 'start',
+      );
+    }
+   
+
     const translateY = this.ScrollViewAnimation.interpolate({
       inputRange: [0, 180],
       outputRange: [0, -280],
@@ -159,7 +188,7 @@ class Component extends React.Component {
           style={[
             styles.linear,
             {
-              transform: [{translateY}],
+              transform: [{ translateY }],
               opacity,
             },
           ]}>
@@ -175,7 +204,7 @@ class Component extends React.Component {
           bounces={false}
           onScrollEndDrag={this.onScrollEndDrag}
           ref={(e) => (this.HorizontalScrollRef = e)}>
-          <View style={{width, height}}>
+          <View style={{ width, height }}>
             <MyChallengesPage
               {...this.props}
               challenges={challenges}
@@ -186,7 +215,7 @@ class Component extends React.Component {
               onScrollEndDragInnerScrolls={this.onScrollEndDragInnerScrolls}
             />
           </View>
-          <View style={{width, height}}>
+          <View style={{ width, height }}>
             <MyChallengesPage
               {...this.props}
               previous={true}
@@ -212,7 +241,10 @@ class Component extends React.Component {
   }
 }
 
-export default connect(({user, challenges}) => ({
+
+
+
+export default connect(({ user, challenges }) => ({
   user,
   challenges,
 }))(Component);

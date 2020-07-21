@@ -11,10 +11,12 @@ import {
   ActivityIndicator,
   Text,
   PanResponder,
+  ScrollView,
+  Keyboard
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+// import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import _ from 'lodash';
 import NavBar from 'dash/src/components/NavBar';
@@ -61,6 +63,7 @@ export default class Component extends React.Component {
       }
     },
   });
+  
   open = () => {
     this.setState(
       {
@@ -139,7 +142,7 @@ export default class Component extends React.Component {
               },
               styles.modalContainer,
             ]}>
-            <KeyboardAwareScrollView
+            <ScrollView
               extraScrollHeight={120}
               enableOnAndroid={true}
               contentContainerStyle={{paddingBottom: 20}}
@@ -154,7 +157,7 @@ export default class Component extends React.Component {
                 },
               )}>
               <Layout user={this.state.user} onChangeText={this.onChangeText} />
-            </KeyboardAwareScrollView>
+            </ScrollView>
             <Animated.View
               style={styles.header}
               {...this.panResponder.panHandlers}>

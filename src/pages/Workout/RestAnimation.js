@@ -7,7 +7,7 @@ export default class extends React.Component {
   animation = new Animated.Value(2);
   timer;
   state = {
-    count: 15,
+    count: 10,
   };
   componentDidMount() {
     if (this.timer) {

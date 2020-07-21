@@ -13,7 +13,7 @@ export default function Component(props) {
     {
       label: 'Name',
       field: 'displayname',
-      value: user.displayname,
+      value:   user.displayname? user.displayname:'',
       edit: true,
     },
     {

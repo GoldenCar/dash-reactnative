@@ -84,7 +84,12 @@ const array = [
 ];
 
 function Component(props) {
-  const {challenges} = props;
+ 
+
+  const challenges = props.challenges.filter(
+    (v) => v.Featured === "yes",
+  );
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainerStyle}  bounces={false}>

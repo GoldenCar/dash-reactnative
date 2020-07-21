@@ -10,17 +10,21 @@ import {
   PanResponder,
   Animated,
   Easing,
+  ImageBackground,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { mediaHost } from '../../config';
 
 import Video from 'react-native-video';
 
-import {CheckList, Swap, Pause, Play} from 'dash/src/components/Icons';
+import { CheckList, Swap, Pause, Play } from 'dash/src/components/Icons';
 
 import CountDownAnimation from './CountDownAnimation';
 import RestAnimation from './RestAnimation';
+import { Thumbnail } from 'native-base';
+//import VideoPlayer from 'react-native-video-controls';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export default class extends React.Component {
   constructor(props) {
@@ -31,21 +35,28 @@ export default class extends React.Component {
       countDown: false,
       rest: false,
       timer: this.props.story.timer[0],
+      totaltime: 0,
+      cyclesCountCircuit: 0,
+      isVideoLoadToPlay: false,
     };
   }
   translateY = new Animated.Value(0);
   pauseOpacity = new Animated.Value(0);
   opacityTimer;
   videoRef = React.createRef(null);
+  viewImageRef = React.createRef(null); 
+
   setTimeoutTimer;
   panResponder = PanResponder.create({
+
     onMoveShouldSetResponderCapture: (evt, gestureState) => true,
     onMoveShouldSetPanResponderCapture: (evt, gestureState) =>
       Math.abs(gestureState.dy) > 5,
     onPanResponderGrant: (e, gestureState) => {
       this.translateY.extractOffset();
     },
-    onPanResponderMove: Animated.event([null, {dx: 0, dy: this.translateY}], {
+    onPanResponderMove: Animated.event([null, { dx: 0, dy: this.translateY }], {
+
       useNativeDriver: false,
     }),
     onPanResponderRelease: (e, gestureState) => {
@@ -77,11 +88,13 @@ export default class extends React.Component {
     },
   });
 
+
+
   countDown = () => {
-    this.setState({countDown: true});
+    this.setState({ countDown: true });
   };
   restEnd = () => {
-    this.setState({rest: false, pause: false, countDown: true});
+    this.setState({ rest: false, pause: false, countDown: true });
   };
   start = () => {
     if (!this.state.pause) {
@@ -92,40 +105,46 @@ export default class extends React.Component {
     }
   };
   timer = () => {
-    this.setTimeoutTimer = setTimeout(() => {
-      this.setState(
-        (prev) => {
-          return {
-            timer: prev.timer - 1,
-          };
-        },
-        () => {
-          if (this.state.timer === 0) {
-            if (
-              this.state.currentIndex ===
-              this.props.story.videos.length - 1
-            ) {
-              this.nextStory();
+    if (this.state.countDown === false && this.state.rest === false) {
+      this.setTimeoutTimer = setTimeout(() => {
+        this.setState(
+          (prev) => {
+            return {
+              timer: prev.timer - 1,
+              totaltime: prev.totaltime + 1
+            };
+          },
+          () => {
+            if (this.state.timer === 0) {
+              if (
+                this.state.currentIndex ===
+                this.props.story.videos.length - 1
+              ) {
+                this.nextStory();
+              } else {
+
+                this.setState((prev) => {
+                  return {
+                    currentIndex: prev.currentIndex + 1,
+                    timer: this.props.story.timer[prev.currentIndex + 1],
+                    pause: false,
+                    rest: true,
+                  };
+                });
+              }
             } else {
-              this.setState((prev) => {
-                return {
-                  currentIndex: prev.currentIndex + 1,
-                  timer: this.props.story.timer[prev.currentIndex + 1],
-                  pause: false,
-                  rest: true,
-                };
-              });
+              if (!this.state.pause) {
+                this.timer();
+              }
             }
-          } else {
-            if (!this.state.pause) {
-              this.timer();
-            }
-          }
-        },
-      );
-    }, 1000);
-  };
+          },
+        );
+      }, 1000);
+    }
+  }
   next = () => {
+
+    console.log("141 next  ------", this.state.currentIndex);
     this.setState(
       (prev) => {
         this.pauseOpacity.setValue(0);
@@ -168,12 +187,42 @@ export default class extends React.Component {
     );
   };
   nextStory = () => {
+
+    console.log("184 nextStory  ------", this.state.currentIndex, this.state.cyclesCountCircuit);
+
+
+    // const { story: { videos } } = this.props;
+
+    // if (vidoes[currentIndex].AutoPlay === 'checked') {
+    //   return;
+    // } else {
+    //   // pan responder 
+    // }
+
+
+    // For managing cyclecount of circuit 
+    if (this.state.cyclesCountCircuit && this.state.cyclesCountCircuit > 0 && this.props.isCircuit) {
+
+      this.setState({
+        cyclesCountCircuit: this.state.cyclesCountCircuit - 1,
+        currentIndex: 0,
+        pause: false,
+        countDown: true,
+        rest: false,
+        timer: this.props.story.timer[0],
+        // totaltime: 0
+      })
+      this.timer();
+      return;
+    }
+
     if (this.state.currentIndex === this.props.story.videos.length - 1) {
       this.props.nextStory();
     } else {
       this.next();
     }
   };
+
   prevStory = () => {
     if (this.state.currentIndex === 0) {
       this.props.prevStory();
@@ -221,7 +270,11 @@ export default class extends React.Component {
     this.videoRef.current.setNativeProps({
       paused: true,
     });
-    this.videoRef.current.seek(0);
+    const { story: { videos } } = this.props;
+    if (videos[this.state.currentIndex].flag === 'video') {
+      this.videoRef.current.seek(0);
+    }
+   
     if (this.setTimeoutTimer) {
       clearTimeout(this.setTimeoutTimer);
     }
@@ -231,13 +284,22 @@ export default class extends React.Component {
       countDown: false,
       rest: false,
       timer: this.props.story.timer[0],
+      totaltime: 0
     });
   };
+  componentDidMount = () => {
+
+
+    if (this.props.dayTasks.versionDayTaskCard && this.props.dayTasks.versionDayTaskCard.length > 0) {
+      let array1 = this.props.dayTasks.versionDayTaskCard
+      let dict = array1[0];
+      this.setState({ cyclesCountCircuit: dict.Cycles })
+    }
+  }
   render() {
-    const {
-      story: {videos},
-    } = this.props;
-    const {currentIndex, pause, countDown, rest} = this.state;
+    const { story: { videos } } = this.props;
+
+    const { currentIndex, pause, countDown, rest } = this.state;
     const opacity = this.pauseOpacity.interpolate({
       inputRange: [0, 1],
       outputRange: [0, 1],
@@ -245,6 +307,10 @@ export default class extends React.Component {
     });
     const minutes = Math.floor(this.state.timer / 60);
     const seconds = this.state.timer - minutes * 60;
+
+    const minTotal = Math.floor(this.state.totaltime / 60);
+    const secTotal = this.state.totaltime - minTotal * 60;
+
     const heightContainer = this.translateY.interpolate({
       inputRange: [-(height - 200), 0],
       outputRange: [height - 200, 150],
@@ -262,21 +328,34 @@ export default class extends React.Component {
     });
     return (
       <SafeAreaView style={styles.container}>
-        <Video
+        {videos && videos.length > 0 && videos[currentIndex].flag === 'video' ? <Video
           ref={this.videoRef}
           useNativeDriver={false}
           repeat={true}
-          paused={true}
-          source={videos[currentIndex]}
+          paused={countDown || rest ? true : false}
+          //source={videos[currentIndex]}
+          source={{ uri: `${mediaHost}${videos[currentIndex].fileName}` }}
           resizeMode={'cover'}
           style={styles.video}
-          onVideoLoad={() => {}}
           onLoad={() => {
+
             this.videoRef.current.seek(0);
+            // this.setState({isVideoLoadToPlay: true},()=>this.timer())
           }}
-        />
+        /> : <View style={styles.video}
+             ref={this.videoRef}
+             >
+            <ImageBackground source={videos[currentIndex].thumbnailImage} style={{ width: '100%', height: '100%' }}>
+            <Text style={styles.storyTitle}>
+            {videos[currentIndex].title ? videos[currentIndex].title : ''}
+          </Text>
+            </ImageBackground>
+          </View>}
+
+
+
         <Animated.View
-          style={[styles.backgroundDescriptionOpen, {backgroundColor}]}
+          style={[styles.backgroundDescriptionOpen, { backgroundColor }]}
         />
         <View style={styles.linearGradientContainer}>
           <LinearGradient
@@ -294,16 +373,15 @@ export default class extends React.Component {
           <TouchableWithoutFeedback onPress={this.onPressPause}>
             <Animated.View
               style={[
-                styles.pauseContainer,
-                {
+                styles.pauseContainer, {
                   opacity,
                 },
               ]}>
               {pause ? (
                 <Play height={30} width={30} />
               ) : (
-                <Pause height={25} width={25} />
-              )}
+                  <Pause height={25} width={25} />
+                )}
             </Animated.View>
           </TouchableWithoutFeedback>
         </View>
@@ -328,34 +406,34 @@ export default class extends React.Component {
           <View style={styles.next}></View>
         </TouchableWithoutFeedback>
         <View style={styles.topRow}>
-          <View>
-            <Text style={styles.title}>Circle</Text>
-            <Text style={styles.title}>4 Rounds Left</Text>
-          </View>
-          <View style={styles.timeContainer}>
+          {this.props.isCircuit ? <View>
+            <Text style={styles.title}>Circuit</Text>
+            <Text style={styles.title}>{this.state.cyclesCountCircuit} Left</Text>
+          </View> : null}
+          {this.state.totaltime > 0 ? <View style={styles.timeContainer}>
             <Pause />
-            <Text style={styles.time}>33:21</Text>
-          </View>
+            <Text style={styles.time}>{`${minTotal < 10 ? '0' : ''}${minTotal}:${
+              secTotal < 10 ? '0' : ''
+              }${secTotal}`}</Text>
+
+          </View> : null}
         </View>
         <Animated.View
           style={[
             styles.mainContainer,
-            {height: heightContainer, transform: [{translateY}]},
+            { height: heightContainer, transform: [{ translateY }] },
           ]}
           {...this.panResponder.panHandlers}>
           <Text style={styles.storyTime}>
             {`${minutes < 10 ? '0' : ''}${minutes}:${
               seconds < 10 ? '0' : ''
-            }${seconds}`}
+              }${seconds}`}
           </Text>
           <Text style={styles.storyTitle}>
-            Overhead Single Arm Strict Shoulder Press
+            {this.props.dayTasks.taskTitle ? this.props.dayTasks.taskTitle : ''}
           </Text>
           <Text style={styles.storyDescription}>
-            A treadmill can give you a great walking workout in any weather. If
-            you use the right walking form and vary your workouts with
-            intervals, hills, and speed changes, you can keep yourself
-            interested and challenge your body in new ways.
+            {this.props.dayTasks.taskDescription ? this.props.dayTasks.taskDescription : ''}
           </Text>
         </Animated.View>
 
@@ -458,7 +536,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     color: 'white',
     textShadowColor: 'rgba(0, 0, 0, 0.2)',
-    textShadowOffset: {width: -0.5, height: 0.5},
+    textShadowOffset: { width: -0.5, height: 0.5 },
     textShadowRadius: 1,
   },
   storyTitle: {
@@ -467,7 +545,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     color: 'white',
     textShadowColor: 'rgba(0, 0, 0, 0.2)',
-    textShadowOffset: {width: -0.5, height: 0.5},
+    textShadowOffset: { width: -0.5, height: 0.5 },
     textShadowRadius: 1,
     marginBottom: 10,
   },
@@ -477,7 +555,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     color: 'white',
     textShadowColor: 'rgba(0, 0, 0, 0.2)',
-    textShadowOffset: {width: -0.5, height: 0.5},
+    textShadowOffset: { width: -0.5, height: 0.5 },
     textShadowRadius: 1,
   },
   mainContainer: {
@@ -507,7 +585,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Poppins-Bold',
     textShadowColor: 'rgba(0, 0, 0, 0.2)',
-    textShadowOffset: {width: -0.5, height: 0.5},
+    textShadowOffset: { width: -0.5, height: 0.5 },
     textShadowRadius: 1,
     fontSize: 18,
     lineHeight: 24,

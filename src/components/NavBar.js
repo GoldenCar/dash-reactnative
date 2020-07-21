@@ -6,7 +6,7 @@ import {BackArrow} from './Icons';
 
 export default function Component(props) {
   const {title, icon, iconRight, iconRightPadding, styleContainer} = props;
-  console.log("props...", props)
+  // console.log("props...", props)
   return (
     <View style={[styles.container, styleContainer]}>
       <View style={styles.iconContainer}>
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     zIndex: 10,
+    flex: 1,
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',

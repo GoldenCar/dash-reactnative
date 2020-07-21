@@ -11,6 +11,8 @@ export default function Component(props) {
     outputRange: [1, 1.1],
     extrapolate: 'clamp',
   });
+ 
+  
   return (
     <>
       <View style={styles.container}>
