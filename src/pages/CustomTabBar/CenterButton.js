@@ -73,6 +73,9 @@ const styles = EStyleSheet.create({
     top: 0,
     alignItems: 'center',
     justifyContent: 'center',
+    height: 64,
+    width: 64,
+    borderRadius: 32,
   },
   addContainer: {
     height: 64,

@@ -25,12 +25,10 @@ export default class App extends React.Component {
   
 
    
-  render() {
-
+  render() { 
     const { ready } = this.state;
-    const {stories, arrayVersionTask} = this.props;
-
-    console.log(" in work out ", this.props.stories);
+    const {stories, arrayVersionTask} = this.props; 
+    
     if (!ready) {
       return (
         <View style={styles.container}>

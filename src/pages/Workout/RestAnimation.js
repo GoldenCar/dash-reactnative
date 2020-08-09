@@ -1,13 +1,12 @@
 import React from 'react';
 import {View, StyleSheet, Animated, Text, TouchableOpacity} from 'react-native';
-
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
-
 export default class extends React.Component {
   animation = new Animated.Value(2);
   timer;
   state = {
-    count: 10,
+    count: this.props.duration,
+    totalTime: this.props.duration * 1000,
   };
   componentDidMount() {
     if (this.timer) {
@@ -35,7 +34,7 @@ export default class extends React.Component {
           };
         },
         () => {
-          if (this.state.count !== 1) {
+          if (this.state.count !== 0) {
             this.start();
           }
         },
@@ -43,6 +42,13 @@ export default class extends React.Component {
     }, 1000);
   };
   end = () => {
+    const { count } = this.state;
+
+    // check count ---
+    if (count != 0) {
+        return null;
+    }
+
     Animated.timing(this.animation, {
       toValue: 0,
       duration: 250,
@@ -53,8 +59,13 @@ export default class extends React.Component {
       }
     });
   };
-  render() {
-    const {count} = this.state;
+
+
+  render() { 
+    const { count } = this.state;
+    const { duration } = this.props;
+    const fillValue = ((duration - count) / duration) * 100;
+
     const opacity = this.animation.interpolate({
       inputRange: [0, 1, 2],
       outputRange: [0, 1, 0],
@@ -64,7 +75,8 @@ export default class extends React.Component {
       inputRange: [0, 1, 2],
       outputRange: [100, 0, 100],
       extrapolate: 'clamp',
-    });
+    }); 
+
     return (
       <Animated.View style={[styles.mainContainer]}>
         <Animated.View
@@ -84,22 +96,22 @@ export default class extends React.Component {
               ],
             }}>
             <AnimatedCircularProgress
-              size={225}
+              size={180}
               width={20}
-              fill={100}
+              fill={fillValue}
               rotation={0}
-              duration={15000}
+              // duration={totalTime}
               tintColor="rgba(255,255,255,1)"
               onAnimationComplete={this.end}
               backgroundColor="rgba(255,255,255,0.4)"
-            />
+             />
           </View>
           <View style={styles.innerContainer}>
             <Text style={styles.count}>{count}</Text>
             <Text style={styles.rest}>REST</Text>
           </View>
         </Animated.View>
-        <TouchableOpacity style={styles.skipContainer} onPress={this.end}>
+        <TouchableOpacity style={styles.skipContainer} onPress={() => this.props.onPress()}>
           <Text style={styles.skip}>Skip Rest</Text>
         </TouchableOpacity>
       </Animated.View>
@@ -110,10 +122,9 @@ export default class extends React.Component {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    width: '100%',
-    backgroundColor: 'rgba(33, 41, 61, 0.4)',
+    width: '100%', 
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center', 
   },
   skip: {
     fontSize: 16,
@@ -138,8 +149,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   container: {
-    width: 225,
-    height: 225,
+    width: 180,
+    height: 180,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgba(33, 41, 61, 0.4)',
