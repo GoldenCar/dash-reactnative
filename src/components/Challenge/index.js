@@ -37,7 +37,7 @@ const array = [
 ];
 export default function Component(props) {
 
-  const { value, past, viewedBy } = props;
+  const { explore, value, past, viewedBy } = props;
 
   let bgImgUrl = '';
   if (value.challengeBGImage.includes('-')) {
@@ -81,10 +81,16 @@ export default function Component(props) {
           </View>
         )}
       </View>
-      <View style={styles.bottomContainer}>
+      <View style={[styles.bottomContainer, explore && { alignItems: 'center' }]}>
         <Text style={styles.title}>{value.title}</Text>
-        {moment(new Date()).diff(moment(new Date(value.startDate)), 'days') >
-          0 ? (
+        {explore ? (
+          <>
+            <View style={styles.seperator} />
+            <View>
+              <Text style={styles.plan}>Plan: {value.Plan}</Text>
+            </View>
+          </>
+        ) : moment(new Date()).diff(moment(new Date(value.startDate)), 'days') > 0 ? (
             <>
               {value.allStep && (
                 <View style={styles.progress}>
@@ -223,4 +229,14 @@ const styles = StyleSheet.create({
     width: width - 30,
     height: width - 30,
   },
+  seperator: {
+    width: '100%',
+    height: 0.5,
+    backgroundColor: '#96AAC6',
+    marginVertical: 15
+  },
+  plan: {
+    fontFamily: 'Poppins-Regular',
+    color: '#96AAC6'
+  }
 });

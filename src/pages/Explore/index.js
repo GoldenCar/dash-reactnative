@@ -122,13 +122,13 @@ function Component(props) {
                 // onPress={() => Actions.ExplorePost()}
                 >
                 <View>
-                  <Challenge value={value} viewedBy={viewedBy} />
+                  <Challenge value={value} viewedBy={viewedBy} explore />
                 </View>
               </TouchableWithoutFeedback>
             ))}
           </ScrollView>
 
-          <View style={styles.host}>
+          <View style={styles.hostContainer}>
             <Text style={[styles.title, { marginBottom: 10 }]}>Host a Challenge</Text>
             <Text style={styles.subtitle}>
               Choose one of our plans and host a challenge for you and your friends
