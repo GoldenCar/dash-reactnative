@@ -9,7 +9,7 @@ import {
 import {connect} from 'react-redux';
 
 import Challenge from '../../components/Challenge';
-import Search from '../../components/Search';
+import SearchButton from '../../components/SearchButton';
 import NavBar from '../../components/NavBar';
 import {Actions} from 'react-native-router-flux';
 
@@ -94,7 +94,7 @@ function Component(props) {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainerStyle}  bounces={false}>
         <Text style={styles.title}>Explore</Text>
-        <Search placeholder="Search Challenges" />
+        <SearchButton style={styles.search} />
         <View style={styles.challengesContainer}>
           {challenges.map((value, index) => (
             <TouchableWithoutFeedback
@@ -130,6 +130,11 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingBottom: 100,
   },
+  search: {
+    position: 'absolute',
+    right: 20,
+    top: 30
+  }
 });
 export default connect(({challenges}) => ({
   challenges,
