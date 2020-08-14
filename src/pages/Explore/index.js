@@ -96,17 +96,23 @@ function Component(props) {
         <Text style={styles.title}>Explore</Text>
         <SearchButton style={styles.search} />
         <View style={styles.challengesContainer}>
-          {challenges.map((value, index) => (
-            <TouchableWithoutFeedback
-              key={index}
-              onPress={() => Actions.ChallengeDetail({challenge: value})}
-              // onPress={() => Actions.ExplorePost()}
-              >
-              <View>
-                <Challenge value={value} viewedBy={viewedBy}/>
-              </View>
-            </TouchableWithoutFeedback>
-          ))}
+          <ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+          >
+            {challenges.map((value, index) => (
+              <TouchableWithoutFeedback
+                key={index}
+                onPress={() => Actions.ChallengeDetail({challenge: value})}
+                // onPress={() => Actions.ExplorePost()}
+                >
+                <View>
+                  <Challenge value={value} viewedBy={viewedBy} />
+                </View>
+              </TouchableWithoutFeedback>
+            ))}
+          </ScrollView>
         </View>
       </ScrollView>
     </View>
