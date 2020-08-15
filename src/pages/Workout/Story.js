@@ -57,7 +57,9 @@ export default class extends React.Component {
       exerciseSets: 1,
       restDuration: 0,
       numberOfTextLine: 3,
-      completeTaskTime: false
+      completeTaskTime: false,
+      restTimerPause: false,
+      taskPaused: false
     };
   }
 
@@ -78,27 +80,24 @@ export default class extends React.Component {
     }),
 
     onPanResponderRelease: (e, gestureState) => {
-      if (gestureState.dy < -100) {
-        console.log("UP Scroll ================<<<<")
+      if (gestureState.dy < 0) {
 
         Animated.timing(this.translateY, {
-          toValue: -(height - 200),
-          duration: 50,
-          easing: Easing.ease,
+          toValue: -(height),
+          easing: Easing.out(Easing.poly(4)),
+          timing: Animated.timing,
           useNativeDriver: false,
         }).start();
 
         clearTimeout(this.panSetTimeout);
         this.panSetTimeout = setTimeout(() => {
           clearTimeout(this.setTimeoutTimer);
-          this.setState({ videoPaused: true });
+          this.setState({ videoPaused: true, restTimerPause: true, taskPaused: true });
           this.props.onPlayPause(true);
 
         }, 500);
 
       } else {
-
-        console.log("Down Scroll ================<<<<")
 
         Animated.timing(this.translateY, {
           toValue: 0,
@@ -112,7 +111,7 @@ export default class extends React.Component {
         clearTimeout(this.panSetTimeout);
         this.panSetTimeout = setTimeout(() => {
           clearTimeout(this.setTimeoutTimer);
-          this.setState({ videoPaused: false });          
+          this.setState({ videoPaused: false, restTimerPause: false, taskPaused: false });
           this.timer();
           this.props.onPlayPause(false);
         }, 500);
@@ -127,6 +126,7 @@ export default class extends React.Component {
 
     const { story: { videos } } = this.props;
     const { currentIndex } = this.state;
+    const countDownHide = videos[currentIndex].cardType == "rest" || videos[currentIndex].cardType == "note" ? true : false;
 
     // if card is solo and exercise is Seconds type ---
     let timerValidate = false;
@@ -142,9 +142,9 @@ export default class extends React.Component {
       timer: timeValue,
       pause: false,
       showTimeLimit: timerValidate,
-      completeTaskTime:false,
+      completeTaskTime: false,
       videoPaused: true,
-      count: true
+      countDown: countDownHide ? false : true
     });
 
   };
@@ -263,15 +263,15 @@ export default class extends React.Component {
           timeValue = timerValidate ? this.props.story.videos[prev.currentIndex + 1].RestTime : 0;
         }
         const cardFlag = this.props.story.videos[prev.currentIndex].flag === "rest" ? true : false;
+        const countDownHide = videos[prev.currentIndex + 1].cardType == "rest" || videos[prev.currentIndex + 1].cardType == "note" ? true : false;
         return {
           currentIndex: prev.currentIndex + 1,
           timer: timeValue,
           pause: false,
           showTimeLimit: timerValidate,
-          // videoPaused: flag,
           rest: cardFlag ? false : restTime,
           restDuration: cardFlag ? 0 : restDuration,
-          countDown: true,
+          countDown: countDownHide ? false : true,
           completeTaskTime: false
         };
       },
@@ -309,7 +309,7 @@ export default class extends React.Component {
         }
 
         const cardFlag = this.props.story.videos[prev.currentIndex].flag === "rest" ? true : false;
-
+        const countDownHide = videos[prev.currentIndex - 1].cardType == "rest" || videos[prev.currentIndex - 1].cardType == "note" ? true : false;
         return {
           currentIndex: prev.currentIndex - 1,
           timer: timeValue,
@@ -318,7 +318,7 @@ export default class extends React.Component {
           videoPaused: flag,
           rest: cardFlag ? false : restTime,
           restDuration: cardFlag ? 0 : restDuration,
-          countDown: true,
+          countDown: countDownHide ? false : true,
           completeTaskTime: false
         };
       },
@@ -337,15 +337,16 @@ export default class extends React.Component {
     if (this.state.cyclesCountCircuit && this.state.cyclesCountCircuit > 0 && this.props.isCircuit) {
       const timerValidate = this.props.story.videos[0].timer;
       const timeValue = timerValidate ? this.props.story.videos[0].RestTime : 0;
+      const countDownHide = this.props.story.videos[0].cardType == "rest" || this.props.story.videos[0].cardType == "note" ? true : false;
       this.setState({
         cyclesCountCircuit: this.state.cyclesCountCircuit - 1,
         currentIndex: 0,
         pause: false,
-        countDown: true,
+        countDown: countDownHide ? false : true,
         rest: false,
         timer: timeValue,
         showTimeLimit: timerValidate,
-        completeTaskTime:false
+        completeTaskTime: false
       })
       this.timer();
       return;
@@ -397,32 +398,35 @@ export default class extends React.Component {
 
       if (!prev.pause) {
         if (this.setTimeoutTimer) {
-          clearTimeout(this.setTimeoutTimer); 
+          clearTimeout(this.setTimeoutTimer);
         }
         this.props.onPlayPause(true);
       } else {
         this.timer();
         this.props.onPlayPause(false);
-      } 
+      }
       return {
         pause: !prev.pause,
         videoPaused: !prev.videoPaused,
+        restTimerPause: !prev.restTimerPause,
+        taskPaused: !prev.taskPaused,
       };
     });
   };
 
   stop = () => {
+    const { story: { videos } } = this.props;
+    const { currentIndex } = this.state;
+    const countDownHide = videos[currentIndex].cardType == "rest" || videos[currentIndex].cardType == "note" ? true : false;
     this.translateY.setValue(0);
-
     this.setState({ videoPaused: true });
-
     if (this.setTimeoutTimer) {
       clearTimeout(this.setTimeoutTimer);
     }
     this.setState({
       currentIndex: 0,
       pause: false,
-      countDown: true,
+      countDown: countDownHide ? false : true,
       rest: false,
       timer: 0,
       showTimeLimit: false,
@@ -438,7 +442,6 @@ export default class extends React.Component {
       this.setState({ cyclesCountCircuit: dict.Cycles - 1 })
     }
   }
-
 
   onCompleteRestTime(autoPlay) {
     const { countDown, rest } = this.state;
@@ -464,6 +467,7 @@ export default class extends React.Component {
           autoplay={data.AutoPlay}
           oncomplete={() => this.onCompleteRestTime(data.AutoPlayShowFlag)}
           onPress={() => this.next(true)}
+          status={this.state.restTimerPause}
         />
       );
     }
@@ -472,8 +476,12 @@ export default class extends React.Component {
   // 
   renderNextButton = () => {
     const { isCircuit, story: { videos } } = this.props;
-    const { currentIndex, rest, countDown } = this.state;
+    const { currentIndex, rest, countDown, taskPaused } = this.state;
     const cardType = videos[currentIndex].cardType;
+
+    if (taskPaused) {
+      return null;
+    }
 
     if (cardType == "rest" || rest == true || countDown == true) {
       return null;
@@ -496,6 +504,29 @@ export default class extends React.Component {
           <Image source={require('../../res/nextButton.png')} style={{ flex: 1 }} resizeMode={"contain"} />
         </View>
       </TouchableWithoutFeedback>
+    )
+  }
+
+  renderTaskActionButton = () => {
+    const { taskPaused } = this.state;
+
+    if (taskPaused === false) {
+      return null;
+    }
+
+    return (
+      <View style={styles.endTaskButtonContainer}>
+        <TouchableWithoutFeedback onPress={() => this.onClickWorkoutTaskAction("setting", true)}>
+          <View style={styles.endTaskButton}>
+            <Image source={require('../../res/settingButton.png')} style={{ height: 50 }} resizeMode={"contain"} />
+          </View>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => this.onClickWorkoutTaskAction("endTask", true)}>
+          <View style={styles.endTaskButton}>
+            <Image source={require('../../res/endTaskButton.png')} style={{ height: 50 }} resizeMode={"contain"} />
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
     )
   }
 
@@ -583,10 +614,13 @@ export default class extends React.Component {
 
   // get card description
   renderCardDescription = () => {
-    const { story: { videos } } = this.props;
+    const { story: { videos }, descriptionHide } = this.props;
     const { currentIndex, numberOfTextLine } = this.state;
-    const { title, description, cardType } = videos[currentIndex];
-    
+    const { title, description, cardType, flag } = videos[currentIndex];
+
+    if (descriptionHide == true && flag == "video") {
+      return null;
+    }
 
     if (cardType == "note") {
       return null;
@@ -608,9 +642,36 @@ export default class extends React.Component {
     );
   }
 
+  // action for task overview screen ---
+  overviewTimeout = null;
+  onClickOverview = (data) => {
+    if (data) {
+      clearTimeout(this.overviewTimeout);
+      this.overviewTimeout = setTimeout(() => {
+        this.props.onTaskOverView();
+      }, 500);
+    }
+    this.setState({ videoPaused: data, restTimerPause: data, taskPaused: data });
+    this.props.onPlayPause(data);
+  }
+
+
+  // action for taskAction screen ---
+  taskActionTimeout = null;
+  onClickWorkoutTaskAction = (type, data) => {
+    if (data) {
+      clearTimeout(this.taskActionTimeout);
+      this.taskActionTimeout = setTimeout(() => {
+        this.props.workoutTaskAction(type);
+      }, 500);
+    }
+    // this.setState({ videoPaused: data, restTimerPause: data });
+    // this.props.onPlayPause(data);
+  }
+
   render() {
     const { story: { videos, timer }, totalTimer, index, activeIndex, isCircuit } = this.props;
-    const { currentIndex, pause, countDown, rest, showTimeLimit, videoLoading, exerciseSets } = this.state;
+    const { currentIndex, pause, countDown, rest, showTimeLimit, videoLoading, exerciseSets, videoPaused } = this.state;
     const opacity = this.pauseOpacity.interpolate({
       inputRange: [0, 1],
       outputRange: [0, 1],
@@ -652,18 +713,19 @@ export default class extends React.Component {
       <SafeAreaView style={styles.container}>
         {videos && videos.length > 0 && !rest && !countDown && activeIndex &&
           <>
-            {videos[currentIndex].flag === 'video' && videos[currentIndex].fileName != "" ? <Video
-              ref={this.videoRef}
-              useNativeDriver={false}
-              paused={this.state.videoPaused}
-              repeat={videoRepeat}
-              source={{ uri: `${mediaHost}${videos[currentIndex].fileName}` }}
-              onReadyForDisplay={() => this.onReadyForDisplay()}
-              resizeMode={'cover'}
-              style={styles.video}
-              onLoadStart={() => this.onLoadStartVideo()}
-              onEnd={() => this.onEndVideo(videos[currentIndex].flag)}
-            />
+            {videos[currentIndex].flag === 'video' && videos[currentIndex].fileName != "" ?
+              <Video
+                ref={this.videoRef}
+                useNativeDriver={false}
+                paused={videoPaused}
+                repeat={videoRepeat}
+                source={{ uri: `${mediaHost}${videos[currentIndex].fileName}` }}
+                onReadyForDisplay={() => this.onReadyForDisplay()}
+                resizeMode={'cover'}
+                style={styles.video}
+                onLoadStart={() => this.onLoadStartVideo()}
+                onEnd={() => this.onEndVideo(videos[currentIndex].flag)}
+              />
               :
               <View style={styles.video} ref={this.videoRef}>
                 {this.renderComponent(videos[currentIndex])}
@@ -736,10 +798,10 @@ export default class extends React.Component {
 
           {totalTimer > 0 ?
             <TouchableOpacity onPress={this.onPressPause} style={styles.timeContainer}>
-              <View style={{ width: '30%' }}>
+              <View style={styles.totalTimerIcon}>
                 {pause ? <Play height={15} width={15} /> : <Pause />}
               </View>
-              <View style={{ width: '70%' }}>
+              <View style={styles.totalTimerNumber}>
                 <Text style={styles.time}>{`${minTotal < 10 ? '0' : ''}${minTotal}:${
                   secTotal < 10 ? '0' : ''
                   }${secTotal}`}
@@ -750,7 +812,7 @@ export default class extends React.Component {
             null
           }
         </View>
-        
+
         {/* *************** Card description container ************ */}
         <Animated.View
           style={[
@@ -758,7 +820,7 @@ export default class extends React.Component {
             {
               height: heightContainer,
               transform: [{ translateY }],
-              top: height-170, 
+              top: height - 170,
             }
           ]}
           {...this.panResponder.panHandlers}>
@@ -783,10 +845,11 @@ export default class extends React.Component {
 
         {/* *************** Next buttons container ************ */}
         <View style={styles.bottomRow}>
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => this.onClickOverview(true)}>
             <View style={styles.button}><CheckList /></View>
           </TouchableWithoutFeedback>
           {this.renderNextButton()}
+          {this.renderTaskActionButton()}
         </View>
 
         {/* *************** CountDown Container ************ */}
@@ -923,30 +986,41 @@ const styles = StyleSheet.create({
     textShadowRadius: 1,
   },
   mainContainer: {
-    position: 'absolute', 
+    position: 'absolute',
     overflow: 'hidden',
     left: 15,
     right: 15,
-    zIndex: 19.9, 
+    zIndex: 19.9,
   },
   time: {
     color: 'white',
     fontFamily: 'Poppins-Bold',
     fontSize: 16,
     lineHeight: 22,
-    // marginLeft: 10, 
+    width: '100%',
+    marginLeft: 5
   },
   timeContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    padding: 10,
     borderRadius: 25,
     backgroundColor: 'rgba(33, 41, 61, 0.4)',
     position: 'absolute',
     right: 0,
     width: responsiveWidth(28)
+  },
+  totalTimerIcon: {
+    width: '30%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  totalTimerNumber: {
+    width: '70%',
+    height: '100%',
+    justifyContent: 'center'
   },
   title: {
     color: 'white',
@@ -984,7 +1058,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     zIndex: 20,
-    minHeight:50,
+    minHeight: 50,
   },
   button: {
     height: 50,
@@ -1006,6 +1080,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0
   },
+  endTaskButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 0
+  },
+  endTaskButton: {
+    height: 50,
+    width: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row'
+  },
   nextButtonText: {
     fontWeight: 'bold',
     fontFamily: 'Poppins',
@@ -1022,7 +1109,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     zIndex: 20,
     height: 80,
-    marginHorizontal: 15, 
+    marginHorizontal: 15,
   },
 
   line: {

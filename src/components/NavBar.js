@@ -6,14 +6,20 @@ import {BackArrow} from './Icons';
 
 export default function Component(props) {
   const {title, icon, iconRight, iconRightPadding, styleContainer} = props;
-  // console.log("props...", props)
+
   return (
     <View style={[styles.container, styleContainer]}>
       <View style={styles.iconContainer}>
         {icon ? (
           icon
         ) : (
-          <TouchableOpacity onPress={() => Actions.pop()}>
+          <TouchableOpacity 
+          onPress={() =>{
+             Actions.pop(); setTimeout(() => { 
+             Actions.refresh({ refresh:true });           
+          }, 500);}} 
+          style={styles.iconContainerContent}
+          >
             <BackArrow />
           </TouchableOpacity>
         )}
@@ -56,6 +62,12 @@ const styles = StyleSheet.create({
     borderRadius:19,
     justifyContent: 'center',
     alignItems:"center"
+  },
+  iconContainerContent:{
+    width:'100%',
+    height:'100%',
+    alignItems:'center',
+    justifyContent:'center'
   },
   iconContainer1: {
     paddingHorizontal: 10,

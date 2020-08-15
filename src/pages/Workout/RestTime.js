@@ -7,7 +7,7 @@ export default class RestTime extends React.Component {
     timer;
     state = {
         count: this.props.duration,
-        totalTime: this.props.duration * 1000,
+        totalTime: this.props.duration * 1000
     };
     componentDidMount() {
         if (this.timer) {
@@ -28,7 +28,20 @@ export default class RestTime extends React.Component {
         }
     }
 
+    UNSAFE_componentWillReceiveProps(nextProps) {
+        if (nextProps.status == false && this.timer == "Pause") {
+            this.start();
+        }
+    }
+
     start = () => {
+        const { status } = this.props;
+
+        if (status === true) {
+            this.timer = "Pause";
+            return null;
+        }
+        clearTimeout(this.timer);
         this.timer = setTimeout(() => {
             this.setState(
                 (prev) => {
@@ -65,7 +78,7 @@ export default class RestTime extends React.Component {
         if (count != 0) {
             return null;
         }
-        
+
         // check if autoplay card ---
         if (autoplay == false) {
             return null;

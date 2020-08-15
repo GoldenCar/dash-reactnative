@@ -29,6 +29,7 @@ import InviteFriends from 'dash/src/pages/ChallengeDetail/InviteFriends';
 import PostPage from 'dash/src/pages/ChallengeDetail/Social/PostPage';
 import CreatePost from 'dash/src/pages/ChallengeDetail/Social/CreatePost';
 import Completed from './pages/Workout/Completed';
+import WorkoutOverView from './pages/Workout/WorkoutOverView';
 
 import Workout from 'dash/src/pages/Workout/index';
 
@@ -158,6 +159,7 @@ export default () => {
                 <Scene key="CreatePost" component={CreatePost} hideNavBar />
                 <Scene key="Workout" component={Workout} hideNavBar />
                 <Scene key="Completed" component={Completed} hideNavBar />
+                <Scene key="WorkoutOverView" component={WorkoutOverView} hideNavBar />
               </Scene>
             </Router>
             <ProfileDetailPopup ref={(e) => (ProfileDetailPopupRef = e)} />

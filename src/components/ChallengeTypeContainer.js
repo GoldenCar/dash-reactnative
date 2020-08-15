@@ -49,8 +49,7 @@ export default function Component(props) {
             }
 
             <View style={styles.videoBox}>
-              {
-              console.log(" item.planVideo=====", item.planVideo),
+              { 
               !load?
                 <View style={styles.videoLoaded}>
                   <ActivityIndicator size="large" color="#ffffff"/>
