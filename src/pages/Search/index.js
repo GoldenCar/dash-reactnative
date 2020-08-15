@@ -9,83 +9,18 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import Challenge from '../../components/Challenge';
-import SearchButton from '../../components/SearchButton';
+
+import Search from '../../components/Search';
+import {Close, BackArrow} from '../../components/Icons';
+
 import NavBar from '../../components/NavBar';
 import Plan from '../../components/Plan';
 
 import {Actions} from 'react-native-router-flux';
 import * as plansActions from '../../actions/plans';
-
-const viewedBy = [
-  {
-    picture: require('dash/src/res/viewedBy/4.png'),
-  },
-  {
-    picture: require('dash/src/res/viewedBy/3.png'),
-  },
-  {
-    picture: require('dash/src/res/viewedBy/1.jpg'),
-  },
-  {
-    picture: require('dash/src/res/viewedBy/2.jpg'),
-  },
-  {},
-  {},
-  {},
-  {},
-]
-
-const array = [
-  {
-    picture: require('dash/src/res/explore/1.png'),
-    title: 'Chris Bumstead 30 Day Challenge',
-    startsIn: 'Starts in 3 Days',
-    viewedBy: [
-      {
-        picture: require('dash/src/res/viewedBy/1.jpg'),
-      },
-      {
-        picture: require('dash/src/res/viewedBy/2.jpg'),
-      },
-      {
-        picture: require('dash/src/res/viewedBy/3.png'),
-      },
-      {
-        picture: require('dash/src/res/viewedBy/4.png'),
-      },
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-    ],
-  },
-  {
-    picture: require('dash/src/res/explore/2.png'),
-    title: 'David Dobrik 30 Day Challenge',
-    startsIn: 'Starts in 3 Days',
-    viewedBy: [
-      {
-        picture: require('dash/src/res/viewedBy/4.png'),
-      },
-      {
-        picture: require('dash/src/res/viewedBy/3.png'),
-      },
-      {
-        picture: require('dash/src/res/viewedBy/1.jpg'),
-      },
-      {
-        picture: require('dash/src/res/viewedBy/2.jpg'),
-      },
-      {},
-      {},
-      {},
-      {},
-    ],
-  },
-];
 
 function Component(props) {
  
@@ -107,14 +42,17 @@ function Component(props) {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.contentContainerStyle}  bounces={false}>
-        <Text style={styles.title}>Explore</Text>
-        <TouchableOpacity style={styles.search} onPress={() => Actions.Search()}>
-          <SearchButton 
-          //style={styles.search} 
-          />
-        </TouchableOpacity>
-        <View style={styles.challengesContainer}>
+      <ScrollView contentContainerStyle={styles.contentContainerStyle} bounces={false}>
+        <Text style={styles.title}>Search</Text>
+          <Search />
+
+          {/* <Close /> */}
+          <TouchableOpacity onPress={() => Actions.pop()} style={{width: 40, alignItems:"center"}}>
+            {/* <BackArrow /> */}
+            <Icon name={'close'} color="#B6BCCA" size={20} />
+          </TouchableOpacity>
+
+        {/* <View style={styles.challengesContainer}>
           <ScrollView
             horizontal
             pagingEnabled
@@ -147,7 +85,7 @@ function Component(props) {
                   <Plan value={value} />
               </TouchableWithoutFeedback>
             ))}
-        </View>
+        </View> */}
       </ScrollView>
     </View>
   );
