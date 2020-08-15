@@ -63,7 +63,7 @@ function Component(props) {
       </View>
 
       <ScrollView bounces={false}>
-        <View style={styles.contentContainerStyle}>
+        <View style={[styles.contentContainerStyle, results.length === 0 && { paddingTop: 0 }]}>
           {results.map((value, index) => (
             <View key={index}>
               <Challenge value={value} viewedBy={viewedBy} explore />
