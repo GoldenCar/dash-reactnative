@@ -33,9 +33,6 @@ const viewedBy = [
 ]
 
 function Component(props) {
-
-  // TODO: clean up search style
-
   const [search, setSearchValue] = useState('');
 
   let results = [];
@@ -54,6 +51,7 @@ function Component(props) {
           autoFocus 
           value={search}
           onChangeText={(value) => setSearchValue(value)}
+          containerStyle={styles.search}
         />
 
         <TouchableOpacity 
@@ -64,16 +62,13 @@ function Component(props) {
         </TouchableOpacity>
       </View>
 
-      <ScrollView contentContainerStyle={styles.contentContainerStyle} bounces={false}>
-        <View style={{
-          backgroundColor: '#B6BCCA',
-          flex: 1
-        }}>
-        {results.map((value, index) => (
+      <ScrollView bounces={false}>
+        <View style={styles.contentContainerStyle}>
+          {results.map((value, index) => (
             <View key={index}>
               <Challenge value={value} viewedBy={viewedBy} explore />
             </View>
-        ))}
+          ))}
         </View>
       </ScrollView>
     </View>
@@ -86,10 +81,9 @@ const styles = StyleSheet.create({
     paddingTop: 30
   },
   contentContainerStyle: {
-    paddingTop: 30,
-    paddingBottom: 30,
-    // backgroundColor: '#B6BCCA',
-   // flex: 1
+    backgroundColor: '#B6BCCA',
+    flex: 1,
+    paddingTop: 30
   },
   searchSection: {
     paddingBottom: 20
@@ -110,6 +104,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 0.5,
     borderColor: '#96AAC6'
+  },
+  search: {
+    marginHorizontal: 0,
+    borderWidth: 0
   }
 });
 export default connect(({challenges}) => ({
