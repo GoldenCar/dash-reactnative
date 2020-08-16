@@ -3,15 +3,17 @@ import { StyleSheet, Animated, Dimensions, View, StatusBar } from 'react-native'
 import Story from './Story';
 import SwiperAnimated from '../../components/CubeNavigation';
 import { Actions } from 'react-native-router-flux';
+import WorkoutTaskAction from './WorkoutTaskAction';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const { width } = Dimensions.get('screen');
 const height = Dimensions.get('screen').height - StatusBar.currentHeight;
-export default class Stories extends React.PureComponent {
+export default class Stories extends React.Component {
   stories = [];
   currentStory = 0;
   totalTimeInterval = null;
 
-  state = { timer: 0 }
+  state = { timer: 0, descriptionHide: false };
 
   constructor(props) {
     super(props);
@@ -23,6 +25,26 @@ export default class Stories extends React.PureComponent {
   componentDidMount() {
     this.storiesItem[0]?.current.countDown();
     this.totalTime();
+    this.validateSettingOption();
+  }
+
+  validateSettingOption = async () => {
+    try {
+      const data = await AsyncStorage.getItem('@taskDescHide');
+      this.setState({ descriptionHide: data ? true : false });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    this.onReturnToBack();
+  }
+
+  onReturnToBack = async () => {
+    if (this.props.stories[this.currentStory].videos.length > 0) {
+      this.storiesItem[this.currentStory]?.current.onClickOverview(false);
+    }
   }
 
   totalTime = (data = null) => {
@@ -79,8 +101,33 @@ export default class Stories extends React.PureComponent {
     if (this.totalTimeInterval && data == true) {
       clearInterval(this.totalTimeInterval);
       this.totalTimeInterval = null;
-    } else if(this.totalTimeInterval == null && data == false) {
+    } else if (this.totalTimeInterval == null && data == false) {
       this.totalTime(true);
+    }
+  }
+
+  onTaskOverView = () => {
+    Actions.WorkoutOverView({ data: this.props, currentIndex: this.currentStory });
+  }
+
+  onTaskAction = async (data) => {
+    const { descriptionHide, endTask, modalType } = data;
+    if (modalType == "setting") {
+      await this.setState({ descriptionHide: descriptionHide });
+      // this.onDismissModal();
+    } else {
+      if (endTask) {
+        Actions.Completed({ challenge: this.props.challenge, user: this.props.user, isTaskCompleted: true });
+        return null;
+      } else {
+        // this.onDismissModal();
+      }
+    }
+  }
+
+  onDismissModal = async () => {
+    if (this.props.stories[this.currentStory].videos.length > 0) {
+      this.storiesItem[this.currentStory]?.current.onClickWorkoutTaskAction(null, false);
     }
   }
 
@@ -112,11 +159,18 @@ export default class Stories extends React.PureComponent {
                   activeIndex={this.currentStory === i}
                   activeIndex2={this.currentStory}
                   index={i}
+                  onTaskOverView={this.onTaskOverView}
+                  workoutTaskAction={(data) => this.workoutTaskAction.show(data)}
+                  descriptionHide={this.state.descriptionHide}
                 />
               </Animated.View>
             ))
           }
         </SwiperAnimated>
+        <WorkoutTaskAction
+          ref={(modal) => { this.workoutTaskAction = modal }}
+          onClose={this.onTaskAction}
+        />
       </View>
     );
   }

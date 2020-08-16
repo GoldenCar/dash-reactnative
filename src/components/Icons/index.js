@@ -40,6 +40,7 @@ import Swap from './Swap';
 import CheckList from './CheckList';
 import Pause from './Pause';
 import Play from './Play';
+import RoundCircle from './RoundCircle';
 
 export {
   Play,
@@ -84,4 +85,5 @@ export {
   Message,
   WhatsApp,
   Link,
+  RoundCircle
 };
