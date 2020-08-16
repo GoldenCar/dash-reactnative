@@ -1,13 +1,22 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 import { mediaHost } from 'dash/src/config';
 
 export default function Component(props) {
   const { value } = props;
 
+  // TODO: make gradiant go left to right
+
   return (
-    <View style={styles.container}>
+    // <View style={styles.container}>
+    <LinearGradient
+    // linear-gradient(233.69deg, #FFFFFF 2.28%, #E7EEF5 96.09%);
+      colors={['#FFFFFF', '#E7EEF5']}
+      style={styles.container}
+      start={{x: 1, y: 0}} end={{x: 0, y: 0}}
+    >
       <View style={styles.left}>
         <Text style={styles.title}>
         {value.title}
@@ -22,7 +31,7 @@ export default function Component(props) {
           style={styles.image}
         />
       </View>
-    </View>
+      </LinearGradient>
   );
 }
 
@@ -32,11 +41,20 @@ Component.defaultProps = {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f0f5fa',
+    //backgroundColor: '#f0f5fa',
     borderRadius: 25,
     marginHorizontal: 15,
     marginVertical: 5,
-    flexDirection: 'row'
+    flexDirection: 'row',
+
+   // border: 1px solid #E7EEF5;
+
+   borderWidth: 1,
+   borderColor: '#E7EEF5',
+
+   // background: linear-gradient(233.69deg, #FFFFFF 2.28%, #E7EEF5 96.09%);
+
+
   },
   left: {
     flex: 3,

@@ -334,16 +334,16 @@ PODS:
     - React
   - RNCPicker (1.6.6):
     - React
-  - RNGestureHandler (1.6.1):
+  - RNGestureHandler (1.7.0):
     - React
   - RNGoogleSignin (4.0.3):
     - GoogleSignIn (~> 5.0.0)
     - React
   - RNPermissions (2.1.5):
     - React
-  - RNReanimated (1.8.0):
+  - RNReanimated (1.13.0):
     - React
-  - RNScreens (2.7.0):
+  - RNScreens (2.10.1):
     - React
   - RNSound (0.11.0):
     - React
@@ -354,7 +354,7 @@ PODS:
     - React
   - RNTextGradientView (0.1.7):
     - React
-  - RNVectorIcons (6.6.0):
+  - RNVectorIcons (6.7.0):
     - React
   - toolbar-android (0.1.0-rc.2):
     - React
@@ -592,19 +592,19 @@ SPEC CHECKSUMS:
   RNAppleAuthentication: 473b2c076f1a48a537610580a168c1fb6d0a90c6
   RNCAsyncStorage: d059c3ee71738c39834a627476322a5a8cd5bf36
   RNCPicker: 494015f2b7ec4bee5484b6f235aa19691426dcdb
-  RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
+  RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
   RNGoogleSignin: ccf71ee4b6cfd324fd788a41e457e2043838c0d9
   RNPermissions: ad71dd4f767ec254f2cd57592fbee02afee75467
-  RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
-  RNScreens: cf198f915f8a2bf163de94ca9f5bfc8d326c3706
+  RNReanimated: 89f5e0a04d1dd52fbf27e7e7030d8f80a646a3fc
+  RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
   RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNTextGradientView: 3eb4744303f801546fad35ac47a53cc82257cb25
-  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
+  RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
   toolbar-android: 85f3ef4d691469f2d304e7dee4bca013aa1ba1ff
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 05d3c670602f490eb1f9f9fd6ba8d5eb7c0d1c51
+PODFILE CHECKSUM: d9a0fed897f90e3b3c8b37ae4a91600175f3c60b
 
 COCOAPODS: 1.9.3
