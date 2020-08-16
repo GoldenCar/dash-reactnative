@@ -262,7 +262,7 @@ PODS:
   - React-jsinspector (0.62.2)
   - react-native-cameraroll (1.8.1):
     - React
-  - react-native-image-picker (2.3.1):
+  - react-native-image-picker (2.3.3):
     - React
   - react-native-video (4.4.5):
     - React
@@ -328,11 +328,11 @@ PODS:
     - React-cxxreact (= 0.62.2)
     - React-jsi (= 0.62.2)
     - ReactCommon/callinvoker (= 0.62.2)
-  - RNAppleAuthentication (1.1.1):
+  - RNAppleAuthentication (1.1.2):
     - React
   - RNCAsyncStorage (1.11.0):
     - React
-  - RNCPicker (1.6.5):
+  - RNCPicker (1.6.6):
     - React
   - RNGestureHandler (1.6.1):
     - React
@@ -341,9 +341,9 @@ PODS:
     - React
   - RNPermissions (2.1.5):
     - React
-  - RNReanimated (1.9.0):
+  - RNReanimated (1.8.0):
     - React
-  - RNScreens (2.9.0):
+  - RNScreens (2.7.0):
     - React
   - RNSound (0.11.0):
     - React
@@ -354,7 +354,7 @@ PODS:
     - React
   - RNTextGradientView (0.1.7):
     - React
-  - RNVectorIcons (6.7.0):
+  - RNVectorIcons (6.6.0):
     - React
   - toolbar-android (0.1.0-rc.2):
     - React
@@ -564,9 +564,9 @@ SPEC CHECKSUMS:
   GTMAppAuth: 4deac854479704f348309e7b66189e604cf5e01e
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
-  Permission-Camera: 53d46bd722aea28d796e20f05fb3cbe6cde6ccb6
-  Permission-PhotoLibrary: 3400b260e5f80e0dd9c04d00c2ceab233bf88427
-  Picker: 4f1722c94059567cabd80e53d0ef72ca290d2b93
+  Permission-Camera: afad27bf90337684d4a86f3825112d648c8c4d3b
+  Permission-PhotoLibrary: 4d2eff62c8f4b8a27bcf045c0e36f5047efbbf20
+  Picker: 37554355aef82a532ea95b71b6eeba66bc86182b
   RCTRequired: cec6a34b3ac8a9915c37e7e4ad3aa74726ce4035
   RCTTypeSafety: 93006131180074cffa227a1075802c89a49dd4ce
   React: 29a8b1a02bd764fb7644ef04019270849b9a7ac3
@@ -576,9 +576,9 @@ SPEC CHECKSUMS:
   React-jsi: b6dc94a6a12ff98e8877287a0b7620d365201161
   React-jsiexecutor: 1540d1c01bb493ae3124ed83351b1b6a155db7da
   React-jsinspector: 512e560d0e985d0e8c479a54a4e5c147a9c83493
-  react-native-cameraroll: 3e8adeb9ebf054c75054bf2b9cbbd53cd188c05d
-  react-native-image-picker: 668e72d0277dc8c12ae90e835507c1eddd2e4f85
-  react-native-video: aa527b0acb37f94c4491e70df0274cb26979405d
+  react-native-cameraroll: e2917a5e62da9f10c3d525e157e25e694d2d6dfa
+  react-native-image-picker: 3d3f85baabca60a00b75fb8facc1376db7bbdafa
+  react-native-video: eee541262ada11bc7ffe8ec5508e6a877937c462
   React-RCTActionSheet: f41ea8a811aac770e0cc6e0ad6b270c644ea8b7c
   React-RCTAnimation: 49ab98b1c1ff4445148b72a3d61554138565bad0
   React-RCTBlob: a332773f0ebc413a0ce85942a55b064471587a71
@@ -589,22 +589,22 @@ SPEC CHECKSUMS:
   React-RCTText: fae545b10cfdb3d247c36c56f61a94cfd6dba41d
   React-RCTVibration: 4356114dbcba4ce66991096e51a66e61eda51256
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
-  RNAppleAuthentication: 64a29b6d4c6435afa6341ab07c8b1ccf5ed68fef
-  RNCAsyncStorage: db711e29e5e0500d9bd21aa0c2e397efa45302b1
-  RNCPicker: 55b9b4240d0a9eba8733d02616775d4040de2e7d
+  RNAppleAuthentication: 473b2c076f1a48a537610580a168c1fb6d0a90c6
+  RNCAsyncStorage: d059c3ee71738c39834a627476322a5a8cd5bf36
+  RNCPicker: 494015f2b7ec4bee5484b6f235aa19691426dcdb
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNGoogleSignin: ccf71ee4b6cfd324fd788a41e457e2043838c0d9
-  RNPermissions: 1888705aebcc81714efa5dbff94351e4388ae012
-  RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
-  RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
-  RNSound: c980916b596cc15c8dcd2f6ecd3b13c4881dbe20
+  RNPermissions: ad71dd4f767ec254f2cd57592fbee02afee75467
+  RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
+  RNScreens: cf198f915f8a2bf163de94ca9f5bfc8d326c3706
+  RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNTextGradientView: 3eb4744303f801546fad35ac47a53cc82257cb25
-  RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
-  toolbar-android: 404f4450b203597e7b417f714ff417bed562a1be
+  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
+  toolbar-android: 85f3ef4d691469f2d304e7dee4bca013aa1ba1ff
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: efc1c1e1cdd7b9cde45f557d3460b36c1733a61d
+PODFILE CHECKSUM: 05d3c670602f490eb1f9f9fd6ba8d5eb7c0d1c51
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.3
