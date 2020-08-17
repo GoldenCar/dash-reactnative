@@ -41,20 +41,12 @@ Component.defaultProps = {
 
 const styles = StyleSheet.create({
   container: {
-    //backgroundColor: '#f0f5fa',
     borderRadius: 25,
     marginHorizontal: 15,
     marginVertical: 5,
     flexDirection: 'row',
-
-   // border: 1px solid #E7EEF5;
-
-   borderWidth: 1,
-   borderColor: '#E7EEF5',
-
-   // background: linear-gradient(233.69deg, #FFFFFF 2.28%, #E7EEF5 96.09%);
-
-
+    borderWidth: 1,
+    borderColor: '#E7EEF5'
   },
   left: {
     flex: 3,
@@ -65,12 +57,14 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Poppins-Bold',
     paddingBottom: 7.5,
-    color: '#21293D'
+    color: '#21293D',
+    fontSize: 14
   },
   description: {
     fontFamily: 'Poppins-Regular',
-    color: '#21293D',
-    fontSize: 14
+    color: '#8A98B7',
+    fontSize: 12,
+    lineHeight: 20
   },
   image: {
     flex: 1,

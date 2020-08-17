@@ -4,11 +4,13 @@ import {
   StyleSheet,
   ScrollView,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  FlatList
 } from 'react-native';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Actions} from 'react-native-router-flux';
+import LinearGradient from 'react-native-linear-gradient';
 
 import Search from '../../components/Search';
 import Challenge from '../../components/Challenge';
@@ -58,19 +60,24 @@ function Component(props) {
           onPress={() => Actions.pop()}
           style={styles.close}
         >
-          <Icon name='close' color="#B6BCCA" size={20} />
+          <Icon name='close' color="#586178" size={15} />
         </TouchableOpacity>
       </View>
-
-      <ScrollView bounces={false}>
-        <View style={[styles.contentContainerStyle, results.length === 0 && { paddingTop: 0 }]}>
-          {results.map((value, index) => (
-            <View key={index}>
-              <Challenge value={value} viewedBy={viewedBy} explore />
-            </View>
-          ))}
-        </View>
-      </ScrollView>
+      <FlatList
+        data={results}
+        renderItem={({ item, index, separators }) => (
+          <View>
+            <Challenge value={item} viewedBy={viewedBy} explore />
+          </View>
+        )}
+        contentContainerStyle={{ flexGrow: 1 }}
+        ListEmptyComponent={
+          <LinearGradient 
+          colors={['#F0F5FA', 'rgb(240, 245, 250)']}
+          style={{ flex: 1 }}
+          />
+        }
+      />
     </View>
   );
 }
@@ -78,12 +85,7 @@ function Component(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 30
-  },
-  contentContainerStyle: {
-    backgroundColor: '#E5E5E5',
-    flex: 1,
-    paddingTop: 30
+    paddingTop: 30,
   },
   searchSection: {
     paddingBottom: 20
@@ -102,8 +104,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 0.5,
-    borderColor: '#96AAC6'
+    borderWidth: 1,
+    borderColor: '#E7EEF5'
   },
   search: {
     marginHorizontal: 0,

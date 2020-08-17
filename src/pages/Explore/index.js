@@ -114,10 +114,17 @@ function Component(props) {
         <TouchableOpacity style={styles.search} onPress={() => Actions.Search()}>
           <SearchButton />
         </TouchableOpacity>
-        <LinearGradient 
+        <View style={styles.challengesContainer}>
+        { /* TODO: fix this gradient (top 300px of explore section) */ }
+        {/* <LinearGradient 
           colors={['#F0F5FA', 'rgb(240, 245, 250)']}
-          style={styles.challengesContainer}
-        >
+          style={{
+            position: 'absolute',
+            height: 300,
+            top: 0,
+            zIndex: 1
+          }}
+        /> */}
           <Text style={styles.title}>Explore</Text>
           <ScrollView
             horizontal
@@ -128,7 +135,7 @@ function Component(props) {
               <TouchableWithoutFeedback
                 key={index}
                 //onPress={() => Actions.ChallengeDetail({challenge: value})}
-                onPress={() => Actions.ExplorePost()}
+                onPress={() => Actions.ExplorePost({ challenge: value })}
                 >
                 <View>
                   <Challenge value={value} viewedBy={viewedBy} explore />
@@ -136,7 +143,7 @@ function Component(props) {
               </TouchableWithoutFeedback>
             ))}
           </ScrollView>
-        </LinearGradient>
+        </View>
 
         <View style={styles.hostContainer}>
           <Text style={[styles.title, { marginBottom: 10 }]}>Host a Challenge</Text>
