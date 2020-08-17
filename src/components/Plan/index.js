@@ -7,12 +7,8 @@ import { mediaHost } from 'dash/src/config';
 export default function Component(props) {
   const { value } = props;
 
-  // TODO: make gradiant go left to right
-
   return (
-    // <View style={styles.container}>
     <LinearGradient
-    // linear-gradient(233.69deg, #FFFFFF 2.28%, #E7EEF5 96.09%);
       colors={['#FFFFFF', '#E7EEF5']}
       style={styles.container}
       start={{x: 1, y: 0}} end={{x: 0, y: 0}}

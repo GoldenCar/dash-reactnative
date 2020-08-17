@@ -106,8 +106,6 @@ function Component(props) {
     init();
   }, []);
 
-  // TODO: linear gradient should only been in first 1/3 of page, not all of it
-
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainerStyle}  bounces={false}>
@@ -170,7 +168,6 @@ const styles = StyleSheet.create({
   },
   contentContainerStyle: {
     paddingBottom: 100,
-    //backgroundColor: 'green'
   },
   challengesContainer: {
     paddingTop: 30,
@@ -178,7 +175,6 @@ const styles = StyleSheet.create({
   },
   hostContainer: {
     marginBottom: 30,
-    //backgroundColor: 'orange'
   },
   title: {
     fontFamily: 'Poppins-Bold',
