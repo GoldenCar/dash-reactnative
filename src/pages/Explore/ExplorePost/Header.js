@@ -10,12 +10,13 @@ import {
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 
+import { mediaHost } from 'dash/src/config';
 import {BackArrow} from '../../../components/Icons';
 
 const {width, height} = Dimensions.get('window');
 
 export default function Component(props) {
-  const {ScrollViewAnimation} = props;
+  const {ScrollViewAnimation, value} = props;
   const scale = ScrollViewAnimation.interpolate({
     inputRange: [0, height / 2 - 20],
     outputRange: [1, 1.1],
@@ -26,6 +27,14 @@ export default function Component(props) {
     outputRange: [10, -1],
     extrapolate: 'clamp',
   });
+
+  let bgImgUrl = '';
+  if (value.challengeBGImage.includes('-')) {
+    bgImgUrl = { uri: `${mediaHost}${value.challengeBGImage}` };
+  } else {
+    bgImgUrl = value.challengeBGImage
+  }
+
   return (
     <>
       <View style={styles.container}>
@@ -39,7 +48,8 @@ export default function Component(props) {
           <Image
             style={styles.picture}
             resizeMode="cover"
-            source={require('dash/src/res/explore/ExplorePost.png')}
+            //source={require('dash/src/res/explore/ExplorePost.png')}
+            source={{uri: `${mediaHost}${value.challengeBGImage}`}}
           />
         </Animated.View>
       </View>
