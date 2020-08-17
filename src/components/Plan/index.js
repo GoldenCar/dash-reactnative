@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 import { mediaHost } from 'dash/src/config';
 
@@ -7,7 +8,11 @@ export default function Component(props) {
   const { value } = props;
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={['#FFFFFF', '#E7EEF5']}
+      style={styles.container}
+      start={{x: 1, y: 0}} end={{x: 0, y: 0}}
+    >
       <View style={styles.left}>
         <Text style={styles.title}>
         {value.title}
@@ -22,7 +27,7 @@ export default function Component(props) {
           style={styles.image}
         />
       </View>
-    </View>
+      </LinearGradient>
   );
 }
 
@@ -32,11 +37,12 @@ Component.defaultProps = {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f0f5fa',
     borderRadius: 25,
     marginHorizontal: 15,
     marginVertical: 5,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderColor: '#E7EEF5'
   },
   left: {
     flex: 3,
@@ -47,12 +53,14 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Poppins-Bold',
     paddingBottom: 7.5,
-    color: '#21293D'
+    color: '#21293D',
+    fontSize: 14
   },
   description: {
     fontFamily: 'Poppins-Regular',
-    color: '#21293D',
-    fontSize: 14
+    color: '#8A98B7',
+    fontSize: 12,
+    lineHeight: 20
   },
   image: {
     flex: 1,

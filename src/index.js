@@ -25,6 +25,7 @@ import AccountInformation from './pages/AccountInformation';
 import PickAUsername from './pages/PickAUsername';
 import ChallengeDetail from './pages/ChallengeDetail';
 import InviteFriends from 'dash/src/pages/ChallengeDetail/InviteFriends';
+import Search from './pages/Search';
 
 import PostPage from 'dash/src/pages/ChallengeDetail/Social/PostPage';
 import CreatePost from 'dash/src/pages/ChallengeDetail/Social/CreatePost';
@@ -160,6 +161,7 @@ export default () => {
                 <Scene key="Workout" component={Workout} hideNavBar />
                 <Scene key="Completed" component={Completed} hideNavBar />
                 <Scene key="WorkoutOverView" component={WorkoutOverView} hideNavBar />
+                <Scene key="Search" component={Search} hideNavBar />
               </Scene>
             </Router>
             <ProfileDetailPopup ref={(e) => (ProfileDetailPopupRef = e)} />

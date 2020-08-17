@@ -5,10 +5,13 @@ import SearchTextInput from './Icons/SearchTextInput';
 
 export default function Component(props) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, props.containerStyle]}>
       <SearchTextInput />
-      <TextInput style={[styles.textInput, Platform.OS === 'ios' ? {paddingVertical: 10} :{}]} 
-      placeholder={props.placeholder} />
+      <TextInput 
+        style={[styles.textInput, Platform.OS === 'ios' ? {paddingVertical: 10} :{}]} 
+        placeholder={props.placeholder}
+        {...props}
+      />
     </View>
   );
 }

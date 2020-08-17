@@ -4,9 +4,11 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   ScrollView,
-  Text
+  Text,
+  TouchableOpacity
 } from 'react-native';
 import {connect} from 'react-redux';
+import LinearGradient from 'react-native-linear-gradient';
 
 import Challenge from '../../components/Challenge';
 import SearchButton from '../../components/SearchButton';
@@ -107,9 +109,21 @@ function Component(props) {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainerStyle}  bounces={false}>
-        <Text style={styles.title}>Explore</Text>
-        <SearchButton style={styles.search} />
+        <TouchableOpacity style={styles.search} onPress={() => Actions.Search()}>
+          <SearchButton />
+        </TouchableOpacity>
         <View style={styles.challengesContainer}>
+        { /* TODO: fix this gradient (top 300px of explore section) */ }
+        {/* <LinearGradient 
+          colors={['#F0F5FA', 'rgb(240, 245, 250)']}
+          style={{
+            position: 'absolute',
+            height: 300,
+            top: 0,
+            zIndex: 1
+          }}
+        /> */}
+          <Text style={styles.title}>Explore</Text>
           <ScrollView
             horizontal
             pagingEnabled
@@ -118,8 +132,8 @@ function Component(props) {
             {challenges.map((value, index) => (
               <TouchableWithoutFeedback
                 key={index}
-                onPress={() => Actions.ChallengeDetail({challenge: value})}
-                // onPress={() => Actions.ExplorePost()}
+                //onPress={() => Actions.ChallengeDetail({challenge: value})}
+                onPress={() => Actions.ExplorePost({ challenge: value })}
                 >
                 <View>
                   <Challenge value={value} viewedBy={viewedBy} explore />
@@ -127,21 +141,21 @@ function Component(props) {
               </TouchableWithoutFeedback>
             ))}
           </ScrollView>
+        </View>
 
-          <View style={styles.hostContainer}>
-            <Text style={[styles.title, { marginBottom: 10 }]}>Host a Challenge</Text>
-            <Text style={styles.subtitle}>
-              Choose one of our plans and host a challenge for you and your friends
-            </Text>
-          </View>
+        <View style={styles.hostContainer}>
+          <Text style={[styles.title, { marginBottom: 10 }]}>Host a Challenge</Text>
+          <Text style={styles.subtitle}>
+            Choose one of our plans and host a challenge for you and your friends
+          </Text>
           {plans.map((value, index) => (
-              <TouchableWithoutFeedback
-                key={index}
-                onPress={() => {}}
-                >
-                  <Plan value={value} />
-              </TouchableWithoutFeedback>
-            ))}
+            <TouchableWithoutFeedback
+              key={index}
+              onPress={() => {}}
+              >
+                <Plan value={value} />
+            </TouchableWithoutFeedback>
+          ))}
         </View>
       </ScrollView>
     </View>
@@ -149,14 +163,25 @@ function Component(props) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  contentContainerStyle: {
+    paddingBottom: 100,
+  },
   challengesContainer: {
-    marginTop: 30,
+    paddingTop: 30,
+    paddingBottom: 30
+  },
+  hostContainer: {
+    marginBottom: 30,
   },
   title: {
     fontFamily: 'Poppins-Bold',
     fontSize: 28,
     color: '#21293D',
     marginHorizontal: 15,
+    marginBottom: 30
   },
   subtitle: {
     fontFamily: 'Poppins-Regular',
@@ -164,20 +189,11 @@ const styles = StyleSheet.create({
     color: '#21293D',
     marginHorizontal: 15
   },
-  container: {
-    flex: 1,
-  },
-  contentContainerStyle: {
-    paddingTop: 30,
-    paddingBottom: 100,
-  },
   search: {
     position: 'absolute',
     right: 20,
-    top: 30
-  },
-  hostContainer: {
-    marginBottom: 30
+    top: 30,
+    zIndex: 10
   }
 });
 export default connect(({challenges}) => ({
