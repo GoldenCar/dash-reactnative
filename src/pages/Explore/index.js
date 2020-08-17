@@ -5,10 +5,12 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
 } from 'react-native';
 import {connect} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
+import Carousel from 'react-native-snap-carousel';
 
 import Challenge from '../../components/Challenge';
 import SearchButton from '../../components/SearchButton';
@@ -17,6 +19,10 @@ import Plan from '../../components/Plan';
 
 import {Actions} from 'react-native-router-flux';
 import * as plansActions from '../../actions/plans';
+
+const { width } = Dimensions.get('window');
+
+const ITEM_WIDTH = width - 60;
 
 const viewedBy = [
   {
@@ -88,6 +94,25 @@ const array = [
   },
 ];
 
+function renderItem({item, index}) {
+  return (
+    <TouchableWithoutFeedback
+      key={index}
+      //onPress={() => Actions.ChallengeDetail({challenge: value})}
+      onPress={() => Actions.ExplorePost({ challenge: item })}
+    >
+      <View>
+        <Challenge 
+          value={item}
+          viewedBy={viewedBy}
+          explore
+          cardWidth={ITEM_WIDTH}
+        />
+      </View>
+    </TouchableWithoutFeedback>
+  )
+}
+
 function Component(props) {
  
   const challenges = props.challenges.filter(
@@ -124,23 +149,12 @@ function Component(props) {
           }}
         /> */}
           <Text style={styles.title}>Explore</Text>
-          <ScrollView
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-          >
-            {challenges.map((value, index) => (
-              <TouchableWithoutFeedback
-                key={index}
-                //onPress={() => Actions.ChallengeDetail({challenge: value})}
-                onPress={() => Actions.ExplorePost({ challenge: value })}
-                >
-                <View>
-                  <Challenge value={value} viewedBy={viewedBy} explore />
-                </View>
-              </TouchableWithoutFeedback>
-            ))}
-          </ScrollView>
+          <Carousel
+            data={challenges}
+            sliderWidth={width}
+            itemWidth={ITEM_WIDTH}
+            renderItem={renderItem}
+          />
         </View>
 
         <View style={styles.hostContainer}>

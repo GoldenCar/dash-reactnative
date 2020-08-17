@@ -40,7 +40,7 @@ const array = [
 ];
 export default function Component(props) {
 
-  const { explore, value, past, viewedBy } = props;
+  const { explore, value, past, viewedBy, cardWidth } = props;
 
   let bgImgUrl = '';
   if (value.challengeBGImage.includes('-')) {
@@ -49,8 +49,13 @@ export default function Component(props) {
     bgImgUrl = value.challengeBGImage
   }
 
+  const exploreContainerStyle = explore ? {
+    marginHorizontal: 0,
+    width: cardWidth
+  } : {};
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, exploreContainerStyle]}>
       <View
         style={[
           styles.pictureContainer,
@@ -59,6 +64,7 @@ export default function Component(props) {
               height: width / 2,
             }
             : {},
+          { width: cardWidth }
         ]}>
         <Image
            source={{uri: `${mediaHost}${value.challengeBGImage}`}} // Chandni will enbale for uploaded images 
@@ -73,6 +79,7 @@ export default function Component(props) {
                 height: width / 2 + 50,
               }
               : {},
+            { width: cardWidth }
           ]}
         />
         {value.newPosts && (
