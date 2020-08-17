@@ -159,7 +159,7 @@ function Component(props) {
         </View>
 
         <View style={styles.hostContainer}>
-          <Text style={[styles.title, { marginBottom: 10 }]}>Host a Challenge</Text>
+          <Text style={styles.hostTitle}>Host a Challenge</Text>
           <Text style={styles.subtitle}>
             Choose one of our plans and host a challenge for you and your friends
           </Text>
@@ -193,22 +193,34 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 28,
-    color: '#21293D',
-    marginHorizontal: 15,
+    fontSize: 32,
+    color: '#3F434F',
+    marginHorizontal: 16,
     marginBottom: 30
   },
   subtitle: {
     fontFamily: 'Poppins-Regular',
     fontSize: 14,
-    color: '#21293D',
-    marginHorizontal: 15
+    color: '#8A98B7',
+    marginHorizontal: 16,
+    marginBottom: 22,
+    fontWeight: '500',
+    lineHeight: 24,
   },
   search: {
     position: 'absolute',
     right: 20,
     top: 25,
     zIndex: 10
+  },
+  hostTitle: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: 24,
+    lineHeight: 32,
+    letterSpacing: .7,
+    color: '#3F434F',
+    marginHorizontal: 16,
+    marginBottom: 13
   }
 });
 export default connect(({challenges}) => ({
