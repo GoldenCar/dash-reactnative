@@ -9,6 +9,9 @@ import ViewedBy from './ViewedBy';
 
 const { width } = Dimensions.get('window');
 
+const GUTTER = 15;
+const CARD_WIDTH = width - (GUTTER * 2);
+
 const array = [
   {
     default: true,
@@ -82,7 +85,7 @@ export default function Component(props) {
         )}
       </View>
       <View style={[styles.bottomContainer, explore && { alignItems: 'center' }]}>
-        <Text style={styles.title}>{value.title}</Text>
+        <Text style={[styles.title, explore && { textAlign: 'center' }]}>{value.title}</Text>
         {explore ? (
           <>
             <View style={styles.seperator} />
@@ -197,7 +200,7 @@ const styles = StyleSheet.create({
   title: {
     color: '#21293D',
     fontSize: 18,
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-Bold'
   },
   bottomContainer: {
     padding: 25,
@@ -219,15 +222,16 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 2,
     shadowOpacity: 0.5,
+    width: CARD_WIDTH
   },
   pictureContainer: {
-    width: width - 30,
-    height: width - 30,
+    width: CARD_WIDTH,
+    height: CARD_WIDTH,
     overflow: 'hidden',
   },
   picture: {
-    width: width - 30,
-    height: width - 30,
+    width: CARD_WIDTH,
+    height: CARD_WIDTH
   },
   seperator: {
     width: '100%',
