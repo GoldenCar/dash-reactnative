@@ -154,6 +154,7 @@ function Component(props) {
             sliderWidth={width}
             itemWidth={ITEM_WIDTH}
             renderItem={renderItem}
+            activeSlideAlignment='start'
           />
         </View>
 
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
   search: {
     position: 'absolute',
     right: 20,
-    top: 30,
+    top: 25,
     zIndex: 10
   }
 });
