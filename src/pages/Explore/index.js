@@ -124,14 +124,13 @@ function Component(props) {
     const requestPlans = async () => {
       try {
         const data = await plansActions.getPlans();
-        console.log("categories1.....", data)
-        setPlans(data);
+        console.log("categories1.....", data);
+        const currentPlans = data.filter((plan) => plan.status === 'current');
+        setPlans(currentPlans);
       } catch (e) {}
     };
     requestPlans();
   }, []);
-
-  // TODO: why are old / removed plans coming through?
 
   return (
     <View style={styles.container}>
