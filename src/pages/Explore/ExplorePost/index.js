@@ -10,6 +10,7 @@ import {
   Animated,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import moment from 'moment';
 
 import {Globe} from 'dash/src/components/Icons/index';
 import ViewedBy from 'dash/src/components/Challenge/ViewedBy';
@@ -20,8 +21,10 @@ import Header from './Header';
 import TimeTillChallenge from './TimeTillChallenge';
 import ChallengeSchedule from './ChallengeSchedule';
 import { Calendar } from '../../../components/Icons';
+import Countdown from './Countdown';
 
 import * as plansActions from '../../../actions/plans';
+import { mediaHost } from 'dash/src/config';
 
 const {height} = Dimensions.get('window');
 
@@ -57,6 +60,31 @@ export default class Component extends React.Component {
     console.log('PLAN in state', this.state.plan);
 
     // TODO: request challenge details
+
+    // TODO: get plans, filter non-current and find one with same name as challenge.plan
+
+    //const [plans, setPlans] = useState([]);
+    // useEffect(() => {
+    //   const requestPlans = async () => {
+    //     try {
+    //       const data = await plansActions.getPlans();
+    //       console.log("categories1.....", data);
+    //       const currentPlans = data.filter((plan) => plan.status === 'current');
+
+    //       console.log(currentPlans);
+
+    //       //setPlans(currentPlans);
+    //     } catch (e) {}
+    //   };
+    //   requestPlans();
+    // }, []);
+
+    const startDate = moment(challenge.startDate).format('YYYY-MM-DD');
+    const milliTo = moment(new Date(challenge.startDate)).diff(moment(new Date()), 'seconds');
+
+    console.log(milliTo);
+
+    console.log(startDate);
 
     return (
       <View style={styles.container}>
@@ -95,8 +123,10 @@ export default class Component extends React.Component {
               end={{ x: 1, y: 0 }}
               style={styles.planContainer}
             >
-              { /* TODO: add plan image */ }
-              <View style={{ height: 175 }} />
+              <Image 
+                source={{uri: `${mediaHost}${plan.planImage}`}}
+                style={styles.planImage}
+              />
               <Text style={styles.planTextBlue}>Challenges Plan:</Text>
               <Text style={styles.planTitle}>
                 {plan.title}
@@ -119,7 +149,10 @@ export default class Component extends React.Component {
                   Challenge Starts in:
                 </Text>
               </View>
-              { /* TODO: set up countdown */ }
+              { /* TODO: set up countdown 
+              "2020-7-15-6-23-52"
+              */ }
+              <Countdown initialTime={milliTo} />
               <View style={styles.countdownContent}>
                 <View style={styles.countdown}>
                   <View style={styles.countdownColumn}>
@@ -224,6 +257,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 30,
     alignItems: 'center'
+  },
+  planImage: {
+    height: 200,
+    width: 200,
+    marginBottom: 28
   },
   planTextBlue: {
     fontFamily: 'Poppins-Bold',
