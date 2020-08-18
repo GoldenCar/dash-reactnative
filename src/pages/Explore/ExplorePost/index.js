@@ -72,7 +72,7 @@ export default class Component extends React.Component {
               },
             ]}>
             <View style={styles.circle}></View>
-            <View style={[styles.paddingHorizontal, {paddingTop: 10}]}>
+            <View style={styles.padding}>
               { /* TODO: host is currently broken. test when fixed */ }
               <Text style={styles.host}>Hosted by {challenge.host}</Text>
                 <Text style={styles.title}>{challenge.title}</Text>
@@ -138,8 +138,9 @@ export default class Component extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  paddingHorizontal: {
+  padding: {
     paddingHorizontal: 15,
+    paddingTop: 10
   },
   container: {
     flex: 1,
