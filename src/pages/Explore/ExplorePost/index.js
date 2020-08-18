@@ -5,28 +5,22 @@ import {
   ScrollView,
   Dimensions,
   Text,
-  Image,
   TouchableOpacity,
   Animated,
+  Image
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import moment from 'moment';
 
-import {Globe} from 'dash/src/components/Icons/index';
-import ViewedBy from 'dash/src/components/Challenge/ViewedBy';
-import ChallengeTypeContainer from 'dash/src/components/ChallengeTypeContainer';
 import AuthPopup from 'dash/src/components/AuthPopup';
-
 import Header from './Header';
-import TimeTillChallenge from './TimeTillChallenge';
-import ChallengeSchedule from './ChallengeSchedule';
-import { Calendar } from '../../../components/Icons';
 import Countdown from './Countdown';
+import { Calendar } from '../../../components/Icons';
 
 import * as plansActions from '../../../actions/plans';
 import { mediaHost } from 'dash/src/config';
 
-const {height} = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 export default class Component extends React.Component {
   AuthPopupRef;
@@ -41,10 +35,7 @@ export default class Component extends React.Component {
   async componentDidMount() {
     const { challenge } = this.props;
     const data = await plansActions.getPlans();
-    console.log("categories1.....", data);
     let plan = data.filter((plan) => plan.status === 'current' && challenge.Plan === plan.title);
-
-   // console.log('plan', currentPlans);
 
     if (plan.length > 0) {
       plan = plan[0];
@@ -54,37 +45,9 @@ export default class Component extends React.Component {
 
   render() {
     const { plan } = this.state;
-    console.log(this.props);
     const { challenge } = this.props;
 
-    console.log('PLAN in state', this.state.plan);
-
-    // TODO: request challenge details
-
-    // TODO: get plans, filter non-current and find one with same name as challenge.plan
-
-    //const [plans, setPlans] = useState([]);
-    // useEffect(() => {
-    //   const requestPlans = async () => {
-    //     try {
-    //       const data = await plansActions.getPlans();
-    //       console.log("categories1.....", data);
-    //       const currentPlans = data.filter((plan) => plan.status === 'current');
-
-    //       console.log(currentPlans);
-
-    //       //setPlans(currentPlans);
-    //     } catch (e) {}
-    //   };
-    //   requestPlans();
-    // }, []);
-
-    const startDate = moment(challenge.startDate).format('YYYY-MM-DD');
-    const milliTo = moment(new Date(challenge.startDate)).diff(moment(new Date()), 'seconds');
-
-    console.log(milliTo);
-
-    console.log(startDate);
+    const timeTilStart = moment(new Date(challenge.startDate)).diff(moment(new Date()), 'seconds');
 
     return (
       <View style={styles.container}>
@@ -141,7 +104,6 @@ export default class Component extends React.Component {
                 </Text>
               </View>
             </LinearGradient>
-            {/* <TimeTillChallenge /> */}
 
             <View style={styles.countdownContainer}>
               <View style={styles.countdownTitleContainer}>
@@ -149,29 +111,8 @@ export default class Component extends React.Component {
                   Challenge Starts in:
                 </Text>
               </View>
-              { /* TODO: set up countdown 
-              "2020-7-15-6-23-52"
-              */ }
-              <Countdown initialTime={milliTo} />
               <View style={styles.countdownContent}>
-                <View style={styles.countdown}>
-                  <View style={styles.countdownColumn}>
-                    <Text style={styles.columnValue}>2</Text>
-                    <Text style={styles.columnLabel}>Days</Text>
-                  </View>
-                  <View style={styles.countdownColumn}>
-                    <Text style={styles.columnValue}>2</Text>
-                    <Text style={styles.columnLabel}>Hour</Text>
-                  </View>
-                  <View style={styles.countdownColumn}>
-                    <Text style={styles.columnValue}>2</Text>
-                    <Text style={styles.columnLabel}>Mins</Text>
-                  </View>
-                  <View style={styles.countdownColumn}>
-                    <Text style={styles.columnValue}>2</Text>
-                    <Text style={styles.columnLabel}>Secs</Text>
-                  </View>
-                </View>
+                <Countdown initialTime={timeTilStart} />
                 <View style={styles.joinButton}>
                   <Text style={styles.joinText}>
                     { /* TODO: hook up button */ }
@@ -336,36 +277,6 @@ const styles = StyleSheet.create({
   countdownContent: {
     flexDirection: 'row',
     justifyContent: 'space-between'
-  },
-  countdown: {
-    width: 216,
-    height: 48,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
-    borderRadius: 8,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-  },
-  countdownColumn: {
-    
-  },
-  columnValue: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: 18,
-    lineHeight: 24,
-    textAlign: 'center',
-    color: '#FFFFFF'
-  },
-  columnLabel: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: 10,
-    lineHeight: 16,
-    textAlign: 'center',
-    letterSpacing: 2,
-    textTransform: 'uppercase',
-    color: '#FFFFFF',
-    opacity: 0.7
   },
   joinButton: {
     width: 89,
