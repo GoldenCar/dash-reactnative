@@ -20,6 +20,8 @@ import Plan from '../../components/Plan';
 import {Actions} from 'react-native-router-flux';
 import * as plansActions from '../../actions/plans';
 
+import {CreateNewChallengeRef} from 'dash/src/pages/CustomTabBar';
+
 const { width } = Dimensions.get('window');
 
 const ITEM_WIDTH = width - 60;
@@ -165,12 +167,17 @@ function Component(props) {
             Choose one of our plans and host a challenge for you and your friends
           </Text>
           {plans.map((value, index) => (
-            <TouchableWithoutFeedback
+            <TouchableOpacity
               key={index}
-              onPress={() => {}}
+              onPress={() => CreateNewChallengeRef.openCreateNew()}
+              //onPress={() => Actions.CreateNewChallenge()}
+
+              // TODO: need to navigate how CreateNew is doing it
+              //       this goes to create new challenge - daily task
+              //       scene - CreateNewChallenge
               >
                 <Plan value={value} />
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
