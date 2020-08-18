@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -21,14 +21,40 @@ import TimeTillChallenge from './TimeTillChallenge';
 import ChallengeSchedule from './ChallengeSchedule';
 import { Calendar } from '../../../components/Icons';
 
+import * as plansActions from '../../../actions/plans';
+
 const {height} = Dimensions.get('window');
 
 export default class Component extends React.Component {
   AuthPopupRef;
   ScrollViewAnimation = new Animated.Value(0);
+
+  state = {
+    plan: {}
+  }
+
+  // NOTE: currently finding plan based on title. this is not acceptable
+  //       need to fix plan id and use that instead
+  async componentDidMount() {
+    const { challenge } = this.props;
+    const data = await plansActions.getPlans();
+    console.log("categories1.....", data);
+    let plan = data.filter((plan) => plan.status === 'current' && challenge.Plan === plan.title);
+
+   // console.log('plan', currentPlans);
+
+    if (plan.length > 0) {
+      plan = plan[0];
+      this.setState({ plan })
+    }
+  }
+
   render() {
+    const { plan } = this.state;
     console.log(this.props);
     const { challenge } = this.props;
+
+    console.log('PLAN in state', this.state.plan);
 
     // TODO: request challenge details
 
@@ -56,6 +82,7 @@ export default class Component extends React.Component {
             ]}>
             <View style={styles.circle}></View>
             <View style={[styles.paddingHorizontal, {paddingTop: 10}]}>
+              { /* TODO: host is currently broken. test when fixed */ }
               <Text style={styles.host}>Hosted by {challenge.host}</Text>
                 <Text style={styles.title}>{challenge.title}</Text>
                 <Text style={styles.description}>
@@ -68,16 +95,18 @@ export default class Component extends React.Component {
               end={{ x: 1, y: 0 }}
               style={styles.planContainer}
             >
+              { /* TODO: add plan image */ }
               <View style={{ height: 175 }} />
               <Text style={styles.planTextBlue}>Challenges Plan:</Text>
               <Text style={styles.planTitle}>
-                20 Minute Daily Mens Workout
+                {plan.title}
               </Text>
               <View style={styles.viewButton}>
                 <View style={styles.iconContainer}>
                   <Calendar />
                 </View>
                 <Text style={styles.viewText}>
+                  { /* TODO: hook up button */ }
                   View Plan
                 </Text>
               </View>
@@ -90,6 +119,7 @@ export default class Component extends React.Component {
                   Challenge Starts in:
                 </Text>
               </View>
+              { /* TODO: set up countdown */ }
               <View style={styles.countdownContent}>
                 <View style={styles.countdown}>
                   <View style={styles.countdownColumn}>
@@ -111,6 +141,7 @@ export default class Component extends React.Component {
                 </View>
                 <View style={styles.joinButton}>
                   <Text style={styles.joinText}>
+                    { /* TODO: hook up button */ }
                     Join
                   </Text>
                 </View>
