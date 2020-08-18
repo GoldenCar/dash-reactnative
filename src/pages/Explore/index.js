@@ -121,15 +121,17 @@ function Component(props) {
 
   const [plans, setPlans] = useState([]);
   useEffect(() => {
-    const init = async () => {
+    const requestPlans = async () => {
       try {
         const data = await plansActions.getPlans();
         console.log("categories1.....", data)
         setPlans(data);
       } catch (e) {}
     };
-    init();
+    requestPlans();
   }, []);
+
+  // TODO: why are old / removed plans coming through?
 
   return (
     <View style={styles.container}>
