@@ -82,14 +82,48 @@ export default class Component extends React.Component {
                 </Text>
               </View>
             </LinearGradient>
-            <TimeTillChallenge />
-            <TouchableOpacity
+            {/* <TimeTillChallenge /> */}
+
+            <View style={styles.countdownContainer}>
+              <View style={styles.countdownTitleContainer}>
+                <Text style={styles.countdownTitle}>
+                  Challenge Starts in:
+                </Text>
+              </View>
+              <View style={styles.countdownContent}>
+                <View style={styles.countdown}>
+                  <View style={styles.countdownColumn}>
+                    <Text style={styles.columnValue}>2</Text>
+                    <Text style={styles.columnLabel}>Days</Text>
+                  </View>
+                  <View style={styles.countdownColumn}>
+                    <Text style={styles.columnValue}>2</Text>
+                    <Text style={styles.columnLabel}>Hour</Text>
+                  </View>
+                  <View style={styles.countdownColumn}>
+                    <Text style={styles.columnValue}>2</Text>
+                    <Text style={styles.columnLabel}>Mins</Text>
+                  </View>
+                  <View style={styles.countdownColumn}>
+                    <Text style={styles.columnValue}>2</Text>
+                    <Text style={styles.columnLabel}>Secs</Text>
+                  </View>
+                </View>
+                <View style={styles.joinButton}>
+                  <Text style={styles.joinText}>
+                    Join
+                  </Text>
+                </View>
+              </View>
+            </View>
+
+            {/* <TouchableOpacity
               style={styles.joinChallengeContainer}
               onPress={() => {
                 this.AuthPopupRef.open();
               }}>
               <Text style={styles.joinChallengeText}>Join Challenge</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </ScrollView>
         <AuthPopup ref={(e) => (this.AuthPopupRef = e)} />
@@ -203,16 +237,92 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: '#1AA0FF'
   },
-  joinChallengeText: {
-    color: 'white',
-    fontSize: 16,
-    fontFamily: 'Poppins-Bold',
+  countdownContainer: {
+    height: 115,
+    backgroundColor: '#1AA0FF',
+    //box-shadow: 0px 20px 20px rgba(26, 160, 255, 0.25);
+    borderRadius: 16,
+    margin: 16,
+    padding: 16,
+    justifyContent: 'center'
   },
-  joinChallengeContainer: {
-    marginTop: 50,
-    backgroundColor: '#00A1FF',
-    paddingVertical: 20,
-    alignItems: 'center',
+  countdownTitleContainer: {
+    position: 'absolute',
+    left: 16,
+    top: -20,
     justifyContent: 'center',
+    width: 186,
+    height: 37,
+    backgroundColor: '#FFFFFF'
+  },
+  countdownTitle: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: 10,
+    lineHeight: 16,
+    textAlign: 'center',
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+    color: '#1AA0FF'
+  },
+  countdownContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  countdown: {
+    width: 216,
+    height: 48,
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    borderRadius: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+  },
+  countdownColumn: {
+    
+  },
+  columnValue: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: 18,
+    lineHeight: 24,
+    textAlign: 'center',
+    color: '#FFFFFF'
+  },
+  columnLabel: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: 10,
+    lineHeight: 16,
+    textAlign: 'center',
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+    color: '#FFFFFF',
+    opacity: 0.7
+  },
+  joinButton: {
+    width: 89,
+    height: 48,
+    backgroundColor: '#FFFFFF',
+    //box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.11);
+    borderRadius: 8,
+    justifyContent: 'center'
+  },
+  joinText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 16,
+    lineHeight: 24,
+    textAlign: 'center',
+    color: '#1AA0FF'
   }
+  // joinChallengeText: {
+  //   color: 'white',
+  //   fontSize: 16,
+  //   fontFamily: 'Poppins-Bold',
+  // },
+  // joinChallengeContainer: {
+  //   marginTop: 50,
+  //   backgroundColor: '#00A1FF',
+  //   paddingVertical: 20,
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  // }
 });
