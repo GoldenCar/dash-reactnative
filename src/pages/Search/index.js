@@ -5,8 +5,7 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  FlatList,
-  Keyboard
+  FlatList
 } from 'react-native';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -56,6 +55,7 @@ function Component(props) {
           onChangeText={(value) => setSearchValue(value)}
           containerStyle={styles.search}
         />
+
         <TouchableOpacity 
           onPress={() => Actions.pop()}
           style={styles.close}
@@ -65,19 +65,16 @@ function Component(props) {
       </View>
       <FlatList
         data={results}
-        decelerationRate={.1}
-        onScroll={() => Keyboard.dismiss()}
-        keyboardShouldPersistTaps='always'
         renderItem={({ item, index, separators }) => (
-          <TouchableOpacity onPress={() => Actions.ExplorePost({ challenge: item })}>
+          <View>
             <Challenge value={item} viewedBy={viewedBy} explore />
-          </TouchableOpacity>
+          </View>
         )}
         contentContainerStyle={{ flexGrow: 1 }}
         ListEmptyComponent={
           <LinearGradient 
-            colors={['#F0F5FA', 'rgb(240, 245, 250)']}
-            style={{ flex: 1 }}
+          colors={['#F0F5FA', 'rgb(240, 245, 250)']}
+          style={{ flex: 1 }}
           />
         }
       />

@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, Animated, Text, TouchableOpacity } from 'react-native';
-import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import {View, StyleSheet, Animated, Text, TouchableOpacity} from 'react-native';
+import {AnimatedCircularProgress} from 'react-native-circular-progress';
+import {ArrowNext} from 'dash/src/components/Icons';
 
 export default class RestTime extends React.Component {
     animation = new Animated.Value(2);
@@ -9,6 +10,7 @@ export default class RestTime extends React.Component {
         count: this.props.duration,
         totalTime: this.props.duration * 1000
     };
+
     componentDidMount() {
         if (this.timer) {
             clearTimeout(this.timer);
@@ -35,7 +37,7 @@ export default class RestTime extends React.Component {
     }
 
     start = () => {
-        const { status } = this.props;
+        const {status} = this.props;
 
         if (status === true) {
             this.timer = "Pause";
@@ -71,8 +73,8 @@ export default class RestTime extends React.Component {
     };
 
     complete = () => {
-        const { autoplay, oncomplete } = this.props;
-        const { count } = this.state;
+        const {autoplay, oncomplete} = this.props;
+        const {count} = this.state;
 
         // check count ---
         if (count != 0) {
@@ -97,8 +99,8 @@ export default class RestTime extends React.Component {
     };
 
     render() {
-        const { count } = this.state;
-        const { duration } = this.props;
+        const {count} = this.state;
+        const {duration} = this.props;
 
         const opacity = this.animation.interpolate({
             inputRange: [0, 1, 2],
@@ -121,7 +123,7 @@ export default class RestTime extends React.Component {
                         styles.container,
                         {
                             opacity,
-                            transform: [{ translateY }],
+                            transform: [{translateY}],
                         },
                     ]}>
                     <View
@@ -133,9 +135,10 @@ export default class RestTime extends React.Component {
                             ],
                         }}>
                         <AnimatedCircularProgress
-                            size={180}
+                            size={200}
                             width={20}
                             fill={fillValue}
+                            style={{backgroundColor: '#1AA0FF'}}
                             rotation={0}
                             // duration={totalTime}
                             tintColor="rgba(255,255,255,1)"
@@ -148,9 +151,12 @@ export default class RestTime extends React.Component {
                         <Text style={styles.rest}>REST</Text>
                     </View>
                 </Animated.View>
-                <TouchableOpacity style={styles.skipContainer} onPress={() => this.props.onPress()}>
-                    <Text style={styles.skip}>Skip Rest</Text>
-                </TouchableOpacity>
+                {!this.props.taskPaused && (
+                    <TouchableOpacity style={styles.skipContainer} onPress={() => this.props.onPress()}>
+                        <Text style={styles.skip}>Skip</Text>
+                        <ArrowNext/>
+                    </TouchableOpacity>
+                )}
             </Animated.View>
         );
     }
@@ -163,19 +169,30 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: "#00a5f9",
-        zIndex: -1
+        zIndex: 99,
+        height: '100%',
+        position: 'absolute'
 
     },
     skip: {
+        alignItems: 'center',
+        paddingTop: 3,
         fontSize: 16,
-        lineHeight: 24,
-        fontFamily: 'Poppins-Bold',
+        lineHeight: 20,
+        fontFamily: 'Poppins-Medium',
         color: '#000',
     },
     skipContainer: {
-        marginTop: 20,
-        paddingVertical: 15,
-        paddingHorizontal: 40,
+        flexDirection: 'row',
+        position: 'absolute',
+        zIndex: 101,
+        bottom: 17,
+        right: 16,
+        width: 97,
+        height: 48,
+        justifyContent: 'space-between',
+        paddingHorizontal: 23,
+        alignItems: 'center',
         backgroundColor: '#fff',
         borderRadius: 50
     },
@@ -197,14 +214,16 @@ const styles = StyleSheet.create({
         borderRadius: 115,
     },
     count: {
-        fontSize: 50,
-        lineHeight: 70,
+        fontSize: 56,
+        lineHeight: 60,
         fontFamily: 'Poppins-Bold',
         color: 'white',
     },
     rest: {
-        fontSize: 14,
+        fontSize: 12,
         fontFamily: 'Poppins-Bold',
+        lineHeight: 16,
+        letterSpacing: 1.6,
         color: 'white',
     },
 });

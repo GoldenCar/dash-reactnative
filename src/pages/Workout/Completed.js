@@ -1,47 +1,34 @@
 import * as React from 'react';
 import {
-    StyleSheet,
-    Animated,
-    Dimensions,
-    Platform,
+    Image,
     View,
-    StatusBar,
     Text,
     TouchableOpacity
 } from 'react-native';
-import { Actions } from 'react-native-router-flux';
-import IconEntypo from 'react-native-vector-icons/Entypo';
-import LinearGradient from 'react-native-linear-gradient';
+import {Actions} from 'react-native-router-flux';
 
 export default class Completed extends React.Component {
 
     render() {
-        console.log(" Comleeted props =", this.props); 
+        console.log(" Comleeted props =", this.props);
         return (
-            <View style={{ flex: 1, backgroundColor: 'rgb(0, 154, 255)' }}>
+            <View style={{flex: 1, backgroundColor: 'rgb(0, 154, 255)'}}>
                 <View style={{
                     height: '100%', width: '100%'
                 }}>
-                    <LinearGradient
-                        colors={['rgb(0, 132, 254)', 'rgb(0, 152, 254)','#007BFF']}
+                    <View
                         style={{
+                            backgroundColor: '#1AA0FF',
                             flex: 1,
                             width: '100%',
                             flexDirection: 'column',
                             justifyContent: 'center',
                         }}>
-                        <View style={{ alignItems: 'center', top: 70, position:'absolute', alignSelf:'center' }}>
-                            <View style={{
-
-                                backgroundColor: 'rgb(52, 176, 255)',
-                                width: 110, height: 110,
-                                borderRadius: 55, borderColor: 'white', borderWidth: 7,
-                                alignItems: 'center', justifyContent: 'center',
-                            }}>
-                                <IconEntypo name="check" color="white" style={{ fontSize: 40 }} x/>
-                            </View>
-                        </View>
-                        <View style={{ alignItems: 'center' }}>
+                        <Image style={{
+                            top: 84, position: 'absolute', alignSelf: 'center', width: 136,
+                            height: 136
+                        }} source={require('../../res/checkComplete.png')}/>
+                        <View style={{alignItems: 'center'}}>
                             <Text
                                 style={{
                                     color: 'white',
@@ -53,29 +40,29 @@ export default class Completed extends React.Component {
                             <Text style={{
                                 color: 'white',
                                 fontFamily: 'Poppins-Bold',
-                                fontSize: 24,
-                                lineHeight: 28,
+                                fontSize: 28,
+                                lineHeight: 38,
 
                             }}>You have finished
-                        </Text>
+                            </Text>
                             <Text style={{
                                 color: 'white',
                                 fontFamily: 'Poppins-Bold',
-                                fontSize: 24,
-                                lineHeight: 28,
+                                fontSize: 28,
+                                lineHeight: 38,
 
-                            }}>todays task.</Text>
+                            }}>today's task.</Text>
 
                         </View>
 
                         <View style={{
-                            bottom: 15,
+                            bottom: 37,
                             position: 'absolute', width: '90%', alignSelf: 'center',
-                        }} >
+                        }}>
                             <View style={{
-
-                               height:167,
-                                borderRadius: 22, paddingBottom: 20,
+                                height: 194,
+                                width: 317,
+                                borderRadius: 24, paddingBottom: 26,
                                 backgroundColor: '#FFFFFF',
 
                             }}>
@@ -85,36 +72,40 @@ export default class Completed extends React.Component {
                                             style={{
                                                 color: 'black',
                                                 fontFamily: 'Poppins-Bold',
-                                                fontSize: 20,
-                                                paddingTop:23,
+                                                fontSize: 24,
+                                                paddingTop: 27,
                                                 // lineHeight: 24,
                                                 alignSelf: 'center',
                                             }}>Day 1</Text>
                                         <Text
                                             style={{
-                                                color: 'rgb(176, 190, 212)',
+                                                color: '#8A98B7',
                                                 fontFamily: 'Poppins-Medium',
-                                                fontSize: 14,
+                                                fontSize: 16,
                                                 alignSelf: 'center',
-                                                paddingTop:5
+                                                paddingTop: 5
                                             }}
                                         > Mediation Day</Text>
                                     </View>
                                     <View style={{}}>
 
                                         <TouchableOpacity style={{
-                                            height: 50,
+                                            height: 64,
                                             alignItems: 'center',
-                                            marginTop:10,
-                                            width: '70%',
+                                            marginTop: 14,
+                                            width: 255,
                                             alignSelf: 'center'
 
                                         }} onPress={() => {
-                                            Actions.ChallengeDetail({challenge: this.props.challenge, user: this.props.user, isTaskCompleted: true })
+                                            Actions.ChallengeDetail({
+                                                challenge: this.props.challenge,
+                                                user: this.props.user,
+                                                isTaskCompleted: true
+                                            })
                                         }}>
-                                            <LinearGradient
-                                                colors={['#007BFF', '#00A1FF']}
+                                            <View
                                                 style={{
+                                                    backgroundColor: '#1AA0FF',
                                                     flex: 1,
                                                     width: '100%',
                                                     borderRadius: 24,
@@ -124,21 +115,21 @@ export default class Completed extends React.Component {
                                                 <Text
                                                     style={{
                                                         color: '#FFFFFF',
-                                                        fontFamily: 'Poppins-Medium',
-                                                        fontSize: 14,
+                                                        fontFamily: 'Poppins-Bold',
+                                                        fontSize: 16,
                                                         lineHeight: 24,
                                                         padding: 2,
                                                     }}>
                                                     Mark As Complete!
-                             </Text>
-                                            </LinearGradient>
+                                                </Text>
+                                            </View>
                                         </TouchableOpacity>
 
                                     </View>
                                 </View>
                             </View>
                         </View>
-                    </LinearGradient>
+                    </View>
                 </View>
             </View>
         )
