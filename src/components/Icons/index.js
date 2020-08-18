@@ -42,6 +42,7 @@ import Pause from './Pause';
 import Play from './Play';
 import RoundCircle from './RoundCircle';
 import ArrowNext from './ArrowNext';
+import Calendar from './Calendar';
 
 export {
   Play,
@@ -87,5 +88,6 @@ export {
   WhatsApp,
   Link,
   RoundCircle,
-  ArrowNext
+  ArrowNext,
+  Calendar
 };

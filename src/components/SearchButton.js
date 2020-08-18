@@ -6,7 +6,7 @@ import SearchIcon from './Icons/SearchIcon';
 export default function Component(props) {
   return (
     <View style={[styles.container, props.style]}>
-      <SearchIcon stroke='black' height={15} width={15} />
+      <SearchIcon stroke='#586178' height={15} width={15} />
     </View>
   );
 }
@@ -16,9 +16,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     borderWidth: 1,
     borderColor: '#E7EEF5',
     shadowColor: 'rgba(0,0,0,0.1)',

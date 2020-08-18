@@ -40,7 +40,7 @@ const array = [
 ];
 export default function Component(props) {
 
-  const { explore, value, past, viewedBy } = props;
+  const { explore, value, past, viewedBy, cardWidth } = props;
 
   let bgImgUrl = '';
   if (value.challengeBGImage.includes('-')) {
@@ -49,8 +49,10 @@ export default function Component(props) {
     bgImgUrl = value.challengeBGImage
   }
 
+  const exploreContainerStyle = explore ? { width: cardWidth } : {};
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, exploreContainerStyle]}>
       <View
         style={[
           styles.pictureContainer,
@@ -59,6 +61,7 @@ export default function Component(props) {
               height: width / 2,
             }
             : {},
+          { width: cardWidth }
         ]}>
         <Image
            source={{uri: `${mediaHost}${value.challengeBGImage}`}} // Chandni will enbale for uploaded images 
@@ -73,6 +76,7 @@ export default function Component(props) {
                 height: width / 2 + 50,
               }
               : {},
+            { width: cardWidth }
           ]}
         />
         {value.newPosts && (
@@ -206,28 +210,27 @@ const styles = StyleSheet.create({
     padding: 25,
   },
   container: {
-    overflow: 'hidden',
     backgroundColor: 'white',
     marginHorizontal: 15,
     borderRadius: 15,
     marginBottom: 25,
     elevation: 1,
     opacity: 0.99,
-    shadowColor: '#000',
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.05)',
     shadowOffset: {
       width: 1,
-      height: 2
+      height: 3
     },
-    shadowRadius: 2,
-    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    shadowOpacity: 1,
+    shadowColor: 'rgba(0, 0, 0, 0.08)',
     width: CARD_WIDTH
   },
   pictureContainer: {
     width: CARD_WIDTH,
     height: CARD_WIDTH,
     overflow: 'hidden',
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15
   },
   picture: {
     width: CARD_WIDTH,
@@ -235,12 +238,12 @@ const styles = StyleSheet.create({
   },
   seperator: {
     width: '100%',
-    height: 0.5,
-    backgroundColor: '#96AAC6',
+    height: 1,
+    backgroundColor: '#E7EEF5',
     marginVertical: 15
   },
   plan: {
     fontFamily: 'Poppins-Regular',
-    color: '#96AAC6'
+    color: '#859AB6'
   }
 });
