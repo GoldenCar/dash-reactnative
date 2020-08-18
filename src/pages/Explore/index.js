@@ -5,12 +5,10 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   Text,
-  TouchableOpacity,
-  Dimensions
+  TouchableOpacity
 } from 'react-native';
 import {connect} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
-import Carousel from 'react-native-snap-carousel';
 
 import Challenge from '../../components/Challenge';
 import SearchButton from '../../components/SearchButton';
@@ -19,12 +17,6 @@ import Plan from '../../components/Plan';
 
 import {Actions} from 'react-native-router-flux';
 import * as plansActions from '../../actions/plans';
-
-import {CreateNewChallengeRef} from 'dash/src/pages/CustomTabBar';
-
-const { width } = Dimensions.get('window');
-
-const ITEM_WIDTH = width - 60;
 
 const viewedBy = [
   {
@@ -96,25 +88,6 @@ const array = [
   },
 ];
 
-function renderItem({item, index}) {
-  return (
-    <TouchableWithoutFeedback
-      key={index}
-      //onPress={() => Actions.ChallengeDetail({challenge: value})}
-      onPress={() => Actions.ExplorePost({ challenge: item })}
-    >
-      <View>
-        <Challenge 
-          value={item}
-          viewedBy={viewedBy}
-          explore
-          cardWidth={ITEM_WIDTH}
-        />
-      </View>
-    </TouchableWithoutFeedback>
-  )
-}
-
 function Component(props) {
  
   const challenges = props.challenges.filter(
@@ -123,15 +96,14 @@ function Component(props) {
 
   const [plans, setPlans] = useState([]);
   useEffect(() => {
-    const requestPlans = async () => {
+    const init = async () => {
       try {
         const data = await plansActions.getPlans();
-        console.log("categories1.....", data);
-        const currentPlans = data.filter((plan) => plan.status === 'current');
-        setPlans(currentPlans);
+        console.log("categories1.....", data)
+        setPlans(data);
       } catch (e) {}
     };
-    requestPlans();
+    init();
   }, []);
 
   return (
@@ -152,32 +124,37 @@ function Component(props) {
           }}
         /> */}
           <Text style={styles.title}>Explore</Text>
-          <Carousel
-            data={challenges}
-            sliderWidth={width}
-            itemWidth={ITEM_WIDTH}
-            renderItem={renderItem}
-            activeSlideAlignment='start'
-          />
+          <ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+          >
+            {challenges.map((value, index) => (
+              <TouchableWithoutFeedback
+                key={index}
+                //onPress={() => Actions.ChallengeDetail({challenge: value})}
+                onPress={() => Actions.ExplorePost({ challenge: value })}
+                >
+                <View>
+                  <Challenge value={value} viewedBy={viewedBy} explore />
+                </View>
+              </TouchableWithoutFeedback>
+            ))}
+          </ScrollView>
         </View>
 
         <View style={styles.hostContainer}>
-          <Text style={styles.hostTitle}>Host a Challenge</Text>
+          <Text style={[styles.title, { marginBottom: 10 }]}>Host a Challenge</Text>
           <Text style={styles.subtitle}>
             Choose one of our plans and host a challenge for you and your friends
           </Text>
           {plans.map((value, index) => (
-            <TouchableOpacity
+            <TouchableWithoutFeedback
               key={index}
-              onPress={() => CreateNewChallengeRef.openCreateNew()}
-              //onPress={() => Actions.CreateNewChallenge()}
-
-              // TODO: need to navigate how CreateNew is doing it
-              //       this goes to create new challenge - daily task
-              //       scene - CreateNewChallenge
+              onPress={() => {}}
               >
                 <Plan value={value} />
-            </TouchableOpacity>
+            </TouchableWithoutFeedback>
           ))}
         </View>
       </ScrollView>
@@ -201,34 +178,22 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 32,
-    color: '#3F434F',
-    marginHorizontal: 16,
+    fontSize: 28,
+    color: '#21293D',
+    marginHorizontal: 15,
     marginBottom: 30
   },
   subtitle: {
     fontFamily: 'Poppins-Regular',
     fontSize: 14,
-    color: '#8A98B7',
-    marginHorizontal: 16,
-    marginBottom: 22,
-    fontWeight: '500',
-    lineHeight: 24,
+    color: '#21293D',
+    marginHorizontal: 15
   },
   search: {
     position: 'absolute',
     right: 20,
-    top: 25,
+    top: 30,
     zIndex: 10
-  },
-  hostTitle: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: 24,
-    lineHeight: 32,
-    letterSpacing: .7,
-    color: '#3F434F',
-    marginHorizontal: 16,
-    marginBottom: 13
   }
 });
 export default connect(({challenges}) => ({

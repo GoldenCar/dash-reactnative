@@ -10,7 +10,7 @@ class WorkoutRestCell extends Component {
             <View style={{flex:1,
               //borderBottomRightRadius: 34,
               //borderBottomLeftRadius: 34, 
-              backgroundColor: "rgba(0,161,255, 1)",
+              backgroundColor: "rgba(0,161,255, 0.1)",
               height:width * 1.2,
               overflow:"hidden" }}>
            <View style={{flex:1, marginLeft:16,justifyContent:"center"}}>
