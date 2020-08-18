@@ -12,6 +12,8 @@ import {Actions} from 'react-native-router-flux';
 
 import { mediaHost } from 'dash/src/config';
 import {BackArrow} from '../../../components/Icons';
+import {Close} from '../../../components/Icons';
+
 
 const {width, height} = Dimensions.get('window');
 
@@ -58,7 +60,8 @@ export default function Component(props) {
           Actions.pop();
         }}>
         <Animated.View style={[styles.backButtonContainer, {zIndex}]}>
-          <BackArrow fill="#fff" />
+          {/* <BackArrow fill="#fff" /> */}
+          <Close />
         </Animated.View>
       </TouchableWithoutFeedback>
     </>
@@ -85,10 +88,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 15,
     top: 20,
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: 'rgba(41,46,58, 0.2)',
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(63, 67, 79, 0.4)',
     alignItems: 'center',
     justifyContent: 'center',
   },

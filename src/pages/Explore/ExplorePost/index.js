@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Animated,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 import {Globe} from 'dash/src/components/Icons/index';
 import ViewedBy from 'dash/src/components/Challenge/ViewedBy';
@@ -18,35 +19,9 @@ import AuthPopup from 'dash/src/components/AuthPopup';
 import Header from './Header';
 import TimeTillChallenge from './TimeTillChallenge';
 import ChallengeSchedule from './ChallengeSchedule';
+import { Calendar } from '../../../components/Icons';
 
 const {height} = Dimensions.get('window');
-
-// const array = [
-//   {
-//     picture: require('dash/src/res/viewedBy/4.png'),
-//   },
-//   {
-//     picture: require('dash/src/res/viewedBy/3.png'),
-//   },
-//   {
-//     picture: require('dash/src/res/viewedBy/1.jpg'),
-//   },
-//   {
-//     picture: require('dash/src/res/viewedBy/2.jpg'),
-//   },
-//   {},
-//   {},
-//   {},
-//   {},
-// ];
-
-// const item = {
-//   picture: require('dash/src/res/StrengthTraining.png'),
-//   backgroundColor: '#F8E0BC',
-//   name: 'Strength Training',
-//   description:
-//     'Guided strength training circuit workouts. No equipment needed.',
-// };
 
 export default class Component extends React.Component {
   AuthPopupRef;
@@ -54,6 +29,9 @@ export default class Component extends React.Component {
   render() {
     console.log(this.props);
     const { challenge } = this.props;
+
+    // TODO: request challenge details
+
     return (
       <View style={styles.container}>
         <Header ScrollViewAnimation={this.ScrollViewAnimation} value={challenge} />
@@ -76,12 +54,34 @@ export default class Component extends React.Component {
                 marginTop: height / 2 - 20,
               },
             ]}>
+            <View style={styles.circle}></View>
             <View style={[styles.paddingHorizontal, {paddingTop: 10}]}>
-              <Text style={styles.title}>{challenge.title}</Text>
-              <Text style={styles.description}>
-                {challenge.description}
-              </Text>
+              <Text style={styles.host}>Hosted by {challenge.host}</Text>
+                <Text style={styles.title}>{challenge.title}</Text>
+                <Text style={styles.description}>
+                  {challenge.description}
+                </Text>
             </View>
+            <LinearGradient
+              colors={['#E7EEF5', '#fff']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.planContainer}
+            >
+              <View style={{ height: 175 }} />
+              <Text style={styles.planTextBlue}>Challenges Plan:</Text>
+              <Text style={styles.planTitle}>
+                20 Minute Daily Mens Workout
+              </Text>
+              <View style={styles.viewButton}>
+                <View style={styles.iconContainer}>
+                  <Calendar />
+                </View>
+                <Text style={styles.viewText}>
+                  View Plan
+                </Text>
+              </View>
+            </LinearGradient>
             <TimeTillChallenge />
             <TouchableOpacity
               style={styles.joinChallengeContainer}
@@ -109,19 +109,99 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     backgroundColor: 'white',
-    paddingTop: 20,
+    paddingTop: 35,
+  },
+  circle: {
+    height: 56,
+    width: 56,
+    backgroundColor: '#FBFBFB',
+    position: 'absolute',
+    top: -28,
+    borderRadius: 28,
+    alignSelf: 'center',
+    shadowOffset: {
+      width: 1,
+      height: 1
+    },
+    shadowRadius: 2,
+    shadowOpacity: 1,
+    shadowColor: 'rgba(0, 0, 0, 0.08)',
+  },
+  host: {
+    fontFamily: 'Poppins-Regular',
+    fontWeight: '600',
+    fontSize: 14,
+    lineHeight: 24,    
+    textAlign: 'center',    
+    color: '#1AA0FF'
   },
   title: {
-    color: '#21293D',
+    color: '#3F434F',
     fontSize: 24,
     fontFamily: 'Poppins-Bold',
     marginBottom: 15,
+    lineHeight: 32,
+    textAlign: 'center'
   },
   description: {
     fontSize: 14,
-    color: '#586178',
+    color: '#859AB6',
     fontFamily: 'Poppins-Medium',
     lineHeight: 24,
+    textAlign: 'center',
+    marginBottom: 27
+  },
+  planContainer: {
+    borderColor: '#E7EEF5',
+    borderWidth: 1,
+    height: 450, 
+    margin: 16,
+    borderRadius: 16,
+    padding: 30,
+    alignItems: 'center'
+  },
+  planTextBlue: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: 12,
+    lineHeight: 16,
+    textAlign: 'center',
+    letterSpacing: 1.6,
+    textTransform: 'uppercase',
+    color: '#1AA0FF',
+    paddingBottom: 6
+  },
+  planTitle: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: 24,
+    lineHeight: 32,
+    textAlign: 'center',
+    color: '#3F434F',
+    paddingBottom: 20
+  },
+  viewButton: {
+    // box-shadow: 0px 20px 52px rgba(0, 0, 0, 0.03);
+    width: 150,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 3
+  },
+  iconContainer: {
+    height: 40,
+    width: 40,
+    backgroundColor: '#E9F6FF',
+    borderRadius: 20,
+    marginRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  viewText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 12,
+    lineHeight: 20,
+    color: '#1AA0FF'
   },
   joinChallengeText: {
     color: 'white',
