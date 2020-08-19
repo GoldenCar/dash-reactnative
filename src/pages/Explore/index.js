@@ -158,6 +158,7 @@ function Component(props) {
             itemWidth={ITEM_WIDTH}
             renderItem={renderItem}
             activeSlideAlignment='start'
+            loop
           />
         </View>
 

@@ -4,12 +4,17 @@ import { View, Text, StyleSheet } from 'react-native';
 class Countdown extends Component {
     constructor(props) {
         super(props);
+        const time = props.initialTime <= 0 ? 1 : props.initialTime;
         this.state = {
-            timer: props.initialTime
+            timer: time,
+            days: 0,
+            hours: 0,
+            minutes: 0,
+            seconds: 0
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.interval = setInterval(() => {
             const total_seconds = this.state.timer - 1;
 
@@ -28,7 +33,6 @@ class Countdown extends Component {
                 minutes,
                 seconds
             });
-
         }, 1000);
     }
 

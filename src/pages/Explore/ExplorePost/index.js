@@ -69,7 +69,8 @@ export default class Component extends React.Component {
               styles.innerContainer,
               {
                 marginTop: height / 2 - 20,
-              },
+                marginBottom: 208
+              }
             ]}>
             <View style={styles.circle}></View>
             <View style={styles.padding}>
@@ -105,23 +106,6 @@ export default class Component extends React.Component {
               </View>
             </LinearGradient>
 
-            <View style={styles.countdownContainer}>
-              <View style={styles.countdownTitleContainer}>
-                <Text style={styles.countdownTitle}>
-                  Challenge Starts in:
-                </Text>
-              </View>
-              <View style={styles.countdownContent}>
-                <Countdown initialTime={timeTilStart} />
-                <View style={styles.joinButton}>
-                  <Text style={styles.joinText}>
-                    { /* TODO: hook up button */ }
-                    Join
-                  </Text>
-                </View>
-              </View>
-            </View>
-
             {/* <TouchableOpacity
               style={styles.joinChallengeContainer}
               onPress={() => {
@@ -132,6 +116,22 @@ export default class Component extends React.Component {
           </View>
         </ScrollView>
         <AuthPopup ref={(e) => (this.AuthPopupRef = e)} />
+
+          <View style={styles.countdownContainer}>
+            <View style={styles.countdownTitleContainer}>
+              <Text style={styles.countdownTitle}>
+                Challenge Starts in:
+              </Text>
+            </View>
+            <View style={styles.countdownContent}>
+              <Countdown initialTime={timeTilStart} />
+              <View style={styles.joinButton}>
+                <Text style={styles.joinText}>
+                  Join
+                </Text>
+              </View>
+            </View>
+          </View>
       </View>
     );
   }
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     paddingTop: 10
   },
   container: {
-    flex: 1,
+    flex: 1
   },
   innerContainer: {
     borderTopLeftRadius: 20,
@@ -253,9 +253,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#1AA0FF',
     //box-shadow: 0px 20px 20px rgba(26, 160, 255, 0.25);
     borderRadius: 16,
-    margin: 16,
     padding: 16,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 8,
+    left: 16,
+    right: 16
   },
   countdownTitleContainer: {
     position: 'absolute',
