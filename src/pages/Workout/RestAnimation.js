@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, StyleSheet, Animated, Text, TouchableOpacity} from 'react-native';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
+import KeepAwake from "react-native-keep-awake";
+
 export default class extends React.Component {
   animation = new Animated.Value(2);
   timer;
@@ -79,6 +81,7 @@ export default class extends React.Component {
 
     return (
       <Animated.View style={[styles.mainContainer]}>
+        <KeepAwake/>
         <Animated.View
           style={[
             styles.container,

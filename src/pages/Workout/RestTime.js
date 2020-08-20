@@ -1,6 +1,9 @@
 import React from 'react';
 import {View, StyleSheet, Animated, Text, TouchableOpacity} from 'react-native';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
+import KeepAwake from 'react-native-keep-awake';
+
+
 import {ArrowNext} from 'dash/src/components/Icons';
 
 export default class RestTime extends React.Component {
@@ -118,6 +121,7 @@ export default class RestTime extends React.Component {
 
         return (
             <Animated.View style={[styles.mainContainer]}>
+                <KeepAwake/>
                 <Animated.View
                     style={[
                         styles.container,
@@ -138,7 +142,7 @@ export default class RestTime extends React.Component {
                             size={200}
                             width={20}
                             fill={fillValue}
-                            style={{backgroundColor: '#1AA0FF'}}
+                            style={{backgroundColor: '#00a5f9'}}
                             rotation={0}
                             // duration={totalTime}
                             tintColor="rgba(255,255,255,1)"
@@ -152,10 +156,12 @@ export default class RestTime extends React.Component {
                     </View>
                 </Animated.View>
                 {!this.props.taskPaused && (
-                    <TouchableOpacity style={styles.skipContainer} onPress={() => this.props.onPress()}>
-                        <Text style={styles.skip}>Skip</Text>
-                        <ArrowNext/>
-                    </TouchableOpacity>
+                    <View style={styles.skipContainer}>
+                        <TouchableOpacity style={styles.skipButton} onPress={() => this.props.onPress()}>
+                            <Text style={styles.skip}>Skip</Text>
+                            <ArrowNext/>
+                        </TouchableOpacity>
+                    </View>
                 )}
             </Animated.View>
         );
@@ -186,8 +192,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         position: 'absolute',
         zIndex: 101,
-        bottom: 17,
+        bottom: 0,
         right: 16,
+        height:80,
+    },
+    skipButton: {
+        flexDirection: 'row',
         width: 97,
         height: 48,
         justifyContent: 'space-between',

@@ -63,16 +63,19 @@ export default class CubeNavigationHorizontal extends React.Component {
     this._panResponder = PanResponder.create({
       onMoveShouldSetResponderCapture: () => true,
       onMoveShouldSetResponderCapture: () => Math.abs(gestureState.dx) > this.props.responderCaptureDx,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) =>
-        Math.abs(gestureState.dx) > this.props.responderCaptureDx,
-      onPanResponderGrant: (e, gestureState) => {
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) =>{
+        if(evt._targetInst.elementType !== "RNCSlider"){
+          return Math.abs(gestureState.dx) > this.props.responderCaptureDx
+        }
+      },
+      onPanResponderGrant: (event, gestureState) => {
         if (this.props.callbackOnSwipe) {
           this.props.callbackOnSwipe(true);
         }
         this._animatedValue.stopAnimation();
         this._animatedValue.setOffset({ x: this._value.x, y: this._value.y });
       },
-      onPanResponderMove: (e, gestureState) => {
+      onPanResponderMove: (event, gestureState) => {
         if (this.props.loop) {
           if (gestureState.dx < 0 && this._value.x < - this.fullWidth) {
             this._animatedValue.setOffset({ x: width });
@@ -80,7 +83,7 @@ export default class CubeNavigationHorizontal extends React.Component {
             this._animatedValue.setOffset({ x: - (this.fullWidth + width ) });
           }
         }
-        Animated.event([null, { dx: this._animatedValue.x }])(e, gestureState);
+        Animated.event([null, { dx: this._animatedValue.x }])(event, gestureState);
       },
       onPanResponderRelease: (e, gestureState) => {
         onDoneSwiping(gestureState);

@@ -27,6 +27,7 @@ import {
     responsiveFontSize
 } from "react-native-responsive-dimensions";
 import testVideo from '../../res/video/Jump-Squat.mp4'
+import Slider from '@react-native-community/slider';
 
 const {width, height} = Dimensions.get('window');
 
@@ -49,6 +50,7 @@ export default class extends React.Component {
             countDown: false,
             rest: false,
             timer: 0,
+            VideoTimer: 0,
             totaltime: 0,
             cyclesCountCircuit: 0,
             isVideoLoadToPlay: false,
@@ -144,6 +146,7 @@ export default class extends React.Component {
             showTimeLimit: timerValidate,
             completeTaskTime: false,
             videoPaused: true,
+            VideoTimer:0,
             countDown: countDownHide ? false : true
         });
 
@@ -628,18 +631,21 @@ export default class extends React.Component {
             return null;
         }
 
+
         return (
             <>
                 <Text style={styles.storyTitle}>
                     {title ? title : ''}
                 </Text>
-                <Text style={[
-                    styles.storyDescription,
-                ]}
-                      onTextLayout={this.onTextLayout}
-                >
-                    {description ? description : ""}
-                </Text>
+                {videos[currentIndex].cardType !== 'video' && (
+                    <Text style={[
+                        styles.storyDescription,
+                    ]}
+                          onTextLayout={this.onTextLayout}
+                    >
+                        {description ? description : ""}
+                    </Text>
+                )}
             </>
         );
     }
@@ -673,7 +679,7 @@ export default class extends React.Component {
 
     render() {
         const {story: {videos, timer}, totalTimer, index, activeIndex, isCircuit} = this.props;
-        const {currentIndex, pause, countDown, rest, showTimeLimit, videoLoading, exerciseSets, videoPaused} = this.state;
+        const {currentIndex, pause, countDown, rest, showTimeLimit, videoLoading, exerciseSets, videoPaused, VideoTimer} = this.state;
         const opacity = this.pauseOpacity.interpolate({
             inputRange: [0, 1],
             outputRange: [0, 1],
@@ -682,12 +688,18 @@ export default class extends React.Component {
         const minutes = showTimeLimit ? Math.floor(this.state.timer / 60) : 0;
         const seconds = showTimeLimit ? this.state.timer - minutes * 60 : 0;
 
+        let minutesVideo = VideoTimer.currentTime ? Math.floor(VideoTimer.currentTime / 60) : 0;
+        let secondsVideo = VideoTimer.currentTime ? VideoTimer.currentTime - minutesVideo * 60 : 0;
+        secondsVideo = secondsVideo.toFixed(0)
+        minutesVideo = minutesVideo.toFixed(0)
+
+
         const minTotal = Math.floor(totalTimer / 60);
         const secTotal = totalTimer - minTotal * 60;
 
         const heightContainer = this.translateY.interpolate({
             inputRange: [-(height - 100), 0],
-            outputRange: [(height - 200), 65],
+            outputRange: [(height - 200), 70],
             extrapolate: 'clamp',
         });
 
@@ -719,10 +731,13 @@ export default class extends React.Component {
                 <>
                     {videos[currentIndex].flag === 'video' && videos[currentIndex].fileName != "" ?
                         <Video
+                            onProgress={(e) => this.setState({VideoTimer: e})}
+                            onSeek={(e) => this.setState({VideoTimer: {...VideoTimer, currentTime: e.currentTime}})}
                             ref={this.videoRef}
                             useNativeDriver={false}
                             paused={videoPaused}
                             repeat={videoRepeat}
+                            currentTime={VideoTimer.currentTime}
                             source={{uri: `${mediaHost}${videos[currentIndex].fileName}`}}
                             onReadyForDisplay={() => this.onReadyForDisplay()}
                             resizeMode={'cover'}
@@ -796,8 +811,7 @@ export default class extends React.Component {
 
                     {!isCircuit && exerciseSeconds == true ?
                         <View>
-                            <Text style={styles.title}>Sets</Text>
-                            <Text style={styles.title}>{videos[currentIndex].Sets - exerciseSets} Rounds Left</Text>
+                            <Text style={styles.title}>{exerciseSets} of {videos[currentIndex].Sets}</Text>
                         </View>
                         : null
                     }
@@ -848,13 +862,45 @@ export default class extends React.Component {
                     </>
                     }
 
+                    {videos[currentIndex].cardType === 'video' && <>
+                        <Text style={styles.videoTime}>
+                            {VideoTimer.currentTime ? `${minutesVideo < 10 ? '0' : ''}${minutesVideo}:${secondsVideo < 10 ? '0' : ''}${secondsVideo}` : '00:00'}
+                        </Text>
+
+                        {VideoTimer.currentTime ? (<Slider
+                            onSlidingStart={() => {
+                                if (!pause && !videoPaused) this.setState({videoPaused: true})
+                            }}
+                            onValueChange={(e) => this.videoRef.current.seek(e, 50)}
+                            onSlidingComplete={() => {
+                                if (!pause && videoPaused) this.setState({videoPaused: false})
+                            }}
+                            value={VideoTimer.currentTime}
+                            style={{width: '105%', height: 20, marginLeft: -13}}
+                            minimumValue={0}
+                            maximumValue={VideoTimer.seekableDuration}
+                            thumbTintColor="#FFFFFF"
+                            minimumTrackTintColor="#FFFFFF"
+                            maximumTrackTintColor="rgba(255,255,255,0.4)"
+                        />) : (<Slider
+                            value={0}
+                            style={{width: '105%', height: 20, marginLeft: -13}}
+                            minimumValue={0}
+                            thumbTintColor="#FFFFFF"
+                            minimumTrackTintColor="#FFFFFF"
+                            maximumTrackTintColor="rgba(255,255,255,0.4)"
+                        />)}
+
+                    </>
+                    }
+
+
                     {this.renderCardDescription(heightContainer)}
                 </Animated.View>
 
 
-
                 {/* *************** Next buttons container ************ */}
-                <View style={{...styles.bottomRow, width:restVideo && !this.state.taskPaused  ? '50%' : 'auto',}}>
+                <View style={{...styles.bottomRow, width: restVideo && !this.state.taskPaused ? '50%' : 'auto',}}>
                     <TouchableWithoutFeedback onPress={() => this.onClickOverview(true)}>
                         <View style={styles.button}><CheckList/></View>
                     </TouchableWithoutFeedback>
@@ -995,11 +1041,19 @@ const styles = StyleSheet.create({
         textShadowOffset: {width: -0.5, height: 0.5},
         textShadowRadius: 1,
     },
+    videoTime: {
+        fontSize: 18,
+        fontFamily: 'Poppins-Bold',
+        color: 'white',
+        textShadowColor: 'rgba(0, 0, 0, 0.2)',
+        textShadowOffset: {width: -0.5, height: 0.5},
+        textShadowRadius: 1,
+    },
     mainContainer: {
         position: 'absolute',
         overflow: 'hidden',
-        left: 15,
-        right: 15,
+        width: '100%',
+        paddingHorizontal: 15,
         zIndex: 19.9,
     },
     time: {
@@ -1012,7 +1066,7 @@ const styles = StyleSheet.create({
     },
     timeContainer: {
         top: 40,
-        zIndex:100,
+        zIndex: 100,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -1069,7 +1123,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        zIndex: 40,
+        zIndex: 100,
         minHeight: 50,
     },
     button: {
@@ -1114,12 +1168,13 @@ const styles = StyleSheet.create({
     },
 
     bottomRow: {
-        bottom: 17,
+        bottom: 0,
         left: 0,
         right: 0,
         position: 'absolute',
         flexDirection: 'row',
         zIndex: 100,
+        height: 80,
         marginHorizontal: 15,
     },
 
@@ -1137,7 +1192,7 @@ const styles = StyleSheet.create({
         height: 20,
         flexDirection: 'row',
         marginHorizontal: 10,
-        zIndex: 20
+        zIndex: 100
     },
     video: {
         ...StyleSheet.absoluteFillObject,
