@@ -30,12 +30,10 @@ export default class Component extends React.Component {
     plan: {}
   }
 
-  // NOTE: currently finding plan based on title. this is not acceptable
-  //       need to fix plan id and use that instead
   async componentDidMount() {
     const { challenge } = this.props;
     const data = await plansActions.getPlans();
-    let plan = data.filter((plan) => plan.status === 'current' && challenge.Plan === plan.title);
+    let plan = data.filter((plan) => plan.status === 'current' && challenge.PlanID === plan._id);
 
     if (plan.length > 0) {
       plan = plan[0];
@@ -74,8 +72,7 @@ export default class Component extends React.Component {
             ]}>
             <View style={styles.circle}></View>
             <View style={styles.padding}>
-              { /* TODO: host is currently broken. test when fixed */ }
-              <Text style={styles.host}>Hosted by {challenge.host}</Text>
+              <Text style={styles.host}>Hosted by {challenge.Host}</Text>
                 <Text style={styles.title}>{challenge.title}</Text>
                 <Text style={styles.description}>
                   {challenge.description}
