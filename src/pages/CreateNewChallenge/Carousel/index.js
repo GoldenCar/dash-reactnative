@@ -4,15 +4,10 @@ import {
   Text,
   Dimensions,
   Animated,
-  Image,
   Keyboard,
   TouchableWithoutFeedback,
   TouchableOpacity,
   ScrollView,
-  Platform,
-  FlatList,
-  PickerIOS, 
-  PickerItemIOS,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -20,17 +15,13 @@ import Carousel from 'react-native-snap-carousel';
 import { Container, Content } from "native-base";
 import _, { toInteger } from 'lodash';
 // import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import Modal1 from 'react-native-modal';
 
 import Modal from 'dash/src/components/Modal';
 import RNPickerSelect from 'react-native-picker-select';
-import Picker from 'react-native-picker';
 import * as challenegesActions from '../../../actions/challenges';
-import ChallengeTypeContainer from 'dash/src/components/ChallengeTypeContainer';
 
 import CreateNew from '../CreateNew';
 import Title from '../Title';
@@ -40,13 +31,11 @@ import StartDate from '../StartDate';
 import Graphic from '../Graphic';
 import AllSet from '../AllSet';
 import Access from '../Access';
+import DailyTask from '../DailyTask';
 
 import Header from './Header';
 
 import { mediaHost } from 'dash/src/config';
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-//import { FlatList, ScrollView } from 'react-native-gesture-handler';
-//import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const { height, width } = Dimensions.get('screen');
 const radioButtonSize = 24;
@@ -315,109 +304,11 @@ class Component extends React.Component {
             }}>
             <ScrollView
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={[styles.contentContainerStyle, { height: Dimensions.get('window').height }]}>
-              <ChallengeTypeContainer
-                item={challenge.type}
-                // onPress={() => this.onPressNext({})}
-                nextTitle={'Confirm Plan'}
-                containerStyle={{ marginBottom: 20 }}
-              >
-                <View style={{ paddingHorizontal: 8, marginTop: 40 }}>
-                  <View style={styles.versionBox}>
-                    <View style={styles.versionsTextBox}>
-                      <Text style={styles.versionText} onPress={() => {
-                        this.setState({
-                          isVersionModalShow: true,
-                        })
-                      }} >Version {this.state.versionNum}.0</Text>
-                      <View style={styles.versionRecommendedBox}>
-                        <Text style={styles.versionRecommended}>Recommended</Text>
-                      </View>
-                    </View>
-                    <TouchableOpacity style={styles.editButton} onPress={() => {
-                      if (Platform.OS === 'android') {
-                        this.setState({
-                          isVersionModalShow: true,
-                        })
-                      } else {
-                        Picker.show()
-                      }
-                    }}>
-                      <MaterialIcon name={'edit'} color="#6F80A7" size={20} />
-                    </TouchableOpacity>
-                  </View>
-
-                </View>
-                {this.state.isVersionModalShow ?
-                  <Modal1
-                    animationIn={Platform.OS === 'ios' ? 'fadeInUp' : 'fadeIn'}
-                    animationOut={Platform.OS === 'ios' ? 'fadeInDown' : "fadeOut"}
-                    isVisible={this.state.isVersionModalShow}
-                    onBackdropPress={() =>
-                      this.setState({ isVersionModalShow: false })
-                    }>
-                    {Platform.OS === 'ios' ? <View style={{ backgroundColor: 'transparent' }}>
-
-                      <View style={{ backgroundColor: 'white', borderRadius: 5 }}>
-                        <Text style={styles.textPickerTitle}>Select Version</Text>
-                        <View style={styles.singleRowIos} />
-                        {/* <View> */}
-                        <PickerIOS
-                        selectedValue={this.state.versionNum}
-                          onValueChange={(version) => { this.setState({versionNum: version}) }}>
-                          {items.map((selectedValue) => (
-                           
-                            <PickerItemIOS
-                              key={selectedValue}
-                              value={selectedValue}
-                              label={'Version ' + selectedValue + '.0'}
-                            />
-                          )
-                          )}
-                        </PickerIOS>
-                        <View style={styles.singleRowIos} />
-                        <TouchableOpacity onPress={() => {
-                          this.setState({
-                            isVersionModalShow: false,
-                            versionNum: iosPickerSelectedValue
-                          })
-                        }}>
-                          <Text style={styles.textConfirmPicker}>Confirm</Text>
-                        </TouchableOpacity>
-                        {/* </View> */}
-                      </View>
-
-                      <View style={{ marginTop: 20, borderRadius: 5, backgroundColor: 'white' }}>
-                        <TouchableOpacity onPress={() => this.setState({ isVersionModalShow: false })}>
-                          <Text style={styles.textCancelPicker}>Cancel</Text>
-                        </TouchableOpacity>
-                      </View>
-
-                    </View> :
-                      <View style={{ backgroundColor: 'white', borderRadius: 5 }}>
-                        <FlatList
-                          data={challenge.type.planTypeData ? challenge.type.planTypeData : []}
-                          renderItem={this.renderItem}
-                          keyExtractor={(item, index) => index.toString()}
-                        />
-                        <View style={{ flexDirection: 'row', alignSelf: 'flex-end', padding: 10 }}>
-                          {/* <TouchableOpacity onPress={() => {
-                          this.setState({ isVersionModalShow: false })
-                        }}>
-                          <Text style={styles.textAlert}>Cancel</Text>
-                        </TouchableOpacity > */}
-
-                          <TouchableOpacity onPress={() => {
-                            this.setState({ isVersionModalShow: false })
-                          }}>
-                            <Text style={styles.textAlert}>Ok</Text>
-                          </TouchableOpacity>
-                        </View>
-                      </View>}
-                  </Modal1>
-                  : null
-                }
-              </ChallengeTypeContainer>
+              contentContainerStyle={[styles.contentContainerStyle, { height: Dimensions.get('window').height }]}
+            >
+              <DailyTask 
+              
+              />
 
 
               {/* <Program
@@ -824,49 +715,16 @@ export default connect(
 
 
 const styles = EStyleSheet.create({
-  textPickerTitle: {
-    color: 'gray',
-    fontSize: 16,
-    alignSelf: 'center',
-    padding: 15,
-  },
-
-  textCancelPicker: {
-    color: 'rgb(3, 132, 255)',
-    alignSelf: 'center',
-    padding: 15,
-    fontWeight: '700',
-    fontSize: 18,
-  },
-
-  textConfirmPicker: {
-    color: 'rgb(3, 132, 255)',
-    alignSelf: 'center',
-    padding: 15,
-    fontWeight: '500',
-    fontSize: 18,
-  },
   nextButtonText: {
     fontFamily: 'Poppins-Bold',
     color: 'white',
     fontSize: 16,
-  },
-  singleRowIos:{
-    backgroundColor: 'lightgray',
-    width: '100%',
-    alignSelf: 'center',
-    height: 1
   },
   singleRow: {
     backgroundColor: 'lightgray',
     width: '110%',
     alignSelf: 'center',
     height: 1
-  },
-  textAlert: {
-    padding: 5,
-    fontWeight: "700",
-    fontSize: 18
   },
   textVersion: {
     fontSize: 18,
@@ -943,42 +801,6 @@ const styles = EStyleSheet.create({
     paddingLeft: 25,
     paddingTop: 25,
   },
-  versionBox: {
-    width: "100%",
-    flexDirection: "row",
-    padding: 15,
-    borderRadius: 12,
-    alignItems: "center",
-    marginBottom: 20,
-    marginTop: 15,
-    borderWidth: 1,
-    borderColor: "#F0F5FA"
-  },
-  versionsTextBox: {
-    flex: 1,
-    flexDirection: "row"
-  },
-  versionText: {
-    color: "#21293D",
-    fontWeight: "bold",
-    marginRight: 15,
-    marginTop: 3
-  },
-  versionRecommendedBox: {
-    paddingLeft: 8,
-    paddingRight: 8,
-    paddingTop: 4,
-    paddingBottom: 4,
-    borderRadius: 10,
-    backgroundColor: "#E9F6FF"
-  },
-  versionRecommended: {
-    color: "#1AA0FF",
-    fontSize: 12
-  },
-  editButton: {
-    marginRight: 10
-  },
   bottomButtonContainer: {
     height: 60,
     flexDirection: 'column',
@@ -1000,26 +822,6 @@ const styles = EStyleSheet.create({
   },
   confirmButton: {
     backgroundColor: "#445533"
-  },
-  versionListBox: {
-    width: "100%",
-    paddingTop: 12,
-    marginTop: height - 755,
-  },
-  versionList: {
-    width: "100%",
-    backgroundColor: "#d1d5db",
-    height: 150,
-    paddingTop: 15
-  },
-  versionsBox: {
-    flexDirection: "row",
-    alignSelf: "center",
-    marginBottom: 5
-  },
-  versionsText: {
-    fontSize: 20,
-    fontWeight: "bold"
   },
   checkIcon: {
     position: "absolute",
