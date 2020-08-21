@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, Keyboard} from 'react-native';
+import {SafeAreaView, Keyboard, View} from 'react-native';
 import {Router, Scene, Reducer} from 'react-native-router-flux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -74,7 +74,7 @@ export default () => {
     init();
   }, []);
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <View style={{flex: 1}}>
       <Provider store={store}>
         {!loading && (
           <>
@@ -170,6 +170,6 @@ export default () => {
           </>
         )}
       </Provider>
-    </SafeAreaView>
+    </View>
   );
 };

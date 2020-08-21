@@ -739,6 +739,7 @@ export default class extends React.Component {
                             repeat={videoRepeat}
                             currentTime={VideoTimer.currentTime}
                             source={{uri: `${mediaHost}${videos[currentIndex].fileName}`}}
+                            // source={testVideo}
                             onReadyForDisplay={() => this.onReadyForDisplay()}
                             resizeMode={'cover'}
                             style={styles.video}
@@ -871,8 +872,9 @@ export default class extends React.Component {
                             onSlidingStart={() => {
                                 if (!pause && !videoPaused) this.setState({videoPaused: true})
                             }}
-                            onValueChange={(e) => this.videoRef.current.seek(e, 50)}
-                            onSlidingComplete={() => {
+                            // onValueChange={(e) => this.videoRef.current.seek(e, 50)}
+                            onSlidingComplete={(e) => {
+                                this.videoRef.current.seek(e, 50)
                                 if (!pause && videoPaused) this.setState({videoPaused: false})
                             }}
                             value={VideoTimer.currentTime}
@@ -1001,7 +1003,7 @@ const styles = StyleSheet.create({
     centerContainer: {
         position: 'absolute',
         width,
-        height,
+        height:height-100,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -1186,7 +1188,7 @@ const styles = StyleSheet.create({
     },
     linesContainer: {
         position: 'absolute',
-        top: 15,
+        top: Platform.OS === 'ios' ? 25 : 15,
         left: 0,
         right: 0,
         height: 20,
