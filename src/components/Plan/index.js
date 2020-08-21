@@ -22,7 +22,7 @@ export default function Component(props) {
         </Text>
       </View>
       <View>
-        <Image 
+        <Image
           source={{uri: `${mediaHost}${value.planImage}`}}
           style={styles.image}
         />
@@ -64,8 +64,7 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    width: 100,
-    overflow: 'hidden', 
+    width: 120, 
     borderTopRightRadius: 25, 
     borderBottomRightRadius: 25
   }
