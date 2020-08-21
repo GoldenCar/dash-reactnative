@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  
   View,
   Text,
   Dimensions,
@@ -12,7 +11,8 @@ import {
   ScrollView,
   Platform,
   FlatList,
-  PickerIOS, PickerItemIOS
+  PickerIOS, 
+  PickerItemIOS,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -67,6 +67,9 @@ const defaultChallenge = {
 //const [done, setDone] = useState(false);
 
 //console.disableYellowBox = true;
+
+// TODO: this needs major clean up
+
 class Component extends React.Component {
   CreateNewRef;
   CarouselRef;
@@ -779,7 +782,6 @@ class Component extends React.Component {
   render() {
     const { challenge } = this.state;
     return (
-
       <Modal
         ref={(e) => (this.CreateNewRef = e)}
         // popupHeight={height}
@@ -794,9 +796,6 @@ class Component extends React.Component {
         }>
         {this.renderChildren()}
       </Modal>
-
-
-
     );
   }
 }
@@ -1056,20 +1055,24 @@ const styles = EStyleSheet.create({
   },
   contentContainerStyle: {
     backgroundColor: '#F7F9FB',
-    paddingHorizontal: 15,
+    //paddingHorizontal: 15,
     paddingBottom: 30,
     flexGrow: 1
   },
   titleContainer1: {
     alignItems: "flex-start",
+    marginBottom: 22
   },
   titleContainer: {
     alignItems: "center",
   },
   titles: {
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 24,
+    lineHeight: 32,
     fontFamily: 'Poppins-Bold',
+    paddingHorizontal: 15,
+    color: '#292E3A',
   },
   itemHeaderText: {
     fontSize: 16,
