@@ -38,7 +38,7 @@ export default class App extends React.Component {
     }
     return (
       <View style={{ flex: 1 }}>
-        <StatusBar barStyle="light-content" />
+        <StatusBar translucent barStyle="light-content" />
         <Stories
           stories={stories} 
           dayTasks={arrayVersionTask}
