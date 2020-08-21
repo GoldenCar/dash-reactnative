@@ -5,14 +5,10 @@ import Picker from 'react-native-picker';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import ChallengeTypeContainer from 'dash/src/components/ChallengeTypeContainer';
-import Modal1 from 'react-native-modal';
-
-// TODO: this needs more clean up
-
-// TODO: state issues need to be fixed
+import Modal from 'react-native-modal';
 
 export default function Component(props) {
-    const { challenge } = props;
+    const { challenge, versionNum, isVersionModalShow, showVersionModal, items, setVersionNum } = props;
 
     return (
         <ChallengeTypeContainer
@@ -24,20 +20,19 @@ export default function Component(props) {
             <View style={{ paddingHorizontal: 8, marginTop: 40 }}>
             <View style={styles.versionBox}>
                 <View style={styles.versionsTextBox}>
-                <Text style={styles.versionText} onPress={() => {
-                    this.setState({
-                    isVersionModalShow: true,
-                    })
-                }} >Version {this.state.versionNum}.0</Text>
+                <Text 
+                    style={styles.versionText} 
+                    onPress={() => showVersionModal(true)}
+                >
+                    Version {versionNum}.0
+                </Text>
                 <View style={styles.versionRecommendedBox}>
                     <Text style={styles.versionRecommended}>Recommended</Text>
                 </View>
                 </View>
                 <TouchableOpacity style={styles.editButton} onPress={() => {
                 if (Platform.OS === 'android') {
-                    this.setState({
-                    isVersionModalShow: true,
-                    })
+                    showVersionModal(true);
                 } else {
                     Picker.show()
                 }
@@ -47,12 +42,12 @@ export default function Component(props) {
             </View>
 
             </View>
-            {this.state.isVersionModalShow &&
-                <Modal1
+            {isVersionModalShow &&
+                <Modal
                     animationIn={Platform.OS === 'ios' ? 'fadeInUp' : 'fadeIn'}
                     animationOut={Platform.OS === 'ios' ? 'fadeInDown' : "fadeOut"}
-                    isVisible={this.state.isVersionModalShow}
-                    onBackdropPress={() => this.setState({ isVersionModalShow: false })}
+                    isVisible={isVersionModalShow}
+                    onBackdropPress={() => showVersionModal(false)}
                 >
                     {Platform.OS === 'ios' ? (
                         <View style={{ backgroundColor: 'transparent' }}>
@@ -60,31 +55,28 @@ export default function Component(props) {
                                 <Text style={styles.textPickerTitle}>Select Version</Text>
                                 <View style={styles.singleRowIos} />
                                 <PickerIOS
-                                selectedValue={this.state.versionNum}
-                                onValueChange={(version) => { this.setState({versionNum: version}) }}>
-                                {items.map((selectedValue) => (
-                                
-                                    <PickerItemIOS
-                                    key={selectedValue}
-                                    value={selectedValue}
-                                    label={'Version ' + selectedValue + '.0'}
-                                    />
-                                )
-                                )}
+                                    selectedValue={versionNum}
+                                    onValueChange={(version) => setVersionNum(version)}
+                                >
+                                    {items.map((selectedValue) => 
+                                        <PickerItemIOS
+                                            key={selectedValue}
+                                            value={selectedValue}
+                                            label={'Version ' + selectedValue + '.0'}
+                                        />
+                                    )}
                                 </PickerIOS>
                                 <View style={styles.singleRowIos} />
                                 <TouchableOpacity onPress={() => {
-                                    this.setState({
-                                        isVersionModalShow: false,
-                                        versionNum: iosPickerSelectedValue
-                                    })
+                                    showVersionModal(false);
+                                    setVersionNum(versionNum);
                                 }}>
-                                <Text style={styles.textConfirmPicker}>Confirm</Text>
+                                    <Text style={styles.textConfirmPicker}>Confirm</Text>
                                 </TouchableOpacity>
                             </View>
 
                             <View style={{ marginTop: 20, borderRadius: 5, backgroundColor: 'white' }}>
-                                <TouchableOpacity onPress={() => this.setState({ isVersionModalShow: false })}>
+                                <TouchableOpacity onPress={() => showVersionModal(false)}>
                                 <Text style={styles.textCancelPicker}>Cancel</Text>
                                 </TouchableOpacity>
                             </View>
@@ -98,20 +90,18 @@ export default function Component(props) {
                             />
                             <View style={{ flexDirection: 'row', alignSelf: 'flex-end', padding: 10 }}>
                                 {/* <TouchableOpacity onPress={() => {
-                                this.setState({ isVersionModalShow: false })
+                                showVersionModal(false);
                                 }}>
                                 <Text style={styles.textAlert}>Cancel</Text>
                                 </TouchableOpacity > */}
 
-                                <TouchableOpacity onPress={() => {
-                                    this.setState({ isVersionModalShow: false })
-                                }}>
+                                <TouchableOpacity onPress={() => showVersionModal(false)}>
                                     <Text style={styles.textAlert}>Ok</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
                     }
-                </Modal1>
+                </Modal>
             }
         </ChallengeTypeContainer>
     );

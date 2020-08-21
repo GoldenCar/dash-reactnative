@@ -290,10 +290,8 @@ class Component extends React.Component {
         challenge.type.planTypeData.map((item, index) => {
           let string = "Version " + item.version + ".0"
           items.push(item.version)
-        })
-
+        });
         
-        let iosPickerSelectedValue = this.state.versionNum;
         return (
           <Animated.View
             style={{
@@ -301,15 +299,20 @@ class Component extends React.Component {
               flex: 1,
               flexDirection: 'column',
               justifyContent: 'space-between'
-            }}>
+            }}
+          >
             <ScrollView
               showsVerticalScrollIndicator={false}
               contentContainerStyle={[styles.contentContainerStyle, { height: Dimensions.get('window').height }]}
             >
               <DailyTask 
-              
+                versionNum={this.state.versionNum}
+                isVersionModalShow={this.state.isVersionModalShow}  
+                challenge={challenge} 
+                showVersionModal={(show) => this.setState({ isVersionModalShow: show })}
+                setVersionNum={(version) => this.setState({ versionNum: version })}
+                items={items}
               />
-
 
               {/* <Program
               onPress={(typeProgram) => {
