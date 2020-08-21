@@ -6,7 +6,8 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  SafeAreaView
 } from 'react-native';
 import {connect} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
@@ -44,57 +45,6 @@ const viewedBy = [
   {},
   {},
 ]
-
-const array = [
-  {
-    picture: require('dash/src/res/explore/1.png'),
-    title: 'Chris Bumstead 30 Day Challenge',
-    startsIn: 'Starts in 3 Days',
-    viewedBy: [
-      {
-        picture: require('dash/src/res/viewedBy/1.jpg'),
-      },
-      {
-        picture: require('dash/src/res/viewedBy/2.jpg'),
-      },
-      {
-        picture: require('dash/src/res/viewedBy/3.png'),
-      },
-      {
-        picture: require('dash/src/res/viewedBy/4.png'),
-      },
-      {},
-      {},
-      {},
-      {},
-      {},
-      {},
-    ],
-  },
-  {
-    picture: require('dash/src/res/explore/2.png'),
-    title: 'David Dobrik 30 Day Challenge',
-    startsIn: 'Starts in 3 Days',
-    viewedBy: [
-      {
-        picture: require('dash/src/res/viewedBy/4.png'),
-      },
-      {
-        picture: require('dash/src/res/viewedBy/3.png'),
-      },
-      {
-        picture: require('dash/src/res/viewedBy/1.jpg'),
-      },
-      {
-        picture: require('dash/src/res/viewedBy/2.jpg'),
-      },
-      {},
-      {},
-      {},
-      {},
-    ],
-  },
-];
 
 function renderItem({item, index}) {
   return (
@@ -135,7 +85,7 @@ function Component(props) {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainerStyle}  bounces={false}>
         <TouchableOpacity style={styles.search} onPress={() => Actions.Search()}>
           <SearchButton />
@@ -158,6 +108,7 @@ function Component(props) {
             itemWidth={ITEM_WIDTH}
             renderItem={renderItem}
             activeSlideAlignment='start'
+            loop
           />
         </View>
 
@@ -181,7 +132,7 @@ function Component(props) {
           ))}
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 

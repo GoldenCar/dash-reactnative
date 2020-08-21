@@ -75,11 +75,14 @@ export default class Component extends React.Component {
           AppleAuthRequestScope.FULL_NAME,
         ],
       });
+      
       this.createAccountApple(appleAuthRequestResponse);
       if (callbackButton) {
         callbackButton();
       }
-    } catch (e) {}
+    } catch (e) {
+      console.log('on apple auth', e);
+    }
   };
   render() {
     return Platform.OS === 'ios' ? (
