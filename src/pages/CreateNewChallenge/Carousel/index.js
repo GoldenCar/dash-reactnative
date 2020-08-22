@@ -38,6 +38,10 @@ import Header from './Header';
 import PageOne from './Children/PageOne';
 import PageTwo from './Children/PageTwo';
 import PageThree from './Children/PageThree';
+import PageFour from './Children/PageFour';
+import PageFive from './Children/PageFive';
+import PageSix from './Children/PageSix';
+import PageSeven from './Children/PageSeven';
 
 import { mediaHost } from 'dash/src/config';
 
@@ -185,7 +189,7 @@ class Component extends React.Component {
 
     this.setState({ renderList, currentIndex }, () => {
       if (currentIndex === 2) {
-        this.TitleRef.focus();
+        //  this.TitleRef.focus();
       }
       if (currentIndex === 6 && this.props.user) {
         this.createChallenge();
@@ -221,9 +225,16 @@ class Component extends React.Component {
     this.CarouselRef.snapToPrev();
   };
 
-
   renderChildren = () => {
     const { challenge } = this.state;
+
+    const pageTwoOnPress = () => {
+      const version = this.state.versionNum;
+      this.onChangeChallenge({ version });
+      this.onPressNext({});
+      this.saveVersion();
+    };
+
     let data = [
       () => <PageOne
         CarouselRef={this.CarouselRef}
@@ -233,12 +244,7 @@ class Component extends React.Component {
       />,
       () => <PageTwo
         challenge={challenge}
-        onPress={() => {
-          let version = this.state.versionNum;
-          this.onChangeChallenge({ version });
-          this.onPressNext({});
-          this.saveVersion();
-        }}
+        onPress={pageTwoOnPress}
         isVersionModalShow={this.state.isVersionModalShow}
         CarouselRef={this.CarouselRef}
         versionNum={this.state.versionNum}
@@ -246,210 +252,40 @@ class Component extends React.Component {
         showVersionModal={(show) => this.setState({ isVersionModalShow: show })}
         setVersionNum={(version) => this.setState({ versionNum: version })}
       />,
-      () =>
-        <PageThree
-          challenge={challenge}
-          CarouselRef={this.CarouselRef}
-        />,
-      () => {
-        const translateY = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [width * 2, width * 3],
-          outputRange: [height - 100, 0],
-          extrapolate: 'clamp',
-        });
-        const translateX = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [width * 2, width * 3],
-          outputRange: [-width, 0],
-          extrapolate: 'clamp',
-        });
-        const scale = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [width * 2, width * 3],
-          outputRange: [0.9, 1],
-          extrapolate: 'clamp',
-        });
-        return (
-          <Animated.View
-            style={[
-              styles.contentContainerStyle,
-              {
-                transform: [{ translateY }, { translateX }, { scale }],
-                flex: 1,
-              },
-            ]}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.itemHeaderText}>Awesome!</Text>
-              <Text style={styles.titles}>Who can have access to {'\n'} this Challenge?</Text>
-            </View>
-            <Access
-              challenge={challenge}
-              onChangeSwitch={(value) =>
-                this.onChangeChallenge({ public: value })
-              }
-            />
-            <TouchableWithoutFeedback
-              onPress={() => challenge.public !== null && this.onPressNext({})}>
-              <View
-                style={[
-                  styles.nextButton,
-                  challenge.public === null ? { backgroundColor: '#96AAC6' } : {},
-                ]}>
-                <Text style={styles.nextButtonText}>Next</Text>
-              </View>
-            </TouchableWithoutFeedback>
-          </Animated.View>
-        );
-      },
-      () => {
-        const translateY = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [width * 3, width * 4],
-          outputRange: [height - 100, 0],
-          extrapolate: 'clamp',
-        });
-        const translateX = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [width * 3, width * 4],
-          outputRange: [-width, 0],
-          extrapolate: 'clamp',
-        });
-        const scale = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [width * 3, width * 4],
-          outputRange: [0.9, 1],
-          extrapolate: 'clamp',
-        });
-        return (
-          <Animated.View
-            style={{
-              transform: [{ translateY }, { translateX }, { scale }],
-              // paddingTop: 100,
-              flex: 1,
-            }}>
-            <ScrollView>
-              <View style={{
-                paddingTop: 100,
-                // flex: 1,
-              }}>
-
-                <View style={styles.titleContainer}>
-                  <Text style={styles.itemHeaderText}>It's a date!</Text>
-                  <Text style={styles.titles}>
-                    When would you like to{'\n'}start the challenge?
-              </Text>
-                </View>
-                <StartDate
-                  challenge={challenge}
-                  onPress={(startDate) => {
-                    this.onChangeChallenge({ startDate });
-                  }}
-                />
-              </View>
-            </ScrollView>
-            <TouchableWithoutFeedback
-              onPress={() =>
-                challenge.startDate !== null && this.onPressNext({})
-              }>
-              <View
-                style={[
-                  styles.nextButton,
-                  challenge.startDate === null
-                    ? { backgroundColor: '#96AAC6' }
-                    : {},
-                ]}>
-                <Text style={styles.nextButtonText}>Next</Text>
-              </View>
-            </TouchableWithoutFeedback>
-          </Animated.View>
-        );
-      },
-      () => {
-        const translateY = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [width * 4, width * 5],
-          outputRange: [height - 100, 0],
-          extrapolate: 'clamp',
-        });
-        const translateX = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [width * 4, width * 5],
-          outputRange: [-width, 0],
-          extrapolate: 'clamp',
-        });
-        const scale = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [width * 4, width * 5],
-          outputRange: [0.9, 1],
-          extrapolate: 'clamp',
-        });
-        return (
-          <Animated.View
-            style={{
-              transform: [{ translateY }, { translateX }, { scale }],
-              flex: 1,
-            }}>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={[
-                styles.contentContainerStyle,
-                { paddingHorizontal: 7.5, paddingBottom: 60 },
-              ]}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.itemHeaderText}>Lookin' good!</Text>
-                <Text style={styles.titles}>Choose a header for {'\n'} your challenge:</Text>
-              </View>
-              <Graphic
-                challenge={challenge}
-                onPress={(graphic) => {
-                  this.onChangeChallenge({ graphic });
-                }}
-              />
-            </ScrollView>
-            <TouchableWithoutFeedback
-              onPress={() =>
-                challenge.graphic !== null && this.onPressNext({})
-              }>
-              <View
-                style={[
-                  styles.nextButton,
-                  challenge.graphic === null
-                    ? { backgroundColor: '#96AAC6' }
-                    : {},
-                ]}>
-                <Text style={styles.nextButtonText}>Next</Text>
-              </View>
-            </TouchableWithoutFeedback>
-          </Animated.View>
-        );
-      },
-      () => {
-        const translateY = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [width * 5, width * 6],
-          outputRange: [height - 100, 0],
-          extrapolate: 'clamp',
-        });
-        const translateX = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [width * 5, width * 6],
-          outputRange: [-width, 0],
-          extrapolate: 'clamp',
-        });
-        const scale = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [width * 5, width * 6],
-          outputRange: [0.9, 1],
-          extrapolate: 'clamp',
-        });
-        return (
-          <Animated.View
-            style={{
-              transform: [{ translateY }, { translateX }, { scale }],
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <AllSet
-              user={this.props.user}
-              challenge={challenge}
-              loading={this.state.loading}
-              createChallenge={this.createChallenge}
-              closeCreateNew={this.closeCreateNew}
-              createdChallenge={this.state.createdChallenge}
-            />
-          </Animated.View>
-        );
-      },
+      () => <PageThree
+        challenge={challenge}
+        CarouselRef={this.CarouselRef}
+        TitleRef={this.TitleRef}
+        onChangeChallenge={this.onChangeChallenge}
+        onPressNext={this.onPressNext}
+      />,
+      () => <PageFour
+        CarouselRef={this.CarouselRef}
+        onChangeChallenge={this.onChangeChallenge}
+        onPressNext={this.onPressNext}
+        challenge={challenge}
+      />,
+      () => <PageFive
+        CarouselRef={this.CarouselRef}
+        onChangeChallenge={this.onChangeChallenge}
+        onPressNext={this.onPressNext}
+        challenge={challenge}
+      />,
+      () => <PageSix
+        CarouselRef={this.CarouselRef}
+        onChangeChallenge={this.onChangeChallenge}
+        onPressNext={this.onPressNext}
+        challenge={challenge}
+      />,
+      () => <PageSeven
+        user={this.props.user}
+        challenge={challenge}
+        loading={this.state.loading}
+        CarouselRef={this.CarouselRef}
+        createChallenge={this.createChallenge}
+        closeCreateNew={this.closeCreateNew}
+        createChallenge={this.state.createdChallenge}
+      />
     ];
     data = data.map((v, i) => {
       const index = this.state.renderList.indexOf(i);
@@ -597,20 +433,14 @@ const styles = EStyleSheet.create({
     width: radioButtonSize / 2,
     height: radioButtonSize / 2,
     borderRadius: radioButtonSize / 4,
-    // borderColor: 'gray',
     backgroundColor: 'rgb(24, 154, 201)',
-    // borderWidth: 0.5,
-
   },
   viewNotSelected: {
     width: radioButtonSize / 2,
     height: radioButtonSize / 2,
     borderRadius: radioButtonSize / 4,
-    // borderColor: 'gray',
     backgroundColor: 'white',
-    // borderWidth: 0.5,
   },
-
   inputIOS: {
     fontSize: 16,
     paddingTop: 13,
@@ -675,8 +505,7 @@ const styles = EStyleSheet.create({
     backgroundColor: "#1ca0ff",
     height: 56,
     alignItems: "center",
-    justifyContent: "center",
-    // marginTop:height-658,
+    justifyContent: "center"
   },
   confirmPlanText: {
     color: "#ffffff",
@@ -720,7 +549,6 @@ const styles = EStyleSheet.create({
   },
   contentContainerStyle: {
     backgroundColor: '#F7F9FB',
-    //paddingHorizontal: 15,
     paddingBottom: 30,
     flexGrow: 1
   },

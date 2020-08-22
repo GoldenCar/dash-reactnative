@@ -2,13 +2,13 @@ import React from 'react';
 import { Animated, Dimensions, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import Title from '../Title';
-import Description from '../Description';
+import Title from '../../Title';
+import Description from '../../Description';
 
 const { height, width } = Dimensions.get('screen');
 
 export default function Component(props) {
-    const { challenge, CarouselRef } = props;
+    const { challenge, CarouselRef, TitleRef, onChangeChallenge, onPressNext } = props;
 
     const translateY = CarouselRef._scrollPos.interpolate({
         inputRange: [width, width * 2],
@@ -42,7 +42,7 @@ export default function Component(props) {
                         <Text style={styles.titles}>Just a few more {'\n'} small details</Text>
                     </View>
                     <Title
-                        ref={(e) => (this.TitleRef = e)}
+                        //ref={(e) => (TitleRef = e)}
                         challenge={challenge}
                         onChangeText={(title) => onChangeChallenge({ title })}
                     />
