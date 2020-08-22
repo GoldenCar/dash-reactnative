@@ -1,38 +1,14 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  Dimensions,
-  Animated,
-  Keyboard,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import React from 'react';
+import { View, Text, Dimensions, Keyboard, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-
 import Carousel from 'react-native-snap-carousel';
-import { Container, Content } from "native-base";
-import _, { toInteger } from 'lodash';
-// import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Ionicon from 'react-native-vector-icons/Ionicons';
 
-import Modal from 'dash/src/components/Modal';
-import RNPickerSelect from 'react-native-picker-select';
 import * as challenegesActions from '../../../actions/challenges';
 
-import CreateNew from '../CreateNew';
-import Title from '../Title';
-import Program from '../Program';
-import Description from '../Description';
-import StartDate from '../StartDate';
-import Graphic from '../Graphic';
-import AllSet from '../AllSet';
-import Access from '../Access';
-import DailyTask from '../DailyTask';
-
+import Modal from 'dash/src/components/Modal';
 import Header from './Header';
 
 import PageOne from './Children/PageOne';
@@ -43,10 +19,8 @@ import PageFive from './Children/PageFive';
 import PageSix from './Children/PageSix';
 import PageSeven from './Children/PageSeven';
 
-import { mediaHost } from 'dash/src/config';
-
 const { height, width } = Dimensions.get('screen');
-const radioButtonSize = 24;
+const RADIO_BUTTON_SIZE = 24;
 
 const defaultChallenge = {
   type: null,
@@ -92,6 +66,7 @@ class Component extends React.Component {
         }
       }
     }
+
     let arrayPlannedVersion = challenge.type.planTypeData;
 
     let arrayOnlyVersion = [];
@@ -117,7 +92,6 @@ class Component extends React.Component {
       this.setState({ versionNum: minimum })
     }
   }
-
 
   saveVersion = async () => {
     try {
@@ -154,12 +128,12 @@ class Component extends React.Component {
       this.CreateNewRef.open({});
     }
   };
+
   closeCreateNew = ({ call = () => { } }) => {
     this.CreateNewRef.close({ call });
   };
 
   onSnapItem = (currentIndex) => {
-
     const renderList = this.state.renderList;
     const i = renderList.indexOf(currentIndex + 1);
     if (i === -1) {
@@ -209,6 +183,7 @@ class Component extends React.Component {
       call,
     );
   };
+
   onPressNext = ({ call } = {}) => {
     if (this.state.currentIndex === 3) {
       Keyboard.dismiss();
@@ -218,6 +193,7 @@ class Component extends React.Component {
       call();
     }
   };
+
   onPressBack = () => {
     if (this.state.currentIndex === 2) {
       Keyboard.dismiss();
@@ -287,6 +263,7 @@ class Component extends React.Component {
         createChallenge={this.state.createdChallenge}
       />
     ];
+
     data = data.map((v, i) => {
       const index = this.state.renderList.indexOf(i);
       if (index === -1) {
@@ -296,6 +273,7 @@ class Component extends React.Component {
       }
       return v;
     });
+
     return (
       <Carousel
         keyboardShouldPersistTaps={'never'}
@@ -317,48 +295,45 @@ class Component extends React.Component {
     );
   };
 
-  // TODO: move
   renderItem = (item, index) => {
-
     const { challenge } = this.state;
     let stringVersion = "Version " + item.item.version + ".0"; // For setting version value
 
+    const itemOnPress = () => {
+      for (let loopCount = 0; loopCount < challenge.type.planTypeData.length; loopCount++) {
+        const element = challenge.type.planTypeData[loopCount];
+
+        if (String(element.version) === String(item.item.version)) {
+          element.isSelected = true;
+          this.setState({ versionNum: item.item.version });
+        } else {
+          element.isSelected = false;
+        }
+
+        challenge.type.planTypeData[loopCount] = element;
+      }
+    }
+
     return (
-      <View style={{}}>
-        <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 15, alignItems: 'center' }}
-          onPress={() => {
-
-            for (let loopCount = 0; loopCount < challenge.type.planTypeData.length; loopCount++) {
-              const element = challenge.type.planTypeData[loopCount];
-
-
-              if (String(element.version) === String(item.item.version)) {
-                element.isSelected = true;
-
-                this.setState({ versionNum: item.item.version });
-
-              } else {
-                element.isSelected = false;
-              }
-              challenge.type.planTypeData[loopCount] = element;
-            }
-          }
-          }
+      <View>
+        <TouchableOpacity
+          style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 15, alignItems: 'center' }}
+          onPress={itemOnPress}
         >
           <Text style={styles.textVersion}>{stringVersion}</Text>
 
           <View style={{
-            width: radioButtonSize,
-            height: radioButtonSize,
-            borderRadius: radioButtonSize / 2,
+            width: RADIO_BUTTON_SIZE,
+            height: RADIO_BUTTON_SIZE,
+            borderRadius: RADIO_BUTTON_SIZE / 2,
             borderColor: 'gray',
             borderWidth: 0.5,
             alignItems: 'center',
             justifyContent: 'center'
           }}
           >
-            {(item.item.isSelected && item.item.isSelected) || (this.state.versionNum === String(item.item.version)) ? <View style={styles.viewSelected} />
-              :
+            {(item.item.isSelected && item.item.isSelected) || (this.state.versionNum === String(item.item.version)) ?
+              <View style={styles.viewSelected} /> :
               <View style={styles.viewNotSelected} />}
 
 
@@ -374,7 +349,6 @@ class Component extends React.Component {
     return (
       <Modal
         ref={(e) => (this.CreateNewRef = e)}
-        // popupHeight={height}
         header={
           <Header
             ref={(e) => (this.HeaderRef = e)}
@@ -390,19 +364,6 @@ class Component extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  console.log(" state in proos ----->>", state);
-  return {}
-};
-
-
-// export default connect(
-//   mapStateToProps,
-//   null,
-//   { forwardRef: true },
-// )(Component);
-
-
 export default connect(
   ({ user }) => ({
     user,
@@ -412,13 +373,7 @@ export default connect(
   { forwardRef: true },
 )(Component);
 
-
 const styles = EStyleSheet.create({
-  nextButtonText: {
-    fontFamily: 'Poppins-Bold',
-    color: 'white',
-    fontSize: 16,
-  },
   singleRow: {
     backgroundColor: 'lightgray',
     width: '110%',
@@ -430,160 +385,15 @@ const styles = EStyleSheet.create({
     fontWeight: "400"
   },
   viewSelected: {
-    width: radioButtonSize / 2,
-    height: radioButtonSize / 2,
-    borderRadius: radioButtonSize / 4,
+    width: RADIO_BUTTON_SIZE / 2,
+    height: RADIO_BUTTON_SIZE / 2,
+    borderRadius: RADIO_BUTTON_SIZE / 4,
     backgroundColor: 'rgb(24, 154, 201)',
   },
   viewNotSelected: {
-    width: radioButtonSize / 2,
-    height: radioButtonSize / 2,
-    borderRadius: radioButtonSize / 4,
+    width: RADIO_BUTTON_SIZE / 2,
+    height: RADIO_BUTTON_SIZE / 2,
+    borderRadius: RADIO_BUTTON_SIZE / 4,
     backgroundColor: 'white',
-  },
-  inputIOS: {
-    fontSize: 16,
-    paddingTop: 13,
-    paddingHorizontal: 10,
-    paddingBottom: 12,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 4,
-    backgroundColor: 'white',
-    color: 'black',
-  },
-  nextButton: {
-    position: 'absolute',
-    paddingVertical: 15,
-    backgroundColor: '$lightBlue',
-    alignItems: 'center',
-    justifyContent: 'center',
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  chooseVersion: {
-    marginTop: 30,
-    color: '#000000',
-    fontSize: 12,
-    lineHeight: 16,
-    fontFamily: 'Poppins-Bold',
-  },
-  challengeDescription: {
-    fontSize: 12,
-    fontFamily: 'Poppins-Medium',
-    lineHeight: 20,
-    color: "#96AAC6"
-  },
-  programPicture: {
-    height: 200,
-    width: "100%",
-  },
-  programPictureContainer: {
-    width: "100%",
-    borderRadius: 13,
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-    backgroundColor: "#ffffff"
-  },
-  descriptionBody: {
-    width: "100%",
-    alignItems: "flex-start",
-    paddingLeft: 25,
-    paddingTop: 25,
-  },
-  bottomButtonContainer: {
-    height: 60,
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    backgroundColor: 'transparent'
-  },
-  bottomConfirmBox: {
-    width: "100%",
-    backgroundColor: "#1ca0ff",
-    height: 56,
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  confirmPlanText: {
-    color: "#ffffff",
-    fontSize: 16,
-    fontFamily: 'Poppins-Medium',
-  },
-  confirmButton: {
-    backgroundColor: "#445533"
-  },
-  checkIcon: {
-    position: "absolute",
-    left: -35,
-    top: 3
-  },
-  actionBox: {
-    flexDirection: "row",
-    marginBottom: 13
-  },
-  actionCancel: {
-    flex: 1,
-    marginLeft: 15
-  },
-  actionSet: {
-    marginRight: 15
-  },
-  actionText: {
-    color: "#62a3f7",
-    fontWeight: "bold",
-    fontSize: 17
-  },
-  backButton: { width: 40 },
-  subTitles: {
-    fontSize: 16,
-    fontFamily: 'Poppins-Medium',
-    color: '#6F80A7',
-  },
-  next: {
-    fontSize: 16,
-    fontFamily: 'Poppins-Bold',
-    color: '#1AA0FF',
-  },
-  contentContainerStyle: {
-    backgroundColor: '#F7F9FB',
-    paddingBottom: 30,
-    flexGrow: 1
-  },
-  titleContainer1: {
-    alignItems: "flex-start",
-    marginBottom: 22
-  },
-  titleContainer: {
-    alignItems: "center",
-  },
-  titles: {
-    textAlign: 'center',
-    fontSize: 24,
-    lineHeight: 32,
-    fontFamily: 'Poppins-Bold',
-    paddingHorizontal: 15,
-    color: '#292E3A',
-  },
-  itemHeaderText: {
-    fontSize: 16,
-    marginBottom: 7,
-    color: "#1AA0FF",
-    fontFamily: 'Poppins-Bold',
-  },
-  header2: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F5FA',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F5FA',
-  },
-  closeButton: {},
+  }
 });
