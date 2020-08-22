@@ -35,6 +35,10 @@ import DailyTask from '../DailyTask';
 
 import Header from './Header';
 
+import PageOne from './Children/PageOne';
+import PageTwo from './Children/PageTwo';
+import PageThree from './Children/PageThree';
+
 import { mediaHost } from 'dash/src/config';
 
 const { height, width } = Dimensions.get('screen');
@@ -45,17 +49,10 @@ const defaultChallenge = {
   public: null,
   title: '',
   description: '',
-  // duration: 10,//null, // chandni
   startDate: null,
   graphic: null,
-  // typeProgram: null,  chandni
-  version: '1',
-
+  version: '1'
 };
-//const [cancel, setCancel] = useState(false);
-//const [done, setDone] = useState(false);
-
-//console.disableYellowBox = true;
 
 // TODO: this needs major clean up
 
@@ -116,9 +113,9 @@ class Component extends React.Component {
       this.setState({ versionNum: minimum })
     }
   }
-  
 
-   saveVersion = async() => {
+
+  saveVersion = async () => {
     try {
       await AsyncStorage.setItem('version', this.state.versionNum);
     } catch (error) {
@@ -228,171 +225,32 @@ class Component extends React.Component {
   renderChildren = () => {
     const { challenge } = this.state;
     let data = [
-      () => {
-        const opacity = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [0, width],
-          outputRange: [1, 0],
-          extrapolate: 'clamp',
-        });
-        return (
-          <Animated.ScrollView
-            keyboardShouldPersistTaps={'never'}
-            showsVerticalScrollIndicator={false}
-            style={{ opacity }}
-            contentContainerStyle={[styles.contentContainerStyle]}>
-            <View style={styles.titleContainer1}>
-              <Text style={styles.titles}>Start your 30 day</Text>
-              <Text style={styles.titles}>
-                challenge by choosing
-              </Text>
-              <Text style={styles.titles}>
-                the plan:
-              </Text>
-            </View>
-            <CreateNew
-              onPress={(type) => {
-                console.log(" type is ", type);
-                this.onPressNext({
-                  call: () => {
-                    this.HeaderRef.next();
-                    if (type.planTypeData && type.planTypeData.length > 0) {
-                      this.onChangeChallenge({ type });
-                    }
-                  },
-                });
-              }}
-            />
-          </Animated.ScrollView>
-        );
-      },
-      () => {
-        const translateY = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [0, width],
-          outputRange: [height, 0],
-          extrapolate: 'clamp',
-        });
-        const translateX = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [0, width],
-          outputRange: [-width, 0],
-          extrapolate: 'clamp',
-        });
-        const scale = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [0, width],
-          outputRange: [1, 1],
-          extrapolate: 'clamp',
-        });
-        if (!challenge.type) {
-          return null;
-        }
-
-        let items = [];
-
-        challenge.type.planTypeData.map((item, index) => {
-          let string = "Version " + item.version + ".0"
-          items.push(item.version)
-        });
-        
-        return (
-          <Animated.View
-            style={{
-              transform: [{ translateY }, { translateX }, { scale }],
-              flex: 1,
-              flexDirection: 'column',
-              justifyContent: 'space-between'
-            }}
-          >
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={[styles.contentContainerStyle, { height: Dimensions.get('window').height }]}
-            >
-              <DailyTask 
-                versionNum={this.state.versionNum}
-                isVersionModalShow={this.state.isVersionModalShow}  
-                challenge={challenge} 
-                showVersionModal={(show) => this.setState({ isVersionModalShow: show })}
-                setVersionNum={(version) => this.setState({ versionNum: version })}
-                items={items}
-              />
-
-              {/* <Program
-              onPress={(typeProgram) => {
-                this.onPressNext({
-                  call: () => {
-                    this.HeaderRef.next();
-                    this.onChangeChallenge({typeProgram});
-                  },
-                });
-              }}
-            />               */}
-            </ScrollView>
-
-            <View style={styles.bottomButtonContainer}>
-              <TouchableOpacity style={styles.bottomConfirmBox} onPress={() => {
-                let version = this.state.versionNum;
-                this.onChangeChallenge({ version });
-                this.onPressNext({});
-                this.saveVersion();
-              }}>
-                <Text style={styles.confirmPlanText}>Confirm Plan</Text>
-              </TouchableOpacity>
-            </View>
-          </Animated.View>
-        );
-      },
-      () => {
-        const translateY = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [width, width * 2],
-          outputRange: [height - 100, 0],
-          extrapolate: 'clamp',
-        });
-        const translateX = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [width, width * 2],
-          outputRange: [-width, 0],
-          extrapolate: 'clamp',
-        });
-        const scale = this.CarouselRef._scrollPos.interpolate({
-          inputRange: [width, width * 2],
-          outputRange: [0.9, 1],
-          extrapolate: 'clamp',
-        });
-        return (
-          <Animated.View
-            style={[
-              {
-                transform: [{ translateY }, { translateX }, { scale }],
-                flex: 1,
-              },
-            ]}>
-            <ScrollView
-              // showsVerticalScrollIndicator={false}
-              contentContainerStyle={[styles.contentContainerStyle, { flexGrow: 1 }]}>
-              <View>
-
-                <View style={styles.titleContainer}>
-                  <Text style={styles.itemHeaderText}>Perfect!</Text>
-                  <Text style={styles.titles}>Just a few more {'\n'} small details</Text>
-                </View>
-                <Title
-                  ref={(e) => (this.TitleRef = e)}
-                  challenge={challenge}
-                  onChangeText={(title) => this.onChangeChallenge({ title })}
-                />
-                <Description
-                  challenge={challenge}
-                  onChangeText={(description) =>
-                    this.onChangeChallenge({ description })
-                  }
-                />
-              </View>
-            </ScrollView>
-            <View style={styles.bottomButtonContainer}>
-              <TouchableOpacity style={styles.bottomConfirmBox} onPress={() => this.onPressNext({})}>
-                <Text style={styles.confirmPlanText}>Next</Text>
-              </TouchableOpacity>
-            </View>
-          </Animated.View>
-        );
-      },
+      () => <PageOne
+        CarouselRef={this.CarouselRef}
+        HeaderRef={this.HeaderRef}
+        onChangeChallenge={this.onChangeChallenge}
+        onPressNext={this.onPressNext}
+      />,
+      () => <PageTwo
+        challenge={challenge}
+        onPress={() => {
+          let version = this.state.versionNum;
+          this.onChangeChallenge({ version });
+          this.onPressNext({});
+          this.saveVersion();
+        }}
+        isVersionModalShow={this.state.isVersionModalShow}
+        CarouselRef={this.CarouselRef}
+        versionNum={this.state.versionNum}
+        isVersionModalShow={this.state.isVersionModalShow}
+        showVersionModal={(show) => this.setState({ isVersionModalShow: show })}
+        setVersionNum={(version) => this.setState({ versionNum: version })}
+      />,
+      () =>
+        <PageThree
+          challenge={challenge}
+          CarouselRef={this.CarouselRef}
+        />,
       () => {
         const translateY = this.CarouselRef._scrollPos.interpolate({
           inputRange: [width * 2, width * 3],
@@ -622,6 +480,8 @@ class Component extends React.Component {
       />
     );
   };
+
+  // TODO: move
   renderItem = (item, index) => {
 
     const { challenge } = this.state;
