@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, Platform } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Picker from 'react-native-picker';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -10,34 +10,35 @@ import VersionPicker from './VersionPicker';
 export default function Component(props) {
     const { challenge, versionNum, isVersionModalShow, showVersionModal, items, setVersionNum } = props;
 
+    const onEdit = () => {
+        if (Platform.OS === 'android') {
+            showVersionModal(true);
+        } else {
+            Picker.show()
+        }
+    }
+
     return (
         <ChallengeTypeContainer
             item={challenge.type}
-            // onPress={() => this.onPressNext({})}
             nextTitle={'Confirm Plan'}
             containerStyle={{ marginBottom: 20 }}
         >
             <View style={{ paddingHorizontal: 8, marginTop: 40 }}>
                 <View style={styles.versionBox}>
                     <View style={styles.versionsTextBox}>
-                    <Text 
-                        style={styles.versionText} 
-                        onPress={() => showVersionModal(true)}
-                    >
-                        Version {versionNum}.0
+                        <Text
+                            style={styles.versionText}
+                            onPress={() => showVersionModal(true)}
+                        >
+                            Version {versionNum}.0
                     </Text>
-                    <View style={styles.versionRecommendedBox}>
-                        <Text style={styles.versionRecommended}>Recommended</Text>
+                        <View style={styles.versionRecommendedBox}>
+                            <Text style={styles.versionRecommended}>Recommended</Text>
+                        </View>
                     </View>
-                    </View>
-                    <TouchableOpacity style={styles.editButton} onPress={() => {
-                        if (Platform.OS === 'android') {
-                            showVersionModal(true);
-                        } else {
-                            Picker.show()
-                        }
-                    }}>
-                    <MaterialIcon name={'edit'} color="#6F80A7" size={20} />
+                    <TouchableOpacity style={styles.editButton} onPress={onEdit}>
+                        <MaterialIcon name={'edit'} color="#6F80A7" size={20} />
                     </TouchableOpacity>
                 </View>
             </View>

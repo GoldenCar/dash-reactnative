@@ -10,10 +10,6 @@ export default function Component(props) {
   const [load, setLoad] = useState(false);
   const videoRef = React.createRef(null);
 
-  useEffect(() => {
-    // if (load) videoRef.presentFullscreenPlayer();
-  }, [load]);
-
   return (
     <Touch
       style={[styles.challengeTypeContainer, containerStyle]}

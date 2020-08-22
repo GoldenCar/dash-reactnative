@@ -10,6 +10,9 @@ const { height, width } = Dimensions.get('screen');
 
 export default function Component(props) {
     const { play, load, item, videoRef, setLoad, setPlay, onPress, nextTitle } = props;
+    
+    const onLoad = () => videoRef.current.seek(0);
+    
     return (
         !play? (
             <Image
@@ -45,9 +48,7 @@ export default function Component(props) {
                         resizeMode={'cover'}
                         style={styles.challengeTypeVideo}
                         onReadyForDisplay={() => setLoad(true)}
-                        onLoad={() => {
-                            videoRef.current.seek(0);
-                        }}
+                        onLoad={onLoad}
                     />
                 </View>
   

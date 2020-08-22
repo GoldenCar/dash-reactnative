@@ -10,6 +10,11 @@ export default function Component(props) {
         return null;
     }
 
+    const onConfirm = () => {
+        showVersionModal(false);
+        setVersionNum(versionNum);
+    };
+
     return (
         <Modal
             animationIn={Platform.OS === 'ios' ? 'fadeInUp' : 'fadeIn'}
@@ -26,7 +31,7 @@ export default function Component(props) {
                             selectedValue={versionNum}
                             onValueChange={(version) => setVersionNum(version)}
                         >
-                            {items.map((selectedValue) => 
+                            {items.map((selectedValue) =>
                                 <PickerItemIOS
                                     key={selectedValue}
                                     value={selectedValue}
@@ -35,17 +40,14 @@ export default function Component(props) {
                             )}
                         </PickerIOS>
                         <View style={styles.singleRowIos} />
-                        <TouchableOpacity onPress={() => {
-                            showVersionModal(false);
-                            setVersionNum(versionNum);
-                        }}>
+                        <TouchableOpacity onPress={onConfirm}>
                             <Text style={styles.textConfirmPicker}>Confirm</Text>
                         </TouchableOpacity>
                     </View>
 
                     <View style={{ marginTop: 20, borderRadius: 5, backgroundColor: 'white' }}>
                         <TouchableOpacity onPress={() => showVersionModal(false)}>
-                        <Text style={styles.textCancelPicker}>Cancel</Text>
+                            <Text style={styles.textCancelPicker}>Cancel</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -57,12 +59,6 @@ export default function Component(props) {
                         keyExtractor={(item, index) => index.toString()}
                     />
                     <View style={{ flexDirection: 'row', alignSelf: 'flex-end', padding: 10 }}>
-                        {/* <TouchableOpacity onPress={() => {
-                        showVersionModal(false);
-                        }}>
-                        <Text style={styles.textAlert}>Cancel</Text>
-                        </TouchableOpacity > */}
-
                         <TouchableOpacity onPress={() => showVersionModal(false)}>
                             <Text style={styles.textAlert}>Ok</Text>
                         </TouchableOpacity>
@@ -93,7 +89,7 @@ const styles = EStyleSheet.create({
         fontWeight: '500',
         fontSize: 18,
     },
-    singleRowIos:{
+    singleRowIos: {
         backgroundColor: 'lightgray',
         width: '100%',
         alignSelf: 'center',
