@@ -1,10 +1,9 @@
 import React from 'react';
-import { View, Text, Dimensions, Keyboard, TouchableOpacity } from 'react-native';
+import { View, Dimensions, Keyboard } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Carousel from 'react-native-snap-carousel';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import EStyleSheet from 'react-native-extended-stylesheet';
 
 import * as challenegesActions from '../../../actions/challenges';
 
@@ -20,7 +19,6 @@ import PageSix from './Children/PageSix';
 import PageSeven from './Children/PageSeven';
 
 const { height, width } = Dimensions.get('screen');
-const RADIO_BUTTON_SIZE = 24;
 
 const defaultChallenge = {
   type: null,
@@ -31,8 +29,6 @@ const defaultChallenge = {
   graphic: null,
   version: '1'
 };
-
-// TODO: this needs major clean up
 
 class Component extends React.Component {
   CreateNewRef;
@@ -295,55 +291,6 @@ class Component extends React.Component {
     );
   };
 
-  renderItem = (item, index) => {
-    const { challenge } = this.state;
-    let stringVersion = "Version " + item.item.version + ".0"; // For setting version value
-
-    const itemOnPress = () => {
-      for (let loopCount = 0; loopCount < challenge.type.planTypeData.length; loopCount++) {
-        const element = challenge.type.planTypeData[loopCount];
-
-        if (String(element.version) === String(item.item.version)) {
-          element.isSelected = true;
-          this.setState({ versionNum: item.item.version });
-        } else {
-          element.isSelected = false;
-        }
-
-        challenge.type.planTypeData[loopCount] = element;
-      }
-    }
-
-    return (
-      <View>
-        <TouchableOpacity
-          style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 15, alignItems: 'center' }}
-          onPress={itemOnPress}
-        >
-          <Text style={styles.textVersion}>{stringVersion}</Text>
-
-          <View style={{
-            width: RADIO_BUTTON_SIZE,
-            height: RADIO_BUTTON_SIZE,
-            borderRadius: RADIO_BUTTON_SIZE / 2,
-            borderColor: 'gray',
-            borderWidth: 0.5,
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-          >
-            {(item.item.isSelected && item.item.isSelected) || (this.state.versionNum === String(item.item.version)) ?
-              <View style={styles.viewSelected} /> :
-              <View style={styles.viewNotSelected} />}
-
-
-          </View>
-        </TouchableOpacity>
-
-        <View style={styles.singleRow} />
-      </View>
-    )
-  }
   render() {
     const { challenge } = this.state;
     return (
@@ -372,28 +319,3 @@ export default connect(
   null,
   { forwardRef: true },
 )(Component);
-
-const styles = EStyleSheet.create({
-  singleRow: {
-    backgroundColor: 'lightgray',
-    width: '110%',
-    alignSelf: 'center',
-    height: 1
-  },
-  textVersion: {
-    fontSize: 18,
-    fontWeight: "400"
-  },
-  viewSelected: {
-    width: RADIO_BUTTON_SIZE / 2,
-    height: RADIO_BUTTON_SIZE / 2,
-    borderRadius: RADIO_BUTTON_SIZE / 4,
-    backgroundColor: 'rgb(24, 154, 201)',
-  },
-  viewNotSelected: {
-    width: RADIO_BUTTON_SIZE / 2,
-    height: RADIO_BUTTON_SIZE / 2,
-    borderRadius: RADIO_BUTTON_SIZE / 4,
-    backgroundColor: 'white',
-  }
-});

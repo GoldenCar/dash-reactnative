@@ -3,6 +3,60 @@ import { View, TouchableOpacity, Text, PickerIOS, PickerItemIOS, Platform } from
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Modal from 'react-native-modal';
 
+const RADIO_BUTTON_SIZE = 24;
+
+// TODO: need to test this on android
+renderItem = (item, index) => {
+    const { challenge, setVersionNum } = this.props;
+    let stringVersion = "Version " + item.item.version + ".0"; // For setting version value
+
+    const itemOnPress = () => {
+        for (let loopCount = 0; loopCount < challenge.type.planTypeData.length; loopCount++) {
+            const element = challenge.type.planTypeData[loopCount];
+
+            if (String(element.version) === String(item.item.version)) {
+                element.isSelected = true;
+                setVersionNum(item.item.version);
+            } else {
+                element.isSelected = false;
+            }
+
+            challenge.type.planTypeData[loopCount] = element;
+        }
+    }
+
+    return (
+        <View>
+            <TouchableOpacity
+                style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 15, alignItems: 'center' }}
+                onPress={itemOnPress}
+            >
+                <Text style={styles.textVersion}>{stringVersion}</Text>
+
+                <View
+                    style={{
+                        width: RADIO_BUTTON_SIZE,
+                        height: RADIO_BUTTON_SIZE,
+                        borderRadius: RADIO_BUTTON_SIZE / 2,
+                        borderColor: 'gray',
+                        borderWidth: 0.5,
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                >
+                    {(item.item.isSelected && item.item.isSelected) || (this.state.versionNum === String(item.item.version)) ?
+                        <View style={styles.viewSelected} /> :
+                        <View style={styles.viewNotSelected} />}
+
+
+                </View>
+            </TouchableOpacity>
+
+            <View style={styles.singleRow} />
+        </View>
+    )
+}
+
 export default function Component(props) {
     const { challenge, versionNum, isVersionModalShow, showVersionModal, items, setVersionNum } = props;
 
@@ -55,7 +109,7 @@ export default function Component(props) {
                 <View style={{ backgroundColor: 'white', borderRadius: 5 }}>
                     <FlatList
                         data={challenge.type.planTypeData ? challenge.type.planTypeData : []}
-                        renderItem={this.renderItem}
+                        renderItem={renderItem}
                         keyExtractor={(item, index) => index.toString()}
                     />
                     <View style={{ flexDirection: 'row', alignSelf: 'flex-end', padding: 10 }}>
@@ -101,4 +155,26 @@ const styles = EStyleSheet.create({
         alignSelf: 'center',
         padding: 15,
     },
+    singleRow: {
+        backgroundColor: 'lightgray',
+        width: '110%',
+        alignSelf: 'center',
+        height: 1
+    },
+    textVersion: {
+        fontSize: 18,
+        fontWeight: "400"
+    },
+    viewSelected: {
+        width: RADIO_BUTTON_SIZE / 2,
+        height: RADIO_BUTTON_SIZE / 2,
+        borderRadius: RADIO_BUTTON_SIZE / 4,
+        backgroundColor: 'rgb(24, 154, 201)',
+    },
+    viewNotSelected: {
+        width: RADIO_BUTTON_SIZE / 2,
+        height: RADIO_BUTTON_SIZE / 2,
+        borderRadius: RADIO_BUTTON_SIZE / 4,
+        backgroundColor: 'white',
+    }
 });
