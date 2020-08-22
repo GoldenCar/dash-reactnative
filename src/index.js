@@ -74,6 +74,7 @@ export default () => {
     init();
   }, []);
   return (
+    // <View style={{flex: 1,     marginTop:20,}}>
     <View style={{flex: 1}}>
       <Provider store={store}>
         {!loading && (

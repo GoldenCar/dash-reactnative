@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, ActivityIndicator, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, ActivityIndicator} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import ChallengeTypeContainer from 'dash/src/components/ChallengeTypeContainer';
-import Plan from '../../components/Plan';
 import * as plansActions from 'dash/src/actions/plans';
 export default function Component(props) {
   const [loading, setLoading] = useState(false);
@@ -28,12 +27,12 @@ export default function Component(props) {
         />
       ) : (
         array.map((value, index) => (
-          <TouchableOpacity onPress={() => props.onPress(value)}>
-            <Plan 
-              value={value}
-              key={index}
-            />
-          </TouchableOpacity>
+          <ChallengeTypeContainer
+            key={index}
+            item={value}
+            onPress={() => props.onPress(value)}
+            containerStyle={{marginBottom: 20}}
+          />
         ))
       )}
     </>
