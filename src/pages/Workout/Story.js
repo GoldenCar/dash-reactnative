@@ -17,7 +17,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import {mediaHost} from '../../config';
 import Video from 'react-native-video';
-import {CheckList, Swap, Pause, Play} from 'dash/src/components/Icons';
+import {CheckList, Swap, Pause, Play, ArrowNext} from 'dash/src/components/Icons';
 import CountDownAnimation from './CountDownAnimation';
 import RestAnimation from './RestAnimation';
 import RestTime from './RestTime';
@@ -34,7 +34,7 @@ const {width, height} = Dimensions.get('window');
 export default class extends React.Component {
 
     translateY = new Animated.Value(0);
-
+    position = new Animated.Value(0);
     pauseOpacity = new Animated.Value(0);
     opacityTimer;
     videoRef = React.createRef(null);
@@ -45,6 +45,7 @@ export default class extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            position:new Animated.Value(1),
             currentIndex: 0,
             pause: false,
             countDown: false,
@@ -146,7 +147,7 @@ export default class extends React.Component {
             showTimeLimit: timerValidate,
             completeTaskTime: false,
             videoPaused: true,
-            VideoTimer:0,
+            VideoTimer: 0,
             countDown: countDownHide ? false : true
         });
 
@@ -248,6 +249,11 @@ export default class extends React.Component {
             return null;
         }
 
+
+        Animated.spring(this.state.position, {
+            toValue: (this.state.currentIndex + 1) * ((width / videos.length) - 5),
+        }).start()
+
         // validate circuit count
         this.setState(
             (prev) => {
@@ -294,6 +300,10 @@ export default class extends React.Component {
         const restTime = videos[currentIndex].RestTime ? videos[currentIndex].RestTime != "" ? true : false : false;
         const restDuration = restTime ? videos[currentIndex].RestTime : 0;
 
+        Animated.spring(this.state.position, {
+            toValue: (this.state.currentIndex - 1) * ((width / videos.length) - 5),
+        }).start()
+
         this.setState(
             (prev) => {
                 this.pauseOpacity.setValue(0);
@@ -336,11 +346,18 @@ export default class extends React.Component {
 
     nextStory = () => {
 
+        Animated.spring(this.state.position, {
+            toValue: 120,
+        })
+
         // For managing cyclecount of circuit
         if (this.state.cyclesCountCircuit && this.state.cyclesCountCircuit > 0 && this.props.isCircuit) {
             const timerValidate = this.props.story.videos[0].timer;
             const timeValue = timerValidate ? this.props.story.videos[0].RestTime : 0;
             const countDownHide = this.props.story.videos[0].cardType == "rest" || this.props.story.videos[0].cardType == "note" ? true : false;
+            Animated.spring(this.state.position, {
+                toValue: 0,
+            }).start()
             this.setState({
                 cyclesCountCircuit: this.state.cyclesCountCircuit - 1,
                 currentIndex: 0,
@@ -361,6 +378,7 @@ export default class extends React.Component {
                 this.videoRef.current.seek(0);
                 this.setState({videoPaused: false});
             }
+
             this.props.nextStory();
         } else {
             this.next();
@@ -426,6 +444,9 @@ export default class extends React.Component {
         if (this.setTimeoutTimer) {
             clearTimeout(this.setTimeoutTimer);
         }
+        Animated.spring(this.state.position, {
+            toValue:0
+        }).start()
         this.setState({
             currentIndex: 0,
             pause: false,
@@ -505,7 +526,7 @@ export default class extends React.Component {
         return (
             <TouchableWithoutFeedback onPress={() => this.next(true)}>
                 <View style={styles.nextButton}>
-                    <Image source={require('../../res/nextButton.png')} style={{flex: 1}} resizeMode={"contain"}/>
+                    <Text style={styles.nextButtonText}>Next</Text><ArrowNext/>
                 </View>
             </TouchableWithoutFeedback>
         )
@@ -679,7 +700,7 @@ export default class extends React.Component {
 
     render() {
         const {story: {videos, timer}, totalTimer, index, activeIndex, isCircuit} = this.props;
-        const {currentIndex, pause, countDown, rest, showTimeLimit, videoLoading, exerciseSets, videoPaused, VideoTimer} = this.state;
+        const {currentIndex, pause, countDown, rest,position, showTimeLimit, videoLoading, exerciseSets, videoPaused, VideoTimer} = this.state;
         const opacity = this.pauseOpacity.interpolate({
             inputRange: [0, 1],
             outputRange: [0, 1],
@@ -724,6 +745,8 @@ export default class extends React.Component {
         const videoRepeat = this.checkVideoIsRepeat(videos[currentIndex]);
 
         const restVideo = videos[currentIndex].flag === 'rest'
+
+
 
         return (
             <SafeAreaView style={styles.container}>
@@ -778,14 +801,24 @@ export default class extends React.Component {
                 {/* ************* item position indicator **************** */}
                 {videos && videos.length !== 1 && (
                     <View style={styles.linesContainer}>
+                        {/*currentIndex === index ? 'white' :*/}
+                        <Animated.View
+                            style={[
+                                styles.line,
+                                styles.activeLine,
+                                {
+                                    width: (width / videos.length) - 5 * (videos.length - 1),
+                                    left:position
+                                }]}
+                        />
+
                         {videos.map((v, index) => (
                             <View
                                 key={index}
                                 style={[
                                     styles.line,
                                     {
-                                        backgroundColor:
-                                            currentIndex === index ? 'white' : 'rgba(255,2555,255,0.4)',
+                                        backgroundColor: 'rgba(255,2555,255,0.4)',
                                     },
                                 ]}
                             />
@@ -849,7 +882,7 @@ export default class extends React.Component {
                     {...this.panResponder.panHandlers}>
 
                     {repCount != "" && <>
-                        <Text style={styles.storyTime}>{`${repCount} Reps`}</Text>
+                        <Text style={{...styles.storyTime, marginBottom: 5}}>{`${repCount} Reps`}</Text>
                     </>
                     }
 
@@ -1003,7 +1036,7 @@ const styles = StyleSheet.create({
     centerContainer: {
         position: 'absolute',
         width,
-        height:height-100,
+        height: height - 100,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -1062,32 +1095,33 @@ const styles = StyleSheet.create({
         color: 'white',
         fontFamily: 'Poppins-Bold',
         fontSize: 16,
-        lineHeight: 22,
+        lineHeight: 24,
         width: '100%',
-        marginLeft: 5
+        marginTop: 2,
+        // marginLeft: 5
     },
     timeContainer: {
         top: 40,
         zIndex: 100,
         flexDirection: 'row',
-        justifyContent: 'center',
+        // justifyContent: 'center',
         alignItems: 'center',
-        padding: 10,
-        borderRadius: 25,
-        backgroundColor: 'rgba(33, 41, 61, 0.4)',
+        // padding: 10,
+        borderRadius: 40,
+        backgroundColor: 'rgba(63,67,79, 0.4)',
         position: 'absolute',
         right: 15,
-        width: responsiveWidth(28)
+        width: 104,
+        height: 48,
     },
     totalTimerIcon: {
-        width: '30%',
-        height: '100%',
+        marginRight: 14,
+        marginLeft: 22,
         alignItems: 'center',
         justifyContent: 'center'
     },
     totalTimerNumber: {
-        width: '70%',
-        height: '100%',
+        alignItems: 'center',
         justifyContent: 'center'
     },
     title: {
@@ -1138,8 +1172,8 @@ const styles = StyleSheet.create({
         marginRight: 15,
     },
     nextButton: {
-        height: 50,
-        width: 80,
+        height: 48,
+        width: 97,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#fff',
@@ -1162,6 +1196,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     nextButtonText: {
+        marginTop: -2,
+        marginRight:11,
         fontWeight: 'bold',
         fontFamily: 'Poppins',
         fontSize: 16,
@@ -1177,6 +1213,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         zIndex: 100,
         height: 80,
+        marginBottom: 10,
         marginHorizontal: 15,
     },
 
@@ -1186,8 +1223,12 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginHorizontal: 5,
     },
+    activeLine: {
+        backgroundColor: '#fff',
+        position: 'absolute'
+    },
     linesContainer: {
-        position: 'absolute',
+        position: 'relative',
         top: Platform.OS === 'ios' ? 25 : 15,
         left: 0,
         right: 0,

@@ -809,7 +809,7 @@ export default class App extends React.Component {
                   lineHeight: 28,
                   fontWeight: '600',
                 }}>
-                What’s a Pyramid Set?
+                What’s a Circuit?
               </Text>
               <TouchableOpacity
                 style={{
@@ -850,47 +850,7 @@ export default class App extends React.Component {
                   fontFamily: 'Poppins',
                   lineHeight: 22,
                 }}>
-                A treadmill can give you a great walking workout
-              </Text>
-              <Text
-                style={{
-                  fontSize: 14,
-                  letterSpacing: 1.2,
-                  color: '#6F80A7',
-                  fontFamily: 'Poppins',
-                  lineHeight: 22,
-                }}>
-                in any weather. If you use the right walking form
-              </Text>
-              <Text
-                style={{
-                  fontSize: 14,
-                  letterSpacing: 1.2,
-                  color: '#6F80A7',
-                  fontFamily: 'Poppins',
-                  lineHeight: 22,
-                }}>
-                and vary your workouts with intervals, hills, and{' '}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 14,
-                  letterSpacing: 1.2,
-                  color: '#6F80A7',
-                  fontFamily: 'Poppins',
-                  lineHeight: 22,
-                }}>
-                speed changes, you can keep yourself interested{' '}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 14,
-                  letterSpacing: 1.2,
-                  color: '#6F80A7',
-                  fontFamily: 'Poppins',
-                  lineHeight: 22,
-                }}>
-                and challenge your body in new ways.
+                A circuit is a sequence of exercises that repeats itself for a set number of rounds.
               </Text>
             </View>
           </View>

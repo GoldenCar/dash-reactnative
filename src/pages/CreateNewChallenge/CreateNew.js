@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, ActivityIndicator, View, TouchableOpacity} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, ActivityIndicator, View, TouchableOpacity } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import ChallengeTypeContainer from 'dash/src/components/ChallengeTypeContainer';
 import Plan from '../../components/Plan';
@@ -12,10 +12,10 @@ export default function Component(props) {
       try {
         setLoading(true);
         const data = await plansActions.getPlans();
-        const planData =  data.filter(data => data.status == "current"); 
+        const planData = data.filter(data => data.status == "current");
         setArray(planData);
         setLoading(false);
-      } catch (e) {}
+      } catch (e) { }
     };
     init();
   }, []);
@@ -27,15 +27,15 @@ export default function Component(props) {
           color={EStyleSheet.value('$lightBlue')}
         />
       ) : (
-        array.map((value, index) => (
-          <TouchableOpacity onPress={() => props.onPress(value)}>
-            <Plan 
-              value={value}
-              key={index}
-            />
-          </TouchableOpacity>
-        ))
-      )}
+          array.map((value, index) => (
+            <TouchableOpacity onPress={() => props.onPress(value)}>
+              <Plan
+                value={value}
+                key={index}
+              />
+            </TouchableOpacity>
+          ))
+        )}
     </>
   );
 }

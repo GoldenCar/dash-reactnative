@@ -75,7 +75,8 @@ export default class Component extends React.Component {
           AppleAuthRequestScope.FULL_NAME,
         ],
       });
-      
+      console.log(appleAuthRequestResponse)
+
       this.createAccountApple(appleAuthRequestResponse);
       if (callbackButton) {
         callbackButton();
