@@ -20,22 +20,41 @@ export default function Component(props) {
     const [load, setLoad] = useState(false);
     const videoRef = createRef(null);
 
+    const [dayData, setDayData] = useState([{ versionDay: 1, taskTitle: 'Yoga' }]);
+
     useEffect(() => {
         const init = async () => {
+            // TODO: clean this up & pull into it's own function
             try {
-                const arrayResponse = await planActions.getPlanTasks("5f21e92ef1a13b555fee2c5b");
-                //const arrayResponse = await planActions.getPlanTasks('plan2020629218443234260564696');
+                const planData = await planActions.getPlanTasks(item._id);
+                console.log('daily task', planData);
 
-                console.log('daily task', arrayResponse);
+                if (planData.planTypeData.length === 0) {
+                    return;
+                }
 
-                // const getAllTasks = await planActions.getAllPlanTasks('plan2020629218443234260564696');
-                //console.log('get all tasks', getAllTasks);
+                const versionData = planData.planTypeData.find((data) => {
+                    return parseInt(data.version) === parseInt(versionNum);
+                });
+
+                console.log('version data', versionData);
+
+                if (!versionData || !versionData.versionData || versionData.versionData.length === 0) {
+                    return;
+                }
+
+                const dayData = versionData.versionData[0].planVersionDayTaskData;
+
+                console.log('day data', dayData);
+
+                //setDayData(dayData);
+
             } catch (e) {
                 console.log(e);
             }
         };
         init();
-    }, []);
+    }, [versionNum]);
 
     return (
         <View style={styles.container}>
@@ -80,6 +99,21 @@ export default function Component(props) {
                         <MaterialIcon name='edit' color="#8A98B7" size={16} />
                     </TouchableOpacity>
                 </LinearGradient>
+            </View>
+
+            <View style={styles.schedule}>
+                <Text>30 day schedule</Text>
+
+                { // TODO: pull this into own component
+                    dayData.map((d) => {
+                        return (
+                            <View style={styles.row}>
+                                <Text>{d.versionDay}</Text>
+                                <Text>{d.taskTitle}</Text>
+                            </View>
+                        )
+                    })
+                }
             </View>
 
             <Video
