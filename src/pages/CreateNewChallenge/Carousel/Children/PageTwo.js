@@ -58,9 +58,7 @@ export default function Component(props) {
             </ScrollView>
 
             <View style={styles.bottomButtonContainer}>
-                <TouchableOpacity style={styles.bottomConfirmBox} onPress={
-                    onPress
-                }>
+                <TouchableOpacity style={styles.bottomConfirmBox} onPress={onPress}>
                     <Text style={styles.confirmPlanText}>Confirm Plan</Text>
                 </TouchableOpacity>
             </View>
