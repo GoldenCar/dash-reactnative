@@ -2,7 +2,6 @@ import React, { useState, createRef } from 'react';
 import { View, TouchableOpacity, Text, Platform, Image } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Picker from 'react-native-picker';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -18,14 +17,6 @@ export default function Component(props) {
     const [play, setPlay] = useState(false);
     const [load, setLoad] = useState(false);
     const videoRef = createRef(null);
-
-    const onEdit = () => {
-        if (Platform.OS === 'android') {
-            showVersionModal(true);
-        } else {
-            Picker.show()
-        }
-    }
 
     return (
         <View style={styles.container}>
@@ -59,44 +50,29 @@ export default function Component(props) {
                         style={styles.image}
                         resizeMode='contain'
                     />
-                </LinearGradient>
 
-            </View>
-
-            {/* TODO: clean up video player (don't need image)
-            <Video
-                    play={play}
-                    load={load}
-                    item={item}
-                    videoRef={videoRef}
-                    setLoad={setLoad}
-                    setPlay={setPlay}
-                    onPress={onPress}
-                    nextTitle={'Confirm Plan'}
-                /> */}
-
-            {/* <View style={styles.challengeTypeMain}>
-                <Text style={styles.typeName}>{item.title}</Text>
-                <Text style={styles.typeDescription}>{item.description}</Text>
-            </View>
-            <View style={{ paddingHorizontal: 8, marginTop: 40 }}>
-                <View style={styles.versionBox}>
-                    <View style={styles.versionsTextBox}>
-                        <Text
-                            style={styles.versionText}
-                            onPress={() => showVersionModal(true)}
-                        >
+                    <TouchableOpacity
+                        style={styles.versionContainer}
+                        onPress={() => showVersionModal(true)}
+                    >
+                        <Text style={styles.versionText}>
                             Version {versionNum}.0
-                    </Text>
-                        <View style={styles.versionRecommendedBox}>
-                            <Text style={styles.versionRecommended}>Recommended</Text>
-                        </View>
-                    </View>
-                    <TouchableOpacity style={styles.editButton} onPress={onEdit}>
-                        <MaterialIcon name={'edit'} color="#6F80A7" size={20} />
+                        </Text>
+                        <MaterialIcon name='edit' color="#8A98B7" size={16} />
                     </TouchableOpacity>
-                </View>
+                </LinearGradient>
             </View>
+
+            <Video
+                play={play}
+                load={load}
+                item={item}
+                videoRef={videoRef}
+                setLoad={setLoad}
+                setPlay={setPlay}
+                onPress={onPress}
+                nextTitle={'Confirm Plan'}
+            />
             <VersionPicker
                 isVersionModalShow={isVersionModalShow}
                 items={items}
@@ -104,8 +80,8 @@ export default function Component(props) {
                 showVersionModal={showVersionModal}
                 challenge={item}
                 versionNum={versionNum}
-            /> */}
-        </View >
+            />
+        </View>
     );
 }
 
@@ -159,7 +135,7 @@ const styles = EStyleSheet.create({
         paddingHorizontal: 22,
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 20
+        marginBottom: 10
     },
     trailerText: {
         fontFamily: 'Poppins-Bold',
@@ -172,66 +148,23 @@ const styles = EStyleSheet.create({
     image: {
         height: 222
     },
-
-
-
-
-
-
-    // typeDescription: {
-    //     color: '#21293D',
-    //     fontFamily: 'Poppins-Medium',
-    //     fontSize: 12,
-    //     lineHeight: 20,
-    //     letterSpacing: 0.6,
-    // },
-    // typeName: {
-    //     color: '#21293D',
-    //     fontFamily: 'Poppins-Bold',
-    //     fontSize: 14,
-    //     lineHeight: 24,
-    // },
-    // challengeTypeMain: {
-    //     flex: 1,
-    //     marginTop: 20,
-    //     paddingHorizontal: 15,
-    //     alignSelf: "flex-start",
-    //     paddingVertical: 20,
-    // },
-    // versionBox: {
-    //     width: "100%",
-    //     flexDirection: "row",
-    //     padding: 15,
-    //     borderRadius: 12,
-    //     alignItems: "center",
-    //     marginBottom: 20,
-    //     marginTop: 15,
-    //     borderWidth: 1,
-    //     borderColor: "#F0F5FA"
-    // },
-    // versionsTextBox: {
-    //     flex: 1,
-    //     flexDirection: "row"
-    // },
-    // versionText: {
-    //     color: "#21293D",
-    //     fontWeight: "bold",
-    //     marginRight: 15,
-    //     marginTop: 3
-    // },
-    // versionRecommendedBox: {
-    //     paddingLeft: 8,
-    //     paddingRight: 8,
-    //     paddingTop: 4,
-    //     paddingBottom: 4,
-    //     borderRadius: 10,
-    //     backgroundColor: "#E9F6FF"
-    // },
-    // versionRecommended: {
-    //     color: "#1AA0FF",
-    //     fontSize: 12
-    // },
-    // editButton: {
-    //     marginRight: 10
-    // }
+    versionContainer: {
+        height: 64,
+        marginTop: 27,
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#E7EEF5',
+        //box-shadow: 0px 20px 52px rgba(0, 0, 0, 0.03);
+        borderRadius: 16,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 24
+    },
+    versionText: {
+        fontFamily: 'Poppins-Medium',
+        fontSize: 14,
+        lineHeight: 24,
+        color: '#21293D'
+    }
 });
