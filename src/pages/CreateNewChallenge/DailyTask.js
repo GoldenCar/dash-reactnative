@@ -1,5 +1,5 @@
 import React, { useState, createRef } from 'react';
-import { View, TouchableOpacity, Text, Platform } from 'react-native';
+import { View, TouchableOpacity, Text, Platform, Image } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Picker from 'react-native-picker';
@@ -9,11 +9,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import VersionPicker from './VersionPicker';
 import Video from './Video';
 
+import { mediaHost } from '../../config';
+
 export default function Component(props) {
     const { challenge, versionNum, isVersionModalShow, showVersionModal, items, setVersionNum, onPress } = props;
     const item = challenge.type;
 
-    //const Touch = onPress ? TouchableOpacity : View;
     const [play, setPlay] = useState(false);
     const [load, setLoad] = useState(false);
     const videoRef = createRef(null);
@@ -27,21 +28,43 @@ export default function Component(props) {
     }
 
     return (
-        <View>
+        <View style={styles.container}>
             <View style={styles.header}>
-                <View>
+                <LinearGradient
+                    colors={['#E7EEF5', '#fff']}
+                    start={{ x: 0, y: 1 }}
+                    end={{ x: 1, y: 0 }}
+                    style={styles.headerBackground}
+                >
                     <Text style={styles.headerTextBlue}>30 Day Plan:</Text>
-                    { /* TODO: add real title */}
-                    <Text style={styles.headerTitle}>Yoga + Stretching</Text>
+                    <Text style={styles.headerTitle}>{item.title}</Text>
+                    <Text style={styles.headerDescription}>{item.description}</Text>
 
-                    { /* TODO: add real description */}
-                    <Text style={styles.headerDescription}>
-                        Guided strength training circuit workouts. No equipment needed.
-                    </Text>
-                </View>
+                    <TouchableOpacity
+                        style={styles.trailerButton}
+                        onPress={() => setPlay(true)}
+                    >
+                        <FontAwesome
+                            style={styles.arrow}
+                            name='play'
+                            color="#000000"
+                            size={11}
+                        />
+                        <Text style={styles.trailerText}>
+                            Trailer
+                        </Text>
+                    </TouchableOpacity>
+                    <Image
+                        source={{ uri: `${mediaHost}${item.planImage}` }}
+                        style={styles.image}
+                        resizeMode='contain'
+                    />
+                </LinearGradient>
 
+            </View>
 
-                {/* <Video
+            {/* TODO: clean up video player (don't need image)
+            <Video
                     play={play}
                     load={load}
                     item={item}
@@ -50,26 +73,8 @@ export default function Component(props) {
                     setPlay={setPlay}
                     onPress={onPress}
                     nextTitle={'Confirm Plan'}
-                />
-                <TouchableOpacity style={styles.trailerBox} onPress={() => setPlay(true)}>
-                    <FontAwesome
-                        style={styles.arrowTrailer}
-                        name={'play'}
-                        color="#000000"
-                        size={12}
-                    />
-                    <Text style={styles.trailerText}>
-                        TRAILER
-                    </Text>
-                </TouchableOpacity> */}
-            </View>
-            { /* TODO: set this up  */}
-            {/* <LinearGradient
-                colors={['#E7EEF5', '#fff']}
-                start={{ x: 0, y: 1 }}
-                end={{ x: 1, y: 0 }}
-                style={{ height: 500 }}
-            /> */}
+                /> */}
+
             {/* <View style={styles.challengeTypeMain}>
                 <Text style={styles.typeName}>{item.title}</Text>
                 <Text style={styles.typeDescription}>{item.description}</Text>
@@ -100,14 +105,19 @@ export default function Component(props) {
                 challenge={item}
                 versionNum={versionNum}
             /> */}
-        </View>
+        </View >
     );
 }
 
 const styles = EStyleSheet.create({
+    container: {
+        flex: 1
+    },
     header: {
-        height: 500,
-        //backgroundColor: 'orange',
+        height: 584
+    },
+    headerBackground: {
+        flex: 1,
         paddingHorizontal: 40,
         paddingTop: 77
     },
@@ -134,86 +144,94 @@ const styles = EStyleSheet.create({
         fontSize: 14,
         lineHeight: 24,
         textAlign: 'center',
-        color: '#859AB6'
+        color: '#859AB6',
+        paddingBottom: 12
     },
-
-    trailerBox: {
-        // flexDirection: "row",
-        // backgroundColor: "#ffffff",
-        // borderRadius: 15,
-        // paddingLeft: 17,
-        // paddingRight: 17,
-        // paddingTop: 7,
-        // paddingBottom: 7,
-        // marginTop: -50,
-        // alignSelf: "flex-end",
-        // marginRight: 15
-    },
-    arrowTrailer: {
-        //marginTop: 3
+    trailerButton: {
+        width: 117,
+        height: 40,
+        backgroundColor: '#FFFFFF',
+        borderColor: '#E0EAF3',
+        borderWidth: 1,
+        borderRadius: 32,
+        alignSelf: 'center',
+        flexDirection: 'row',
+        paddingHorizontal: 22,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 20
     },
     trailerText: {
-        // marginLeft: 11,
-        // fontSize: 10,
-        // marginTop: 2,
-        // fontFamily: 'Poppins-Bold',
-        // letterSpacing: 2
+        fontFamily: 'Poppins-Bold',
+        fontSize: 10,
+        lineHeight: 16,
+        letterSpacing: 2,
+        textTransform: 'uppercase',
+        color: '#3F434F'
+    },
+    image: {
+        height: 222
     },
 
-    typeDescription: {
-        color: '#21293D',
-        fontFamily: 'Poppins-Medium',
-        fontSize: 12,
-        lineHeight: 20,
-        letterSpacing: 0.6,
-    },
-    typeName: {
-        color: '#21293D',
-        fontFamily: 'Poppins-Bold',
-        fontSize: 14,
-        lineHeight: 24,
-    },
-    challengeTypeMain: {
-        flex: 1,
-        marginTop: 20,
-        paddingHorizontal: 15,
-        alignSelf: "flex-start",
-        paddingVertical: 20,
-    },
-    versionBox: {
-        width: "100%",
-        flexDirection: "row",
-        padding: 15,
-        borderRadius: 12,
-        alignItems: "center",
-        marginBottom: 20,
-        marginTop: 15,
-        borderWidth: 1,
-        borderColor: "#F0F5FA"
-    },
-    versionsTextBox: {
-        flex: 1,
-        flexDirection: "row"
-    },
-    versionText: {
-        color: "#21293D",
-        fontWeight: "bold",
-        marginRight: 15,
-        marginTop: 3
-    },
-    versionRecommendedBox: {
-        paddingLeft: 8,
-        paddingRight: 8,
-        paddingTop: 4,
-        paddingBottom: 4,
-        borderRadius: 10,
-        backgroundColor: "#E9F6FF"
-    },
-    versionRecommended: {
-        color: "#1AA0FF",
-        fontSize: 12
-    },
-    editButton: {
-        marginRight: 10
-    }
+
+
+
+
+
+    // typeDescription: {
+    //     color: '#21293D',
+    //     fontFamily: 'Poppins-Medium',
+    //     fontSize: 12,
+    //     lineHeight: 20,
+    //     letterSpacing: 0.6,
+    // },
+    // typeName: {
+    //     color: '#21293D',
+    //     fontFamily: 'Poppins-Bold',
+    //     fontSize: 14,
+    //     lineHeight: 24,
+    // },
+    // challengeTypeMain: {
+    //     flex: 1,
+    //     marginTop: 20,
+    //     paddingHorizontal: 15,
+    //     alignSelf: "flex-start",
+    //     paddingVertical: 20,
+    // },
+    // versionBox: {
+    //     width: "100%",
+    //     flexDirection: "row",
+    //     padding: 15,
+    //     borderRadius: 12,
+    //     alignItems: "center",
+    //     marginBottom: 20,
+    //     marginTop: 15,
+    //     borderWidth: 1,
+    //     borderColor: "#F0F5FA"
+    // },
+    // versionsTextBox: {
+    //     flex: 1,
+    //     flexDirection: "row"
+    // },
+    // versionText: {
+    //     color: "#21293D",
+    //     fontWeight: "bold",
+    //     marginRight: 15,
+    //     marginTop: 3
+    // },
+    // versionRecommendedBox: {
+    //     paddingLeft: 8,
+    //     paddingRight: 8,
+    //     paddingTop: 4,
+    //     paddingBottom: 4,
+    //     borderRadius: 10,
+    //     backgroundColor: "#E9F6FF"
+    // },
+    // versionRecommended: {
+    //     color: "#1AA0FF",
+    //     fontSize: 12
+    // },
+    // editButton: {
+    //     marginRight: 10
+    // }
 });
