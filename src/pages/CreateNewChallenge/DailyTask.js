@@ -1,4 +1,4 @@
-import React, { useState, createRef } from 'react';
+import React, { useState, createRef, useEffect } from 'react';
 import { View, TouchableOpacity, Text, Platform, Image } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -9,6 +9,8 @@ import VersionPicker from './VersionPicker';
 import Video from './Video';
 
 import { mediaHost } from '../../config';
+import * as planActions from '../../actions/plans';
+
 
 export default function Component(props) {
     const { challenge, versionNum, isVersionModalShow, showVersionModal, items, setVersionNum, onPress } = props;
@@ -17,6 +19,23 @@ export default function Component(props) {
     const [play, setPlay] = useState(false);
     const [load, setLoad] = useState(false);
     const videoRef = createRef(null);
+
+    useEffect(() => {
+        const init = async () => {
+            try {
+                const arrayResponse = await planActions.getPlanTasks("5f21e92ef1a13b555fee2c5b");
+                //const arrayResponse = await planActions.getPlanTasks('plan2020629218443234260564696');
+
+                console.log('daily task', arrayResponse);
+
+                // const getAllTasks = await planActions.getAllPlanTasks('plan2020629218443234260564696');
+                //console.log('get all tasks', getAllTasks);
+            } catch (e) {
+                console.log(e);
+            }
+        };
+        init();
+    }, []);
 
     return (
         <View style={styles.container}>

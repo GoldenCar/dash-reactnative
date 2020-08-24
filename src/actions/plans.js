@@ -13,15 +13,12 @@ export const getAllPlanTasks = async () => {
 };
 
 export const getPlanTasks = async (id) => {
-  
-  const response = await apiAdmin.get('/showJoinedPlanData/'+id);
+  const response = await apiAdmin.get('/showJoinedPlanData/' + id);
   return response.data.data;
 };
 
 export const getExerciseData = async (id) => {
- 
-  const response = await apiAdmin.get('/cardapi/'+id);
- 
+  const response = await apiAdmin.get('/cardapi/' + id);
   return response.data.data;
 };
 
