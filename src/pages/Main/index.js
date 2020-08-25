@@ -50,7 +50,6 @@ const thumbnail_rest_outside_circuit = require('../../res/workout/rest_outside_c
 const thumbnail_note_card = require('../../res/workout/note_thumbnail.png');
 const thumbnail_old = require('../../res/list_image.png');
 
-// TODO: this needs major clean up
 
 // const Stack = createStackNavigator();
 
@@ -838,18 +837,16 @@ export default class App extends React.Component {
             />
             <View
               style={{
-                marginTop: 26,
-                marginLeft: 16,
-                marginRight: 16,
-                height: 160,
+                marginTop: 28,
+                marginHorizontal: 24,
+                height: 120,
               }}>
               <Text
                 style={{
-                  fontSize: 14,
-                  letterSpacing: 1.2,
+                  fontSize: 16,
                   color: '#6F80A7',
-                  fontFamily: 'Poppins',
-                  lineHeight: 22,
+                  fontFamily: 'Poppins-Medium',
+                  lineHeight: 28,
                 }}>
                 A circuit is a sequence of exercises that repeats itself for a set number of rounds.
               </Text>
@@ -1694,7 +1691,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 16,
     zIndex: 100,
-    elevation: 4
+    elevation:4    
   },
   backButton: {
     width: 45,
