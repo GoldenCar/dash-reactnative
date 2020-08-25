@@ -1,5 +1,5 @@
 import React, { useState, createRef, useEffect } from 'react';
-import { View, TouchableOpacity, Text, Platform, Image } from 'react-native';
+import { View, TouchableOpacity, Text, Image } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -7,6 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import VersionPicker from './VersionPicker';
 import Video from './Video';
+import ScheduleRow from '../../components/ScheduleRow';
 
 import { mediaHost } from '../../config';
 import * as planActions from '../../actions/plans';
@@ -96,22 +97,12 @@ export default function Component(props) {
                 <Text style={styles.title}>30 day schedule</Text>
                 <View style={styles.seperator} />
 
-                { // TODO: pull this into own component
-                    dayData.map((d, index) => {
-                        const showSeperator = dayData.length - 1 !== index;
-                        return (
-                            <>
-                                <View style={styles.row}>
-                                    <View style={styles.day}>
-                                        <Text style={styles.dayText}>{d.versionDay}</Text>
-                                    </View>
-                                    <Text style={styles.taskTitle}>{d.taskTitle}</Text>
-                                </View>
-                                {showSeperator && <View style={styles.seperator} />}
-                            </>
-                        )
-                    })
-                }
+                {dayData.map((d, index) => {
+                    const showSeperator = dayData.length - 1 !== index;
+                    return (
+                        <ScheduleRow data={d} showSeperator={showSeperator} />
+                    )
+                })}
             </View>
 
             <Video
@@ -229,39 +220,9 @@ const styles = EStyleSheet.create({
         color: '#3F434F',
         marginBottom: 21
     },
-    row: {
-        height: 97,
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
     seperator: {
         height: 1,
         backgroundColor: '#E7EEF5',
         borderRadius: 16,
-    },
-    day: {
-        height: 48,
-        width: 48,
-        borderRadius: 24,
-        backgroundColor: '#FFFFFF',
-        borderWidth: 1,
-        borderColor: '#E7EEF5',
-        //box-shadow: 0px 6px 13px rgba(133, 154, 182, 0.08);
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 16
-    },
-    dayText: {
-        fontFamily: 'Poppins-Medium',
-        fontSize: 16,
-        lineHeight: 24,
-        textAlign: 'center',
-        color: '#1AA0FF'
-    },
-    taskTitle: {
-        fontFamily: 'Poppins-Medium',
-        fontSize: 16,
-        lineHeight: 24,
-        color: '#3F434F'
     }
 });
