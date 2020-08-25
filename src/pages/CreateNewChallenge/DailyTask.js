@@ -11,7 +11,6 @@ import Video from './Video';
 import { mediaHost } from '../../config';
 import * as planActions from '../../actions/plans';
 
-
 export default function Component(props) {
     const { challenge, versionNum, isVersionModalShow, showVersionModal, items, setVersionNum, onPress } = props;
     const item = challenge.type;
@@ -20,15 +19,13 @@ export default function Component(props) {
     const [load, setLoad] = useState(false);
     const videoRef = createRef(null);
 
-    const [dayData, setDayData] = useState([{ versionDay: 1, taskTitle: 'Yoga' }]);
+    const [dayData, setDayData] = useState([]);
 
     useEffect(() => {
-        const init = async () => {
+        const getPlanDayData = async () => {
             // TODO: clean this up & pull into it's own function
             try {
                 const planData = await planActions.getPlanTasks(item._id);
-                console.log('daily task', planData);
-
                 if (planData.planTypeData.length === 0) {
                     return;
                 }
@@ -37,23 +34,17 @@ export default function Component(props) {
                     return parseInt(data.version) === parseInt(versionNum);
                 });
 
-                console.log('version data', versionData);
-
                 if (!versionData || !versionData.versionData || versionData.versionData.length === 0) {
                     return;
                 }
 
                 const dayData = versionData.versionData[0].planVersionDayTaskData;
-
-                console.log('day data', dayData);
-
-                //setDayData(dayData);
-
+                setDayData(dayData);
             } catch (e) {
                 console.log(e);
             }
         };
-        init();
+        getPlanDayData();
     }, [versionNum]);
 
     return (
@@ -102,15 +93,22 @@ export default function Component(props) {
             </View>
 
             <View style={styles.schedule}>
-                <Text>30 day schedule</Text>
+                <Text style={styles.title}>30 day schedule</Text>
+                <View style={styles.seperator} />
 
                 { // TODO: pull this into own component
-                    dayData.map((d) => {
+                    dayData.map((d, index) => {
+                        const showSeperator = dayData.length - 1 !== index;
                         return (
-                            <View style={styles.row}>
-                                <Text>{d.versionDay}</Text>
-                                <Text>{d.taskTitle}</Text>
-                            </View>
+                            <>
+                                <View style={styles.row}>
+                                    <View style={styles.day}>
+                                        <Text style={styles.dayText}>{d.versionDay}</Text>
+                                    </View>
+                                    <Text style={styles.taskTitle}>{d.taskTitle}</Text>
+                                </View>
+                                {showSeperator && <View style={styles.seperator} />}
+                            </>
                         )
                     })
                 }
@@ -219,5 +217,51 @@ const styles = EStyleSheet.create({
         fontSize: 14,
         lineHeight: 24,
         color: '#21293D'
+    },
+    schedule: {
+        marginTop: 35,
+        marginHorizontal: 16
+    },
+    title: {
+        fontFamily: 'Poppins-Bold',
+        fontSize: 24,
+        lineHeight: 32,
+        color: '#3F434F',
+        marginBottom: 21
+    },
+    row: {
+        height: 97,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    seperator: {
+        height: 1,
+        backgroundColor: '#E7EEF5',
+        borderRadius: 16,
+    },
+    day: {
+        height: 48,
+        width: 48,
+        borderRadius: 24,
+        backgroundColor: '#FFFFFF',
+        borderWidth: 1,
+        borderColor: '#E7EEF5',
+        //box-shadow: 0px 6px 13px rgba(133, 154, 182, 0.08);
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 16
+    },
+    dayText: {
+        fontFamily: 'Poppins-Medium',
+        fontSize: 16,
+        lineHeight: 24,
+        textAlign: 'center',
+        color: '#1AA0FF'
+    },
+    taskTitle: {
+        fontFamily: 'Poppins-Medium',
+        fontSize: 16,
+        lineHeight: 24,
+        color: '#3F434F'
     }
 });
