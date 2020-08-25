@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, Dimensions, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Dimensions, ScrollView, Text, TouchableOpacity } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import DailyTask from '../../DailyTask';
 
@@ -57,13 +57,9 @@ export default function Component(props) {
                 />
             </ScrollView>
 
-            <View style={styles.bottomButtonContainer}>
-                <TouchableOpacity style={styles.bottomConfirmBox} onPress={
-                    onPress
-                }>
-                    <Text style={styles.confirmPlanText}>Confirm Plan</Text>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity style={styles.button} onPress={onPress}>
+                <Text style={styles.buttonText}>Confirm Plan</Text>
+            </TouchableOpacity>
         </Animated.View>
     )
 }
@@ -74,22 +70,21 @@ const styles = EStyleSheet.create({
         paddingBottom: 30,
         flexGrow: 1
     },
-    confirmPlanText: {
-        color: "#ffffff",
-        fontSize: 16,
-        fontFamily: 'Poppins-Medium',
-    },
-    bottomConfirmBox: {
-        width: "100%",
-        backgroundColor: "#1ca0ff",
-        height: 56,
+    button: {
+        borderRadius: 16,
+        height: 64,
+        position: 'absolute',
+        bottom: 19,
+        left: 16,
+        right: 16,
+        backgroundColor: "#1AA0FF",
         alignItems: "center",
         justifyContent: "center",
+        //box-shadow: 0px 20px 20px rgba(26, 160, 255, 0.13);
     },
-    bottomButtonContainer: {
-        height: 60,
-        flexDirection: 'column',
-        justifyContent: 'flex-end',
-        backgroundColor: 'transparent'
-    },
+    buttonText: {
+        color: "#ffffff",
+        fontSize: 16,
+        fontFamily: 'Poppins-Medium'
+    }
 });

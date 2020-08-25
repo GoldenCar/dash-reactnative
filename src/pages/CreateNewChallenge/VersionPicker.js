@@ -85,9 +85,9 @@ export default function Component(props) {
                             selectedValue={versionNum}
                             onValueChange={(version) => setVersionNum(version)}
                         >
-                            {items.map((selectedValue) =>
+                            {items.map((selectedValue, index) =>
                                 <PickerItemIOS
-                                    key={selectedValue}
+                                    key={index}
                                     value={selectedValue}
                                     label={'Version ' + selectedValue + '.0'}
                                 />
