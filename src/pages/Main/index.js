@@ -50,6 +50,7 @@ const thumbnail_rest_outside_circuit = require('../../res/workout/rest_outside_c
 const thumbnail_note_card = require('../../res/workout/note_thumbnail.png');
 const thumbnail_old = require('../../res/list_image.png');
 
+// TODO: this needs major clean up
 
 // const Stack = createStackNavigator();
 
@@ -1691,7 +1692,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 16,
     zIndex: 100,
-    elevation:4    
+    elevation: 4
   },
   backButton: {
     width: 45,
