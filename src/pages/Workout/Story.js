@@ -11,10 +11,12 @@ import {
     Animated,
     Easing,
     ActivityIndicator,
+    ScrollView,
     Image,
     TouchableOpacity
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import MaskedView from '@react-native-community/masked-view';
 import {mediaHost} from '../../config';
 import Video from 'react-native-video';
 import {CheckList, Swap, Pause, Play, ArrowNext} from 'dash/src/components/Icons';
@@ -38,18 +40,20 @@ export default class extends React.Component {
     pauseOpacity = new Animated.Value(0);
     opacityTimer;
     videoRef = React.createRef(null);
-    viewImageRef = React.createRef(null);
+    scrollDescription = React.createRef(null);
     setTimeoutTimer;
     panSetTimeout;
 
     constructor(props) {
         super(props);
         this.state = {
-            position:new Animated.Value(1),
+            position: new Animated.Value(1),
             currentIndex: 0,
             pause: false,
             countDown: false,
             rest: false,
+            descriptionScroll: null,
+            descriptionScrollHeight: 0,
             timer: 0,
             VideoTimer: 0,
             totaltime: 0,
@@ -63,8 +67,30 @@ export default class extends React.Component {
             numberOfTextLine: 3,
             completeTaskTime: false,
             restTimerPause: false,
-            taskPaused: false
+            taskPaused: false,
+            openDescription: false
         };
+    }
+
+    toBottom = () => {
+        this.setState({descriptionScroll: null, openDescription: false})
+        this.scrollDescription.current.scrollTo(0)
+        Animated.timing(this.translateY, {
+            toValue: 0,
+            duration: 50,
+            easing: Easing.ease,
+            useNativeDriver: false,
+        }).start();
+
+        this.translateY.flattenOffset();
+
+        clearTimeout(this.panSetTimeout);
+        this.panSetTimeout = setTimeout(() => {
+            clearTimeout(this.setTimeoutTimer);
+            this.setState({videoPaused: false, restTimerPause: false, taskPaused: false});
+            this.timer();
+            this.props.onPlayPause(false);
+        }, 500);
     }
 
 
@@ -72,8 +98,14 @@ export default class extends React.Component {
 
         onMoveShouldSetResponderCapture: () => true,
 
-        onMoveShouldSetPanResponderCapture: (evt, gestureState) =>
-            Math.abs(gestureState.dy) > 5,
+        onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
+            console.log(gestureState.dy, this.state.descriptionScroll)
+            if (this.state.descriptionScroll === 0 && gestureState.dy > 0) {
+                this.toBottom()
+            } else {
+                return Math.abs(gestureState.dy) > 5
+            }
+        },
 
         onPanResponderGrant: (e, gestureState) => {
             this.translateY.extractOffset();
@@ -84,8 +116,9 @@ export default class extends React.Component {
         }),
 
         onPanResponderRelease: (e, gestureState) => {
+            console.log(gestureState.dy)
             if (gestureState.dy < 0) {
-
+                this.setState({openDescription: true, descriptionScroll: 0})
                 Animated.timing(this.translateY, {
                     toValue: -(height),
                     easing: Easing.out(Easing.poly(4)),
@@ -102,24 +135,7 @@ export default class extends React.Component {
                 }, 500);
 
             } else {
-
-                Animated.timing(this.translateY, {
-                    toValue: 0,
-                    duration: 50,
-                    easing: Easing.ease,
-                    useNativeDriver: false,
-                }).start();
-
-                this.translateY.flattenOffset();
-
-                clearTimeout(this.panSetTimeout);
-                this.panSetTimeout = setTimeout(() => {
-                    clearTimeout(this.setTimeoutTimer);
-                    this.setState({videoPaused: false, restTimerPause: false, taskPaused: false});
-                    this.timer();
-                    this.props.onPlayPause(false);
-                }, 500);
-
+                this.toBottom()
             }
         },
     });
@@ -445,7 +461,7 @@ export default class extends React.Component {
             clearTimeout(this.setTimeoutTimer);
         }
         Animated.spring(this.state.position, {
-            toValue:0
+            toValue: 0
         }).start()
         this.setState({
             currentIndex: 0,
@@ -658,13 +674,37 @@ export default class extends React.Component {
                 <Text style={styles.storyTitle}>
                     {title ? title : ''}
                 </Text>
+                {/*{videos[currentIndex].cardType !== 'video' && (*/}
+                {/*    <Text style={[*/}
+                {/*        styles.storyDescription,*/}
+                {/*    ]}*/}
+                {/*          onTextLayout={this.onTextLayout}*/}
+                {/*    >*/}
+                {/*        {description ? description : ""}*/}
+                {/*    </Text>*/}
+                {/*)}*/}
                 {videos[currentIndex].cardType !== 'video' && (
                     <Text style={[
                         styles.storyDescription,
                     ]}
                           onTextLayout={this.onTextLayout}
                     >
-                        {description ? description : ""}
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores aspernatur at autem earum
+                        fuga harum, hic, iusto magni minus nisi obcaecati perferendis quidem sunt veniam vero? Ab amet
+                        beatae cumque, dolorem, dolorum eum laboriosam magnam minima modi nemo odio quod sit ut. Ad
+                        architecto assumenda atque cum doloremque ducimus error, eveniet minus non officia omnis
+                        perferendis porro quidem quo ratione repellendus, suscipit totam ullam unde vero vitae
+                        voluptatem voluptatum. A ab, ad cumque explicabo fugiat libero nesciunt nisi odio officia
+                        quaerat quam totam veniam, veritatis. Aliquid architecto ea earum, eum exercitationem harum
+                        impedit ipsa, ipsum iure necessitatibus nisi obcaecati perspiciatis quisquam tempora temporibus
+                        vero voluptas? A ab accusamus aliquam atque dolor dolore eos error explicabo fuga omnis
+                        perspiciatis possimus praesentium quae quos reiciendis rem repellendus saepe tempora tempore,
+                        ullam. At autem blanditiis dignissimos eligendi et labore quos recusandae reprehenderit, unde
+                        veritatis. Cumque ipsa obcaecati quibusdam? Accusantium aperiam, cum dolor doloribus, eos error
+                        ex expedita explicabo molestias obcaecati quas ratione veritatis vitae. Ab accusantium adipisci
+                        aspernatur commodi dolore dolorum ducimus ea eius error exercitationem fuga illum iste iure,
+                        iusto maxime minima nam necessitatibus non nostrum odio placeat porro possimus quae quaerat qui
+                        ratione recusandae sit sunt temporibus tenetur totam veritatis voluptate.
                     </Text>
                 )}
             </>
@@ -700,7 +740,7 @@ export default class extends React.Component {
 
     render() {
         const {story: {videos, timer}, totalTimer, index, activeIndex, isCircuit} = this.props;
-        const {currentIndex, pause, countDown, rest,position, showTimeLimit, videoLoading, exerciseSets, videoPaused, VideoTimer} = this.state;
+        const {currentIndex, pause, countDown, rest, position, showTimeLimit, videoLoading, exerciseSets, videoPaused, VideoTimer, openDescription, descriptionScroll, descriptionScrollHeight} = this.state;
         const opacity = this.pauseOpacity.interpolate({
             inputRange: [0, 1],
             outputRange: [0, 1],
@@ -745,7 +785,6 @@ export default class extends React.Component {
         const videoRepeat = this.checkVideoIsRepeat(videos[currentIndex]);
 
         const restVideo = videos[currentIndex].flag === 'rest'
-
 
 
         return (
@@ -808,7 +847,7 @@ export default class extends React.Component {
                                 styles.activeLine,
                                 {
                                     width: (width / videos.length) - 5 * (videos.length - 1),
-                                    left:position
+                                    left: position
                                 }]}
                         />
 
@@ -876,61 +915,79 @@ export default class extends React.Component {
                         {
                             height: heightContainer,
                             transform: [{translateY}],
-                            top: height - 170,
+                            top: height - 200,
                         }
                     ]}
                     {...this.panResponder.panHandlers}>
-
                     {repCount != "" && <>
                         <Text style={{...styles.storyTime, marginBottom: 5}}>{`${repCount} Reps`}</Text>
                     </>
                     }
-
-                    {showTimeLimit && <>
-                        <Text style={styles.storyTime}>
-                            {showTimeLimit ?
-                                `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
-                                : ""
+                    {/*<MaskedView*/}
+                    {/*    maskElement={*/}
+                    {/*        <LinearGradient style={{flex: 1}}*/}
+                    {/*                        colors={(openDescription && descriptionScroll >= 0) ? ['black', 'transparent'] : ['black', 'black']}*/}
+                    {/*                        start={{x: 0, y: 0.8}} end={{x: 0, y: 1}}/>*/}
+                    {/*    }*/}
+                    {/*>*/}
+                        <MaskedView
+                            maskElement={
+                                <LinearGradient style={{flex: 1}}
+                                                colors={(openDescription && descriptionScroll > 0) ? ['transparent', 'black'] : ['black', 'black']}
+                                                start={{x: 0, y: 0}} end={{x: 0, y: 0.2}}/>
                             }
-                        </Text>
-                    </>
-                    }
+                        >
+                            <ScrollView fadingEdgeLength={openDescription ? 100 : 0} ref={this.scrollDescription}
+                                        onScroll={(e) => this.setState({descriptionScroll: e.nativeEvent.contentOffset.y})}
+                                        scrollEnabled={openDescription}>
+                                {showTimeLimit && <>
+                                    <Text style={styles.storyTime}>
+                                        {showTimeLimit ?
+                                            `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+                                            : ""
+                                        }
+                                    </Text>
+                                </>
+                                }
 
-                    {videos[currentIndex].cardType === 'video' && <>
-                        <Text style={styles.videoTime}>
-                            {VideoTimer.currentTime ? `${minutesVideo < 10 ? '0' : ''}${minutesVideo}:${secondsVideo < 10 ? '0' : ''}${secondsVideo}` : '00:00'}
-                        </Text>
+                                {videos[currentIndex].cardType === 'video' && <>
+                                    <Text style={styles.videoTime}>
+                                        {VideoTimer.currentTime ? `${minutesVideo < 10 ? '0' : ''}${minutesVideo}:${secondsVideo < 10 ? '0' : ''}${secondsVideo}` : '00:00'}
+                                    </Text>
 
-                        {VideoTimer.currentTime ? (<Slider
-                            onSlidingStart={() => {
-                                if (!pause && !videoPaused) this.setState({videoPaused: true})
-                            }}
-                            // onValueChange={(e) => this.videoRef.current.seek(e, 50)}
-                            onSlidingComplete={(e) => {
-                                this.videoRef.current.seek(e, 50)
-                                if (!pause && videoPaused) this.setState({videoPaused: false})
-                            }}
-                            value={VideoTimer.currentTime}
-                            style={{width: '105%', height: 20, marginLeft: -13}}
-                            minimumValue={0}
-                            maximumValue={VideoTimer.seekableDuration}
-                            thumbTintColor="#FFFFFF"
-                            minimumTrackTintColor="#FFFFFF"
-                            maximumTrackTintColor="rgba(255,255,255,0.4)"
-                        />) : (<Slider
-                            value={0}
-                            style={{width: '105%', height: 20, marginLeft: -13}}
-                            minimumValue={0}
-                            thumbTintColor="#FFFFFF"
-                            minimumTrackTintColor="#FFFFFF"
-                            maximumTrackTintColor="rgba(255,255,255,0.4)"
-                        />)}
+                                    {VideoTimer.currentTime ? (<Slider
+                                        onSlidingStart={() => {
+                                            if (!pause && !videoPaused) this.setState({videoPaused: true})
+                                        }}
+                                        // onValueChange={(e) => this.videoRef.current.seek(e, 50)}
+                                        onSlidingComplete={(e) => {
+                                            this.videoRef.current.seek(e, 50)
+                                            if (!pause && videoPaused) this.setState({videoPaused: false})
+                                        }}
+                                        value={VideoTimer.currentTime}
+                                        style={{width: '105%', height: 20, marginLeft: -13}}
+                                        minimumValue={0}
+                                        maximumValue={VideoTimer.seekableDuration}
+                                        thumbTintColor="#FFFFFF"
+                                        minimumTrackTintColor="#FFFFFF"
+                                        maximumTrackTintColor="rgba(255,255,255,0.4)"
+                                    />) : (<Slider
+                                        value={0}
+                                        style={{width: '105%', height: 20, marginLeft: -13}}
+                                        minimumValue={0}
+                                        thumbTintColor="#FFFFFF"
+                                        minimumTrackTintColor="#FFFFFF"
+                                        maximumTrackTintColor="rgba(255,255,255,0.4)"
+                                    />)}
 
-                    </>
-                    }
+                                </>
+                                }
 
 
-                    {this.renderCardDescription(heightContainer)}
+                                {this.renderCardDescription()}
+                            </ScrollView>
+                        </MaskedView>
+                    {/*</MaskedView>*/}
                 </Animated.View>
 
 
@@ -1049,9 +1106,9 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
     storyDescription: {
-        fontSize: 16,
+        fontSize: 14,
         lineHeight: 24,
-        fontFamily: 'Poppins-Bold',
+        fontFamily: 'Poppins-Medium',
         color: 'white',
         textShadowColor: 'rgba(0, 0, 0, 0.2)',
         textShadowOffset: {width: -0.5, height: 0.5},
@@ -1111,12 +1168,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(63,67,79, 0.4)',
         position: 'absolute',
         right: 15,
-        width: 104,
+        width: 112,
         height: 48,
     },
     totalTimerIcon: {
         marginRight: 14,
-        marginLeft: 22,
+        marginLeft: 24,
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -1197,7 +1254,7 @@ const styles = StyleSheet.create({
     },
     nextButtonText: {
         marginTop: -2,
-        marginRight:11,
+        marginRight: 11,
         fontWeight: 'bold',
         fontFamily: 'Poppins',
         fontSize: 16,

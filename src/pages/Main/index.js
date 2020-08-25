@@ -838,18 +838,16 @@ export default class App extends React.Component {
             />
             <View
               style={{
-                marginTop: 26,
-                marginLeft: 16,
-                marginRight: 16,
-                height: 160,
+                marginTop: 28,
+                marginHorizontal: 24,
+                height: 120,
               }}>
               <Text
                 style={{
-                  fontSize: 14,
-                  letterSpacing: 1.2,
+                  fontSize: 16,
                   color: '#6F80A7',
-                  fontFamily: 'Poppins',
-                  lineHeight: 22,
+                  fontFamily: 'Poppins-Medium',
+                  lineHeight: 28,
                 }}>
                 A circuit is a sequence of exercises that repeats itself for a set number of rounds.
               </Text>
