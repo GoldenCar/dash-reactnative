@@ -7,6 +7,7 @@ import ViewedBy from 'dash/src/components/Challenge/ViewedBy';
 import LightButton from 'dash/src/components/LightButton';
 
 import Header from './Header';
+import Countdown from '../../../components/Countdown';
 
 const { height } = Dimensions.get('window');
 
@@ -35,7 +36,15 @@ export default class Component extends React.Component {
         >
           <View style={styles.innerContainer}>
 
+            <Text>Hosted by {challenge.Host}</Text>
 
+            <Text>{challenge.tite}</Text>
+
+            <Countdown
+              initialTime={60}
+              centerTitle
+              containerStyle={styles.countdownContainer}
+            />
           </View>
         </ScrollView>
       </View>
@@ -56,6 +65,10 @@ const styles = EStyleSheet.create({
     borderTopRightRadius: 20,
     backgroundColor: 'white',
     flex: 1,
-    marginTop: height / 2 - 20
+    marginTop: height / 2 - 20,
+    paddingHorizontal: 16
   },
+  countdownContainer: {
+    paddingHorizontal: 56
+  }
 });
