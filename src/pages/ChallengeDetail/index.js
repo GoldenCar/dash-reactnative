@@ -25,6 +25,15 @@ class Component extends React.Component {
         const { challenge } = this.props;
         console.log(" challenge is ", challenge);
 
+        // TODO: 
+        //          1. Only show countdown if not started
+        //          2. Invite Friends
+        //          3. View Plan
+        //          4. Activity / social feed
+        //          5. New post button 
+        //          6. Figure out how to find if plan started
+        //          7. Figure out daily progression
+
         return (
             <View>
                 <TouchableOpacity
