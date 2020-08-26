@@ -386,7 +386,7 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = RZQPL3JSK5;
 						LastSwiftMigration = 1120;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -828,7 +828,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = dash/dash.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = RZQPL3JSK5;
 				ENABLE_BITCODE = NO;
@@ -846,7 +846,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.test.gtech.org.reactjs.native.example.dash;
 				PRODUCT_NAME = "Dash-Fitness";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.test.gtech.org.reactjs.native.example.dash";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -860,8 +860,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = dash/dash.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = RZQPL3JSK5;
 				INFOPLIST_FILE = dash/Info.plist;
@@ -874,7 +874,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.test.gtech.org.reactjs.native.example.dash;
 				PRODUCT_NAME = "Dash-Fitness";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.test.gtech.org.reactjs.native.example.dash";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
