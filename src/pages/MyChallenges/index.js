@@ -58,11 +58,13 @@ class Component extends React.Component {
         key={index}
         onPress={() => Actions.ChallengeDetail({ challenge: item })}
       >
-        <Challenge
-          value={item}
-          explore
-          cardWidth={ITEM_WIDTH}
-        />
+        <View>
+          <Challenge
+            value={item}
+            explore
+            cardWidth={ITEM_WIDTH}
+          />
+        </View>
       </TouchableWithoutFeedback>
     )
   }
@@ -78,15 +80,23 @@ class Component extends React.Component {
       );
     }
 
-    // TODO: if no challenges gradient should be top to bottom
-    //       if challenges, keep current one
+    // bottom left to top right gradient
+    const bottomLeftToTopRightStart = { x: 0, y: 1 };
+    const bottomLeftToTopRightEnd = { x: 1, y: 0 };
+
+    // top to bottom gradient
+    const topToBottomGradientStart = { x: 0, y: 0 };
+    const topToBottomGradientEnd = { x: 1, y: 1 };
+
+    const start = challenges.length === 0 ? topToBottomGradientStart : bottomLeftToTopRightStart;
+    const end = challenges.length === 0 ? topToBottomGradientEnd : bottomLeftToTopRightEnd;
 
     return (
       <SafeAreaView style={styles.container}>
         <LinearGradient
           colors={['#E7EEF5', '#fff']}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 1, y: 0 }}
+          start={start}
+          end={end}
           style={styles.gradient}
         >
           <Text style={styles.heading}>Your {'\n'} Challenges</Text>
