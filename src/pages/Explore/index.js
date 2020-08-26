@@ -9,7 +9,7 @@ import {
   Dimensions,
   SafeAreaView
 } from 'react-native';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel from 'react-native-snap-carousel';
 
@@ -18,10 +18,10 @@ import SearchButton from '../../components/SearchButton';
 import NavBar from '../../components/NavBar';
 import Plan from '../../components/Plan';
 
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import * as plansActions from '../../actions/plans';
 
-import {CreateNewChallengeRef} from 'dash/src/pages/CustomTabBar';
+import { CreateNewChallengeRef } from 'dash/src/pages/CustomTabBar';
 
 const { width } = Dimensions.get('window');
 
@@ -46,7 +46,7 @@ const viewedBy = [
   {},
 ]
 
-function renderItem({item, index}) {
+function renderItem({ item, index }) {
   return (
     <TouchableWithoutFeedback
       key={index}
@@ -54,7 +54,7 @@ function renderItem({item, index}) {
       onPress={() => Actions.ExplorePost({ challenge: item })}
     >
       <View>
-        <Challenge 
+        <Challenge
           value={item}
           viewedBy={viewedBy}
           explore
@@ -66,7 +66,7 @@ function renderItem({item, index}) {
 }
 
 function Component(props) {
- 
+
   const challenges = props.challenges.filter(
     (v) => v.Featured === "yes",
   );
@@ -79,20 +79,20 @@ function Component(props) {
         console.log("categories1.....", data);
         const currentPlans = data.filter((plan) => plan.status === 'current');
         setPlans(currentPlans);
-      } catch (e) {}
+      } catch (e) { }
     };
     requestPlans();
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.contentContainerStyle}  bounces={false}>
+      <ScrollView contentContainerStyle={styles.contentContainerStyle} bounces={false}>
         <TouchableOpacity style={styles.search} onPress={() => Actions.Search()}>
           <SearchButton />
         </TouchableOpacity>
         <View style={styles.challengesContainer}>
-        { /* TODO: fix this gradient (top 300px of explore section) */ }
-        {/* <LinearGradient 
+          { /* TODO: fix this gradient (top 300px of explore section) */}
+          {/* <LinearGradient 
           colors={['#F0F5FA', 'rgb(240, 245, 250)']}
           style={{
             position: 'absolute',
@@ -121,13 +121,13 @@ function Component(props) {
             <TouchableOpacity
               key={index}
               onPress={() => CreateNewChallengeRef.openCreateNew()}
-              //onPress={() => Actions.CreateNewChallenge()}
+            //onPress={() => Actions.CreateNewChallenge()}
 
-              // TODO: need to navigate how CreateNew is doing it
-              //       this goes to create new challenge - daily task
-              //       scene - CreateNewChallenge
-              >
-                <Plan value={value} />
+            // TODO: need to navigate how CreateNew is doing it
+            //       this goes to create new challenge - daily task
+            //       scene - CreateNewChallenge
+            >
+              <Plan value={value} />
             </TouchableOpacity>
           ))}
         </View>
@@ -182,6 +182,6 @@ const styles = StyleSheet.create({
     marginBottom: 13
   }
 });
-export default connect(({challenges}) => ({
+export default connect(({ challenges }) => ({
   challenges,
 }))(Component);
