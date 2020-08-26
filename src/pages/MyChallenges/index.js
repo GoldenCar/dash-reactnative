@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Dimensions, Text, SafeAreaView, TouchableWithoutFeedback } from 'react-native';
+import { View, Dimensions, Text, SafeAreaView, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -8,8 +8,11 @@ import { Actions } from 'react-native-router-flux';
 
 import Plus from './Icons/Plus';
 import Challenge from '../../components/Challenge';
+import Plan from '../../components/Plan';
+import { CreateNewChallengeRef } from 'dash/src/pages/CustomTabBar';
 
 import * as challengesActions from '../../actions/challenges';
+import * as planActions from '../../actions/plans';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = width - 60;
@@ -20,6 +23,7 @@ const ITEM_WIDTH = width - 60;
 class Component extends React.Component {
   state = {
     arrayAllChallenges: [],
+    plans: []
   };
 
   componentDidMount = async () => {
@@ -41,6 +45,10 @@ class Component extends React.Component {
     const { user } = this.props;
     if (user) {
       await challengesActions.getMyChallenges();
+
+      const data = await planActions.getPlans();
+      const currentPlans = data.filter((plan) => plan.status === 'current');
+      this.setState({ plans: currentPlans });
     }
   };
 
@@ -60,7 +68,7 @@ class Component extends React.Component {
   }
 
   render() {
-    const { arrayAllChallenges } = this.state;
+    const { arrayAllChallenges, plans } = this.state;
     const { user } = this.props;
 
     let challenges = [];
@@ -69,6 +77,9 @@ class Component extends React.Component {
         (v) => v.createdBy === user._id && v.status === 'start',
       );
     }
+
+    // TODO: if no challenges gradient should be top to bottom
+    //       if challenges, keep current one
 
     return (
       <SafeAreaView style={styles.container}>
@@ -83,16 +94,32 @@ class Component extends React.Component {
             <Plus />
             <Text style={styles.buttonText}>New</Text>
           </View>
-          <View>
-            <Carousel
-              data={challenges}
-              sliderWidth={width}
-              itemWidth={ITEM_WIDTH}
-              renderItem={this.renderItem}
-              activeSlideAlignment='start'
-              loop
-            />
-          </View>
+          {
+            challenges.length === 0 ? (
+              <View>
+                <Text style={styles.subtitle}>You currently have no challenges, let's create a new one!</Text>
+                {plans.map((value, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => CreateNewChallengeRef.openCreateNew()}
+                  >
+                    <Plan value={value} />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            ) : (
+                <View>
+                  <Carousel
+                    data={challenges}
+                    sliderWidth={width}
+                    itemWidth={ITEM_WIDTH}
+                    renderItem={this.renderItem}
+                    activeSlideAlignment='start'
+                    loop
+                  />
+                </View>
+              )
+          }
         </LinearGradient>
       </SafeAreaView>
     );
@@ -139,5 +166,14 @@ const styles = EStyleSheet.create({
     fontSize: 14,
     lineHeight: 24,
     color: '#3F434F'
+  },
+  subtitle: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: 16,
+    lineHeight: 28,
+    color: '#3F434F',
+    paddingHorizontal: 16,
+    marginBottom: 34,
+    marginTop: 8
   }
 });
