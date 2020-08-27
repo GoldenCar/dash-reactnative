@@ -26,6 +26,7 @@ class Component extends React.Component {
         console.log(" challenge is ", challenge);
 
         // TODO: 
+        //          0. Title info (Host, Title)
         //          1. Only show countdown if not started
         //          2. Invite Friends
         //          3. View Plan
