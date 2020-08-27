@@ -5,8 +5,8 @@ import {
   TouchableWithoutFeedback,
   RefreshControl,
 } from 'react-native';
-import {Actions} from 'react-native-router-flux';
-import {connect} from 'react-redux';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -26,15 +26,15 @@ class Component extends React.Component {
   };
   getData = async (loading = false) => {
     try {
-      this.setState({loading, refresh: true});
+      this.setState({ loading, refresh: true });
       await PostsActions.getPosts();
-      this.setState({loading: false, refresh: false});
+      this.setState({ loading: false, refresh: false });
     } catch (e) {
-      this.setState({loading: false, refresh: false});
+      this.setState({ loading: false, refresh: false });
     }
   };
   render() {
-    const {user, challenge, PopupPostRef} = this.props;
+    const { user, challenge, PopupPostRef } = this.props;
     const posts = this.props.posts.filter(
       (v) => v.challengeId === challenge._id,
     );
@@ -45,7 +45,7 @@ class Component extends React.Component {
           useAngle={true}
           angle={72}
           style={styles.container}>
-          <ScrollView
+          {/* <ScrollView
             scrollEventThrottle={16}
             contentContainerStyle={styles.contentContainerStyle}
             refreshControl={
@@ -67,17 +67,17 @@ class Component extends React.Component {
                 />
               ))}
             </View>
-          </ScrollView>
+          </ScrollView> */}
           {/* <TouchableWithoutFeedback
             onPress={() => Actions.CreatePost({challenge})}> */}
-          <View style={styles.writeSomething}>
+          {/* <View style={styles.writeSomething}>
             <WriteSomething
-              onPress={() => Actions.CreatePost({challenge})}
+              onPress={() => Actions.CreatePost({ challenge })}
               onPressPhoto={() => {
-                Actions.CreatePost({challenge, photo: true});
+                Actions.CreatePost({ challenge, photo: true });
               }}
             />
-          </View>
+          </View> */}
           {/* </TouchableWithoutFeedback> */}
         </LinearGradient>
       </>
@@ -85,31 +85,31 @@ class Component extends React.Component {
   }
 }
 
-export default connect(({posts}) => ({
+export default connect(({ posts }) => ({
   posts,
 }))(Component);
 
 const styles = EStyleSheet.create({
-  writeSomething: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 90,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F5FA',
-    zIndex: 1,
-  },
-  contentContainerStyle: {
-    paddingTop: 30,
-    paddingBottom: 40,
-  },
-  postsContainer: {
-    marginHorizontal: 15,
-  },
-  container: {
-    flex: 1,
-    paddingTop: 140,
-  },
+  // writeSomething: {
+  //   position: 'absolute',
+  //   left: 0,
+  //   right: 0,
+  //   top: 90,
+  //   borderBottomWidth: 1,
+  //   borderBottomColor: '#F0F5FA',
+  //   zIndex: 1,
+  // },
+  // contentContainerStyle: {
+  //   paddingTop: 30,
+  //   paddingBottom: 40,
+  // },
+  // postsContainer: {
+  //   marginHorizontal: 15,
+  // },
+  // container: {
+  //   flex: 1,
+  //   // paddingTop: 140,
+  // },
 });
 
 Component.defaultProps = {};

@@ -5,14 +5,17 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import Header from './Header';
 import Countdown from '../../../components/Countdown';
 import Plan from '../../../components/Plan';
+import PopupPost from '../Social/PopupPost';
+import Social from '../Social'
 
 import Plus from '../../MyChallenges/Icons/Plus';
 import FriendImage from './invite.png';
 
-const { height } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 export default class Component extends React.Component {
   AuthPopupRef;
+  PopupPostRef;
   ScrollViewAnimation = new Animated.Value(0);
 
   render() {
@@ -63,8 +66,17 @@ export default class Component extends React.Component {
             <View style={styles.planContainer}>
               <Plan value={plan} blueButton />
             </View>
+
+            <View style={{ width, height }}>
+              <Social
+                user={user}
+                challenge={challenge}
+                PopupPostRef={this.PopupPostRef}
+              />
+            </View>
           </View>
         </ScrollView>
+        <PopupPost ref={(e) => (this.PopupPostRef = e)} />
       </View>
     );
   }

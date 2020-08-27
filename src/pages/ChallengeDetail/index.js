@@ -41,11 +41,10 @@ class Component extends React.Component {
 
         // TODO: 
         //          1. Only show countdown if not started
-        //          2. View Plan
-        //          3. Activity / social feed
-        //          4. New post button 
-        //          5. Figure out how to find if plan started
-        //          6. Figure out daily progression
+        //          2. Activity / social feed
+        //          3. New post button 
+        //          4. Figure out how to find if plan started
+        //          5. Figure out daily progression
 
         return (
             <View>
