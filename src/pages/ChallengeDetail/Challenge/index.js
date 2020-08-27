@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, ScrollView, Dimensions, Text, Animated, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Dimensions, Text, Animated, Image } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-
-import { Globe, Add, ChevronRight } from 'dash/src/components/Icons/index';
-import ViewedBy from 'dash/src/components/Challenge/ViewedBy';
-import LightButton from 'dash/src/components/LightButton';
 
 import Header from './Header';
 import Countdown from '../../../components/Countdown';
+import Plan from '../../../components/Plan';
+
+import Plus from '../../MyChallenges/Icons/Plus';
+import FriendImage from './invite.png';
 
 const { height } = Dimensions.get('window');
 
@@ -16,7 +16,7 @@ export default class Component extends React.Component {
   ScrollViewAnimation = new Animated.Value(0);
 
   render() {
-    const { challenge, user } = this.props;
+    const { challenge, plan, user } = this.props;
 
     const onScroll = Animated.event(
       [{ nativeEvent: { contentOffset: { y: this.ScrollViewAnimation } } }],
@@ -30,7 +30,6 @@ export default class Component extends React.Component {
           {...this.props}
         />
         <ScrollView
-          contentContainerStyle={styles.contentContainerStyle}
           onScroll={onScroll}
           showsVerticalScrollIndicator={false}
         >
@@ -44,11 +43,25 @@ export default class Component extends React.Component {
             />
 
             <View style={styles.inviteFriends}>
+              <Image
+                source={FriendImage}
+              />
+              <View style={styles.friendTextContainer}>
+                <Text style={styles.friendTitle}>Invite Friends</Text>
+                <Text style={styles.friendSubtitle}>
+                  Invite your friends to this challenge so they can join in on the fun.
+                </Text>
+              </View>
+              <View style={styles.friendButton}>
+                <Plus fill='#fff' />
+                <Text style={styles.friendButtonText}>
+                  Invite Friends
+                </Text>
+              </View>
+            </View>
 
-              <Text style={styles.friendTitle}>Invite Friends</Text>
-              <Text style={styles.friendSubtitle}>
-                Invite your friends to this challenge so they can join in on the fun.
-              </Text>
+            <View style={styles.planContainer}>
+              <Plan value={plan} blueButton />
             </View>
           </View>
         </ScrollView>
@@ -61,10 +74,6 @@ const styles = EStyleSheet.create({
   container: {
     flex: 1,
   },
-  contentContainerStyle: {
-    paddingBottom: 40,
-    flex: 1,
-  },
   innerContainer: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -72,7 +81,8 @@ const styles = EStyleSheet.create({
     flex: 1,
     marginTop: height / 2 - 20,
     paddingHorizontal: 16,
-    paddingTop: 34
+    paddingTop: 34,
+    marginBottom: 208
   },
   countdownContainer: {
     paddingHorizontal: 56,
@@ -94,13 +104,18 @@ const styles = EStyleSheet.create({
     color: '#3F434F',
     paddingBottom: 18
   },
-
-
   inviteFriends: {
-
+    height: 390,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E7EEF5',
+    borderRadius: 16,
+    paddingTop: 12
   },
-  friendImage: {
-
+  friendTextContainer: {
+    position: 'absolute',
+    top: 212,
+    paddingHorizontal: 60
   },
   friendTitle: {
     fontFamily: 'Poppins-Bold',
@@ -117,9 +132,26 @@ const styles = EStyleSheet.create({
     color: '#859AB6'
   },
   friendButton: {
-
+    width: 154,
+    height: 48,
+    backgroundColor: '#1AA0FF',
+    borderRadius: 48,
+    paddingHorizontal: 23,
+    paddingVertical: 13,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    alignSelf: 'center'
   },
   friendButtonText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 12,
+    lineHeight: 20,
+    textAlign: 'center',
+    color: '#FFFFFF',
+  },
 
+  planContainer: {
+    marginTop: 13
   }
 });

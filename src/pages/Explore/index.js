@@ -121,6 +121,7 @@ function Component(props) {
             <TouchableOpacity
               key={index}
               onPress={() => CreateNewChallengeRef.openCreateNew()}
+              style={styles.planContainer}
             //onPress={() => Actions.CreateNewChallenge()}
 
             // TODO: need to navigate how CreateNew is doing it
@@ -180,6 +181,10 @@ const styles = StyleSheet.create({
     color: '#3F434F',
     marginHorizontal: 16,
     marginBottom: 13
+  },
+  planContainer: {
+    marginHorizontal: 15,
+    marginVertical: 5,
   }
 });
 export default connect(({ challenges }) => ({
