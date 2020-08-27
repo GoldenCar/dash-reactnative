@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Animated, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Animated, Text, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import KeepAwake from 'react-native-keep-awake';
 
@@ -156,12 +156,11 @@ export default class RestTime extends React.Component {
                     </View>
                 </Animated.View>
                 {!this.props.taskPaused && (
-                    <View style={styles.skipContainer}>
-                        <TouchableOpacity style={styles.skipButton} onPress={() => this.props.onPress()}>
-                            <Text style={styles.skip}>Skip</Text>
-                            <ArrowNext/>
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableWithoutFeedback onPress={() => this.props.onPress()}>
+                        <View style={styles.skipContainer}>
+                            <Text style={styles.skipButtonText}>Skip</Text><ArrowNext/>
+                        </View>
+                    </TouchableWithoutFeedback>
                 )}
             </Animated.View>
         );
@@ -169,6 +168,27 @@ export default class RestTime extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    skipContainer: {
+        height: 48,
+        width: 97,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#fff',
+        flexDirection: 'row',
+        borderRadius: 25,
+        position: 'absolute',
+        right: 15,
+        bottom: 40,
+    },
+    skipButtonText: {
+        marginTop: -2,
+        marginRight: 11,
+        fontWeight: 'bold',
+        fontFamily: 'Poppins',
+        fontSize: 16,
+        lineHeight: 28,
+        color: '#000000'
+    },
     mainContainer: {
         flex: 1,
         width: '100%',
@@ -187,14 +207,6 @@ const styles = StyleSheet.create({
         lineHeight: 20,
         fontFamily: 'Poppins-Medium',
         color: '#000',
-    },
-    skipContainer: {
-        flexDirection: 'row',
-        position: 'absolute',
-        zIndex: 101,
-        bottom: 0,
-        right: 16,
-        height:80,
     },
     skipButton: {
         flexDirection: 'row',
