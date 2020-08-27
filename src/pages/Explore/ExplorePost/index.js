@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -14,7 +14,7 @@ import moment from 'moment';
 
 import AuthPopup from 'dash/src/components/AuthPopup';
 import Header from './Header';
-import Countdown from './Countdown';
+import Countdown from '../../../components/Countdown';
 import { Calendar } from '../../../components/Icons';
 
 import * as plansActions from '../../../actions/plans';
@@ -54,7 +54,7 @@ export default class Component extends React.Component {
           onScroll={Animated.event(
             [
               {
-                nativeEvent: {contentOffset: {y: this.ScrollViewAnimation}},
+                nativeEvent: { contentOffset: { y: this.ScrollViewAnimation } },
               },
             ],
             {
@@ -73,10 +73,10 @@ export default class Component extends React.Component {
             <View style={styles.circle}></View>
             <View style={styles.padding}>
               <Text style={styles.host}>Hosted by {challenge.Host}</Text>
-                <Text style={styles.title}>{challenge.title}</Text>
-                <Text style={styles.description}>
-                  {challenge.description}
-                </Text>
+              <Text style={styles.title}>{challenge.title}</Text>
+              <Text style={styles.description}>
+                {challenge.description}
+              </Text>
             </View>
             <LinearGradient
               colors={['#E7EEF5', '#fff']}
@@ -84,8 +84,8 @@ export default class Component extends React.Component {
               end={{ x: 1, y: 0 }}
               style={styles.planContainer}
             >
-              <Image 
-                source={{uri: `${mediaHost}${plan.planImage}`}}
+              <Image
+                source={{ uri: `${mediaHost}${plan.planImage}` }}
                 style={styles.planImage}
               />
               <Text style={styles.planTextBlue}>Challenges Plan:</Text>
@@ -97,7 +97,7 @@ export default class Component extends React.Component {
                   <Calendar />
                 </View>
                 <Text style={styles.viewText}>
-                  { /* TODO: hook up button */ }
+                  { /* TODO: hook up button */}
                   View Plan
                 </Text>
               </View>
@@ -114,21 +114,12 @@ export default class Component extends React.Component {
         </ScrollView>
         <AuthPopup ref={(e) => (this.AuthPopupRef = e)} />
 
-          <View style={styles.countdownContainer}>
-            <View style={styles.countdownTitleContainer}>
-              <Text style={styles.countdownTitle}>
-                Challenge Starts in:
-              </Text>
-            </View>
-            <View style={styles.countdownContent}>
-              <Countdown initialTime={timeTilStart} />
-              <View style={styles.joinButton}>
-                <Text style={styles.joinText}>
-                  Join
-                </Text>
-              </View>
-            </View>
-          </View>
+        <Countdown
+          initialTime={timeTilStart}
+          containerStyle={styles.countdownContainer}
+          showButton
+          countdownBackground={styles.countdownBackground}
+        />
       </View>
     );
   }
@@ -168,8 +159,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontWeight: '600',
     fontSize: 14,
-    lineHeight: 24,    
-    textAlign: 'center',    
+    lineHeight: 24,
+    textAlign: 'center',
     color: '#1AA0FF'
   },
   title: {
@@ -191,7 +182,7 @@ const styles = StyleSheet.create({
   planContainer: {
     borderColor: '#E7EEF5',
     borderWidth: 1,
-    height: 450, 
+    height: 450,
     margin: 16,
     borderRadius: 16,
     padding: 30,
@@ -246,64 +237,12 @@ const styles = StyleSheet.create({
     color: '#1AA0FF'
   },
   countdownContainer: {
-    height: 115,
-    backgroundColor: '#1AA0FF',
-    //box-shadow: 0px 20px 20px rgba(26, 160, 255, 0.25);
-    borderRadius: 16,
-    padding: 16,
-    justifyContent: 'center',
     position: 'absolute',
     bottom: 8,
     left: 16,
     right: 16
   },
-  countdownTitleContainer: {
-    position: 'absolute',
-    left: 16,
-    top: -20,
-    justifyContent: 'center',
-    width: 186,
-    height: 37,
-    backgroundColor: '#FFFFFF'
-  },
-  countdownTitle: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: 10,
-    lineHeight: 16,
-    textAlign: 'center',
-    letterSpacing: 2,
-    textTransform: 'uppercase',
-    color: '#1AA0FF'
-  },
-  countdownContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  joinButton: {
-    width: 89,
-    height: 48,
-    backgroundColor: '#FFFFFF',
-    //box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.11);
-    borderRadius: 8,
-    justifyContent: 'center'
-  },
-  joinText: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: 16,
-    lineHeight: 24,
-    textAlign: 'center',
-    color: '#1AA0FF'
+  countdownBackground: {
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
   }
-  // joinChallengeText: {
-  //   color: 'white',
-  //   fontSize: 16,
-  //   fontFamily: 'Poppins-Bold',
-  // },
-  // joinChallengeContainer: {
-  //   marginTop: 50,
-  //   backgroundColor: '#00A1FF',
-  //   paddingVertical: 20,
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // }
 });

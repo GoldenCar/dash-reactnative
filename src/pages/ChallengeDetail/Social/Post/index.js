@@ -1,24 +1,25 @@
-import React, {useState, useEffect} from 'react';
-import {View, Image, Text, TouchableOpacity} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Image, Text, TouchableOpacity } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 
 import * as UserActions from 'dash/src/actions/user';
-import {HorizontalDots} from 'dash/src/components/Icons';
-import {mediaHost} from 'dash/src/config';
+import { mediaHost } from 'dash/src/config';
 
 import CommentsContainer from './CommentsContainer';
+import { Settings } from 'dash/src/components/Icons';
 
 TimeAgo.addLocale(en);
 const timeAgo = new TimeAgo('en-US');
 
 function Component(props) {
-  const {postId, onPressMenu} = props;
+  const { postId, onPressMenu } = props;
   const value = props.posts.find((v) => v._id === postId);
   const [allComments, setAllComments] = useState(false);
   const [user, setUser] = useState({});
+
   useEffect(() => {
     const init = async () => {
       const user = await UserActions.getUserById(value.createdBy);
@@ -26,13 +27,14 @@ function Component(props) {
     };
     init();
   }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.main}>
         <View style={styles.top}>
           <View style={styles.avatarContainer}>
             <Image
-              source={{uri: `${mediaHost}${user.profileImage}`}}
+              source={{ uri: `${mediaHost}${user.profileImage}` }}
               style={styles.avatar}
               resizeMode="cover"
             />
@@ -50,7 +52,7 @@ function Component(props) {
           </View>
         </View>
         <TouchableOpacity style={styles.menuIcon} onPress={onPressMenu}>
-          <HorizontalDots />
+          <Settings fill='#859AB6' />
         </TouchableOpacity>
       </View>
       <CommentsContainer
@@ -63,11 +65,19 @@ function Component(props) {
     </View>
   );
 }
-export default connect(({posts}) => ({
+
+export default connect(({ posts }) => ({
   posts,
 }))(Component);
 
 const styles = EStyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: '#F8FAFC',
+    marginBottom: 8,
+    overflow: 'hidden',
+  },
   postText: {
     color: '#292E3A',
     fontFamily: 'Poppins-Medium',
@@ -115,7 +125,7 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  avatar: {width: 35, height: 35},
+  avatar: { width: 35, height: 35 },
   avatarContainer: {
     width: 35,
     height: 35,
@@ -127,14 +137,6 @@ const styles = EStyleSheet.create({
   },
   main: {
     padding: 20,
-  },
-  container: {
-    borderRadius: 15,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#F0F5FA',
-    marginBottom: 20,
-    overflow: 'hidden',
   },
 });
 
