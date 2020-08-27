@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, Keyboard, View, StatusBar} from 'react-native';
+import {View, StatusBar} from 'react-native';
 import {Router, Scene, Reducer} from 'react-native-router-flux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 

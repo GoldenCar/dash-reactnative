@@ -25,7 +25,7 @@ export default class WorkoutOverView extends React.Component {
 
   // render task items ---------
   renderItem = (item, isCircuit, index, taskComplete) => {
-    const { exerciseCardArray } = this.props.data; 
+    const { stories } = this.props.data;
     let thumbnailUrl = "";
     if (item.cardType === "note") {
       thumbnailUrl = thumbnail_note_card;
@@ -36,7 +36,7 @@ export default class WorkoutOverView extends React.Component {
     } else if (item.cardType === 'video' && item.thumbnailFileName && item.thumbnailFileName != "") {
       thumbnailUrl = { uri: mediaHost + item.thumbnailFileName }
     } else if (item.cardType === "exercise") {
-      let cardData = exerciseCardArray.filter(data => data.id === item.id);  
+      let cardData = stories.filter(data => data.id === item.id);
       if (cardData.length) {
         thumbnailUrl = cardData[0].BaseThumbnail_fileName ? { uri: mediaHost + cardData[0].BaseThumbnail_fileName } : thumbnail_old;
       }

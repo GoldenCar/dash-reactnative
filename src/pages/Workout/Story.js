@@ -16,7 +16,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import MaskedView from '@react-native-community/masked-view';
+import FadingEdge from 'react-native-fading-edge';
 import {mediaHost} from '../../config';
 import Video from 'react-native-video';
 import {CheckList, Swap, Pause, Play, ArrowNext} from 'dash/src/components/Icons';
@@ -99,7 +99,9 @@ export default class extends React.Component {
         onMoveShouldSetResponderCapture: () => true,
 
         onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
-            console.log(gestureState.dy, this.state.descriptionScroll)
+            if(this.props.story.videos[this.state.currentIndex].cardType === 'video'){
+                return false
+            }
             if (this.state.descriptionScroll === 0 && gestureState.dy > 0) {
                 this.toBottom()
             } else {
@@ -759,7 +761,7 @@ export default class extends React.Component {
         const secTotal = totalTimer - minTotal * 60;
 
         const heightContainer = this.translateY.interpolate({
-            inputRange: [-(height - 100), 0],
+            inputRange: [-(height - 100), 50],
             outputRange: [(height - 200), 70],
             extrapolate: 'clamp',
         });
@@ -801,7 +803,6 @@ export default class extends React.Component {
                             repeat={videoRepeat}
                             currentTime={VideoTimer.currentTime}
                             source={{uri: `${mediaHost}${videos[currentIndex].fileName}`}}
-                            // source={testVideo}
                             onReadyForDisplay={() => this.onReadyForDisplay()}
                             resizeMode={'cover'}
                             style={styles.video}
@@ -923,71 +924,62 @@ export default class extends React.Component {
                         <Text style={{...styles.storyTime, marginBottom: 5}}>{`${repCount} Reps`}</Text>
                     </>
                     }
-                    {/*<MaskedView*/}
-                    {/*    maskElement={*/}
-                    {/*        <LinearGradient style={{flex: 1}}*/}
-                    {/*                        colors={(openDescription && descriptionScroll >= 0) ? ['black', 'transparent'] : ['black', 'black']}*/}
-                    {/*                        start={{x: 0, y: 0.8}} end={{x: 0, y: 1}}/>*/}
-                    {/*    }*/}
-                    {/*>*/}
-                        <MaskedView
-                            maskElement={
-                                <LinearGradient style={{flex: 1}}
-                                                colors={(openDescription && descriptionScroll > 0) ? ['transparent', 'black'] : ['black', 'black']}
-                                                start={{x: 0, y: 0}} end={{x: 0, y: 0.2}}/>
+                    <FadingEdge
+                        top={(openDescription && descriptionScroll > 0) ? 100 : 0}
+                        left={0}
+                        bottom={0}
+                        right={0}
+                    >
+                        <ScrollView fadingEdgeLength={100} ref={this.scrollDescription}
+                                    onScroll={(e) => this.setState({descriptionScroll: e.nativeEvent.contentOffset.y})}
+                                    scrollEnabled={openDescription}>
+                            {showTimeLimit && <>
+                                <Text style={styles.storyTime}>
+                                    {showTimeLimit ?
+                                        `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+                                        : ""
+                                    }
+                                </Text>
+                            </>
                             }
-                        >
-                            <ScrollView fadingEdgeLength={openDescription ? 100 : 0} ref={this.scrollDescription}
-                                        onScroll={(e) => this.setState({descriptionScroll: e.nativeEvent.contentOffset.y})}
-                                        scrollEnabled={openDescription}>
-                                {showTimeLimit && <>
-                                    <Text style={styles.storyTime}>
-                                        {showTimeLimit ?
-                                            `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
-                                            : ""
-                                        }
-                                    </Text>
-                                </>
-                                }
 
-                                {videos[currentIndex].cardType === 'video' && <>
-                                    <Text style={styles.videoTime}>
-                                        {VideoTimer.currentTime ? `${minutesVideo < 10 ? '0' : ''}${minutesVideo}:${secondsVideo < 10 ? '0' : ''}${secondsVideo}` : '00:00'}
-                                    </Text>
+                            {videos[currentIndex].cardType === 'video' && <>
+                                <Text style={styles.videoTime}>
+                                    {VideoTimer.currentTime ? `${minutesVideo < 10 ? '0' : ''}${minutesVideo}:${secondsVideo < 10 ? '0' : ''}${secondsVideo}` : '00:00'}
+                                </Text>
 
-                                    {VideoTimer.currentTime ? (<Slider
-                                        onSlidingStart={() => {
-                                            if (!pause && !videoPaused) this.setState({videoPaused: true})
-                                        }}
-                                        // onValueChange={(e) => this.videoRef.current.seek(e, 50)}
-                                        onSlidingComplete={(e) => {
-                                            this.videoRef.current.seek(e, 50)
-                                            if (!pause && videoPaused) this.setState({videoPaused: false})
-                                        }}
-                                        value={VideoTimer.currentTime}
-                                        style={{width: '105%', height: 20, marginLeft: -13}}
-                                        minimumValue={0}
-                                        maximumValue={VideoTimer.seekableDuration}
-                                        thumbTintColor="#FFFFFF"
-                                        minimumTrackTintColor="#FFFFFF"
-                                        maximumTrackTintColor="rgba(255,255,255,0.4)"
-                                    />) : (<Slider
-                                        value={0}
-                                        style={{width: '105%', height: 20, marginLeft: -13}}
-                                        minimumValue={0}
-                                        thumbTintColor="#FFFFFF"
-                                        minimumTrackTintColor="#FFFFFF"
-                                        maximumTrackTintColor="rgba(255,255,255,0.4)"
-                                    />)}
+                                {VideoTimer.currentTime ? (<Slider
+                                    onSlidingStart={() => {
+                                        if (!pause && !videoPaused) this.setState({videoPaused: true})
+                                    }}
+                                    // onValueChange={(e) => this.videoRef.current.seek(e, 50)}
+                                    onSlidingComplete={(e) => {
+                                        this.videoRef.current.seek(e, 50)
+                                        if (!pause && videoPaused) this.setState({videoPaused: false})
+                                    }}
+                                    value={VideoTimer.currentTime}
+                                    style={{width: '100%', height: 20, marginLeft: -7}}
+                                    minimumValue={0}
+                                    maximumValue={VideoTimer.seekableDuration}
+                                    thumbTintColor="#FFFFFF"
+                                    minimumTrackTintColor="#FFFFFF"
+                                    maximumTrackTintColor="rgba(255,255,255,0.4)"
+                                />) : (<Slider
+                                    value={0}
+                                    style={{width: '105%', height: 20, marginLeft: -7}}
+                                    minimumValue={0}
+                                    thumbTintColor="#FFFFFF"
+                                    minimumTrackTintColor="#FFFFFF"
+                                    maximumTrackTintColor="rgba(255,255,255,0.4)"
+                                />)}
 
-                                </>
-                                }
+                            </>
+                            }
 
 
-                                {this.renderCardDescription()}
-                            </ScrollView>
-                        </MaskedView>
-                    {/*</MaskedView>*/}
+                            {this.renderCardDescription()}
+                        </ScrollView>
+                    </FadingEdge>
                 </Animated.View>
 
 
@@ -1239,6 +1231,15 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 0
     },
+    nextButtonText: {
+        marginTop: -2,
+        marginRight: 11,
+        fontWeight: 'bold',
+        fontFamily: 'Poppins',
+        fontSize: 16,
+        lineHeight: 28,
+        color: '#000000'
+    },
     endTaskButtonContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
@@ -1252,15 +1253,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row'
     },
-    nextButtonText: {
-        marginTop: -2,
-        marginRight: 11,
-        fontWeight: 'bold',
-        fontFamily: 'Poppins',
-        fontSize: 16,
-        lineHeight: 28,
-        color: '#000000'
-    },
+
 
     bottomRow: {
         bottom: 0,
@@ -1334,22 +1327,6 @@ const styles = StyleSheet.create({
         color: "#fff",
         width: "80%",
         textAlign: 'center'
-    },
-    skip: {
-        fontSize: 16,
-        lineHeight: 24,
-        fontFamily: 'Poppins-Bold',
-        color: 'black',
-    },
-    skipContainer: {
-        paddingVertical: 15,
-        paddingHorizontal: 40,
-        backgroundColor: '#fff',
-        borderRadius: 50,
-        position: 'absolute',
-        width: responsiveWidth(50),
-        alignSelf: 'center',
-        bottom: responsiveHeight(32)
     },
 
 });
