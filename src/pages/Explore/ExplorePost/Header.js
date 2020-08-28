@@ -8,17 +8,17 @@ import {
   Animated,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 
 import { mediaHost } from 'dash/src/config';
-import {BackArrow} from '../../../components/Icons';
-import {Close} from '../../../components/Icons';
+import { BackArrow } from '../../../components/Icons';
+import { Close } from '../../../components/Icons';
 
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export default function Component(props) {
-  const {ScrollViewAnimation, value} = props;
+  const { ScrollViewAnimation, value } = props;
   const scale = ScrollViewAnimation.interpolate({
     inputRange: [0, height / 2 - 20],
     outputRange: [1, 1.1],
@@ -44,14 +44,13 @@ export default function Component(props) {
           style={[
             styles.pictureContainer,
             {
-              transform: [{scale}],
+              transform: [{ scale }],
             },
           ]}>
           <Image
             style={styles.picture}
             resizeMode="cover"
-            //source={require('dash/src/res/explore/ExplorePost.png')}
-            source={{uri: `${mediaHost}${value.challengeBGImage}`}}
+            source={{ uri: `${mediaHost}${value.challengeBGImage}` }}
           />
         </Animated.View>
       </View>
@@ -59,8 +58,7 @@ export default function Component(props) {
         onPress={() => {
           Actions.pop();
         }}>
-        <Animated.View style={[styles.backButtonContainer, {zIndex}]}>
-          {/* <BackArrow fill="#fff" /> */}
+        <Animated.View style={[styles.backButtonContainer, { zIndex }]}>
           <Close />
         </Animated.View>
       </TouchableWithoutFeedback>

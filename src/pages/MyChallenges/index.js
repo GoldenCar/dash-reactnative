@@ -104,32 +104,30 @@ class Component extends React.Component {
             <Plus />
             <Text style={styles.buttonText}>New</Text>
           </View>
-          {
-            challenges.length === 0 ? (
-              <View>
-                <Text style={styles.subtitle}>You currently have no challenges, let's create a new one!</Text>
-                {plans.map((value, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => CreateNewChallengeRef.openCreateNew()}
-                  >
-                    <Plan value={value} />
-                  </TouchableOpacity>
-                ))}
-              </View>
-            ) : (
-                <View>
-                  <Carousel
-                    data={challenges}
-                    sliderWidth={width}
-                    itemWidth={ITEM_WIDTH}
-                    renderItem={this.renderItem}
-                    activeSlideAlignment='start'
-                    loop
-                  />
-                </View>
-              )
-          }
+          {challenges.length === 0 ? (
+            <View>
+              <Text style={styles.subtitle}>You currently have no challenges, let's create a new one!</Text>
+              {plans.map((value, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => CreateNewChallengeRef.openCreateNew()}
+                >
+                  <Plan value={value} />
+                </TouchableOpacity>
+              ))}
+            </View>
+          ) : (
+            <View>
+              <Carousel
+                data={challenges}
+                sliderWidth={width}
+                itemWidth={ITEM_WIDTH}
+                renderItem={this.renderItem}
+                activeSlideAlignment='start'
+                loop
+              />
+            </View>
+          )}
         </LinearGradient>
       </SafeAreaView>
     );
