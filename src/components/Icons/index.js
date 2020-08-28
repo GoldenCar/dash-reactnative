@@ -44,6 +44,7 @@ import RoundCircle from './RoundCircle';
 import ArrowNext from './ArrowNext';
 import Calendar from './Calendar';
 import Settings from './Settings';
+import ArrowRight from './ArrowRight';
 
 export {
   Play,
@@ -91,5 +92,6 @@ export {
   RoundCircle,
   ArrowNext,
   Calendar,
-  Settings
+  Settings,
+  ArrowRight
 };

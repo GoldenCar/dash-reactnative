@@ -9,6 +9,7 @@ import Plan from '../../../components/Plan';
 import InviteFriends from './InviteFriends';
 import PopupPost from '../Social/PopupPost';
 import Social from '../Social'
+import DayOverview from './DayOverview';
 
 const { height } = Dimensions.get('window');
 
@@ -21,6 +22,8 @@ export default class Component extends React.Component {
 
     const timeTilStart = moment(new Date(challenge.startDate)).diff(moment(new Date()), 'seconds');
     const hasStarted = timeTilStart <= 0;
+
+    // TODO: get current days plan data (title, date)
 
     return (
       <View style={styles.container}>
@@ -50,9 +53,7 @@ export default class Component extends React.Component {
                 </TouchableOpacity>
               </>
             ) : (
-                <View style={{ height: 500 }}>
-
-                </View>
+                <DayOverview />
               )}
           </View>
 
@@ -107,5 +108,5 @@ const styles = EStyleSheet.create({
   planContainer: {
     marginTop: 13,
     marginBottom: 16
-  }
+  },
 });

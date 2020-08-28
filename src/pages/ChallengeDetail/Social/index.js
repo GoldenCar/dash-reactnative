@@ -45,7 +45,7 @@ class Component extends React.Component {
         style={styles.container}
       >
         <View style={styles.header}>
-          <Text style={styles.headerText}>Activity</Text>
+          <Text style={styles.headerText}>Recent Activity</Text>
           <Text style={styles.headerBlueText}>Friends Only</Text>
         </View>
 
