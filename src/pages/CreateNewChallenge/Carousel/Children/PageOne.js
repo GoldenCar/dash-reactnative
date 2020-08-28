@@ -4,7 +4,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import CreateNew from '../../CreateNew';
 
 export default function Component(props) {
-    const { CarouselRef, HeaderRef, onChangeChallenge, onPressNext } = props;
+    const { CarouselRef, onChangeChallenge, onPressNext } = props;
 
     const opacity = CarouselRef._scrollPos.interpolate({
         inputRange: [0, 300],
@@ -32,7 +32,7 @@ export default function Component(props) {
                     console.log(" type is ", type);
                     onPressNext({
                         call: () => {
-                            HeaderRef.next();
+
                             if (type.planTypeData && type.planTypeData.length > 0) {
                                 onChangeChallenge({ type });
                             }

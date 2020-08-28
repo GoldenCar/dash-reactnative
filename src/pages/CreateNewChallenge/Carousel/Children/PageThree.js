@@ -1,65 +1,100 @@
 import React from 'react';
-import { Animated, Dimensions, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {
+    Animated,
+    Dimensions,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View,
+    KeyboardAvoidingView,
+    Platform,
+    Keyboard
+} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 import Title from '../../Title';
 import Description from '../../Description';
 
-const { height, width } = Dimensions.get('screen');
+const {height, width} = Dimensions.get('screen');
 
-export default function Component(props) {
-    const { challenge, CarouselRef, TitleRef, onChangeChallenge, onPressNext } = props;
+export default class Component extends React.Component {
+    state = {
+        keyboardDidShow: false
+    }
 
-    const translateY = CarouselRef._scrollPos.interpolate({
-        inputRange: [width, width * 2],
-        outputRange: [height - 100, 0],
-        extrapolate: 'clamp',
-    });
-    const translateX = CarouselRef._scrollPos.interpolate({
-        inputRange: [width, width * 2],
-        outputRange: [-width, 0],
-        extrapolate: 'clamp',
-    });
-    const scale = CarouselRef._scrollPos.interpolate({
-        inputRange: [width, width * 2],
-        outputRange: [0.9, 1],
-        extrapolate: 'clamp',
-    });
 
-    return (
-        <Animated.View
-            style={[
-                {
-                    transform: [{ translateY }, { translateX }, { scale }],
-                    flex: 1,
-                },
-            ]}>
-            <ScrollView contentContainerStyle={[styles.contentContainerStyle, { flexGrow: 1 }]}>
-                <View>
+    componentDidMount() {
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardWillShow', () => this.setState({keyboardDidShow: true}));
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardWillHide', () => this.setState({keyboardDidShow: false}));
+    }
 
-                    <View style={styles.titleContainer}>
-                        <Text style={styles.itemHeaderText}>Perfect!</Text>
-                        <Text style={styles.titles}>Just a few more {'\n'} small details</Text>
+    componentWillUnmount() {
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
+    }
+
+
+    render() {
+        const {challenge, CarouselRef, onChangeChallenge, onPressNext} = this.props;
+        const {keyboardDidShow} = this.state;
+        const
+            translateY = CarouselRef._scrollPos.interpolate({
+                inputRange: [width, width * 2],
+                outputRange: [height - 100, 0],
+                extrapolate: 'clamp',
+            });
+        const
+            translateX = CarouselRef._scrollPos.interpolate({
+                inputRange: [width, width * 2],
+                outputRange: [-width, 0],
+                extrapolate: 'clamp',
+            });
+        const
+            scale = CarouselRef._scrollPos.interpolate({
+                inputRange: [width, width * 2],
+                outputRange: [0.9, 1],
+                extrapolate: 'clamp',
+            });
+        return (
+            <KeyboardAvoidingView keyboardVerticalOffset={125} style={{flex: 1}}
+                                  behavior={Platform.OS === "ios" ? "padding" : "height"}>
+                <Animated.View
+                    style={[
+                        {
+                            transform: [{translateY}, {translateX}, {scale}],
+                            flex: 1,
+                        },
+                    ]}>
+                    <ScrollView contentContainerStyle={[styles.contentContainerStyle, {flexGrow: 1}]}>
+                        <View>
+
+                            <View style={styles.titleContainer}>
+                                <Text style={styles.itemHeaderText}>Perfect!</Text>
+                                <Text style={styles.titles}>Just a few more {'\n'} small details</Text>
+                            </View>
+                            <Title
+                                //ref={(e) => (TitleRef = e)}
+                                challenge={challenge}
+                                onChangeText={(title) => onChangeChallenge({title})}
+                            />
+                            <Description
+                                challenge={challenge}
+                                onChangeText={(description) => onChangeChallenge({description})
+                                }
+                            />
+                        </View>
+                    </ScrollView>
+                    <View style={styles.bottomButtonContainer}>
+                        <TouchableOpacity style={keyboardDidShow ?  styles.keyboardDidShow : styles.bottomConfirmBox } onPress={() => onPressNext({})}>
+                            <Text style={styles.confirmPlanText}>Next</Text>
+                        </TouchableOpacity>
                     </View>
-                    <Title
-                        //ref={(e) => (TitleRef = e)}
-                        challenge={challenge}
-                        onChangeText={(title) => onChangeChallenge({ title })}
-                    />
-                    <Description
-                        challenge={challenge}
-                        onChangeText={(description) => onChangeChallenge({ description })
-                        }
-                    />
-                </View>
-            </ScrollView>
-            <View style={styles.bottomButtonContainer}>
-                <TouchableOpacity style={styles.bottomConfirmBox} onPress={() => onPressNext({})}>
-                    <Text style={styles.confirmPlanText}>Next</Text>
-                </TouchableOpacity>
-            </View>
-        </Animated.View>
-    )
+                </Animated.View>
+            </KeyboardAvoidingView>
+        )
+    }
+
+
 }
 
 const styles = EStyleSheet.create({
@@ -73,8 +108,17 @@ const styles = EStyleSheet.create({
         fontSize: 16,
         fontFamily: 'Poppins-Medium',
     },
-    bottomConfirmBox: {
+    keyboardDidShow: {
         width: "100%",
+        backgroundColor: "#1ca0ff",
+        height: 56,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    bottomConfirmBox: {
+        width: width - 32,
+        margin:16,
+        borderRadius:8,
         backgroundColor: "#1ca0ff",
         height: 56,
         alignItems: "center",
