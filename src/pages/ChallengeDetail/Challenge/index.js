@@ -14,6 +14,8 @@ import FriendImage from './invite.png';
 
 const { height, width } = Dimensions.get('window');
 
+const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+
 export default class Component extends React.Component {
   AuthPopupRef;
   PopupPostRef;
@@ -55,8 +57,7 @@ export default class Component extends React.Component {
             <View
               style={styles.contentContainer}
               onLayout={(event) => {
-                const { x, y, width, height } = event.nativeEvent.layout;
-                console.log('content container height', height);
+                const { height } = event.nativeEvent.layout;
                 this.setState({ contentHeight: height });
               }}
             >
@@ -68,6 +69,7 @@ export default class Component extends React.Component {
               <View style={styles.inviteFriends}>
                 <Image
                   source={FriendImage}
+                  style={styles.friendImage}
                 />
                 <View style={styles.friendTextContainer}>
                   <Text style={styles.friendTitle}>Invite Friends</Text>
@@ -87,23 +89,22 @@ export default class Component extends React.Component {
               </View>
             </View>
 
-            <View style={{ width, height }}>
-              <Social
-                user={user}
-                challenge={challenge}
-                PopupPostRef={this.PopupPostRef}
-              />
-            </View>
+            <Social
+              user={user}
+              challenge={challenge}
+              PopupPostRef={this.PopupPostRef}
+            />
           </View>
         </ScrollView>
         <PopupPost ref={(e) => (this.PopupPostRef = e)} />
 
-        <TouchableOpacity onPress={() => Actions.CreatePost({ challenge })}>
-          <Animated.View style={[styles.addPostButton, { opacity }]}>
-            <Plus fill='#fff' />
-            <Text style={styles.addPostText}>New Post</Text>
-          </Animated.View>
-        </TouchableOpacity>
+        <AnimatedTouchable
+          onPress={() => Actions.CreatePost({ challenge })}
+          style={[styles.addPostButton, { opacity }]}
+        >
+          <Plus fill='#fff' />
+          <Text style={styles.addPostText}>New Post</Text>
+        </AnimatedTouchable>
       </View>
     );
   }
@@ -153,10 +154,13 @@ const styles = EStyleSheet.create({
     borderRadius: 16,
     paddingTop: 12
   },
+  friendImage: {
+    width: '100%'
+  },
   friendTextContainer: {
     position: 'absolute',
     top: 212,
-    paddingHorizontal: 60
+    paddingHorizontal: 32
   },
   friendTitle: {
     fontFamily: 'Poppins-Bold',

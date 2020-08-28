@@ -40,11 +40,9 @@ class Component extends React.Component {
         console.log(" challenge is ", challenge);
 
         // TODO: 
-        //          1. Only show countdown if not started
-        //          2. Activity / social feed
-        //          3. New post button 
-        //          4. Figure out how to find if plan started
-        //          5. Figure out daily progression
+        //          1. Figure out how to find if plan started
+        //          2. Only show countdown if not started
+        //          3. Figure out daily progression
 
         return (
             <View>

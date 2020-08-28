@@ -16,23 +16,21 @@ export default function Component(props) {
   const imageURL = `${mediaHost}${challenge.challengeBGImage}`;
 
   return (
-    <>
-      <View style={styles.container}>
-        <Animated.View
-          style={[
-            styles.pictureContainer,
-            {
-              transform: [{ scale }],
-            },
-          ]}>
-          <Image
-            style={styles.picture}
-            resizeMode="cover"
-            source={{ uri: imageURL }}
-          />
-        </Animated.View>
-      </View>
-    </>
+    <View style={styles.container}>
+      <Animated.View
+        style={[
+          styles.pictureContainer,
+          {
+            transform: [{ scale }],
+          },
+        ]}>
+        <Image
+          style={styles.picture}
+          resizeMode="cover"
+          source={{ uri: imageURL }}
+        />
+      </Animated.View>
+    </View>
   );
 }
 
