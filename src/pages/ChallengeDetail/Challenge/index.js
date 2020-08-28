@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Dimensions, Text, Image } from 'react-native';
+import { View, Dimensions, Text, Image, TouchableOpacity } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { Actions } from 'react-native-router-flux';
+import moment from 'moment';
 
 import Countdown from '../../../components/Countdown';
 import Plan from '../../../components/Plan';
@@ -19,6 +21,9 @@ export default class Component extends React.Component {
   render() {
     const { challenge, plan, user, setContentContainerHeight } = this.props;
 
+    const timeTilStart = moment(new Date(challenge.startDate)).diff(moment(new Date()), 'seconds');
+    const hasStarted = timeTilStart <= 0;
+
     return (
       <View style={styles.container}>
         <View style={styles.innerContainer}>
@@ -32,11 +37,14 @@ export default class Component extends React.Component {
               setContentContainerHeight(height);
             }}
           >
-            <Countdown
-              initialTime={60}
-              centerTitle
-              containerStyle={styles.countdownContainer}
-            />
+            {!hasStarted && (
+              <Countdown
+                initialTime={60}
+                centerTitle
+                containerStyle={styles.countdownContainer}
+              />
+            )}
+            { /* TODO: pull out into seperate component */}
             <View style={styles.inviteFriends}>
               <Image
                 source={FriendImage}
@@ -55,9 +63,11 @@ export default class Component extends React.Component {
                   </Text>
               </View>
             </View>
-            <View style={styles.planContainer}>
-              <Plan value={plan} blueButton />
-            </View>
+            <TouchableOpacity onPress={() => Actions.PlanExploration()}>
+              <View style={styles.planContainer}>
+                <Plan value={plan} blueButton />
+              </View>
+            </TouchableOpacity>
           </View>
 
           <Social
