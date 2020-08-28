@@ -35,7 +35,7 @@ export default class Component extends React.Component {
             style={styles.contentContainer}
             onLayout={(event) => {
               const { height } = event.nativeEvent.layout;
-              setContentContainerHeight(height);
+              setContentContainerHeight(height - 100);
             }}
           >
             {!hasStarted ? (
