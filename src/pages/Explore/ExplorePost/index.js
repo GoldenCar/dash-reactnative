@@ -37,6 +37,7 @@ export default class Component extends React.Component {
     const { plan } = this.state;
     const { challenge } = this.props;
 
+    // TODO: this needs to be fully hooked up, handle logged in user
     const onJoinPress = () => this.AuthPopupRef.open();
 
     const onScroll = Animated.event(
