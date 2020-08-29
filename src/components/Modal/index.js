@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   modalContainer: {
-    backgroundColor: '#F0F5FA',
+    backgroundColor: '#F7F9FB',
     marginHorizontal: 0,
     overflow: 'hidden',
     zIndex: 1001,

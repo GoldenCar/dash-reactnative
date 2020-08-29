@@ -9,6 +9,7 @@ import {
   Lifebuoy,
   ChevronRight,
   AccountDetails,
+  PreviousChallenges,
   RemoveAds,
   PushNotifications,
   LeaveAReview,
@@ -28,8 +29,11 @@ const array = [
     title: 'Push Notifications',
   },
   {
-    icon: <RemoveAds />,
-    title: 'Remove Ads',
+    icon: <PreviousChallenges />,
+    title: 'Previous Challenges',
+    onPress: () => {
+      Actions.PreviousChallenges();
+    },
   },
   {
     icon: <LeaveAReview />,

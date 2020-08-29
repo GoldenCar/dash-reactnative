@@ -61,14 +61,15 @@ const styles = EStyleSheet.create({
         fontSize: 16,
     },
     nextButton: {
+        borderRadius: 8,
+        width:width - 30,
         position: 'absolute',
-        paddingVertical: 15,
+        marginHorizontal: 15,
+        height:64,
         backgroundColor: '$lightBlue',
         alignItems: 'center',
         justifyContent: 'center',
-        left: 0,
-        right: 0,
-        bottom: 0,
+        bottom: 19,
     },
     titles: {
         textAlign: 'center',
@@ -90,6 +91,7 @@ const styles = EStyleSheet.create({
     contentContainerStyle: {
         backgroundColor: '#F7F9FB',
         paddingBottom: 30,
+        height:'100%',
         flexGrow: 1
     },
 });

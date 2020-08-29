@@ -24,8 +24,8 @@ export default class Component extends React.Component {
 
 
     componentDidMount() {
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardWillShow', () => this.setState({keyboardDidShow: true}));
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardWillHide', () => this.setState({keyboardDidShow: false}));
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => this.setState({keyboardDidShow: true}));
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => this.setState({keyboardDidShow: false}));
     }
 
     componentWillUnmount() {
@@ -120,7 +120,7 @@ const styles = EStyleSheet.create({
         margin:16,
         borderRadius:8,
         backgroundColor: "#1ca0ff",
-        height: 56,
+        height: 64,
         alignItems: "center",
         justifyContent: "center",
     },

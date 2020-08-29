@@ -104,11 +104,4 @@ pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
   end
 end
 
-target 'dash-tvOS' do
-  # Pods for dash-tvOS
 
-  target 'dash-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-end

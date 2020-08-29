@@ -25,10 +25,10 @@ const array = [
     icon: <Time />,
     title: 'Push Notifications',
   },
-  {
-    icon: <Star />,
-    title: 'Remove Ads',
-  },
+  // {
+  //   icon: <Star />,
+  //   title: 'Remove Ads',
+  // },
   {
     icon: <Star />,
     title: 'Leave a Review',

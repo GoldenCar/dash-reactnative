@@ -22,6 +22,7 @@ import Logo from './Logo';
 import User from './User';
 import Bell from './Bell';
 import AccountDetails from './AccountDetails';
+import PreviousChallenges from './PreviousChallenges';
 import PushNotifications from './PushNotifications';
 import RemoveAds from './RemoveAds';
 import LeaveAReview from './LeaveAReview';
@@ -86,6 +87,7 @@ export {
   Apple,
   Google,
   ChevronRight,
+  PreviousChallenges,
   Message,
   WhatsApp,
   Link,
