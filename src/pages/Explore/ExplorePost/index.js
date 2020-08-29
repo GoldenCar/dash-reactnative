@@ -1,16 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-  Text,
-  TouchableOpacity,
-  Animated,
-  Image
-} from 'react-native';
+import React from 'react';
+import { View, StyleSheet, Dimensions, Text, Animated, Image, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import moment from 'moment';
+import { Actions } from 'react-native-router-flux';
 
 import AuthPopup from 'dash/src/components/AuthPopup';
 import Header from './Header';
@@ -45,31 +37,23 @@ export default class Component extends React.Component {
     const { plan } = this.state;
     const { challenge } = this.props;
 
+    const onJoinPress = () => this.AuthPopupRef.open();
+
+    const onScroll = Animated.event(
+      [{ nativeEvent: { contentOffset: { y: this.ScrollViewAnimation } } }],
+      { useNativeDriver: true }
+    );
+
     const timeTilStart = moment(new Date(challenge.startDate)).diff(moment(new Date()), 'seconds');
 
     return (
       <View style={styles.container}>
         <Header ScrollViewAnimation={this.ScrollViewAnimation} value={challenge} />
-        <ScrollView
-          onScroll={Animated.event(
-            [
-              {
-                nativeEvent: { contentOffset: { y: this.ScrollViewAnimation } },
-              },
-            ],
-            {
-              useNativeDriver: false,
-            },
-          )}
-          showsVerticalScrollIndicator={false}>
-          <View
-            style={[
-              styles.innerContainer,
-              {
-                marginTop: height / 2 - 20,
-                marginBottom: 208
-              }
-            ]}>
+        <Animated.ScrollView
+          onScroll={onScroll}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.innerContainer}>
             <View style={styles.circle}></View>
             <View style={styles.padding}>
               <Text style={styles.host}>Hosted by {challenge.Host}</Text>
@@ -96,22 +80,15 @@ export default class Component extends React.Component {
                 <View style={styles.iconContainer}>
                   <Calendar />
                 </View>
-                <Text style={styles.viewText}>
-                  { /* TODO: hook up button */}
-                  View Plan
+                <TouchableOpacity onPress={() => Actions.PlanOverview()}>
+                  <Text style={styles.viewText}>
+                    View Plan
                 </Text>
+                </TouchableOpacity>
               </View>
             </LinearGradient>
-
-            {/* <TouchableOpacity
-              style={styles.joinChallengeContainer}
-              onPress={() => {
-                this.AuthPopupRef.open();
-              }}>
-              <Text style={styles.joinChallengeText}>Join Challenge</Text>
-            </TouchableOpacity> */}
           </View>
-        </ScrollView>
+        </Animated.ScrollView>
         <AuthPopup ref={(e) => (this.AuthPopupRef = e)} />
 
         <Countdown
@@ -119,6 +96,7 @@ export default class Component extends React.Component {
           containerStyle={styles.countdownContainer}
           showButton
           countdownBackground={styles.countdownBackground}
+          onPress={onJoinPress}
         />
       </View>
     );
@@ -138,6 +116,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     backgroundColor: 'white',
     paddingTop: 35,
+    marginTop: height / 2 - 20,
+    marginBottom: 208
   },
   circle: {
     height: 56,

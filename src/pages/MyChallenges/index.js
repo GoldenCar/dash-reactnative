@@ -43,12 +43,13 @@ class Component extends React.Component {
 
   getData = async () => {
     const { user } = this.props;
+
+    const data = await planActions.getPlans();
+    const currentPlans = data.filter((plan) => plan.status === 'current');
+    this.setState({ plans: currentPlans });
+
     if (user) {
       await challengesActions.getMyChallenges();
-
-      const data = await planActions.getPlans();
-      const currentPlans = data.filter((plan) => plan.status === 'current');
-      this.setState({ plans: currentPlans });
     }
   };
 
@@ -100,34 +101,37 @@ class Component extends React.Component {
           style={styles.gradient}
         >
           <Text style={styles.heading}>Your {'\n'} Challenges</Text>
-          <View style={styles.newButton}>
+          <TouchableOpacity
+            style={styles.newButton}
+            onPress={() => CreateNewChallengeRef.openCreateNew()}
+          >
             <Plus />
             <Text style={styles.buttonText}>New</Text>
-          </View>
+          </TouchableOpacity>
           {challenges.length === 0 ? (
             <View>
               <Text style={styles.subtitle}>You currently have no challenges, let's create a new one!</Text>
-              {plans.map((value, index) => (
-                <TouchableOpacity
-                  key={index}
+              {plans.map((value) => (
+                <Plan
+                  value={value}
+                  useDefaultMargin
+                  // TODO: this should open plan page
                   onPress={() => CreateNewChallengeRef.openCreateNew()}
-                >
-                  <Plan value={value} />
-                </TouchableOpacity>
+                />
               ))}
             </View>
           ) : (
-            <View>
-              <Carousel
-                data={challenges}
-                sliderWidth={width}
-                itemWidth={ITEM_WIDTH}
-                renderItem={this.renderItem}
-                activeSlideAlignment='start'
-                loop
-              />
-            </View>
-          )}
+              <View>
+                <Carousel
+                  data={challenges}
+                  sliderWidth={width}
+                  itemWidth={ITEM_WIDTH}
+                  renderItem={this.renderItem}
+                  activeSlideAlignment='start'
+                  loop
+                />
+              </View>
+            )}
         </LinearGradient>
       </SafeAreaView>
     );

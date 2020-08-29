@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 
 const { width } = Dimensions.get('screen');
 
@@ -54,7 +54,7 @@ class Countdown extends Component {
 
     render() {
         const { days, hours, minutes, seconds } = this.state;
-        const { showButton, countdownBackground, containerStyle, centerTitle } = this.props;
+        const { showButton, countdownBackground, containerStyle, centerTitle, onPress } = this.props;
 
         return (
             <View style={[styles.countdownContainer, containerStyle]}>
@@ -83,11 +83,14 @@ class Countdown extends Component {
                         </View>
                     </View>
                     {showButton && (
-                        <View style={styles.joinButton}>
+                        <TouchableOpacity
+                            style={styles.joinButton}
+                            onPress={onPress}
+                        >
                             <Text style={styles.joinText}>
                                 Join
                             </Text>
-                        </View>
+                        </TouchableOpacity>
                     )}
                 </View>
             </View>

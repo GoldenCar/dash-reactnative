@@ -118,18 +118,16 @@ function Component(props) {
             Choose one of our plans and host a challenge for you and your friends
           </Text>
           {plans.map((value, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => CreateNewChallengeRef.openCreateNew()}
-              style={styles.planContainer}
-            //onPress={() => Actions.CreateNewChallenge()}
-
             // TODO: need to navigate how CreateNew is doing it
             //       this goes to create new challenge - daily task
             //       scene - CreateNewChallenge
-            >
-              <Plan value={value} />
-            </TouchableOpacity>
+            //>
+            <Plan
+              value={value}
+              onPress={() => CreateNewChallengeRef.openCreateNew()}
+              //onPress={() => Actions.CreateNewChallenge()}
+              useDefaultMargin
+            />
           ))}
         </View>
       </ScrollView>
@@ -181,10 +179,6 @@ const styles = StyleSheet.create({
     color: '#3F434F',
     marginHorizontal: 16,
     marginBottom: 13
-  },
-  planContainer: {
-    marginHorizontal: 15,
-    marginVertical: 5,
   }
 });
 export default connect(({ challenges }) => ({

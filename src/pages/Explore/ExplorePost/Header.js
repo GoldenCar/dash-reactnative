@@ -1,41 +1,31 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Image,
-  TouchableOpacity,
-  Animated,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { View, StyleSheet, Dimensions, Image, Animated, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 import { mediaHost } from 'dash/src/config';
-import { BackArrow } from '../../../components/Icons';
 import { Close } from '../../../components/Icons';
-
 
 const { width, height } = Dimensions.get('window');
 
+const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+
 export default function Component(props) {
   const { ScrollViewAnimation, value } = props;
+
+  // TODO: use constants here
   const scale = ScrollViewAnimation.interpolate({
     inputRange: [0, height / 2 - 20],
     outputRange: [1, 1.1],
     extrapolate: 'clamp',
   });
-  const zIndex = ScrollViewAnimation.interpolate({
+
+  const opacity = ScrollViewAnimation.interpolate({
     inputRange: [height / 2 - 125, height / 2 - 80],
-    outputRange: [10, -1],
+    outputRange: [1, 0],
     extrapolate: 'clamp',
   });
 
-  let bgImgUrl = '';
-  if (value.challengeBGImage.includes('-')) {
-    bgImgUrl = { uri: `${mediaHost}${value.challengeBGImage}` };
-  } else {
-    bgImgUrl = value.challengeBGImage
-  }
+  const onClose = () => Actions.pop();
 
   return (
     <>
@@ -43,9 +33,7 @@ export default function Component(props) {
         <Animated.View
           style={[
             styles.pictureContainer,
-            {
-              transform: [{ scale }],
-            },
+            { transform: [{ scale }] },
           ]}>
           <Image
             style={styles.picture}
@@ -54,14 +42,12 @@ export default function Component(props) {
           />
         </Animated.View>
       </View>
-      <TouchableWithoutFeedback
-        onPress={() => {
-          Actions.pop();
-        }}>
-        <Animated.View style={[styles.backButtonContainer, { zIndex }]}>
-          <Close />
-        </Animated.View>
-      </TouchableWithoutFeedback>
+      <AnimatedTouchable
+        onPress={onClose}
+        style={[styles.backButtonContainer, { opacity }]}
+      >
+        <Close />
+      </AnimatedTouchable>
     </>
   );
 }
@@ -83,6 +69,7 @@ const styles = StyleSheet.create({
     zIndex: -1,
   },
   backButtonContainer: {
+    zIndex: 10,
     position: 'absolute',
     left: 15,
     top: 20,
@@ -94,5 +81,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-Component.defaultProps = {};
