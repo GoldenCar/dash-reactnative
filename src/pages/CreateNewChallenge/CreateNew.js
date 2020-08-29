@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, ActivityIndicator, View, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+
 import Plan from '../../components/Plan';
 import * as plansActions from 'dash/src/actions/plans';
+
 export default function Component(props) {
   const [loading, setLoading] = useState(false);
   const [array, setArray] = useState([]);
+
   useEffect(() => {
     const init = async () => {
       try {
@@ -18,6 +21,7 @@ export default function Component(props) {
     };
     init();
   }, []);
+
   return (
     <>
       {loading ? (
@@ -31,14 +35,13 @@ export default function Component(props) {
               <Plan
                 value={value}
                 key={index}
+                onPress={() => props.onPress(value)}
+                useDefaultMargin
               />
             </TouchableOpacity>
           ))
-        )}
+        )
+      }
     </>
   );
 }
-
-const styles = StyleSheet.create({});
-
-Component.defaultProps = {};

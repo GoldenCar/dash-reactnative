@@ -108,6 +108,7 @@ class Component extends React.Component {
             <View>
               <Text style={styles.subtitle}>You currently have no challenges, let's create a new one!</Text>
               {plans.map((value, index) => (
+                // TODO: clean up, move onPress to Plan and check if margin needed
                 <TouchableOpacity
                   key={index}
                   onPress={() => CreateNewChallengeRef.openCreateNew()}
@@ -117,17 +118,17 @@ class Component extends React.Component {
               ))}
             </View>
           ) : (
-            <View>
-              <Carousel
-                data={challenges}
-                sliderWidth={width}
-                itemWidth={ITEM_WIDTH}
-                renderItem={this.renderItem}
-                activeSlideAlignment='start'
-                loop
-              />
-            </View>
-          )}
+              <View>
+                <Carousel
+                  data={challenges}
+                  sliderWidth={width}
+                  itemWidth={ITEM_WIDTH}
+                  renderItem={this.renderItem}
+                  activeSlideAlignment='start'
+                  loop
+                />
+              </View>
+            )}
         </LinearGradient>
       </SafeAreaView>
     );
