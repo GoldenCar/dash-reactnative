@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import {View, StatusBar} from 'react-native';
-import {Router, Scene, Reducer} from 'react-native-router-flux';
+import React, { useState, useEffect } from 'react';
+import { View, StatusBar } from 'react-native';
+import { Router, Scene, Reducer } from 'react-native-router-flux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import store from './store';
 
 import AuthPopup from 'dash/src/components/AuthPopup';
 
-import PlanExploration from './pages/PlanExploration';
+import PlanOverview from './pages/PlanOverview';
 import Main from './pages/Main';
 import MyChallenges from './pages/MyChallenges';
 
@@ -76,8 +76,8 @@ export default () => {
     }, []);
     return (
         <>
-            <StatusBar translucent barStyle="light-content"/>
-            <View style={{flex: 1, paddingTop: 20,}}>
+            <StatusBar translucent barStyle="light-content" />
+            <View style={{ flex: 1, paddingTop: 20, }}>
                 {/*<View style={{flex: 1}}>*/}
                 <Provider store={store}>
                     {!loading && (
@@ -97,8 +97,8 @@ export default () => {
 
 
                                         <Scene key="MyProfile">
-                                            <Scene key="Profile" component={Profile} hideNavBar/>
-                                            <Scene key="Friends" component={Friends} hideNavBar/>
+                                            <Scene key="Profile" component={Profile} hideNavBar />
+                                            <Scene key="Friends" component={Friends} hideNavBar />
                                             <Scene
                                                 key="Notifications"
                                                 component={Notifications}
@@ -113,13 +113,13 @@ export default () => {
                                             />
                                         </Scene>
                                         <Scene key="ExploreTab">
-                                            <Scene key="Explore" component={Explore} hideNavBar/>
+                                            <Scene key="Explore" component={Explore} hideNavBar />
                                         </Scene>
                                     </Scene>
                                     <Scene
-                                        key="PlanExploration"
+                                        key="PlanOverview"
                                         type="reset"
-                                        component={PlanExploration}
+                                        component={PlanOverview}
                                         hideNavBar
                                     />
                                     <Scene
@@ -132,13 +132,13 @@ export default () => {
                                         component={PastChallenges}
                                         hideNavBar
                                     />
-                                    <Scene key="Main" component={Main} hideNavBar/>
+                                    <Scene key="Main" component={Main} hideNavBar />
                                     <Scene
                                         key="ScrollAnimation"
                                         component={ScrollAnimation}
                                         hideNavBar
                                     />
-                                    <Scene key="ExplorePost" component={ExplorePost} hideNavBar/>
+                                    <Scene key="ExplorePost" component={ExplorePost} hideNavBar />
                                     <Scene
                                         key="PickAUsername"
                                         component={PickAUsername}
@@ -154,23 +154,23 @@ export default () => {
                                         component={AccountInformation}
                                         hideNavBar
                                     />
-                                    <Scene key="CameraRoll" component={CameraRoll} hideNavBar/>
+                                    <Scene key="CameraRoll" component={CameraRoll} hideNavBar />
                                     <Scene
                                         key="ChallengeDetail"
                                         component={ChallengeDetail}
                                         hideNavBar
                                     />
-                                    <Scene key="PostPage" component={PostPage} hideNavBar/>
-                                    <Scene key="CreatePost" component={CreatePost} hideNavBar/>
-                                    <Scene key="Workout" component={Workout} hideNavBar/>
-                                    <Scene key="Completed" component={Completed} hideNavBar/>
-                                    <Scene key="WorkoutOverView" component={WorkoutOverView} hideNavBar/>
-                                    <Scene key="Search" component={Search} hideNavBar/>
+                                    <Scene key="PostPage" component={PostPage} hideNavBar />
+                                    <Scene key="CreatePost" component={CreatePost} hideNavBar />
+                                    <Scene key="Workout" component={Workout} hideNavBar />
+                                    <Scene key="Completed" component={Completed} hideNavBar />
+                                    <Scene key="WorkoutOverView" component={WorkoutOverView} hideNavBar />
+                                    <Scene key="Search" component={Search} hideNavBar />
                                 </Scene>
                             </Router>
-                            <ProfileDetailPopup ref={(e) => (ProfileDetailPopupRef = e)}/>
-                            <AuthPopup ref={(e) => (AuthPopupRef = e)}/>
-                            <InviteFriends ref={(e) => (InviteFriendsRef = e)}/>
+                            <ProfileDetailPopup ref={(e) => (ProfileDetailPopupRef = e)} />
+                            <AuthPopup ref={(e) => (AuthPopupRef = e)} />
+                            <InviteFriends ref={(e) => (InviteFriendsRef = e)} />
                         </>
                     )}
                 </Provider>

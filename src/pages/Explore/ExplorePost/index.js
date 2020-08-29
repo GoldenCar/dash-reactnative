@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Text, Animated, Image } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Animated, Image, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import moment from 'moment';
+import { Actions } from 'react-native-router-flux';
 
 import AuthPopup from 'dash/src/components/AuthPopup';
 import Header from './Header';
@@ -79,10 +80,11 @@ export default class Component extends React.Component {
                 <View style={styles.iconContainer}>
                   <Calendar />
                 </View>
-                <Text style={styles.viewText}>
-                  { /* TODO: hook up button */}
-                  View Plan
+                <TouchableOpacity onPress={() => Actions.PlanOverview()}>
+                  <Text style={styles.viewText}>
+                    View Plan
                 </Text>
+                </TouchableOpacity>
               </View>
             </LinearGradient>
           </View>
