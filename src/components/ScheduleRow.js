@@ -2,12 +2,13 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-export default function Component({ data, showSeperator }) {
+export default function Component({ data, showSeperator, index }) {
+    const day = data.versionDay || (index + 1);
     return (
         <>
             <View style={styles.row}>
                 <View style={styles.day}>
-                    <Text style={styles.dayText}>{data.versionDay}</Text>
+                    <Text style={styles.dayText}>{day}</Text>
                 </View>
                 <Text style={styles.taskTitle}>{data.taskTitle}</Text>
             </View>

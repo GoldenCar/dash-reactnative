@@ -27,12 +27,13 @@ export default function Component(props) {
 	const videoRef = createRef(null);
 
 	// TODO: get date subtitle (Thursday Jan 23)
-	const [dayData, setDayData] = useState([]);
+	const [dayData, setDayData] = useState([{}, {}, {}, {}]);
 	console.log('DAY DATA', dayData);
 
 	useEffect(() => {
 		const getPlanDayData = async () => {
 			// TODO: clean this up & pull into it's own function
+			//			 shouldn't have to request this data every time
 			try {
 				const planData = await planActions.getPlanTasks(plan._id);
 				if (planData.planTypeData.length === 0) {
@@ -105,7 +106,11 @@ export default function Component(props) {
 				{dayData.map((d, index) => {
 					const showSeperator = dayData.length - 1 !== index;
 					return (
-						<ScheduleRow data={d} showSeperator={showSeperator} />
+						<ScheduleRow
+							data={d}
+							index={index}
+							showSeperator={showSeperator}
+						/>
 					)
 				})}
 			</View>
