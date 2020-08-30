@@ -55,11 +55,11 @@ export let ProfileDetailPopupRef;
 export let InviteFriendsRef;
 
 const createReducer = (params) => {
-  const defaultReducer = Reducer(params);
-  return (state, action) => {
-    store.dispatch(action);
-    return defaultReducer(state, action);
-  };
+    const defaultReducer = Reducer(params);
+    return (state, action) => {
+        store.dispatch(action);
+        return defaultReducer(state, action);
+    };
 };
 
 export default () => {
@@ -120,7 +120,6 @@ export default () => {
                                     </Scene>
                                     <Scene
                                         key="PlanOverview"
-                                        type="reset"
                                         component={PlanOverview}
                                         hideNavBar
                                     />
