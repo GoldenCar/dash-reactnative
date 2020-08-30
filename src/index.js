@@ -100,6 +100,7 @@ export default () => {
                                         <Scene key="MyProfile">
                                             <Scene key="Profile" component={Profile} hideNavBar />
                                             <Scene key="Friends" component={Friends} hideNavBar />
+                                            <Scene key="PreviousChallenges" component={PreviousChallenges} hideNavBar />
                                             <Scene
                                                 key="Notifications"
                                                 component={Notifications}
