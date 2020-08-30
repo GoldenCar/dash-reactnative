@@ -66,7 +66,6 @@ export default function Component(props) {
                         onPress={() => setPlay(true)}
                     >
                         <FontAwesome
-                            style={styles.arrow}
                             name='play'
                             color="#000000"
                             size={11}
