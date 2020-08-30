@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Image, TouchableOpacity, ScrollView } from 'rea
 import LinearGradient from 'react-native-linear-gradient';
 import { Actions } from 'react-native-router-flux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import moment from 'moment';
 
 import { mediaHost } from 'dash/src/config';
 import * as planActions from '../../actions/plans';
@@ -12,7 +13,7 @@ import Video from '../CreateNewChallenge/Video';
 import ScheduleRow from '../../components/ScheduleRow';
 
 export default function Component(props) {
-	const { plan } = props;
+	const { challenge, plan } = props;
 	console.log('PLAN IN OVERVIEW', plan);
 
 	// TODO: hook up real data for progress bar
@@ -21,6 +22,10 @@ export default function Component(props) {
 	const progress = `${(daysCompleted / totalDays) * 100}%`;
 
 	const imageURL = `${mediaHost}${plan.planImage}`;
+
+	const now = moment(new Date());
+	const startDate = new Date(challenge.startDate);
+	const currentDay = moment(now).diff(startDate, 'days');
 
 	const [play, setPlay] = useState(false);
 	const [load, setLoad] = useState(false);
@@ -74,7 +79,7 @@ export default function Component(props) {
 
 				<Text style={styles.daysCompleted}>
 					{daysCompleted} of {totalDays} Days Complete
-					</Text>
+				</Text>
 
 				<Image
 					source={{ uri: imageURL }}
@@ -105,11 +110,13 @@ export default function Component(props) {
 			<View style={styles.scheduleContainer}>
 				{dayData.map((d, index) => {
 					const showSeperator = dayData.length - 1 !== index;
+					const showEyebrow = (currentDay - 1) === index;
 					return (
 						<ScheduleRow
 							data={d}
 							index={index}
 							showSeperator={showSeperator}
+							showEyebrow={showEyebrow}
 						/>
 					)
 				})}

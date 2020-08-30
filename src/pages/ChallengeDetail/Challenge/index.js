@@ -80,7 +80,7 @@ export default class Component extends React.Component {
                   <Plan
                     value={plan}
                     blueButton
-                    onPress={() => Actions.PlanOverview({ plan })}
+                    onPress={() => Actions.PlanOverview({ challenge, plan })}
                   />
                 </View>
               </>

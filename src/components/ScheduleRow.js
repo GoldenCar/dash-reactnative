@@ -2,15 +2,33 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-export default function Component({ data, showSeperator, index }) {
+export default function Component({ data, showSeperator, index, showEyebrow }) {
     const day = data.versionDay || (index + 1);
+
+    const contentContainerStyles = [styles.contentContainer];
+    if (showEyebrow) {
+        contentContainerStyles.push({
+            marginTop: 60,
+            marginBottom: 16
+        });
+    };
+
     return (
         <>
             <View style={styles.row}>
-                <View style={styles.day}>
-                    <Text style={styles.dayText}>{day}</Text>
+                {showEyebrow && (
+                    <View style={styles.eyebrow}>
+                        <Text style={styles.eyebrowText}>
+                            Todays Task
+                        </Text>
+                    </View>
+                )}
+                <View style={contentContainerStyles}>
+                    <View style={styles.day}>
+                        <Text style={styles.dayText}>{day}</Text>
+                    </View>
+                    <Text style={styles.taskTitle}>{data.taskTitle}</Text>
                 </View>
-                <Text style={styles.taskTitle}>{data.taskTitle}</Text>
             </View>
             {showSeperator && <View style={styles.seperator} />}
         </>
@@ -19,9 +37,29 @@ export default function Component({ data, showSeperator, index }) {
 
 const styles = EStyleSheet.create({
     row: {
-        height: 97,
+        minHeight: 97,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    contentContainer: {
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    eyebrow: {
+        width: 142,
+        height: 37,
+        backgroundColor: '#E9F6FF',
+        position: 'absolute',
+        top: 0,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    eyebrowText: {
+        fontFamily: 'Poppins-Bold',
+        fontSize: 10,
+        letterSpacing: 2,
+        textTransform: 'uppercase',
+        color: '#1AA0FF'
     },
     seperator: {
         height: 1,

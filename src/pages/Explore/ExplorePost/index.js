@@ -81,7 +81,7 @@ export default class Component extends React.Component {
                 <View style={styles.iconContainer}>
                   <Calendar />
                 </View>
-                <TouchableOpacity onPress={() => Actions.PlanOverview({plan})}>
+                <TouchableOpacity onPress={() => Actions.PlanOverview({ challenge, plan })}>
                   <Text style={styles.viewText}>
                     View Plan
                 </Text>
