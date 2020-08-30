@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+
 import { ArrowRight } from '../../../components/Icons';
 
 export default function Component(props) {
-  const { currentDay, dayData } = props;
+  const { currentDay, dayData, challenge, user } = props;
   const day = dayData[currentDay] || {};
 
   console.log('day', day);
@@ -24,10 +26,13 @@ export default function Component(props) {
             Friday Jan 24
           </Text>
         </View>
-        <View style={styles.startButton}>
+        <TouchableOpacity 
+          style={styles.startButton}
+          onPress={() => Actions.Main({ challenge: challenge, user: user })}
+        >
           <Text style={styles.startText}>Start</Text>
           <ArrowRight />
-        </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.viewFullPlanButton}>
         <Text style={styles.viewFullPlanButtonText}>

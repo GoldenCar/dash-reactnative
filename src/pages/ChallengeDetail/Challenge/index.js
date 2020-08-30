@@ -88,6 +88,8 @@ export default class Component extends React.Component {
                 <DayOverview
                   currentDay={currentDay}
                   dayData={dayData}
+                  challenge={challenge}
+                  user={user}
                 />
               )}
           </View>
