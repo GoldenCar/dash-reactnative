@@ -50,7 +50,7 @@ export default function Component(props) {
                 />
             </View>
 
-            {load &&
+            {(load && nextTitle) &&
                 <View style={styles.bottomBox}>
                     <Text style={styles.itemTitle}>{item.title}</Text>
                     <TouchableOpacity style={styles.selectPlanBox} onPress={onPress}>

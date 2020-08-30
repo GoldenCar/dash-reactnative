@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Dimensions, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Dimensions, Text } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Actions } from 'react-native-router-flux';
 import moment from 'moment';
+
+import * as planActions from '../../../actions/plans';
 
 import Countdown from '../../../components/Countdown';
 import Plan from '../../../components/Plan';
@@ -17,11 +19,39 @@ export default class Component extends React.Component {
   AuthPopupRef;
   PopupPostRef;
 
+  state = {
+    dayData: []
+  }
+
+  async componentDidMount() {
+    const { plan } = this.props;
+
+    // TODO: clean this up & pull into it's own function
+    const planData = await planActions.getPlanTasks(plan._id);
+    if (planData.planTypeData.length === 0) {
+      return;
+    }
+
+    // TODO: is it okay to assume it's the first one? need to test with plan with 2 versions
+    const versionData = planData.planTypeData[0];
+    if (!versionData || !versionData.versionData || versionData.versionData.length === 0) {
+      return;
+    }
+
+    const dayData = versionData.versionData[0].planVersionDayTaskData;
+    this.setState({ dayData });
+  }
+
   render() {
+    const { dayData } = this.state;
     const { challenge, plan, user, setContentContainerHeight } = this.props;
 
-    const timeTilStart = moment(new Date(challenge.startDate)).diff(moment(new Date()), 'seconds');
-    const hasStarted = timeTilStart <= 0;
+    const now = moment(new Date());
+    const startDate = new Date(challenge.startDate);
+
+    const secondsTilStart = moment(startDate).diff(now, 'seconds');
+    const hasStarted = secondsTilStart <= 0;
+    const currentDay = moment(now).diff(startDate, 'days');
 
     // TODO: get current days plan data (title, date)
 
@@ -41,19 +71,24 @@ export default class Component extends React.Component {
             {!hasStarted ? (
               <>
                 <Countdown
-                  initialTime={timeTilStart}
+                  initialTime={secondsTilStart}
                   centerTitle
                   containerStyle={styles.countdownContainer}
                 />
                 <InviteFriends />
-                <TouchableOpacity onPress={() => Actions.PlanOverview()}>
-                  <View style={styles.planContainer}>
-                    <Plan value={plan} blueButton />
-                  </View>
-                </TouchableOpacity>
+                <View style={styles.planContainer}>
+                  <Plan
+                    value={plan}
+                    blueButton
+                    onPress={() => Actions.PlanOverview({ challenge, plan })}
+                  />
+                </View>
               </>
             ) : (
-                <DayOverview />
+                <DayOverview
+                  currentDay={currentDay}
+                  dayData={dayData}
+                />
               )}
           </View>
 

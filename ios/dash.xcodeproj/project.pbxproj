@@ -845,7 +845,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.test.gtech.org.reactjs.native.example.dash;
-				PRODUCT_NAME = "Dash-Fitness";
+				PRODUCT_NAME = "Dash";
 				PROVISIONING_PROFILE_SPECIFIER = "match Development com.test.gtech.org.reactjs.native.example.dash";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -873,7 +873,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.test.gtech.org.reactjs.native.example.dash;
-				PRODUCT_NAME = "Dash-Fitness";
+				PRODUCT_NAME = "Dash";
 				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.test.gtech.org.reactjs.native.example.dash";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
