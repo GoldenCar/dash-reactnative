@@ -3,21 +3,26 @@ import { View, StyleSheet, Text } from 'react-native';
 import { ArrowRight } from '../../../components/Icons';
 
 export default function Component(props) {
+  const { currentDay, dayData } = props;
+  const day = dayData[currentDay] || {};
+
+  console.log('day', day);
+
   return (
     <View style={styles.dayOverview}>
       <View style={styles.dayHeading}>
         <Text style={styles.dayHeadingText}>
-          Todays task - Day 5
+          Todays task - Day {currentDay}
         </Text>
       </View>
       <View style={styles.dayContent}>
         <View>
           <Text style={styles.dayTitle}>
-            Full Body Stretching
+            {day.taskTitle}
           </Text>
           <Text style={styles.daySubtitle}>
             Friday Jan 24
-         </Text>
+          </Text>
         </View>
         <View style={styles.startButton}>
           <Text style={styles.startText}>Start</Text>
