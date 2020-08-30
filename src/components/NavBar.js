@@ -5,11 +5,11 @@ import {Actions} from 'react-native-router-flux';
 import {BackArrow} from './Icons';
 
 export default function Component(props) {
-  const {title, icon, iconRight, iconRightPadding, styleContainer} = props;
+  const {title, icon, iconRight, iconRightPadding, styleContainer, shadow} = props;
 
   return (
     <View style={[styles.container, styleContainer]}>
-      <View style={styles.iconContainer}>
+      <View style={shadow ? {...styles.iconContainer, ...styles.shadow} : {...styles.iconContainer}}>
         {icon ? (
           icon
         ) : (
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     // borderBottomWidth: 1,
     // borderBottomColor: '#F0F5FA',
   },
-  iconContainer: {
+  shadow:{
     shadowColor: "rgba(0, 0, 0, 0.08)",
     shadowOffset: {
       width: 0,
@@ -64,6 +64,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  iconContainer: {
+
     width:38,
     height:38,
     backgroundColor:"#ffffff",
@@ -94,5 +97,6 @@ const styles = StyleSheet.create({
 
 Component.defaultProps = {
   iconRightPadding: 10,
+  shadow: true,
   styleContainer: {},
 };

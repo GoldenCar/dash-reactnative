@@ -45,7 +45,7 @@ export default function Component(props) {
         >
             <ScrollView
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={[styles.contentContainerStyle, { height }]}
+                // contentContainerStyle={[styles.contentContainerStyle, { height }]}
             >
                 <DailyTask
                     versionNum={versionNum}
@@ -54,12 +54,14 @@ export default function Component(props) {
                     showVersionModal={showVersionModal}
                     setVersionNum={setVersionNum}
                     items={items}
+
                 />
+                <TouchableOpacity style={styles.button} onPress={onPress} >
+                    <Text style={styles.buttonText}>Confirm Plan</Text>
+                </TouchableOpacity>
             </ScrollView>
 
-            <TouchableOpacity style={styles.button} onPress={onPress}>
-                <Text style={styles.buttonText}>Confirm Plan</Text>
-            </TouchableOpacity>
+
         </Animated.View>
     )
 }
@@ -71,12 +73,14 @@ const styles = EStyleSheet.create({
         flexGrow: 1
     },
     button: {
-        borderRadius: 16,
+        borderRadius: 8,
         height: 64,
-        position: 'absolute',
-        bottom: 19,
-        left: 16,
-        right: 16,
+        width:'auto',
+        marginTop:80,
+        marginHorizontal: 15,
+        marginBottom: 19,
+        // position: 'absolute',
+        // bottom: 19,
         backgroundColor: "#1AA0FF",
         alignItems: "center",
         justifyContent: "center",

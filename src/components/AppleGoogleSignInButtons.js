@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Text, Image} from 'react-native';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import appleAuth, {
   AppleAuthRequestOperation,
@@ -8,9 +8,9 @@ import appleAuth, {
 import { Actions } from 'react-native-router-flux';
 import jwt_decode from 'jwt-decode';
 
-import { Google, Apple } from 'dash/src/components/Icons';
+import {Google, Apple} from '../components/Icons';
 
-import * as userActions from 'dash/src/actions/user';
+import * as userActions from '../actions/user';
 
 if (Platform.OS === 'android') {
   GoogleSignin.configure({
@@ -21,6 +21,14 @@ if (Platform.OS === 'android') {
   });
 }
 
+const arrAvatar = [
+  require('../res/Face/Face-1.png'),
+  require('../res/Face/Face-2.png'),
+  require('../res/Face/Face-3.png'),
+  require('../res/Face/Face-4.png'),
+  require('../res/Face/Face-5.png'),
+]
+
 export default class Component extends React.Component {
   createAccount = async ({ userInfo }) => {
     const { callbackButton } = this.props;
@@ -28,6 +36,9 @@ export default class Component extends React.Component {
       id_token: userInfo.idToken,
       username: '',
     });
+    if(!res.profileImage || res.profileImage && res.profileImage.slice(0,5) === 'https'){
+      await userActions.editUserPicture(res,Image.resolveAssetSource(arrAvatar[Math.floor(Math.random() * arrAvatar.length)]))
+    }
     if (callbackButton) {
       callbackButton({ userInfo });
     }
@@ -58,6 +69,9 @@ export default class Component extends React.Component {
       photo: '',
       kid: data.user,
     });
+    if(!res.profileImage){
+      await userActions.editUserPicture(res,Image.resolveAssetSource(arrAvatar[Math.floor(Math.random() * arrAvatar.length)]))
+    }
     if (callbackButton) {
       callbackButton({ userInfo: data });
     }

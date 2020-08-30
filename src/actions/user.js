@@ -17,24 +17,30 @@ export const getUserById = async (id) => {
 };
 
 export const editUserPicture = async (data, picture) => {
-  const user = _.cloneDeep(data);
-  var form_data = new FormData();
-  form_data.append('picture', {
-    name: `${new Date().getTime()}.jpg`,
-    type: 'image/jpeg',
-    uri:
-      Platform.OS === 'android'
-        ? picture.uri
-        : picture.uri.replace('file://', ''),
-  });
-  form_data.append('editUserID', user._id);
-  const response = await api.patch('userapi', form_data);
-  store.dispatch({
-    type: actionTypes.SET_USER,
-    payload: response.data.data,
-  });
-  AsyncStorage.setItem('@user', JSON.stringify(response.data.data));
-  return response.data.data;
+  console.log(data,picture)
+  try {
+    const user = _.cloneDeep(data);
+    var form_data = new FormData();
+    form_data.append('picture', {
+      name: `${new Date().getTime()}.jpg`,
+      type: 'image/jpeg',
+      uri:
+          Platform.OS === 'android'
+              ? picture.uri
+              : picture.uri.replace('file://', ''),
+    });
+    form_data.append('editUserID', user._id);
+    const response = await api.patch('userapi', form_data);
+    store.dispatch({
+      type: actionTypes.SET_USER,
+      payload: response.data.data,
+    });
+    AsyncStorage.setItem('@user', JSON.stringify(response.data.data));
+    return response.data.data;
+  }catch (e) {
+    console.log(e)
+  }
+
 };
 
 export const editUser = async (data) => {

@@ -37,6 +37,7 @@ import Workout from 'dash/src/pages/Workout/index';
 // Profile
 import Profile from './pages/Profile';
 import Friends from './pages/Profile/Friends';
+import PreviousChallenges from './pages/Profile/PreviousChallenges';
 
 // MyChallenges
 import ProfileDetailPopup from './pages/MyChallenges/ProfileDetailPopup';
@@ -54,11 +55,11 @@ export let ProfileDetailPopupRef;
 export let InviteFriendsRef;
 
 const createReducer = (params) => {
-    const defaultReducer = Reducer(params);
-    return (state, action) => {
-        store.dispatch(action);
-        return defaultReducer(state, action);
-    };
+  const defaultReducer = Reducer(params);
+  return (state, action) => {
+    store.dispatch(action);
+    return defaultReducer(state, action);
+  };
 };
 
 export default () => {
@@ -99,6 +100,7 @@ export default () => {
                                         <Scene key="MyProfile">
                                             <Scene key="Profile" component={Profile} hideNavBar />
                                             <Scene key="Friends" component={Friends} hideNavBar />
+                                            <Scene key="PreviousChallenges" component={PreviousChallenges} hideNavBar />
                                             <Scene
                                                 key="Notifications"
                                                 component={Notifications}
