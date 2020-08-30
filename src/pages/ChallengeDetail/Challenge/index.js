@@ -46,7 +46,7 @@ export default class Component extends React.Component {
                   containerStyle={styles.countdownContainer}
                 />
                 <InviteFriends />
-                <TouchableOpacity onPress={() => Actions.PlanOverview()}>
+                <TouchableOpacity onPress={() => Actions.PlanOverview({ plan })}>
                   <View style={styles.planContainer}>
                     <Plan value={plan} blueButton />
                   </View>

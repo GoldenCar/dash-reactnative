@@ -11,6 +11,8 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import { Actions } from 'react-native-router-flux';
 
+import { mediaHost } from 'dash/src/config';
+
 // import BottomTabs from './BottomTabs';
 // import BackgroundTop from './BackgroundTop';
 // import ChevronRightIcon from './ChevronRightIcon';
@@ -26,9 +28,18 @@ import { BackArrow } from '../../components/Icons';
 export default class extends React.Component {
 
 	render() {
+		const { plan } = this.props;
+		console.log('PLAN IN OVERVIEW', plan);
+
 		// TODO: 
-		//			- add progress bar
 		//			- add image 
+
+		// TODO: hook up real data for progress bar
+		const daysCompleted = 23;
+		const totalDays = 30;
+		const progress = `${(daysCompleted / totalDays) * 100}%`;
+
+		const imageURL = `${mediaHost}${plan.planImage}`;
 
 		return (
 			<View style={styles.container}>
@@ -39,15 +50,22 @@ export default class extends React.Component {
 					style={styles.overview}
 				>
 					<Text style={styles.overviewBlueText}>30 Day Plan:</Text>
-					<Text style={styles.overviewTitle}>Yoga + Stretching</Text>
+					<Text style={styles.overviewTitle}>{plan.title}</Text>
 
-					<View style={styles.progressBar}>
-
+					<View style={styles.progressContainer}>
+						<View style={styles.progressBar}>
+							<View style={[styles.progressCompleted, { width: progress }]} />
+						</View>
 					</View>
 
 					<Text style={styles.daysCompleted}>
-						23 of 30 Days Complete
+						{daysCompleted} of {totalDays} Days Complete
 					</Text>
+
+					<Image
+						source={{ uri: imageURL }}
+						style={styles.overviewImage}
+					/>
 
 					<View style={styles.trailerButton}>
 						<Text style={styles.trailerText}>Trailer</Text>
@@ -84,7 +102,8 @@ const styles = StyleSheet.create({
 		backgroundColor: 'lightblue',
 		height: 469,
 		paddingTop: 96,
-		paddingHorizontal: 40
+		paddingHorizontal: 40,
+		justifyContent: 'flex-end'
 	},
 	overviewBlueText: {
 		fontFamily: 'Poppins-Bold',
@@ -104,22 +123,33 @@ const styles = StyleSheet.create({
 		color: '#21293D',
 		paddingBottom: 20
 	},
+	progressContainer: {
+		marginHorizontal: 21
+	},
 	progressBar: {
+		width: '100%',
+		height: 4,
+		backgroundColor: '#E0EAF3',
+		borderRadius: 2,
+		marginBottom: 17,
+	},
+	progressCompleted: {
 		backgroundColor: '#1AA0FF',
 		borderRadius: 2,
-		height: 4,
-		width: 203,
-		marginBottom: 17
+		height: 4
 	},
 	daysCompleted: {
 		fontFamily: 'Poppins-Medium',
 		fontSize: 12,
 		lineHeight: 20,
 		textAlign: 'center',
-		color: '#1AA0FF'
+		color: '#1AA0FF',
+		marginBottom: 12
 	},
 	overviewImage: {
-
+		height: 240,
+		width: 240,
+		alignSelf: 'center'
 	},
 	trailerButton: {
 		width: 117,
@@ -132,7 +162,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		alignSelf: 'center',
 		position: 'absolute',
-		bottom: 20
+		bottom: 25
 	},
 	trailerText: {
 		fontFamily: 'Poppins-Bold',
@@ -141,5 +171,6 @@ const styles = StyleSheet.create({
 		letterSpacing: 2,
 		textTransform: 'uppercase',
 		color: '#3F434F'
-	}
+	},
+
 });
