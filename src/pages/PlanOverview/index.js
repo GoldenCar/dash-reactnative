@@ -1,13 +1,15 @@
-import React, { createRef, useState } from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import React, { createRef, useEffect, useState } from 'react';
+import { View, StyleSheet, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Actions } from 'react-native-router-flux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import { mediaHost } from 'dash/src/config';
+import * as planActions from '../../actions/plans';
 
 import { BackArrow } from '../../components/Icons';
 import Video from '../CreateNewChallenge/Video';
+import ScheduleRow from '../../components/ScheduleRow';
 
 export default function Component(props) {
 	const { plan } = props;
@@ -24,8 +26,36 @@ export default function Component(props) {
 	const [load, setLoad] = useState(false);
 	const videoRef = createRef(null);
 
+	// TODO: get date subtitle (Thursday Jan 23)
+	const [dayData, setDayData] = useState([]);
+	console.log('DAY DATA', dayData);
+
+	useEffect(() => {
+		const getPlanDayData = async () => {
+			// TODO: clean this up & pull into it's own function
+			try {
+				const planData = await planActions.getPlanTasks(plan._id);
+				if (planData.planTypeData.length === 0) {
+					return;
+				}
+
+				// TODO: is it okay to assume it's the first one? need to test with plan with 2 versions
+				const versionData = planData.planTypeData[0];
+				if (!versionData || !versionData.versionData || versionData.versionData.length === 0) {
+					return;
+				}
+
+				const dayData = versionData.versionData[0].planVersionDayTaskData;
+				setDayData(dayData);
+			} catch (e) {
+				console.log(e);
+			}
+		};
+		getPlanDayData();
+	}, []);
+
 	return (
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 			<LinearGradient
 				colors={['#E7EEF5', '#fff']}
 				start={{ x: 0, y: 1 }}
@@ -71,6 +101,15 @@ export default function Component(props) {
 				<BackArrow />
 			</TouchableOpacity>
 
+			<View style={styles.scheduleContainer}>
+				{dayData.map((d, index) => {
+					const showSeperator = dayData.length - 1 !== index;
+					return (
+						<ScheduleRow data={d} showSeperator={showSeperator} />
+					)
+				})}
+			</View>
+
 			<Video
 				play={play}
 				load={load}
@@ -79,7 +118,7 @@ export default function Component(props) {
 				setLoad={setLoad}
 				setPlay={setPlay}
 			/>
-		</View>
+		</ScrollView>
 	);
 
 }
@@ -176,6 +215,8 @@ const styles = StyleSheet.create({
 	},
 	trailerArrow: {
 		paddingRight: 8
+	},
+	scheduleContainer: {
+		marginHorizontal: 16
 	}
-
 });
