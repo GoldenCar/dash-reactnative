@@ -46,12 +46,11 @@ const viewedBy = [
   {},
 ]
 
-function renderItem({ item, index }) {
+function renderItem(item, index, user) {
   return (
     <TouchableWithoutFeedback
       key={index}
-      //onPress={() => Actions.ChallengeDetail({challenge: value})}
-      onPress={() => Actions.ExplorePost({ challenge: item })}
+      onPress={() => Actions.ExplorePost({ challenge: item, user })}
     >
       <View>
         <Challenge
@@ -106,7 +105,7 @@ function Component(props) {
             data={challenges}
             sliderWidth={width}
             itemWidth={ITEM_WIDTH}
-            renderItem={renderItem}
+            renderItem={({ item, index }) => renderItem(item, index, props.user)}
             activeSlideAlignment='start'
             loop
           />
@@ -185,6 +184,7 @@ const styles = StyleSheet.create({
     marginBottom: 13
   }
 });
-export default connect(({ challenges }) => ({
+export default connect(({ challenges, user }) => ({
   challenges,
+  user
 }))(Component);

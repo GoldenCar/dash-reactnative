@@ -1,15 +1,15 @@
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import {GoogleSignin} from '@react-native-community/google-signin';
-import {Actions} from 'react-native-router-flux';
+import { GoogleSignin } from '@react-native-community/google-signin';
+import { Actions } from 'react-native-router-flux';
 import _ from 'lodash';
 
-import {actionTypes} from 'dash/src/store/reducers/user';
+import { actionTypes } from 'dash/src/store/reducers/user';
 import store from 'dash/src/store';
 
-import {api} from '../config';
+import { api } from '../config';
 
-import {getMyChallenges} from './challenges';
+import { getMyChallenges } from './challenges';
 
 export const getUserById = async (id) => {
   const response = await api.get(`userapi/${id}`);
@@ -17,7 +17,7 @@ export const getUserById = async (id) => {
 };
 
 export const editUserPicture = async (data, picture) => {
-  console.log(data,picture)
+  console.log(data, picture)
   try {
     const user = _.cloneDeep(data);
     var form_data = new FormData();
@@ -25,9 +25,9 @@ export const editUserPicture = async (data, picture) => {
       name: `${new Date().getTime()}.jpg`,
       type: 'image/jpeg',
       uri:
-          Platform.OS === 'android'
-              ? picture.uri
-              : picture.uri.replace('file://', ''),
+        Platform.OS === 'android'
+          ? picture.uri
+          : picture.uri.replace('file://', ''),
     });
     form_data.append('editUserID', user._id);
     const response = await api.patch('userapi', form_data);
@@ -37,10 +37,9 @@ export const editUserPicture = async (data, picture) => {
     });
     AsyncStorage.setItem('@user', JSON.stringify(response.data.data));
     return response.data.data;
-  }catch (e) {
+  } catch (e) {
     console.log(e)
   }
-
 };
 
 export const editUser = async (data) => {
@@ -54,13 +53,13 @@ export const editUser = async (data) => {
   return response.data.data;
 };
 
-export const loginGoogleUser = async ({id_token, username}) => {
+export const loginGoogleUser = async ({ id_token, username }) => {
   const response = await api.post('addGoogleUser', {
     id_token,
     username,
   });
-  
-  console.log(" id_token ------", id_token, " user name ======", username); 
+
+  console.log(" id_token ------", id_token, " user name ======", username);
 
   api.defaults.headers.common.Authorization = `Bearer ${response.data.user_token}`;
   AsyncStorage.setItem('@user', JSON.stringify(response.data.data));
