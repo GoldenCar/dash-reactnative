@@ -118,14 +118,18 @@ function Component(props) {
             Choose one of our plans and host a challenge for you and your friends
           </Text>
           {plans.map((value, index) => (
-            // TODO: need to navigate how CreateNew is doing it
-            //       this goes to create new challenge - daily task
-            //       scene - CreateNewChallenge
-            //>
             <Plan
               value={value}
-              onPress={() => CreateNewChallengeRef.openCreateNew()}
-              //onPress={() => Actions.CreateNewChallenge()}
+              // TODO: this is a mess. need to clean up asap
+              onPress={() => CreateNewChallengeRef.openCreateNew(null, () =>
+                CreateNewChallengeRef.onPressNext({
+                  call: () => {
+                    if (value.planTypeData && value.planTypeData.length > 0) {
+                      CreateNewChallengeRef.onChangeChallenge({ type: value });
+                    }
+                  }
+                })
+              )}
               useDefaultMargin
             />
           ))}
