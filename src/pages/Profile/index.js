@@ -2,18 +2,11 @@ import React from 'react';
 import {View, StyleSheet, ScrollView, Animated} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LinearGradient from 'react-native-linear-gradient';
-
-import {AccountDetailsRef} from 'dash/src/pages/CustomTabBar';
-
 import Layout from './Layout';
 import Top from './Top';
 export let ScrollViewRef;
 export default class Component extends React.Component {
   ScrollViewAnimation = new Animated.Value(0);
-
-  openAccountDetails = () => {
-    AccountDetailsRef.open();
-  };
 
   render() {
     const translateY = this.ScrollViewAnimation.interpolate({
@@ -57,7 +50,7 @@ export default class Component extends React.Component {
             },
           )}
           contentContainerStyle={styles.contentContainerStyle}>
-          <Layout openAccountDetails={this.openAccountDetails} />
+          <Layout />
         </ScrollView>
         <Top ScrollViewAnimation={this.ScrollViewAnimation} />
       </View>

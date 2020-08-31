@@ -5,7 +5,7 @@ import {Actions} from 'react-native-router-flux';
 import {BackArrow} from './Icons';
 
 export default function Component(props) {
-  const {title, icon, iconRight, iconRightPadding, styleContainer, shadow} = props;
+  const {title,titleStyle, icon, iconRight, iconRightPadding, styleContainer, shadow, iconRightStyle} = props;
 
   return (
     <View style={[styles.container, styleContainer]}>
@@ -24,9 +24,9 @@ export default function Component(props) {
           </TouchableOpacity>
         )}
       </View>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={[styles.title, titleStyle]}>{title}</Text>
       <View
-        style={[styles.iconContainer1, {paddingHorizontal: iconRightPadding}]}>
+        style={[styles.iconContainer1, {paddingHorizontal: iconRightPadding}, iconRightStyle]}>
         {iconRight ? iconRight : <View />}
       </View>
     </View>

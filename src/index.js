@@ -38,6 +38,7 @@ import Workout from 'dash/src/pages/Workout/index';
 import Profile from './pages/Profile';
 import Friends from './pages/Profile/Friends';
 import PreviousChallenges from './pages/Profile/PreviousChallenges';
+import AccountDetails from './pages/Profile/AccountDetails';
 
 // MyChallenges
 import ProfileDetailPopup from './pages/MyChallenges/ProfileDetailPopup';
@@ -101,6 +102,8 @@ export default () => {
                                             <Scene key="Profile" component={Profile} hideNavBar />
                                             <Scene key="Friends" component={Friends} hideNavBar />
                                             <Scene key="PreviousChallenges" component={PreviousChallenges} hideNavBar />
+                                            <Scene key="AccountDetails" component={AccountDetails} hideNavBar />
+                                            
                                             <Scene
                                                 key="Notifications"
                                                 component={Notifications}

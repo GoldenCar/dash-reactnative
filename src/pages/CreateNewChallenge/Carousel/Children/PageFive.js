@@ -5,7 +5,26 @@ import StartDate from '../../StartDate';
 const { height, width } = Dimensions.get('screen');
 
 export default function Component(props) {
+    let animation = new Animated.Value(100);
     const { CarouselRef, onChangeChallenge, onPressNext, challenge } = props;
+
+    const hideHeader = () =>{
+        Animated.timing(animation, {
+            toValue: -100,
+            duration: 500,
+            useNativeDriver: false,
+        }).start()
+    }
+
+    const showHeader = (y) =>{
+        if(y < 10){
+            Animated.timing(animation, {
+                toValue: 100,
+                duration: 500,
+                useNativeDriver: false,
+            }).start()
+        }
+    }
 
     const translateY = CarouselRef._scrollPos.interpolate({
         inputRange: [width * 3, width * 4],
@@ -29,19 +48,26 @@ export default function Component(props) {
                 transform: [{ translateY }, { translateX }, { scale }],
                 flex: 1
             }}>
-            <ScrollView>
-                <View style={{ paddingTop: 100 }}>
-                    <View style={styles.titleContainer}>
-                        <Text style={styles.itemHeaderText}>It's a date!</Text>
-                        <Text style={styles.titles}>
-                            When would you like to{'\n'}start the challenge?
+            <Animated.View style={{ marginTop: animation }}>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.itemHeaderText}>It's a date!</Text>
+                    <Text style={styles.titles}>
+                        When would you like to{'\n'}start the challenge?
+                    </Text>
+                </View>
+                <View style={styles.weekContainer}>
+                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',].map((val) => (
+                        <Text style={styles.weekDay} key={val}>
+                            {val}
                         </Text>
-                    </View>
+                    ))}
+                </View>
+            </Animated.View>
+            <ScrollView onScrollEndDrag={(e)=>showHeader(e.nativeEvent.contentOffset.y)}  onScrollBeginDrag={hideHeader}>
                     <StartDate
                         challenge={challenge}
                         onPress={(startDate) => onChangeChallenge({ startDate })}
-                    />
-                </View>
+                    />    
             </ScrollView>
             <TouchableWithoutFeedback
                 onPress={() => challenge.startDate !== null && onPressNext({})}
@@ -61,6 +87,20 @@ export default function Component(props) {
 }
 
 const styles = EStyleSheet.create({
+    weekDay: {
+        width: 35,
+        textAlign: 'center',
+        color: '#292E3A',
+        fontFamily: 'Poppins-Bold',
+    },
+    weekContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        marginBottom: 5,
+    },
     nextButtonText: {
         fontFamily: 'Poppins-Bold',
         color: 'white',

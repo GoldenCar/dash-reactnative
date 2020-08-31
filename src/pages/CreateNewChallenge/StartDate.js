@@ -19,13 +19,7 @@ export default function Component(props) {
     const {challenge, onPress} = props;
     return (
         <>
-            <View style={styles.weekContainer}>
-                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',].map((val) => (
-                    <Text style={styles.weekDay} key={val}>
-                        {val}
-                    </Text>
-                ))}
-            </View>
+           
             <ScrollView contentContainerStyle={{paddingBottom: 60}}>
                 <CalendarList
                     calendarStyle={{height:380}}
@@ -84,20 +78,7 @@ export default function Component(props) {
 }
 
 const styles = StyleSheet.create({
-    weekDay: {
-        width: 35,
-        textAlign: 'center',
-        color: '#292E3A',
-        fontFamily: 'Poppins-Bold',
-    },
-    weekContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        marginBottom: 5,
-    },
+    
     message: {
         fontSize: 14,
         color: '#1AA0FF',
