@@ -23,6 +23,9 @@ const array = [
   {
     icon: <AccountDetails />,
     title: 'Account Details',
+    onPress: () => {
+      Actions.AccountDetails();
+    },
   },
   {
     icon: <PushNotifications />,
@@ -71,9 +74,6 @@ export default function Component(props) {
               key={index}
               style={styles.item}
               onPress={() => {
-                if (index === 0) {
-                  props.openAccountDetails();
-                }
                 if (value.onPress) {
                   value.onPress();
                 }

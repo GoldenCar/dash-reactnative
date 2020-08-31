@@ -91,7 +91,7 @@ function Component(props) {
       </View>
       <FriendPopup ref={(e) => (FriendPopupRef = e)} />
       <CreateNewChallenge ref={(e) => (CreateNewChallengeRef = e)} />
-      <AccountDetails user={user} ref={(e) => (AccountDetailsRef = e)} />
+      {/*<AccountDetails user={user} ref={(e) => (AccountDetailsRef = e)} />*/}
     </>
   );
 }
