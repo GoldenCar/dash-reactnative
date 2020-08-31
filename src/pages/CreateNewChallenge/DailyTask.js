@@ -1,5 +1,5 @@
 import React, { useState, createRef, useEffect } from 'react';
-import { View, TouchableOpacity, Text, Image } from 'react-native';
+import { View, TouchableOpacity, Text, Image, ScrollView } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -49,7 +49,7 @@ export default function Component(props) {
     }, [versionNum]);
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <View style={styles.header}>
                 <LinearGradient
                     colors={['#E7EEF5', '#fff']}
@@ -122,7 +122,7 @@ export default function Component(props) {
                 challenge={item}
                 versionNum={versionNum}
             />
-        </View>
+        </ScrollView>
     );
 }
 

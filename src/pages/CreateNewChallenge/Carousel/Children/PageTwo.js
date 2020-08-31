@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, Dimensions, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { Animated, Dimensions, Text, TouchableOpacity } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import DailyTask from '../../DailyTask';
 
@@ -43,25 +43,17 @@ export default function Component(props) {
                 justifyContent: 'space-between'
             }}
         >
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                // contentContainerStyle={[styles.contentContainerStyle, { height }]}
-            >
-                <DailyTask
-                    versionNum={versionNum}
-                    isVersionModalShow={isVersionModalShow}
-                    challenge={challenge}
-                    showVersionModal={showVersionModal}
-                    setVersionNum={setVersionNum}
-                    items={items}
-
-                />
-                <TouchableOpacity style={styles.button} onPress={onPress} >
-                    <Text style={styles.buttonText}>Confirm Plan</Text>
-                </TouchableOpacity>
-            </ScrollView>
-
-
+            <DailyTask
+                versionNum={versionNum}
+                isVersionModalShow={isVersionModalShow}
+                challenge={challenge}
+                showVersionModal={showVersionModal}
+                setVersionNum={setVersionNum}
+                items={items}
+            />
+            <TouchableOpacity style={styles.button} onPress={onPress} >
+                <Text style={styles.buttonText}>Confirm Plan</Text>
+            </TouchableOpacity>
         </Animated.View>
     )
 }
@@ -75,16 +67,14 @@ const styles = EStyleSheet.create({
     button: {
         borderRadius: 8,
         height: 64,
-        width:'auto',
-        marginTop:80,
-        marginHorizontal: 15,
-        marginBottom: 19,
-        // position: 'absolute',
-        // bottom: 19,
         backgroundColor: "#1AA0FF",
         alignItems: "center",
         justifyContent: "center",
         //box-shadow: 0px 20px 20px rgba(26, 160, 255, 0.13);
+        position: 'absolute',
+        left: 15,
+        right: 15,
+        bottom: 19
     },
     buttonText: {
         color: "#ffffff",
