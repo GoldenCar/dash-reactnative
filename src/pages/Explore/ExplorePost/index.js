@@ -51,10 +51,12 @@ export default class Component extends React.Component {
 
       console.log('COMPETITION JOINED RESPONSE', response);
 
-      const addUserToChallengeResponse = await challengeActions.editChallenge({
+      const editChallengeData = {
         _id: challenge._id,
         joinedUsers: user._id
-      });
+      };
+
+      const addUserToChallengeResponse = await challengeActions.editChallenge(editChallengeData);
 
       console.log('USER ADDED TO COMPETITION RESPONSE', addUserToChallengeResponse);
     }

@@ -99,14 +99,23 @@ export const postMyChallenge = async (data) => {
 };
 
 export const editChallenge = async (data) => {
-  data.editID = data._id;
-  const response = await api.patch('challengesapi', data);
+  const formData = new FormData();
+  formData.append('editID', data._id);
+  formData.append('joinedUsers', data.joinedUsers);
 
-  console.log(response);
-  // store.dispatch({
-  //   type: actionTypes.SET_USER,
-  //   payload: response.data.data,
-  // });
-  // AsyncStorage.setItem('@user', JSON.stringify(response.data.data));
-  return response.data.data;
-};
+  return axios({
+    method: 'patch',
+    url: host + "/challengesapi",
+    data: formData
+  })
+    .then(response => {
+      console.log("EDIT CHALLENGE", response);
+      // store.dispatch({
+      //   type: actionTypes.ADD_CHALLENGE,
+      //   payload: response.data.data,
+      // });
+      return response.data.data;
+    }).catch(err => {
+      console.log(" error is ", err);
+    })
+}
