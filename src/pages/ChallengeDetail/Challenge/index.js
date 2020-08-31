@@ -90,6 +90,7 @@ export default class Component extends React.Component {
                   dayData={dayData}
                   challenge={challenge}
                   user={user}
+                  onPress={() => Actions.PlanOverview({ challenge, plan })}
                 />
               )}
           </View>
