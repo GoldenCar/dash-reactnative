@@ -76,9 +76,22 @@ class Component extends React.Component {
 
     let challenges = [];
     if (user && user._id) {
-      challenges = arrayAllChallenges.filter(
-        (v) => v.createdBy === user._id && v.status === 'start',
-      );
+      challenges = arrayAllChallenges.filter((v) => {
+        if (!v.status === 'start') {
+          return false;
+        }
+
+        if (v.createdBy === user._id) {
+          return true;
+        }
+
+        const hasUserJoined = (v.joinedUsers.indexOf(user._id) > -1);
+        if (hasUserJoined) {
+          return true;
+        }
+
+        return false;
+      });
     }
 
     // bottom left to top right gradient
