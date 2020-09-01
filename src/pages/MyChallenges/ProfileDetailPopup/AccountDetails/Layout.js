@@ -1,7 +1,6 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
-import Gender from '../../../../components/Gender';
 import InformationContainer, {
   Title,
 } from '../../../../components/InformationContainer';
@@ -30,7 +29,6 @@ export default function Component() {
     <View style={styles.container}>
       <InformationContainer title={'General Info'} items={array} />
       <Title>Gender</Title>
-      <Gender />
     </View>
   );
 }
