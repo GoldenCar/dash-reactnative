@@ -80,7 +80,8 @@ class Component extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        marginBottom: 48
     },
     backButton: {
         height: 40,

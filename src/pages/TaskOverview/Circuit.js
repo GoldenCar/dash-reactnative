@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 
 import CircuitIcon from './CircuitIcon';
+
+import { getCircuitThumbnailUrl } from '../../helpers/Workout';
+import * as planActions from '../../actions/plans';
 
 export default function Component(props) {
   const { task } = props;
@@ -10,6 +13,27 @@ export default function Component(props) {
   console.log('CIRCUIT TASK', task);
 
   const exerciseCards = task.exeerciseCards || [];
+  const [cards, setCards] = useState(exerciseCards);
+
+  // TODO: get correct subtitle
+
+  useEffect(() => {
+    const getCardData = async () => {
+      exerciseCards.map(async (exercise) => {
+        if (exercise.cardUUID) {
+          console.log('EXERCISE IN MAP', exercise);
+          const arrayResponse = await planActions.getExerciseData(exercise.cardUUID)
+          exercise.exercisesData = arrayResponse
+        };
+
+        return exercise;
+      });
+
+      setCards(cards);
+    };
+
+    getCardData();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -26,10 +50,16 @@ export default function Component(props) {
         <Text style={styles.headingSubtitle}>
           5 Rounds
         </Text>
-        {exerciseCards.map((exercise) => {
+        {cards.map((exercise) => {
+          const thumbnailUrl = getCircuitThumbnailUrl(exercise);
           return (
             <View style={styles.cell}>
-              <View style={styles.image}></View>
+              <View style={styles.image}>
+                <Image
+                  source={thumbnailUrl}
+                  style={styles.image}
+                />
+              </View>
               <View>
                 <Text style={styles.taskTitle}>{exercise.title}</Text>
                 <Text style={styles.taskBlueText}>12-15 Reps</Text>
