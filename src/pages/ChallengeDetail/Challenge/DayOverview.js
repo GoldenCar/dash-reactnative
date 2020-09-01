@@ -10,6 +10,8 @@ export default function Component(props) {
 
   console.log('day', day);
 
+  console.log('DAY DATA', dayData);
+
   return (
     <View style={styles.dayOverview}>
       <View style={styles.dayHeading}>

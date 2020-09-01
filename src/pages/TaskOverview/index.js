@@ -2,11 +2,14 @@ import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import LinearGradient from 'react-native-linear-gradient';
 
 import { mediaHost } from 'dash/src/config';
 
 import { BackArrow } from '../../components/Icons';
-import LinearGradient from 'react-native-linear-gradient';
+
+import Circuit from './Circuit';
+import TaskCell from './TaskCell';
 
 class Component extends React.Component {
     render() {
@@ -14,6 +17,8 @@ class Component extends React.Component {
         console.log(challenge, user, day, currentDay, plan);
 
         const imageURL = `${mediaHost}${plan.planImage}`;
+
+        console.log('DAY INFO', day);
 
         return (
             <View style={styles.container}>
@@ -42,7 +47,26 @@ class Component extends React.Component {
                         <BackArrow />
                     </TouchableOpacity>
                 </LinearGradient>
+                <View style={styles.content}>
+                    <View style={styles.header}>
+                        <View style={styles.blueBox}>
+                        </View>
 
+                        <View>
+                            <Text>{day.taskTitle}</Text>
+                            <Text>{day.taskDescription}</Text>
+                        </View>
+                    </View>
+                    {day && day.versionDayTaskCard && day.versionDayTaskCard.length > 0 && (
+                        day.versionDayTaskCard.map((task) => {
+                            if (task.flag === 'circuit') {
+                                return <Circuit task={task} />
+                            } else {
+                                return <TaskCell task={task} />
+                            }
+                        })
+                    )}
+                </View>
             </View>
         );
     }
@@ -93,6 +117,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 44,
         right: 10
+    },
+
+
+    content: {
+        flex: 1,
+        backgroundColor: 'orange'
     }
 });
 
