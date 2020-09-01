@@ -5,7 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import { ArrowRight } from '../../../components/Icons';
 
 export default function Component(props) {
-  const { currentDay, dayData, challenge, user, onPress } = props;
+  const { currentDay, dayData, challenge, user, onPress, plan } = props;
   const day = dayData[currentDay] || {};
 
   console.log('day', day);
@@ -28,7 +28,13 @@ export default function Component(props) {
         </View>
         <TouchableOpacity
           style={styles.startButton}
-          onPress={() => Actions.Main({ challenge: challenge, user: user })}
+          onPress={() => Actions.Main({
+            challenge: challenge,
+            user: user,
+            day: day,
+            currentDay: currentDay,
+            plan: plan
+          })}
         >
           <Text style={styles.startText}>Start</Text>
           <ArrowRight />

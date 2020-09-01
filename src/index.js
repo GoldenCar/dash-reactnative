@@ -137,11 +137,11 @@ export default () => {
                                         hideNavBar
                                     />
                                     <Scene key="Main" component={Main} hideNavBar />
-                                    <Scene
+                                    {/* <Scene
                                         key="ScrollAnimation"
                                         component={ScrollAnimation}
                                         hideNavBar
-                                    />
+                                    /> */}
                                     <Scene key="ExplorePost" component={ExplorePost} hideNavBar />
                                     <Scene
                                         key="PickAUsername"

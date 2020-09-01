@@ -91,6 +91,7 @@ export default class Component extends React.Component {
                   challenge={challenge}
                   user={user}
                   onPress={() => Actions.PlanOverview({ challenge, plan })}
+                  plan={plan}
                 />
               )}
           </View>
