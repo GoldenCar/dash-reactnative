@@ -50,11 +50,17 @@ class Component extends React.Component {
                 <View style={styles.content}>
                     <View style={styles.header}>
                         <View style={styles.blueBox}>
+                            <Text style={styles.blueBoxText}>
+                                Todays Task
+                            </Text>
                         </View>
-
                         <View>
-                            <Text>{day.taskTitle}</Text>
-                            <Text>{day.taskDescription}</Text>
+                            <Text style={styles.taskTitle}>
+                                {day.taskTitle}
+                            </Text>
+                            <Text style={styles.taskDescription}>
+                                {day.taskDescription}
+                            </Text>
                         </View>
                     </View>
                     {day && day.versionDayTaskCard && day.versionDayTaskCard.length > 0 && (
@@ -122,8 +128,47 @@ const styles = StyleSheet.create({
 
     content: {
         flex: 1,
-        backgroundColor: 'orange'
+        marginLeft: 20,
+        marginRight: 15,
+        position: 'relative'
+    },
+    header: {
+        paddingBottom: 36,
+        marginBottom: 22,
+        borderBottomWidth: 1,
+        borderBottomColor: '#F0F5FA'
+    },
+    blueBox: {
+        width: 142,
+        height: 37,
+        backgroundColor: '#1AA0FF',
+        justifyContent: 'center',
+        marginTop: -8,
+        marginBottom: 24
+    },
+    blueBoxText: {
+        fontFamily: 'Poppins-Bold',
+        fontSize: 10,
+        lineHeight: 16,
+        textAlign: 'center',
+        letterSpacing: 2,
+        textTransform: 'uppercase',
+        color: '#FFFFFF'
+    },
+    taskTitle: {
+        fontFamily: 'Poppins-Bold',
+        fontSize: 24,
+        lineHeight: 32,
+        color: '#3F434F',
+        marginBottom: 8
+    },
+    taskDescription: {
+        fontFamily: 'Poppins-Regular',
+        fontSize: 14,
+        lineHeight: 24,
+        color: '#859AB6',
     }
+
 });
 
 export default connect(({ challenges, user }) => ({
