@@ -15,8 +15,6 @@ export default function Component(props) {
   const exerciseCards = task.exeerciseCards || [];
   const [cards, setCards] = useState(exerciseCards);
 
-  // TODO: get correct subtitle
-
   useEffect(() => {
     const getCardData = async () => {
       exerciseCards.map(async (exercise) => {
@@ -52,6 +50,9 @@ export default function Component(props) {
         </Text>
         {cards.map((exercise) => {
           const thumbnailUrl = getCircuitThumbnailUrl(exercise);
+
+          // TODO: add correct subtitle here          
+
           return (
             <View style={styles.cell}>
               <View style={styles.image}>

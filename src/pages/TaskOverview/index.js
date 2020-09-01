@@ -1,26 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Image, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { mediaHost } from 'dash/src/config';
+import { getWorkoutData } from '../../helpers/Workout';
 
 import { BackArrow } from '../../components/Icons';
 
 import Circuit from './Circuit';
 import TaskCell from './TaskCell';
 
-class Component extends React.Component {
-    render() {
-        const { challenge, user, day, currentDay, plan } = this.props;
-        console.log(challenge, user, day, currentDay, plan);
+function Component(props) {
+    const { challenge, user, day, currentDay, plan } = props;
+    console.log(challenge, user, day, currentDay, plan);
 
-        const imageURL = `${mediaHost}${plan.planImage}`;
+    const imageURL = `${mediaHost}${plan.planImage}`;
 
-        console.log('DAY INFO', day);
+    console.log('DAY INFO', day);
 
-        return (
+    const [stories, setStories] = useState([]);
+
+    useEffect(() => {
+        const getWorkout = async () => {
+            const workoutData = await getWorkoutData(day, user);
+            setStories(workoutData);
+        }
+
+        getWorkout();
+    }, []);
+
+    const onPress = () => Actions.Workout({
+        challenge: challenge,
+        user: user,
+        // TODO: need to get this data from getWorkoutData
+        //stories: [],
+        stories: stories,
+        arrayVersionTask: day
+    });
+
+    return (
+        <View style={{ flex: 1 }}>
             <ScrollView style={styles.container}>
                 <LinearGradient
                     style={styles.overview}
@@ -74,14 +95,19 @@ class Component extends React.Component {
                     )}
                 </View>
             </ScrollView>
-        );
-    }
+            <TouchableOpacity style={styles.button} onPress={onPress}>
+                <Text style={styles.buttonText}>
+                    Start Day
+                </Text>
+            </TouchableOpacity>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginBottom: 48
+        marginBottom: 96
     },
     backButton: {
         height: 40,
@@ -168,6 +194,26 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 24,
         color: '#859AB6',
+    },
+
+    button: {
+        height: 72,
+        // background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
+        backgroundColor: '#218FDE',
+        //box-shadow: 0px 20px 20px rgba(26, 160, 255, 0.13);
+        borderRadius: 8,
+        position: 'absolute',
+        bottom: 13,
+        left: 16,
+        right: 16,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    buttonText: {
+        fontFamily: 'Poppins-Medium',
+        fontSize: 16,
+        lineHeight: 24,
+        color: '#FFFFFF'
     }
 
 });
