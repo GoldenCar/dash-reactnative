@@ -5,7 +5,7 @@ import Carousel from 'react-native-snap-carousel';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 
-import * as challenegesActions from '../../../actions/challenges';
+import * as challengeActions from '../../../actions/challenges';
 
 import Modal from 'dash/src/components/Modal';
 import Header from './Header';
@@ -48,7 +48,7 @@ class Component extends React.Component {
     getChallengesApiCall = async () => {
         const { challenge } = this.state;
         console.log(" chllenge ", challenge);
-        const arrayAllChallenges = await challenegesActions.getChallenges();
+        const arrayAllChallenges = await challengeActions.getChallenges();
 
         // get the version of the plan which user has completed in his challenge.
         let arrayUserPlanVersion = [];
@@ -100,7 +100,7 @@ class Component extends React.Component {
     createChallenge = async () => {
         try {
             this.setState({ loading: true });
-            const res = await challenegesActions.postMyChallenge(
+            const res = await challengeActions.postMyChallenge(
                 this.state.challenge,
             );
             this.setState({ loading: false, createdChallenge: res });
@@ -112,7 +112,14 @@ class Component extends React.Component {
         }
     };
 
-    openCreateNew = (create = true) => {
+    openCreateNew = (create = true, callback) => {
+        if (callback) {
+            // TODO: fix this immediately. major hack to get navigation from other screen working
+            setTimeout(() => {
+                callback(); 
+            }, 1000);
+        }
+
         if (create) {
             this.setState(
                 { currentIndex: 0, challenge: _.cloneDeep(defaultChallenge), createdChallenge: null },
@@ -181,7 +188,10 @@ class Component extends React.Component {
     };
 
     onPressNext = ({ call } = {}) => {
-        this.HeaderRef.next()
+        if (this.HeaderRef) {
+            this.HeaderRef.next()
+        }
+
         if (this.state.currentIndex === 3) {
             Keyboard.dismiss();
         }

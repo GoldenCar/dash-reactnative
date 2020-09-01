@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
-
 import moment from 'moment';
 
 import { mediaHost } from 'dash/src/config';
@@ -12,42 +11,8 @@ const { width } = Dimensions.get('window');
 const GUTTER = 15;
 const CARD_WIDTH = width - (GUTTER * 2);
 
-const array = [
-  {
-    default: true,
-    value: '1',
-    //uri: require('dash/src/res/graphic/1.jpg'),
-    uri:"https://dashchallengesapi.com/static/media/2020-6-10-5-14-33-1.jpg",
-  },
-  {
-    default: true,
-    value: '2',
-    uri:"https://dashchallengesapi.com/static/media/2020-6-10-5-14-38-2.jpg",
-   // uri: require('dash/src/res/graphic/2.jpg'),
-  },
-  {
-    default: true,
-    value: '3',
-    uri:"https://dashchallengesapi.com/static/media/2020-6-10-5-14-39-3.jpg",
-    //uri: require('dash/src/res/graphic/3.jpg'),
-  },
-  {
-    default: true,
-    value: '4',
-    uri:"https://dashchallengesapi.com/static/media/2020-6-10-5-14-40-4.jpg",
-   // uri: require('dash/src/res/graphic/4.jpg'),
-  },
-];
 export default function Component(props) {
-
   const { explore, value, past, viewedBy, cardWidth } = props;
-
-  let bgImgUrl = '';
-  if (value.challengeBGImage.includes('-')) {
-    bgImgUrl = { uri: `${mediaHost}${value.challengeBGImage}` };
-  } else {
-    bgImgUrl = value.challengeBGImage
-  }
 
   const exploreContainerStyle = explore ? { width: cardWidth } : {};
 
@@ -64,8 +29,7 @@ export default function Component(props) {
           { width: cardWidth }
         ]}>
         <Image
-           source={{uri: `${mediaHost}${value.challengeBGImage}`}} // Chandni will enbale for uploaded images 
-          // source={bgImgUrl}
+          source={{ uri: `${mediaHost}${value.challengeBGImage}` }} // Chandni will enbale for uploaded images 
           resizeMode="cover"
           PlaceholderContent={<ActivityIndicator />}
           style={[
@@ -98,41 +62,41 @@ export default function Component(props) {
             </View>
           </>
         ) : moment(new Date()).diff(moment(new Date(value.startDate)), 'days') > 0 ? (
-            <>
-              {value.allStep && (
-                <View style={styles.progress}>
-                  <View
-                    style={[
-                      styles.progressCompleted,
-                      { width: `${(value.myStep * 100) / value.allStep}%` },
-                    ]}></View>
-                </View>
-              )}
-              {value.allStep && (
-                <Text
-                  style={
-                    styles.completed
-                  }>{`${value.myStep}/${value.allStep} Completed`}</Text>
-              )}
-            </>
-          ) : (
-            <View style={styles.bottom}>
-              {past && <Text style={styles.date}>{value.date}</Text>}
-              {value.startDate && (
-                <Text style={styles.completed}>
-                  Starts in{' '}
-                  {Math.abs(
-                    moment(new Date()).diff(
-                      moment(new Date(value.startDate)),
-                      'days',
-                    ),
-                  )}{' '}
-                Days
+          <>
+            {value.allStep && (
+              <View style={styles.progress}>
+                <View
+                  style={[
+                    styles.progressCompleted,
+                    { width: `${(value.myStep * 100) / value.allStep}%` },
+                  ]}></View>
+              </View>
+            )}
+            {value.allStep && (
+              <Text
+                style={
+                  styles.completed
+                }>{`${value.myStep}/${value.allStep} Completed`}</Text>
+            )}
+          </>
+        ) : (
+              <View style={styles.bottom}>
+                {past && <Text style={styles.date}>{value.date}</Text>}
+                {value.startDate && (
+                  <Text style={styles.completed}>
+                    Starts in{' '}
+                    {Math.abs(
+                      moment(new Date()).diff(
+                        moment(new Date(value.startDate)),
+                        'days',
+                      ),
+                    )}{' '}
+                    Days
                 </Text>
-              )}
-              {viewedBy && <ViewedBy viewedBy={viewedBy} />}
-            </View>
-          )}
+                )}
+                {viewedBy && <ViewedBy viewedBy={viewedBy} />}
+              </View>
+            )}
       </View>
     </View>
   );

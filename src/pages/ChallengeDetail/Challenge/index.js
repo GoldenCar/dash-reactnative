@@ -88,6 +88,9 @@ export default class Component extends React.Component {
                 <DayOverview
                   currentDay={currentDay}
                   dayData={dayData}
+                  challenge={challenge}
+                  user={user}
+                  onPress={() => Actions.PlanOverview({ challenge, plan })}
                 />
               )}
           </View>

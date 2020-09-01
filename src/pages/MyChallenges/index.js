@@ -74,11 +74,24 @@ class Component extends React.Component {
     const { arrayAllChallenges, plans } = this.state;
     const { user } = this.props;
 
-    let challenges = [];
+    let myChallenges = [];
     if (user && user._id) {
-      challenges = arrayAllChallenges.filter(
-        (v) => v.createdBy === user._id && v.status === 'start',
-      );
+      myChallenges = arrayAllChallenges.filter((v) => {
+        if (!v.status === 'start') {
+          return false;
+        }
+
+        if (v.createdBy === user._id) {
+          return true;
+        }
+
+        const hasUserJoined = (v.joinedUsers.indexOf(user._id) > -1);
+        if (hasUserJoined) {
+          return true;
+        }
+
+        return false;
+      });
     }
 
     // bottom left to top right gradient
@@ -89,8 +102,8 @@ class Component extends React.Component {
     const topToBottomGradientStart = { x: 0, y: 0 };
     const topToBottomGradientEnd = { x: 1, y: 1 };
 
-    const start = challenges.length === 0 ? topToBottomGradientStart : bottomLeftToTopRightStart;
-    const end = challenges.length === 0 ? topToBottomGradientEnd : bottomLeftToTopRightEnd;
+    const start = myChallenges.length === 0 ? topToBottomGradientStart : bottomLeftToTopRightStart;
+    const end = myChallenges.length === 0 ? topToBottomGradientEnd : bottomLeftToTopRightEnd;
 
     return (
       <SafeAreaView style={styles.container}>
@@ -108,7 +121,7 @@ class Component extends React.Component {
             <Plus />
             <Text style={styles.buttonText}>New</Text>
           </TouchableOpacity>
-          {challenges.length === 0 ? (
+          {myChallenges.length === 0 ? (
             <View>
               <Text style={styles.subtitle}>You currently have no challenges, let's create a new one!</Text>
               {plans.map((value) => (
@@ -123,7 +136,7 @@ class Component extends React.Component {
           ) : (
               <View>
                 <Carousel
-                  data={challenges}
+                  data={myChallenges}
                   sliderWidth={width}
                   itemWidth={ITEM_WIDTH}
                   renderItem={this.renderItem}

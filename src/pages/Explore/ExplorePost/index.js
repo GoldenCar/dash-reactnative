@@ -10,6 +10,9 @@ import Countdown from '../../../components/Countdown';
 import { Calendar } from '../../../components/Icons';
 
 import * as plansActions from '../../../actions/plans';
+import * as userActions from '../../../actions/user';
+import * as challengeActions from '../../../actions/challenges';
+
 import { mediaHost } from 'dash/src/config';
 
 const { height } = Dimensions.get('window');
@@ -33,12 +36,35 @@ export default class Component extends React.Component {
     }
   }
 
+  // TODO: needs to handle flow after user logs in
+  //       needs to navigate after join
+  async onJoinPress() {
+    const { user, challenge } = this.props;
+
+    if (!user) {
+      this.AuthPopupRef.open();
+    } else {
+      const response = await userActions.editUser({
+        _id: user._id,
+        challengesIds: challenge._id
+      });
+
+      console.log('COMPETITION JOINED RESPONSE', response);
+
+      const editChallengeData = {
+        _id: challenge._id,
+        joinedUsers: user._id
+      };
+
+      const addUserToChallengeResponse = await challengeActions.editChallenge(editChallengeData);
+
+      console.log('USER ADDED TO COMPETITION RESPONSE', addUserToChallengeResponse);
+    }
+  }
+
   render() {
     const { plan } = this.state;
     const { challenge } = this.props;
-
-    // TODO: this needs to be fully hooked up, handle logged in user
-    const onJoinPress = () => this.AuthPopupRef.open();
 
     const onScroll = Animated.event(
       [{ nativeEvent: { contentOffset: { y: this.ScrollViewAnimation } } }],
@@ -97,7 +123,7 @@ export default class Component extends React.Component {
           containerStyle={styles.countdownContainer}
           showButton
           countdownBackground={styles.countdownBackground}
-          onPress={onJoinPress}
+          onPress={() => this.onJoinPress()}
         />
       </View>
     );

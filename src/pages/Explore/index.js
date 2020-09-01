@@ -46,12 +46,11 @@ const viewedBy = [
   {},
 ]
 
-function renderItem({ item, index }) {
+function renderItem(item, index, user) {
   return (
     <TouchableWithoutFeedback
       key={index}
-      //onPress={() => Actions.ChallengeDetail({challenge: value})}
-      onPress={() => Actions.ExplorePost({ challenge: item })}
+      onPress={() => Actions.ExplorePost({ challenge: item, user })}
     >
       <View>
         <Challenge
@@ -106,7 +105,7 @@ function Component(props) {
             data={challenges}
             sliderWidth={width}
             itemWidth={ITEM_WIDTH}
-            renderItem={renderItem}
+            renderItem={({ item, index }) => renderItem(item, index, props.user)}
             activeSlideAlignment='start'
             loop
           />
@@ -118,14 +117,18 @@ function Component(props) {
             Choose one of our plans and host a challenge for you and your friends
           </Text>
           {plans.map((value, index) => (
-            // TODO: need to navigate how CreateNew is doing it
-            //       this goes to create new challenge - daily task
-            //       scene - CreateNewChallenge
-            //>
             <Plan
               value={value}
-              onPress={() => CreateNewChallengeRef.openCreateNew()}
-              //onPress={() => Actions.CreateNewChallenge()}
+              // TODO: this is a mess. need to clean up asap
+              onPress={() => CreateNewChallengeRef.openCreateNew(null, () =>
+                CreateNewChallengeRef.onPressNext({
+                  call: () => {
+                    if (value.planTypeData && value.planTypeData.length > 0) {
+                      CreateNewChallengeRef.onChangeChallenge({ type: value });
+                    }
+                  }
+                })
+              )}
               useDefaultMargin
             />
           ))}
@@ -181,6 +184,7 @@ const styles = StyleSheet.create({
     marginBottom: 13
   }
 });
-export default connect(({ challenges }) => ({
+export default connect(({ challenges, user }) => ({
   challenges,
+  user
 }))(Component);

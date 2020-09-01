@@ -18,11 +18,11 @@ export const getMyChallenges = async () => {
   return response.data.data;
 };
 
-export const getAllChallengesOfDB = ()=>{
+export const getAllChallengesOfDB = () => {
 
   return axios({
     method: 'get',
-    url: host+"/challengesapi",
+    url: host + "/challengesapi",
   })
     .then(response => {
       store.dispatch({
@@ -39,10 +39,10 @@ export const postMyChallenge = async (data) => {
 
   console.log("postMyChallenge-----> ", data);
 
-  const user = store.getState().user;  
+  const user = store.getState().user;
   const picture = data.graphic;
   const formData = new FormData();
-  
+
   formData.append('createdBy', user._id);
   formData.append('title', data.title);
   formData.append('accessType', data.public ? 'public' : 'private');
@@ -53,36 +53,36 @@ export const postMyChallenge = async (data) => {
   formData.append('typeDescription', data.type.description);
   formData.append('Version', data.version);
   formData.append('imageFlag', false);
-  formData.append('Plan',data.type.title);
-  formData.append('ActiveDate',data.startDate);
-  formData.append('PlanID',data.type._id);
+  formData.append('Plan', data.type.title);
+  formData.append('ActiveDate', data.startDate);
+  formData.append('PlanID', data.type._id);
   //formData.append('Featured',"No");
   //formData.append('program', data.typeProgram.number);
 
   //formData.append('',);
-    
-    formData.append('challengeBGImage', {
-      name: `${new Date().getTime()}.jpg`,
-      type: 'image/jpeg',
-      uri:
-        Platform.OS === 'android'
-          ? String(picture.uri)
-          : picture.uri.replace('file://', ''),
-    });
-    formData.append('TypeImage', {
-      name: `${new Date().getTime()}.jpg`,
-      type: 'image/jpeg',
-      uri:
-        Platform.OS === 'android'
-          ? picture.uri
-          : picture.uri.replace('file://', ''),
-    });
-  
+
+  formData.append('challengeBGImage', {
+    name: `${new Date().getTime()}.jpg`,
+    type: 'image/jpeg',
+    uri:
+      Platform.OS === 'android'
+        ? String(picture.uri)
+        : picture.uri.replace('file://', ''),
+  });
+  formData.append('TypeImage', {
+    name: `${new Date().getTime()}.jpg`,
+    type: 'image/jpeg',
+    uri:
+      Platform.OS === 'android'
+        ? picture.uri
+        : picture.uri.replace('file://', ''),
+  });
+
   console.log(" form data ==================================", formData);
-  
+
   return axios({
     method: 'post',
-    url: host+"/challengesapi",
+    url: host + "/challengesapi",
     data: formData
     //headers: headers,
   })
@@ -97,3 +97,25 @@ export const postMyChallenge = async (data) => {
       console.log(" error is ", err);
     })
 };
+
+export const editChallenge = async (data) => {
+  const formData = new FormData();
+  formData.append('editID', data._id);
+  formData.append('joinedUsers', data.joinedUsers);
+
+  return axios({
+    method: 'patch',
+    url: host + "/challengesapi",
+    data: formData
+  })
+    .then(response => {
+      console.log("EDIT CHALLENGE", response);
+      // store.dispatch({
+      //   type: actionTypes.ADD_CHALLENGE,
+      //   payload: response.data.data,
+      // });
+      return response.data.data;
+    }).catch(err => {
+      console.log(" error is ", err);
+    })
+}
