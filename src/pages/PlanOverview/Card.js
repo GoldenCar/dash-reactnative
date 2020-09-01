@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, StyleSheet, Dimensions, Text, Image, TouchableOpacity} from 'react-native';
-import {Actions} from 'react-native-router-flux'
+import { View, StyleSheet, Dimensions, Text, Image, TouchableOpacity } from 'react-native';
+import { Actions } from 'react-native-router-flux'
 
 import DotsIcon from './DotsIcon';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 export default class extends React.Component {
   render() {
@@ -22,7 +22,7 @@ export default class extends React.Component {
             <DotsIcon style={styles.dotsIcon} />
           </View>
         </View>
-        <TouchableOpacity style={styles.startButton} onPress={() => Actions.Main()}>
+        <TouchableOpacity style={styles.startButton} onPress={() => Actions.TaskOverview()}>
           <Text style={styles.startText}>Start</Text>
         </TouchableOpacity>
         <Image
@@ -41,9 +41,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
   },
   startButton: {
-      position: 'absolute',
-      bottom: 20,
-      right: 15,
+    position: 'absolute',
+    bottom: 20,
+    right: 15,
     alignSelf: 'center',
     paddingVertical: 10,
     paddingHorizontal: 25,

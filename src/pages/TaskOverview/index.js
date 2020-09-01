@@ -24,7 +24,7 @@ class Component extends React.Component {
                 >
                     <View style={styles.overviewText}>
                         <Text style={styles.dayText}>
-                            Day 22
+                            Day {currentDay}
                         </Text>
                         <Text style={styles.dayBlueText}>
                             Friday Jan 24

@@ -28,7 +28,7 @@ export default function Component(props) {
         </View>
         <TouchableOpacity
           style={styles.startButton}
-          onPress={() => Actions.Main({
+          onPress={() => Actions.TaskOverview({
             challenge: challenge,
             user: user,
             day: day,
