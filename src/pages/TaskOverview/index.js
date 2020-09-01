@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Image } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Text, Image, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
@@ -21,7 +21,7 @@ class Component extends React.Component {
         console.log('DAY INFO', day);
 
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 <LinearGradient
                     style={styles.overview}
                     colors={['#FFFFFF', '#E7EEF5']}
@@ -73,7 +73,7 @@ class Component extends React.Component {
                         })
                     )}
                 </View>
-            </View>
+            </ScrollView>
         );
     }
 }

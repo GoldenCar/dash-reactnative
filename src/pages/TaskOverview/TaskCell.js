@@ -7,7 +7,6 @@ export default class extends React.Component {
 
     console.log('TASK CELL', task);
 
-
     let subtitle = '';
     if (task.flag === 'exercise') {
       subtitle = `${task.RepsCount} ${task.Reps}`;
@@ -15,12 +14,13 @@ export default class extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>
-          {task.title}
-        </Text>
-        <Text style={styles.subtitle}>
-          {subtitle}
-        </Text>
+        <View style={styles.image}>
+
+        </View>
+        <View>
+          <Text style={styles.title}>{task.title}</Text>
+          <Text style={styles.subtitle}>{subtitle}</Text>
+        </View>
       </View>
     );
   }
@@ -28,7 +28,16 @@ export default class extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    height: 88
+    height: 88,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  image: {
+    height: 72,
+    width: 72,
+    borderRadius: 16,
+    backgroundColor: 'purple',
+    marginRight: 19
   },
   title: {
     fontFamily: 'Poppins-Medium',
