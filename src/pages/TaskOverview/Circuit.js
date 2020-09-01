@@ -10,8 +10,6 @@ export default function Component(props) {
   const { task } = props;
   const [height, setHeight] = useState(300);
 
-  console.log('CIRCUIT TASK', task);
-
   const exerciseCards = task.exeerciseCards || [];
   const [cards, setCards] = useState(exerciseCards);
 
@@ -19,7 +17,6 @@ export default function Component(props) {
     const getCardData = async () => {
       exerciseCards.map(async (exercise) => {
         if (exercise.cardUUID) {
-          console.log('EXERCISE IN MAP', exercise);
           const arrayResponse = await planActions.getExerciseData(exercise.cardUUID)
           exercise.exercisesData = arrayResponse
         };
@@ -51,7 +48,10 @@ export default function Component(props) {
         {cards.map((exercise) => {
           const thumbnailUrl = getCircuitThumbnailUrl(exercise);
 
-          // TODO: add correct subtitle here          
+          let subtitle = '';
+          if (exercise.flag === 'exercise') {
+            subtitle = `${exercise.RepsCount} ${exercise.Reps}`;
+          }
 
           return (
             <View style={styles.cell}>
@@ -63,7 +63,7 @@ export default function Component(props) {
               </View>
               <View>
                 <Text style={styles.taskTitle}>{exercise.title}</Text>
-                <Text style={styles.taskBlueText}>12-15 Reps</Text>
+                <Text style={styles.taskBlueText}>{subtitle}</Text>
               </View>
             </View>
           )

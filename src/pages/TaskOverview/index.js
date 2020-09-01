@@ -26,6 +26,7 @@ function Component(props) {
         const getWorkout = async () => {
             const workoutData = await getWorkoutData(day, user);
             setStories(workoutData);
+            // TODO: disable onPress til we get this data
         }
 
         getWorkout();
@@ -34,8 +35,6 @@ function Component(props) {
     const onPress = () => Actions.Workout({
         challenge: challenge,
         user: user,
-        // TODO: need to get this data from getWorkoutData
-        //stories: [],
         stories: stories,
         arrayVersionTask: day
     });
@@ -151,8 +150,6 @@ const styles = StyleSheet.create({
         top: 44,
         right: 10
     },
-
-
     content: {
         flex: 1,
         marginLeft: 20,
