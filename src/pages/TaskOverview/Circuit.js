@@ -105,7 +105,6 @@ const styles = StyleSheet.create({
     height: 72,
     width: 72,
     borderRadius: 16,
-    backgroundColor: 'purple',
     marginRight: 19
   },
   taskTitle: {

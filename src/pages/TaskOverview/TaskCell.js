@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 
-import { getCircuitThumbnailUrl } from '../../helpers/Workout';
+import { getCircuitThumbnailUrl } from '../../helpers/workout';
 import * as planActions from '../../actions/plans';
 
 export default function (props) {
@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
     height: 72,
     width: 72,
     borderRadius: 16,
-    backgroundColor: 'purple',
     marginRight: 19
   },
   title: {

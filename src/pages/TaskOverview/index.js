@@ -5,7 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { mediaHost } from 'dash/src/config';
-import { getWorkoutData } from '../../helpers/Workout';
+import { getWorkoutData } from '../../helpers/workout';
 
 import { BackArrow } from '../../components/Icons';
 
