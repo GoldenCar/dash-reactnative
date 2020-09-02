@@ -9,6 +9,7 @@ import { Actions } from 'react-native-router-flux';
 import Plus from './Icons/Plus';
 import Challenge from '../../components/Challenge';
 import Plan from '../../components/Plan';
+
 import { CreateNewChallengeRef } from 'dash/src/pages/CustomTabBar';
 
 import * as challengesActions from '../../actions/challenges';

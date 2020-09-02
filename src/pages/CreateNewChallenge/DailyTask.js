@@ -6,7 +6,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import LinearGradient from 'react-native-linear-gradient';
 
 import VersionPicker from './VersionPicker';
-import Video from './Video';
+import Video from '../../components/Video';
 import ScheduleRow from '../../components/ScheduleRow';
 
 import { mediaHost } from '../../config';
