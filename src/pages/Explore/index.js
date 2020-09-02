@@ -15,7 +15,6 @@ import Carousel from 'react-native-snap-carousel';
 
 import Challenge from '../../components/Challenge';
 import SearchButton from '../../components/SearchButton';
-import NavBar from '../../components/NavBar';
 import Plan from '../../components/Plan';
 
 import { Actions } from 'react-native-router-flux';
@@ -27,25 +26,6 @@ const { width } = Dimensions.get('window');
 
 const ITEM_WIDTH = width - 60;
 
-const viewedBy = [
-  {
-    picture: require('dash/src/res/viewedBy/4.png'),
-  },
-  {
-    picture: require('dash/src/res/viewedBy/3.png'),
-  },
-  {
-    picture: require('dash/src/res/viewedBy/1.jpg'),
-  },
-  {
-    picture: require('dash/src/res/viewedBy/2.jpg'),
-  },
-  {},
-  {},
-  {},
-  {},
-]
-
 function renderItem(item, index, user) {
   return (
     <TouchableWithoutFeedback
@@ -55,7 +35,7 @@ function renderItem(item, index, user) {
       <View>
         <Challenge
           value={item}
-          viewedBy={viewedBy}
+          //viewedBy={viewedBy}
           explore
           cardWidth={ITEM_WIDTH}
         />

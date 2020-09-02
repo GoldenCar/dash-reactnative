@@ -29,6 +29,8 @@ async function getExerciseInformation(cardId) {
     return arrayResponse;
 }
 
+// CLEANUP: this needs more clean up
+
 async function getWorkoutData(day, user) {
     const userDisplayName = user && user.displayname ? user.displayname : '';
 

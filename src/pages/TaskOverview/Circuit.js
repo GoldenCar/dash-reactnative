@@ -13,6 +13,7 @@ export default function Component(props) {
   const exerciseCards = task.exeerciseCards || [];
   const [cards, setCards] = useState(exerciseCards);
 
+  // TODO: pull this out
   useEffect(() => {
     const getCardData = async () => {
       exerciseCards.map(async (exercise) => {
@@ -43,6 +44,7 @@ export default function Component(props) {
       >
         <Text style={styles.heading}>Circuit</Text>
         <Text style={styles.headingSubtitle}>
+          { /* TODO: need real data here */}
           5 Rounds
         </Text>
         {cards.map((exercise) => {

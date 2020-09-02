@@ -21,7 +21,6 @@ import Notifications from './pages/Notifications';
 import PastChallenges from './pages/PastChallenges';
 import Explore from './pages/Explore';
 import ExplorePost from './pages/Explore/ExplorePost';
-import AccountInformation from './pages/AccountInformation';
 import PickAUsername from './pages/PickAUsername';
 import ChallengeDetail from './pages/ChallengeDetail';
 import InviteFriends from 'dash/src/pages/ChallengeDetail/InviteFriends';
@@ -151,11 +150,6 @@ export default () => {
                                     <Scene
                                         key="InviteFriendsToDash"
                                         component={InviteFriendsToDash}
-                                        hideNavBar
-                                    />
-                                    <Scene
-                                        key="AccountInformation"
-                                        component={AccountInformation}
                                         hideNavBar
                                     />
                                     <Scene key="CameraRoll" component={CameraRoll} hideNavBar />

@@ -3,7 +3,7 @@ import { View, StyleSheet, Dimensions, Image, Animated, TouchableOpacity } from 
 import { Actions } from 'react-native-router-flux';
 
 import { mediaHost } from 'dash/src/config';
-import { Close } from '../../../components/Icons';
+import { Close } from '../../components/Icons';
 
 const { width, height } = Dimensions.get('window');
 

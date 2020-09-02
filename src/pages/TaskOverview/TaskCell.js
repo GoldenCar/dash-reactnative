@@ -14,6 +14,7 @@ export default function (props) {
 
   const [fullTask, setTask] = useState(task);
 
+  // TODO: pull this out
   useEffect(() => {
     const getData = async () => {
       if (fullTask.flag !== 'exercise') {

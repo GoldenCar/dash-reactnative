@@ -6,12 +6,12 @@ import { Actions } from 'react-native-router-flux';
 
 import AuthPopup from 'dash/src/components/AuthPopup';
 import Header from './Header';
-import Countdown from '../../../components/Countdown';
-import { Calendar } from '../../../components/Icons';
+import Countdown from '../../components/Countdown';
+import { Calendar } from '../../components/Icons';
 
-import * as plansActions from '../../../actions/plans';
-import * as userActions from '../../../actions/user';
-import * as challengeActions from '../../../actions/challenges';
+import * as plansActions from '../../actions/plans';
+import * as userActions from '../../actions/user';
+import * as challengeActions from '../../actions/challenges';
 
 import { mediaHost } from 'dash/src/config';
 
