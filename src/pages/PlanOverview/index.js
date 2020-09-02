@@ -16,16 +16,14 @@ export default function Component(props) {
 	const { challenge, plan } = props;
 	console.log('PLAN IN OVERVIEW', plan);
 
-	// TODO: hook up real data for progress bar
-	const daysCompleted = 23;
-	const totalDays = 30;
-	const progress = `${(daysCompleted / totalDays) * 100}%`;
-
-	const imageURL = `${mediaHost}${plan.planImage}`;
-
 	const now = moment(new Date());
 	const startDate = new Date(challenge.startDate);
 	const currentDay = moment(now).diff(startDate, 'days');
+
+	const totalDays = 30;
+	const progress = `${(currentDay / totalDays) * 100}%`;
+
+	const imageURL = `${mediaHost}${plan.planImage}`;
 
 	const [play, setPlay] = useState(false);
 	const [load, setLoad] = useState(false);
@@ -78,7 +76,7 @@ export default function Component(props) {
 				</View>
 
 				<Text style={styles.daysCompleted}>
-					{daysCompleted} of {totalDays} Days Complete
+					{currentDay} of {totalDays} Days Complete
 				</Text>
 
 				<Image

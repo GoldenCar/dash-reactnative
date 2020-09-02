@@ -12,8 +12,8 @@ import NavBar from 'dash/src/components/NavBar';
 import InformationContainer, {
   Title,
 } from 'dash/src/components/InformationContainer';
-import Gender from 'dash/src/components/Gender';
-import {Upload} from 'dash/src/components/Icons';
+// import Gender from 'dash/src/components/Gender';
+import { Upload } from 'dash/src/components/Icons';
 
 const array = [
   {
@@ -44,7 +44,7 @@ export default function Component() {
           <Text style={styles.uploadText}>Upload Profile Picture</Text>
         </View>
         <Title>Gender</Title>
-        <Gender />
+        {/* <Gender /> */}
         <InformationContainer title="Details" items={array} />
         <TouchableOpacity style={styles.confirmContainer}>
           <Text style={styles.confirmText}>Confirm Account</Text>

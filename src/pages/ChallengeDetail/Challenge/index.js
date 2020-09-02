@@ -24,10 +24,14 @@ export default class Component extends React.Component {
   }
 
   async componentDidMount() {
-    const { plan } = this.props;
+    const { plan, challenge } = this.props;
+
+    console.log(plan, challenge);
+
+    const planID = plan._id || challenge.PlanID;
 
     // TODO: clean this up & pull into it's own function
-    const planData = await planActions.getPlanTasks(plan._id);
+    const planData = await planActions.getPlanTasks(planID);
     if (planData.planTypeData.length === 0) {
       return;
     }
@@ -91,6 +95,8 @@ export default class Component extends React.Component {
                   challenge={challenge}
                   user={user}
                   onPress={() => Actions.PlanOverview({ challenge, plan })}
+                  plan={plan}
+                  currentTimestamp={now}
                 />
               )}
           </View>

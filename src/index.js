@@ -9,7 +9,7 @@ import store from './store';
 import AuthPopup from 'dash/src/components/AuthPopup';
 
 import PlanOverview from './pages/PlanOverview';
-import Main from './pages/Main';
+import TaskOverview from './pages/TaskOverview';
 import MyChallenges from './pages/MyChallenges';
 
 import CameraRoll from './pages/CameraRoll';
@@ -103,7 +103,7 @@ export default () => {
                                             <Scene key="Friends" component={Friends} hideNavBar />
                                             <Scene key="PreviousChallenges" component={PreviousChallenges} hideNavBar />
                                             <Scene key="AccountDetails" component={AccountDetails} hideNavBar />
-                                            
+
                                             <Scene
                                                 key="Notifications"
                                                 component={Notifications}
@@ -136,12 +136,12 @@ export default () => {
                                         component={PastChallenges}
                                         hideNavBar
                                     />
-                                    <Scene key="Main" component={Main} hideNavBar />
-                                    <Scene
+                                    <Scene key="TaskOverview" component={TaskOverview} hideNavBar />
+                                    {/* <Scene
                                         key="ScrollAnimation"
                                         component={ScrollAnimation}
                                         hideNavBar
-                                    />
+                                    /> */}
                                     <Scene key="ExplorePost" component={ExplorePost} hideNavBar />
                                     <Scene
                                         key="PickAUsername"

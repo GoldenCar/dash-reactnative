@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import moment from 'moment';
 
 import { ArrowRight } from '../../../components/Icons';
 
 export default function Component(props) {
-  const { currentDay, dayData, challenge, user, onPress } = props;
+  const { currentDay, dayData, challenge, user, onPress, plan, now } = props;
   const day = dayData[currentDay] || {};
 
-  console.log('day', day);
+  const weekDayName = moment(now).format('dddd');
+  const dayName = moment(now).format('MMM D');
 
   return (
     <View style={styles.dayOverview}>
@@ -23,12 +25,18 @@ export default function Component(props) {
             {day.taskTitle}
           </Text>
           <Text style={styles.daySubtitle}>
-            Friday Jan 24
+            {weekDayName} {dayName}
           </Text>
         </View>
         <TouchableOpacity
           style={styles.startButton}
-          onPress={() => Actions.Main({ challenge: challenge, user: user })}
+          onPress={() => Actions.TaskOverview({
+            challenge: challenge,
+            user: user,
+            day: day,
+            currentDay: currentDay,
+            plan: plan
+          })}
         >
           <Text style={styles.startText}>Start</Text>
           <ArrowRight />
