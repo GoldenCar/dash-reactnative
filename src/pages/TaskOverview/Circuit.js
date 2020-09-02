@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, Image } from 'react-native';
 
 import CircuitIcon from './CircuitIcon';
 
-import { getCircuitThumbnailUrl } from '../../helpers/Workout';
+import { getCircuitThumbnailUrl } from '../../helpers/workout';
 import * as planActions from '../../actions/plans';
 
 export default function Component(props) {
