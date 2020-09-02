@@ -1,35 +1,28 @@
-import React, {useEffect} from 'react';
-import {View, TouchableOpacity, Image, Keyboard} from 'react-native';
-import {Actions} from 'react-native-router-flux';
-import {connect} from 'react-redux';
+import React from 'react';
+import { View, TouchableOpacity, Image } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import {User, SearchIcon} from 'dash/src/components/Icons';
-
-import AccountDetails from 'dash/src/pages/Profile/AccountDetails';
-
-import FriendPopup from '../MyChallenges/FriendPopup';
+import FriendPopup from './FriendPopup';
 import CreateNewChallenge from '../CreateNewChallenge';
-
-import {AuthPopupRef} from '../../index';
-
-import {mediaHost} from '../../config';
-
-import {ScrollViewRef} from '../Profile';
-
 import TopLine from './TopLine';
-
 import CenterButton from './CenterButton';
 
+import { User, SearchIcon } from 'dash/src/components/Icons';
+
+import { AuthPopupRef } from '../../index';
+import { ScrollViewRef } from '../Profile';
+
+import { mediaHost } from '../../config';
+
 export let CreateNewChallengeRef;
-export let AccountDetailsRef;
 export let FriendPopupRef;
 
 function Component(props) {
-  const {user} = props;
-  const {state} = props.navigation;
+  const { user } = props;
+  const { state } = props.navigation;
   const activeTabIndex = state.index;
-  
 
   const getUserAvatar = () => {
     if (user && user.profileImage && user.profileImage.length > 0) {
@@ -37,7 +30,7 @@ function Component(props) {
         <View style={styles.avatarContainer}>
           <Image
             resizeMode="cover"
-            source={{uri: `${mediaHost}${user.profileImage}`}}
+            source={{ uri: `${mediaHost}${user.profileImage}` }}
             style={styles.avatar}
           />
         </View>
@@ -79,7 +72,7 @@ function Component(props) {
             console.log(user, user !== null)
             if (user !== null) {
               ScrollViewRef &&
-                ScrollViewRef.scrollTo({x: 0, y: 0, animated: true});
+                ScrollViewRef.scrollTo({ x: 0, y: 0, animated: true });
               Actions.MyProfile();
             } else {
               console.log(" elese osmsfsmf")
@@ -91,7 +84,6 @@ function Component(props) {
       </View>
       <FriendPopup ref={(e) => (FriendPopupRef = e)} />
       <CreateNewChallenge ref={(e) => (CreateNewChallengeRef = e)} />
-      {/*<AccountDetails user={user} ref={(e) => (AccountDetailsRef = e)} />*/}
     </>
   );
 }
@@ -138,6 +130,6 @@ const styles = EStyleSheet.create({
 
 Component.defaultProps = {};
 
-export default connect(({user}) => ({
+export default connect(({ user }) => ({
   user,
 }))(Component);

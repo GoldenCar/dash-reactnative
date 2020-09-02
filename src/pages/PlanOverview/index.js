@@ -9,7 +9,7 @@ import { mediaHost } from 'dash/src/config';
 import * as planActions from '../../actions/plans';
 
 import { BackArrow } from '../../components/Icons';
-import Video from '../CreateNewChallenge/Video';
+import Video from '../../components/Video';
 import ScheduleRow from '../../components/ScheduleRow';
 
 export default function Component(props) {

@@ -4,9 +4,7 @@ import Stories from './Stories';
 
 export default class App extends React.Component {
   state = {
-    ready: false,
-    stories: [],
-    arrayVersionTask: []
+    ready: false
   };
 
   componentDidMount() {

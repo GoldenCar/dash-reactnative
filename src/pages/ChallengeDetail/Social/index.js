@@ -8,6 +8,8 @@ import * as PostsActions from 'dash/src/actions/posts';
 
 import Post from './Post';
 
+// TODO: go through Social components
+
 class Component extends React.Component {
   PopupPostRef;
   state = {

@@ -5,7 +5,7 @@ import Video from 'react-native-video';
 import Modal from 'react-native-modal';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 
-import { mediaHost } from '../../config';
+import { mediaHost } from '../config';
 const { height, width } = Dimensions.get('screen');
 
 export default function Component(props) {
@@ -23,7 +23,7 @@ export default function Component(props) {
                 <TouchableOpacity style={styles.closeBtn} onPress={() => setPlay(false)}>
                     <Image
                         style={styles.closeIcon}
-                        source={require('../../res/close-video.png')}
+                        source={require('../res/close-video.png')}
                         resizeMode="contain"
                     />
                 </TouchableOpacity>

@@ -5,7 +5,9 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { Actions } from 'react-native-router-flux';
 
 import Challenge from './Challenge';
-import Header from './Challenge/Header';
+import Header from './Header';
+
+// TODO: clean up import file destinations
 import { Close, Settings } from 'dash/src/components/Icons';
 import Plus from '../MyChallenges/Icons/Plus';
 

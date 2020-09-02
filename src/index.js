@@ -16,12 +16,10 @@ import CameraRoll from './pages/CameraRoll';
 import CustomTabBar from './pages/CustomTabBar';
 import InviteFriendsToDash from './pages/InviteFriendsToDash';
 import InviteToChallenge from './pages/InviteToChallenge';
-import ScrollAnimation from './pages/ScrollAnimation';
 import Notifications from './pages/Notifications';
 import PastChallenges from './pages/PastChallenges';
 import Explore from './pages/Explore';
 import ExplorePost from './pages/Explore/ExplorePost';
-import AccountInformation from './pages/AccountInformation';
 import PickAUsername from './pages/PickAUsername';
 import ChallengeDetail from './pages/ChallengeDetail';
 import InviteFriends from 'dash/src/pages/ChallengeDetail/InviteFriends';
@@ -40,9 +38,6 @@ import Friends from './pages/Profile/Friends';
 import PreviousChallenges from './pages/Profile/PreviousChallenges';
 import AccountDetails from './pages/Profile/AccountDetails';
 
-// MyChallenges
-import ProfileDetailPopup from './pages/MyChallenges/ProfileDetailPopup';
-
 import * as settingsActions from 'dash/src/actions/settings';
 import * as userActions from 'dash/src/actions/user';
 import NewView from './pages/Workout/NewView';
@@ -52,7 +47,6 @@ import themes from './themes';
 EStyleSheet.build(themes.light);
 
 export let AuthPopupRef;
-export let ProfileDetailPopupRef;
 export let InviteFriendsRef;
 
 const createReducer = (params) => {
@@ -80,17 +74,11 @@ export default () => {
         <>
             <StatusBar translucent barStyle="light-content" />
             <View style={{ flex: 1, paddingTop: 20, }}>
-                {/*<View style={{flex: 1}}>*/}
                 <Provider store={store}>
                     {!loading && (
                         <>
                             <Router createReducer={createReducer}>
                                 <Scene key="root" hideNavBar>
-                                    {/* <Scene
-                     initial 
-                     key="HomePage1" 
-                     component={NewView} 
-                      /> */}
                                     <Scene
                                         initial
                                         key="HomePage"
@@ -137,11 +125,6 @@ export default () => {
                                         hideNavBar
                                     />
                                     <Scene key="TaskOverview" component={TaskOverview} hideNavBar />
-                                    {/* <Scene
-                                        key="ScrollAnimation"
-                                        component={ScrollAnimation}
-                                        hideNavBar
-                                    /> */}
                                     <Scene key="ExplorePost" component={ExplorePost} hideNavBar />
                                     <Scene
                                         key="PickAUsername"
@@ -151,11 +134,6 @@ export default () => {
                                     <Scene
                                         key="InviteFriendsToDash"
                                         component={InviteFriendsToDash}
-                                        hideNavBar
-                                    />
-                                    <Scene
-                                        key="AccountInformation"
-                                        component={AccountInformation}
                                         hideNavBar
                                     />
                                     <Scene key="CameraRoll" component={CameraRoll} hideNavBar />
@@ -172,7 +150,6 @@ export default () => {
                                     <Scene key="Search" component={Search} hideNavBar />
                                 </Scene>
                             </Router>
-                            <ProfileDetailPopup ref={(e) => (ProfileDetailPopupRef = e)} />
                             <AuthPopup ref={(e) => (AuthPopupRef = e)} />
                             <InviteFriends ref={(e) => (InviteFriendsRef = e)} />
                         </>

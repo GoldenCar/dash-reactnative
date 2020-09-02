@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 
 import FriendItem from 'dash/src/components/FriendItem';
 import NavBar from 'dash/src/components/NavBar';
@@ -15,9 +15,9 @@ import InvitationScroll from 'dash/src/components/InvitationScroll';
 
 import AddFriend from '../MyChallenges/Icons/AddFriend';
 import ChevronRight from '../MyChallenges/Icons/ChevronRight';
-import ChallengeYourFriends from '../MyChallenges/ChallengeYourFriends';
+import ChallengeYourFriends from './ChallengeYourFriends';
 
-import {FriendPopupRef} from 'dash/src/pages/CustomTabBar';
+import { FriendPopupRef } from 'dash/src/pages/CustomTabBar';
 
 const array = [
   {
@@ -78,37 +78,37 @@ export default function Component(props) {
         {array.length === 0 ? (
           <ChallengeYourFriends />
         ) : (
-          <View>
-            <Search placeholder="Find friends.." />
-            <InvitationScroll type="request"/>
-            {array.map((value, index) =>
-              value.first ? (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.container}
-                  onPress={() => Actions.InviteFriendsToDash()}>
-                  <View style={styles.startPart}>
-                    <View style={styles.pictureContainer}>
-                      <AddFriend />
-                    </View>
-                    <View style={styles.centerContainer}>
-                      <Text style={styles.inviteText}>
-                        Invite Friends to Dash
+            <View>
+              <Search placeholder="Find friends.." />
+              <InvitationScroll type="request" />
+              {array.map((value, index) =>
+                value.first ? (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.container}
+                    onPress={() => Actions.InviteFriendsToDash()}>
+                    <View style={styles.startPart}>
+                      <View style={styles.pictureContainer}>
+                        <AddFriend />
+                      </View>
+                      <View style={styles.centerContainer}>
+                        <Text style={styles.inviteText}>
+                          Invite Friends to Dash
                       </Text>
+                      </View>
                     </View>
-                  </View>
-                  <ChevronRight />
-                </TouchableOpacity>
-              ) : (
-                <FriendItem
-                  key={index}
-                  value={value}
-                  onPress={() => onPressFriend(value)}
-                />
-              ),
-            )}
-          </View>
-        )}
+                    <ChevronRight />
+                  </TouchableOpacity>
+                ) : (
+                    <FriendItem
+                      key={index}
+                      value={value}
+                      onPress={() => onPressFriend(value)}
+                    />
+                  ),
+              )}
+            </View>
+          )}
       </ScrollView>
     </View>
   );
