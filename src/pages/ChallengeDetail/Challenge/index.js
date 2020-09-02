@@ -96,6 +96,7 @@ export default class Component extends React.Component {
                   user={user}
                   onPress={() => Actions.PlanOverview({ challenge, plan })}
                   plan={plan}
+                  currentTimestamp={now}
                 />
               )}
           </View>
