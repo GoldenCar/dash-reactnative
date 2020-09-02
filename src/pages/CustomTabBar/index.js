@@ -1,35 +1,28 @@
-import React, { useEffect } from 'react';
-import { View, TouchableOpacity, Image, Keyboard } from 'react-native';
+import React from 'react';
+import { View, TouchableOpacity, Image } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-import { User, SearchIcon } from 'dash/src/components/Icons';
-
-import AccountDetails from 'dash/src/pages/Profile/AccountDetails';
-
 import FriendPopup from './FriendPopup';
 import CreateNewChallenge from '../CreateNewChallenge';
+import TopLine from './TopLine';
+import CenterButton from './CenterButton';
+
+import { User, SearchIcon } from 'dash/src/components/Icons';
 
 import { AuthPopupRef } from '../../index';
+import { ScrollViewRef } from '../Profile';
 
 import { mediaHost } from '../../config';
 
-import { ScrollViewRef } from '../Profile';
-
-import TopLine from './TopLine';
-
-import CenterButton from './CenterButton';
-
 export let CreateNewChallengeRef;
-export let AccountDetailsRef;
 export let FriendPopupRef;
 
 function Component(props) {
   const { user } = props;
   const { state } = props.navigation;
   const activeTabIndex = state.index;
-
 
   const getUserAvatar = () => {
     if (user && user.profileImage && user.profileImage.length > 0) {
@@ -91,7 +84,6 @@ function Component(props) {
       </View>
       <FriendPopup ref={(e) => (FriendPopupRef = e)} />
       <CreateNewChallenge ref={(e) => (CreateNewChallengeRef = e)} />
-      {/*<AccountDetails user={user} ref={(e) => (AccountDetailsRef = e)} />*/}
     </>
   );
 }
