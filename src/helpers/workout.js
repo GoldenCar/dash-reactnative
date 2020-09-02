@@ -1,9 +1,7 @@
 import thumbnail_rest_inside_circuit from '../res/workout/rest_inside_circuit.png';
 import thumbnail_note_card from '../res/workout/note_thumbnail.png';
-
-const bgimage_rest_inside_circuit = require('../res/workoutimage.png');
-const thumbnail_rest_outside_circuit = require('../res/workout/rest_outside_circuit.png');
-const thumbnail_old = require('../res/list_image.png');
+import bgimage_rest_inside_circuit from '../res/workoutimage.png';
+import thumbnail_rest_outside_circuit from '../res/workout/rest_outside_circuit.png';
 
 import { mediaHost } from 'dash/src/config';
 import * as planActions from '../actions/plans';
@@ -32,225 +30,233 @@ async function getExerciseInformation(cardId) {
 }
 
 async function getWorkoutData(day, user) {
-    let stories = [];
-
-    // return;
-
-    //let dayTasks = this.arrayTasks;
-    //let dataTask1 = dayTasks[0];
-    //this.setState({ arrayVersionTask: dataTask1 });
-    //let stories = [];
-    let userDisplayName = user && user.displayname ? user.displayname : '';
-
-    // TODO: put in helpers/workout
-
-    // IMPORTANT
+    //const stories = [];
+    const userDisplayName = user && user.displayname ? user.displayname : '';
 
     //  Getting videos and set them in the story 
-    for (let index = 0; index < day.versionDayTaskCard.length; index++) {
-
-        const element = day.versionDayTaskCard[index];
-        let arrayCircuitVideos = [];
-        let arrayVideoTimerCircuit = []; // gett the original video time   
-        let arrayNormalVideos = [];
-        let arrayVideoTimerNormal = [];
-
-        if (element.flag === "circuit") {
-            for (let index = 0; index < element.exeerciseCards.length; index++) {
-                const temp = element.exeerciseCards[index];
-
-                if (temp.flag === "video" && temp.fileName) {
-                    let dict = {
-                        'title': temp.title,
-                        'description': temp.description,
-                        'fileName': temp.fileName ? temp.fileName : '',
-                        'AutoPlay': temp.AutoPlay == 'checked' ? true : false,
-                        'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : true,
-                        'flag': temp.flag,
-                        'RestTime': temp.RestTime,
-                        'timer': false,
-                        "cardType": "video"
-                    }
-                    arrayCircuitVideos.push(dict);
-                    // const timer = temp.RestTime != "" ? temp.RestTime : 15;
-                    // arrayVideoTimerCircuit.push(timer);
-
-                }
-                else if (temp.flag === "rest") {
-                    let dict = {
-                        'title': temp.title,
-                        'description': temp.description,
-                        'flag': temp.flag,
-                        'thumbnailImage': bgimage_rest_inside_circuit,
-                        'RestTime': temp.RestTime,
-                        'timer': false,
-                        'cardType': 'rest',
-                        'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : '',
-                        'AutoPlay': temp.AutoPlay == 'checked' ? true : false,
-                    }
-                    arrayCircuitVideos.push(dict);
-                }
-                else if (temp.flag === "note") {
-                    let dict = {
-                        'title': temp.title,
-                        'description': temp.description,
-                        'flag': temp.flag,
-                        'thumbnailImage': thumbnail_note_card,
-                        'RestTime': temp.RestTime,
-                        'timer': false,
-                        'cardType': 'note',
-                        'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : '',
-                        'AutoPlay': false,
-                    }
-                    arrayCircuitVideos.push(dict);
-                }
-                else if (temp.flag === "exercise") {
-                    await getExerciseInformation(temp.cardUUID).then((exResponse) => {
-                        if (exResponse.exercisesData) {
-                            const cardData = exResponse.exercisesData.filter(data => data.id === temp.cardExerciseID);
-                            if (cardData.length) {
-                                const {
-                                    BaseVideo_fileName,
-                                    exerciseDescription,
-                                    exerciseName,
-                                } = cardData[0];
-
-                                let arrData = {
-                                    'title': exerciseName ? exerciseName : '',
-                                    'description': exerciseDescription ? exerciseDescription : '',
-                                    'fileName': BaseVideo_fileName ? BaseVideo_fileName : '',
-                                    'AutoPlayShowFlag': false,
-                                    'flag': 'video',
-                                    'RestTime': temp.RestTime,
-                                    'cardType': 'exercise',
-                                    'Reps': temp.Reps,
-                                    "Sets": temp.Sets,
-                                    'RepsCount': temp.RepsCount,
-                                    'AutoPlay': temp.AutoPlay == 'checked' ? true : false,
-                                }
-                                arrayCircuitVideos.push(arrData);
-                                //this.exerciseCardArray.push(cardData[0]);
-                            }
-                        }
-                    });
-                }
+    return Promise.all(
+        day.versionDayTaskCard.map(async (exercise) => {
+            if (exercise.flag === 'circuit') {
+                const circuitData = await getCiruitData(exercise, exercise.exeerciseCards, userDisplayName);
+                return circuitData;
+            } else {
+                const taskData = await getTaskData(exercise, userDisplayName);
+                return taskData;
             }
-            const pushData = {
-                id: '2',
-                source: require('dash/src/res/friends/friend1.png'),
-                user: userDisplayName,
-                avatar: require('dash/src/res/friends/friend1.png'),
-                timer: arrayVideoTimerCircuit,
-                videos: arrayCircuitVideos,
-                flag: 'circuit'
-            };
-            stories.push(pushData);
+        })
+    );
+}
 
-        } else {
+function getVideoData(temp) {
+    return {
+        'title': temp.title,
+        'description': temp.description,
+        'fileName': temp.fileName ? temp.fileName : '',
+        'AutoPlay': temp.AutoPlay == 'checked' ? true : false,
+        'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : true,
+        'flag': temp.flag,
+        'RestTime': temp.RestTime,
+        'timer': false,
+        "cardType": "video"
+    }
+}
 
-            if (element.flag === "exercise") {
-                await getExerciseInformation(element.cardUUID).then((exResponse1) => {
-                    if (exResponse1.exercisesData) {
-                        const cardData = exResponse1.exercisesData.filter(data => data.id === element.cardExerciseID);
-                        if (cardData.length) {
-                            const {
-                                BaseVideo_fileName,
-                                exerciseDescription,
-                                exerciseName,
-                            } = cardData[0];
+function getRestData(temp) {
+    return {
+        'title': temp.title,
+        'description': temp.description,
+        'flag': temp.flag,
+        'thumbnailImage': bgimage_rest_inside_circuit,
+        'RestTime': temp.RestTime,
+        'timer': false,
+        'cardType': 'rest',
+        'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : '',
+        'AutoPlay': temp.AutoPlay == 'checked' ? true : false,
+    }
+}
 
-                            let arrData = {
-                                'title': exerciseName ? exerciseName : '',
-                                'description': exerciseDescription ? exerciseDescription : '',
-                                'fileName': BaseVideo_fileName ? BaseVideo_fileName : '',
-                                'AutoPlayShowFlag': false,
-                                'flag': 'video',
-                                'RestTime': element.RestTime,
-                                'cardType': 'exercise',
-                                'Reps': element.Reps,
-                                'Sets': element.Sets,
-                                'RepsCount': element.RepsCount,
-                                'AutoPlay': element.AutoPlay == 'checked' ? true : false,
-                            }
-                            arrayNormalVideos.push(arrData);
-                            //this.exerciseCardArray.push(cardData[0]);
-                        }
-                    }
-                });
-            }
-            else if (element.flag === "video" && element.fileName) {
-                let dict = {
-                    'title': element.title,
-                    'description': element.description,
-                    'fileName': element.fileName ? element.fileName : '',
-                    'AutoPlay': element.AutoPlay == 'checked' ? true : false,
-                    'AutoPlayShowFlag': element.AutoPlayShowFlag ? element.AutoPlayShowFlag : '',
-                    'RestTime': element.RestTime,
-                    'timer': false,
-                    'flag': element.flag,
-                    'cardType': 'video'
-                }
+function getNoteData(temp) {
+    return {
+        'title': temp.title,
+        'description': temp.description,
+        'flag': temp.flag,
+        'thumbnailImage': thumbnail_note_card,
+        'RestTime': temp.RestTime,
+        'timer': false,
+        'cardType': 'note',
+        'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : '',
+        'AutoPlay': false,
+    }
+}
 
-                arrayNormalVideos.push(dict);
-            } else if (element.flag === 'note') {
-                let dict = {
-                    'title': element.title,
-                    'description': element.description,
-                    'flag': element.flag,
-                    'thumbnailImage': thumbnail_note_card,
-                    'RestTime': element.RestTime,
-                    'timer': false,
-                    'cardType': 'note',
-                    'AutoPlayShowFlag': element.AutoPlayShowFlag ? element.AutoPlayShowFlag : '',
-                    'AutoPlay': false,
-
-                }
-                arrayNormalVideos.push(dict);
-            }
-            else if (element.flag === "rest") {
-                let dict = {
-                    'title': element.title,
-                    'description': element.description,
-                    'flag': element.flag,
-                    'thumbnailImage': thumbnail_rest_outside_circuit,
-                    'RestTime': element.RestTime,
-                    'title': element.title,
-                    'timer': true,
-                    "cardType": "rest",
-                    'AutoPlayShowFlag': element.AutoPlayShowFlag ? element.AutoPlayShowFlag : '',
-                    'AutoPlay': element.AutoPlay == 'checked' ? true : false,
-                }
-                arrayNormalVideos.push(dict);
-
-                const timer = element.RestTime != "" ? element.RestTime : 15;
-                arrayVideoTimerNormal.push(timer);
-
-            }
-
-            if (arrayNormalVideos.length) {
-                const pushData = {
-                    id: '4',
-                    source: require('dash/src/res/friends/friend1.png'),
-                    user: userDisplayName,
-                    avatar: require('dash/src/res/friends/friend1.png'),
-                    timer: arrayVideoTimerNormal,
-                    videos: arrayNormalVideos,
-                    flag: 'solo'
-                };
-                stories.push(pushData);
-            }
-        }
-
-        return stories;
+async function getExerciseData(temp) {
+    const response = await getExerciseInformation(temp.cardUUID);
+    if (!response.exercisesData) {
+        return {};
     }
 
-    // clearTimeout(this.timeoutStories);
-    // this.timeoutStories = setTimeout(() => {
-    //   this.setState({
-    //     storiesArray: stories,
-    //     loading: false
-    //   });
-    // }, 2000);
+    const cardData = response.exercisesData.filter(data => data.id === temp.cardExerciseID);
+    if (cardData.length <= 0) {
+        return {};
+    }
+
+    const {
+        BaseVideo_fileName,
+        exerciseDescription,
+        exerciseName,
+    } = cardData[0];
+
+    return {
+        'title': exerciseName ? exerciseName : '',
+        'description': exerciseDescription ? exerciseDescription : '',
+        'fileName': BaseVideo_fileName ? BaseVideo_fileName : '',
+        'AutoPlayShowFlag': false,
+        'flag': 'video',
+        'RestTime': temp.RestTime,
+        'cardType': 'exercise',
+        'Reps': temp.Reps,
+        "Sets": temp.Sets,
+        'RepsCount': temp.RepsCount,
+        'AutoPlay': temp.AutoPlay == 'checked' ? true : false,
+    }
+}
+
+async function getCiruitData(element, exerciseCards, userDisplayName) {
+    const arrayCircuitVideos = [];
+    const arrayVideoTimerCircuit = [];
+
+    for (let index = 0; index < exerciseCards.length; index++) {
+        const temp = element.exeerciseCards[index];
+
+        if (temp.flag === "video" && temp.fileName) {
+            let dict = getVideoData(temp);
+            arrayCircuitVideos.push(dict);
+        } else if (temp.flag === "rest") {
+            let dict = getRestData(temp);
+            arrayCircuitVideos.push(dict);
+        } else if (temp.flag === "note") {
+            let dict = getNoteData(temp);
+            arrayCircuitVideos.push(dict);
+        } else if (temp.flag === "exercise") {
+            let dict = await getExerciseData(temp);
+            arrayCircuitVideos.push(dict);
+        }
+    }
+
+    const pushData = {
+        id: '2',
+        source: require('dash/src/res/friends/friend1.png'),
+        user: userDisplayName,
+        avatar: require('dash/src/res/friends/friend1.png'),
+        timer: arrayVideoTimerCircuit,
+        videos: arrayCircuitVideos,
+        flag: 'circuit'
+    };
+
+    return pushData;
+}
+
+async function getTaskData(exercise, userDisplayName) {
+    let pushData = {};
+    let arrayNormalVideos = [];
+    let arrayVideoTimerNormal = [];
+
+    if (exercise.flag === "exercise") {
+        await getExerciseInformation(exercise.cardUUID).then((exResponse1) => {
+            if (exResponse1.exercisesData) {
+                const cardData = exResponse1.exercisesData.filter(data => data.id === exercise.cardExerciseID);
+                if (cardData.length) {
+                    const {
+                        BaseVideo_fileName,
+                        exerciseDescription,
+                        exerciseName,
+                    } = cardData[0];
+
+                    let arrData = {
+                        'title': exerciseName ? exerciseName : '',
+                        'description': exerciseDescription ? exerciseDescription : '',
+                        'fileName': BaseVideo_fileName ? BaseVideo_fileName : '',
+                        'AutoPlayShowFlag': false,
+                        'flag': 'video',
+                        'RestTime': exercise.RestTime,
+                        'cardType': 'exercise',
+                        'Reps': exercise.Reps,
+                        'Sets': exercise.Sets,
+                        'RepsCount': exercise.RepsCount,
+                        'AutoPlay': exercise.AutoPlay == 'checked' ? true : false,
+                    }
+                    arrayNormalVideos.push(arrData);
+                }
+            }
+        });
+    }
+    // TODO: pull into own function
+    else if (exercise.flag === "video" && exercise.fileName) {
+        let dict = {
+            'title': exercise.title,
+            'description': exercise.description,
+            'fileName': exercise.fileName ? exercise.fileName : '',
+            'AutoPlay': exercise.AutoPlay == 'checked' ? true : false,
+            'AutoPlayShowFlag': exercise.AutoPlayShowFlag ? exercise.AutoPlayShowFlag : '',
+            'RestTime': exercise.RestTime,
+            'timer': false,
+            'flag': exercise.flag,
+            'cardType': 'video'
+        }
+
+        arrayNormalVideos.push(dict);
+
+        // TODO: pull into own function
+    } else if (exercise.flag === 'note') {
+        let dict = {
+            'title': exercise.title,
+            'description': exercise.description,
+            'flag': exercise.flag,
+            'thumbnailImage': thumbnail_note_card,
+            'RestTime': exercise.RestTime,
+            'timer': false,
+            'cardType': 'note',
+            'AutoPlayShowFlag': exercise.AutoPlayShowFlag ? exercise.AutoPlayShowFlag : '',
+            'AutoPlay': false,
+
+        }
+        arrayNormalVideos.push(dict);
+    }
+
+    // TODO: pull into own function
+    else if (exercise.flag === "rest") {
+        let dict = {
+            'title': exercise.title,
+            'description': exercise.description,
+            'flag': exercise.flag,
+            'thumbnailImage': thumbnail_rest_outside_circuit,
+            'RestTime': exercise.RestTime,
+            'title': exercise.title,
+            'timer': true,
+            "cardType": "rest",
+            'AutoPlayShowFlag': exercise.AutoPlayShowFlag ? exercise.AutoPlayShowFlag : '',
+            'AutoPlay': exercise.AutoPlay == 'checked' ? true : false,
+        }
+        arrayNormalVideos.push(dict);
+
+        const timer = exercise.RestTime != "" ? exercise.RestTime : 15;
+        arrayVideoTimerNormal.push(timer);
+
+    }
+
+    if (arrayNormalVideos.length) {
+        pushData = {
+            id: '4',
+            source: require('dash/src/res/friends/friend1.png'),
+            user: userDisplayName,
+            avatar: require('dash/src/res/friends/friend1.png'),
+            timer: arrayVideoTimerNormal,
+            videos: arrayNormalVideos,
+            flag: 'solo'
+        };
+    }
+
+    return pushData;
 }
 
 export { getCircuitThumbnailUrl, getWorkoutData }
