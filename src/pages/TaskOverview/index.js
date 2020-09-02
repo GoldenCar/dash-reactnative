@@ -6,6 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import { mediaHost } from 'dash/src/config';
 import { getWorkoutData } from '../../helpers/workout';
+import { getCurrentDay } from '../../helpers/date';
 
 import { BackArrow } from '../../components/Icons';
 
@@ -52,7 +53,7 @@ function Component(props) {
                             Day {currentDay}
                         </Text>
                         <Text style={styles.dayBlueText}>
-                            Friday Jan 24
+                            {getCurrentDay()}
                         </Text>
                     </View>
                     <Image
