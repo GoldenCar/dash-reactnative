@@ -30,7 +30,6 @@ async function getExerciseInformation(cardId) {
 }
 
 async function getWorkoutData(day, user) {
-    //const stories = [];
     const userDisplayName = user && user.displayname ? user.displayname : '';
 
     //  Getting videos and set them in the story 
@@ -52,7 +51,7 @@ function getVideoData(temp) {
         'title': temp.title,
         'description': temp.description,
         'fileName': temp.fileName ? temp.fileName : '',
-        'AutoPlay': temp.AutoPlay == 'checked' ? true : false,
+        'AutoPlay': temp.AutoPlay === 'checked' ? true : false,
         'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : true,
         'flag': temp.flag,
         'RestTime': temp.RestTime,
@@ -71,8 +70,14 @@ function getRestData(temp) {
         'timer': false,
         'cardType': 'rest',
         'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : '',
-        'AutoPlay': temp.AutoPlay == 'checked' ? true : false,
+        'AutoPlay': temp.AutoPlay === 'checked' ? true : false,
     }
+
+    // diff from getTaskData
+    // let dict = {
+    //     'thumbnailImage': thumbnail_rest_outside_circuit,
+    //     'timer': true,
+    // }
 }
 
 function getNoteData(temp) {
@@ -162,86 +167,20 @@ async function getTaskData(exercise, userDisplayName) {
     let arrayVideoTimerNormal = [];
 
     if (exercise.flag === "exercise") {
-        await getExerciseInformation(exercise.cardUUID).then((exResponse1) => {
-            if (exResponse1.exercisesData) {
-                const cardData = exResponse1.exercisesData.filter(data => data.id === exercise.cardExerciseID);
-                if (cardData.length) {
-                    const {
-                        BaseVideo_fileName,
-                        exerciseDescription,
-                        exerciseName,
-                    } = cardData[0];
-
-                    let arrData = {
-                        'title': exerciseName ? exerciseName : '',
-                        'description': exerciseDescription ? exerciseDescription : '',
-                        'fileName': BaseVideo_fileName ? BaseVideo_fileName : '',
-                        'AutoPlayShowFlag': false,
-                        'flag': 'video',
-                        'RestTime': exercise.RestTime,
-                        'cardType': 'exercise',
-                        'Reps': exercise.Reps,
-                        'Sets': exercise.Sets,
-                        'RepsCount': exercise.RepsCount,
-                        'AutoPlay': exercise.AutoPlay == 'checked' ? true : false,
-                    }
-                    arrayNormalVideos.push(arrData);
-                }
-            }
-        });
-    }
-    // TODO: pull into own function
-    else if (exercise.flag === "video" && exercise.fileName) {
-        let dict = {
-            'title': exercise.title,
-            'description': exercise.description,
-            'fileName': exercise.fileName ? exercise.fileName : '',
-            'AutoPlay': exercise.AutoPlay == 'checked' ? true : false,
-            'AutoPlayShowFlag': exercise.AutoPlayShowFlag ? exercise.AutoPlayShowFlag : '',
-            'RestTime': exercise.RestTime,
-            'timer': false,
-            'flag': exercise.flag,
-            'cardType': 'video'
-        }
-
+        let dict = getExerciseData(exercise);
         arrayNormalVideos.push(dict);
-
-        // TODO: pull into own function
+    } else if (exercise.flag === "video" && exercise.fileName) {
+        let dict = getVideoData(exercise);
+        arrayNormalVideos.push(dict);
     } else if (exercise.flag === 'note') {
-        let dict = {
-            'title': exercise.title,
-            'description': exercise.description,
-            'flag': exercise.flag,
-            'thumbnailImage': thumbnail_note_card,
-            'RestTime': exercise.RestTime,
-            'timer': false,
-            'cardType': 'note',
-            'AutoPlayShowFlag': exercise.AutoPlayShowFlag ? exercise.AutoPlayShowFlag : '',
-            'AutoPlay': false,
-
-        }
+        let dict = getNoteData(exercise);
         arrayNormalVideos.push(dict);
-    }
-
-    // TODO: pull into own function
-    else if (exercise.flag === "rest") {
-        let dict = {
-            'title': exercise.title,
-            'description': exercise.description,
-            'flag': exercise.flag,
-            'thumbnailImage': thumbnail_rest_outside_circuit,
-            'RestTime': exercise.RestTime,
-            'title': exercise.title,
-            'timer': true,
-            "cardType": "rest",
-            'AutoPlayShowFlag': exercise.AutoPlayShowFlag ? exercise.AutoPlayShowFlag : '',
-            'AutoPlay': exercise.AutoPlay == 'checked' ? true : false,
-        }
+    } else if (exercise.flag === "rest") {
+        let dict = getRestData(exercise);
         arrayNormalVideos.push(dict);
 
         const timer = exercise.RestTime != "" ? exercise.RestTime : 15;
         arrayVideoTimerNormal.push(timer);
-
     }
 
     if (arrayNormalVideos.length) {
