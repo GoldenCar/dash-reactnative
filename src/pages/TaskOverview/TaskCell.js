@@ -1,29 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 
-export default class extends React.Component {
-  render() {
-    const { task } = this.props;
+import { getCircuitThumbnailUrl } from '../../helpers/Workout';
+import * as planActions from '../../actions/plans';
 
-    console.log('TASK CELL', task);
+export default function (props) {
+  const { task } = props;
 
-    let subtitle = '';
-    if (task.flag === 'exercise') {
-      subtitle = `${task.RepsCount} ${task.Reps}`;
+  let subtitle = '';
+  if (task.flag === 'exercise') {
+    subtitle = `${task.RepsCount} ${task.Reps}`;
+  }
+
+  const [fullTask, setTask] = useState(task);
+
+  useEffect(() => {
+    const getData = async () => {
+      if (fullTask.flag !== 'exercise') {
+        return;
+      }
+
+      const allExerciseData = await planActions.getExerciseData(fullTask.cardUUID);
+      const exerciseData = allExerciseData.exercisesData.filter((e) => e.id === fullTask.cardExerciseID);
+      if (exerciseData.length >= 1) {
+        fullTask.exerciseData = exerciseData[0];
+        setTask(task);
+      }
     }
 
-    return (
-      <View style={styles.container}>
-        <View style={styles.image}>
+    getData();
+  }, []);
 
-        </View>
-        <View>
-          <Text style={styles.title}>{task.title}</Text>
-          <Text style={styles.subtitle}>{subtitle}</Text>
-        </View>
+  const thumbnailURL = getCircuitThumbnailUrl(fullTask);
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.image}>
+        <Image
+          source={thumbnailURL}
+          style={styles.image}
+        />
       </View>
-    );
-  }
+      <View>
+        <Text style={styles.title}>{task.title}</Text>
+        <Text style={styles.subtitle}>{subtitle}</Text>
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
