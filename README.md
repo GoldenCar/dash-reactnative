@@ -1,6 +1,6 @@
 # Dash App native app client
 
-###How to set up local dev environment
+### How to set up local dev environment
 1. Clone the repo
 2. Install rvm
 3. install cocoapods
