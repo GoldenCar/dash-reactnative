@@ -10,73 +10,62 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Actions} from 'react-native-router-flux';
 
 import AppleGoogleSignInButtons from './AppleGoogleSignInButtons';
 
-const {height, width} = Dimensions.get('screen');
+const { height, width } = Dimensions.get('screen');
 
 export default class Component extends React.Component {
   translateY = new Animated.Value(1);
+
   state = {
     visible: false,
   };
+
   open = () => {
-    this.setState(
-      {
-        visible: true,
-      },
-      () => {
-        Animated.timing(this.translateY, {
-          toValue: 0,
-          duration: 250,
-          easing: Easing.ease,
-          useNativeDriver: false,
-        }).start();
-      },
-    );
-  };
-  close = ({open = () => {}} = {}) => {
+    this.setState({ visible: true });
+
+    Animated.timing(this.translateY, {
+      toValue: 0,
+      duration: 250,
+      easing: Easing.ease,
+      useNativeDriver: false,
+    }).start();
+  }
+
+  close = () => {
+    this.setState({ visible: false });
+
     Animated.timing(this.translateY, {
       toValue: 1,
       duration: 250,
       easing: Easing.ease,
       useNativeDriver: false,
-    }).start(({finished}) => {
-      if (finished) {
-        this.setState({visible: false}, () => {
-          if (open) {
-            open();
-          }
-        });
-      }
     });
-  };
-  callbackButton = ({userInfo} = {}) => {
-    this.close({});
-  };
+  }
+
   render() {
     const backgroundColor = this.translateY.interpolate({
       inputRange: [0, 1],
       outputRange: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)'],
       extrapolate: 'clamp',
     });
+
     const translateY = this.translateY.interpolate({
       inputRange: [0, 1],
       outputRange: [0, 350],
       extrapolate: 'clamp',
     });
+
     return (
       this.state.visible && (
         <View style={styles.overlay}>
           <TouchableWithoutFeedback onPress={this.close}>
-            <Animated.View style={[styles.container, {backgroundColor}]} />
+            <Animated.View style={[styles.container, { backgroundColor }]} />
           </TouchableWithoutFeedback>
           <Animated.View
             style={[
-              {
-                transform: [{translateY}],
-              },
+              { transform: [{ translateY }] },
               styles.modalContainer,
             ]}>
             <View style={styles.header}>
@@ -88,7 +77,9 @@ export default class Component extends React.Component {
               <Text style={styles.title}>Join Dash</Text>
               <Text style={styles.text}>Join Liza Koshy on her 30 day</Text>
               <Text style={styles.text}>challenge and get healthier.</Text>
-              <AppleGoogleSignInButtons callbackButton={this.callbackButton} />
+              <AppleGoogleSignInButtons
+              // callbackButton={this.callbackButton} 
+              />
             </View>
           </Animated.View>
         </View>
@@ -98,6 +89,27 @@ export default class Component extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    width,
+    height,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    top: 0,
+    flex: 1,
+    zIndex: 1000,
+  },
+  modalContainer: {
+    marginTop: height - 350,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    backgroundColor: 'white',
+    marginHorizontal: 0,
+    height: 350,
+    overflow: 'hidden',
+    zIndex: 1001,
+  },
   text: {
     color: '#6F80A7',
     fontSize: 16,
@@ -129,27 +141,6 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     shadowOpacity: 0.5,
   },
-  container: {
-    width,
-    height,
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    top: 0,
-    flex: 1,
-    zIndex: 1000,
-  },
-  modalContainer: {
-    marginTop: height - 350,
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    backgroundColor: 'white',
-    marginHorizontal: 0,
-    height: 350,
-    overflow: 'hidden',
-    zIndex: 1001,
-  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -160,7 +151,3 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 });
-
-Component.defaultProps = {
-  callbackClose: () => {},
-};

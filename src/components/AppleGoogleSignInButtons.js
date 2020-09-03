@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity, Text, Image} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import appleAuth, {
   AppleAuthRequestOperation,
@@ -8,7 +8,7 @@ import appleAuth, {
 import { Actions } from 'react-native-router-flux';
 import jwt_decode from 'jwt-decode';
 
-import {Google, Apple} from '../components/Icons';
+import { Google, Apple } from '../components/Icons';
 
 import * as userActions from '../actions/user';
 
@@ -31,14 +31,29 @@ const arrAvatar = [
 
 export default class Component extends React.Component {
   createAccount = async ({ userInfo }) => {
-    try {
-      const { callbackButton } = this.props;
-      const res = await userActions.loginGoogleUser({
-        id_token: userInfo.idToken,
-        username: '',
+    // const { callbackButton } = this.props;
+    const res = await userActions.loginGoogleUser({
+      id_token: userInfo.idToken,
+      username: '',
+    });
+
+    if (!res.profileImage || res.profileImage && res.profileImage.slice(0, 5) === 'https') {
+      await userActions.editUserPicture(res, Image.resolveAssetSource(arrAvatar[Math.floor(Math.random() * arrAvatar.length)]))
+    }
+
+    // if (callbackButton) {
+    //   callbackButton({ userInfo });
+    // }
+
+    if (res.username === '') {
+      Actions.PickAUsername({
+        userInfo,
+        callback: () => {
+          Actions.pop();
+        },
       });
-      if(!res.profileImage || res.profileImage && res.profileImage.slice(0,5) === 'https'){
-        await userActions.editUserPicture(res,Image.resolveAssetSource(arrAvatar[Math.floor(Math.random() * arrAvatar.length)]))
+      if (!res.profileImage || res.profileImage && res.profileImage.slice(0, 5) === 'https') {
+        await userActions.editUserPicture(res, Image.resolveAssetSource(arrAvatar[Math.floor(Math.random() * arrAvatar.length)]))
       }
       if (callbackButton) {
         callbackButton({ userInfo });
@@ -56,8 +71,9 @@ export default class Component extends React.Component {
     }
 
   };
+
   createAccountApple = async (data) => {
-    const { callbackButton } = this.props;
+    // const { callbackButton } = this.props;
     const identityData = jwt_decode(data.identityToken);
     console.log('identity data', identityData);
     // TODO: once server endpoint is fixed, need to remove this
@@ -74,13 +90,17 @@ export default class Component extends React.Component {
       photo: '',
       kid: data.user,
     });
-    if(!res.profileImage){
-      await userActions.editUserPicture(res,Image.resolveAssetSource(arrAvatar[Math.floor(Math.random() * arrAvatar.length)]))
+
+    if (!res.profileImage) {
+      await userActions.editUserPicture(res, Image.resolveAssetSource(arrAvatar[Math.floor(Math.random() * arrAvatar.length)]))
     }
-    if (callbackButton) {
-      callbackButton({ userInfo: data });
-    }
+
+    // if (callbackButton) {
+    //   callbackButton({ userInfo: data });
+    // }
+
   };
+
   onPressGoogle = async () => {
     try {
       await GoogleSignin.hasPlayServices({
@@ -93,26 +113,34 @@ export default class Component extends React.Component {
       console.log(e.message);
     }
   };
-  onAppleButtonPress = async () => {
-    try {
-      const { callbackButton } = this.props;
-      const appleAuthRequestResponse = await appleAuth.performRequest({
-        requestedOperation: AppleAuthRequestOperation.LOGIN,
-        requestedScopes: [
-          AppleAuthRequestScope.EMAIL,
-          AppleAuthRequestScope.FULL_NAME,
-        ],
-      });
-      console.log(appleAuthRequestResponse)
 
-      this.createAccountApple(appleAuthRequestResponse);
-      if (callbackButton) {
-        callbackButton();
-      }
-    } catch (e) {
-      console.log('on apple auth', e);
-    }
+  onAppleButtonPress = async () => {
+    // try {
+    //   //const { callbackButton } = this.props;
+    //   const appleAuthRequestResponse = await appleAuth.performRequest({
+    //     requestedOperation: AppleAuthRequestOperation.LOGIN,
+    //     requestedScopes: [
+    //       AppleAuthRequestScope.EMAIL,
+    //       AppleAuthRequestScope.FULL_NAME,
+    //     ],
+    //   });
+    //   console.log(appleAuthRequestResponse)
+
+    //   this.createAccountApple(appleAuthRequestResponse);
+    //   // if (callbackButton) {
+    //   //   callbackButton();
+    //   // }
+    // } catch (e) {
+    //   console.log('on apple auth', e);
+    // }
+
+
+    const response = requestAppleLogin();
+
+    console.log('APPLE LOGIN RESPONSE', response);
+
   };
+
   render() {
     return Platform.OS === 'ios' ? (
       <TouchableOpacity
