@@ -47,6 +47,7 @@ async function getWorkoutData(day, user) {
     );
 }
 
+// TODO: can getData functions be combined?
 async function parseTaskData(exercise) {
     let data = {};
 
