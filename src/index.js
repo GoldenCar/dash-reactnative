@@ -40,7 +40,8 @@ import AccountDetails from './pages/Profile/AccountDetails';
 
 import * as settingsActions from 'dash/src/actions/settings';
 import * as userActions from 'dash/src/actions/user';
-import NewView from './pages/Workout/NewView';
+
+import CreateNewChallenge from './pages/CreateNewChallenge/CreateNewChallenge';
 
 import themes from './themes';
 
@@ -83,71 +84,39 @@ export default () => {
                                         initial
                                         key="HomePage"
                                         tabs={true}
-                                        tabBarComponent={CustomTabBar}>
-
-
+                                        tabBarComponent={CustomTabBar}
+                                    >
                                         <Scene key="MyProfile">
                                             <Scene key="Profile" component={Profile} hideNavBar />
                                             <Scene key="Friends" component={Friends} hideNavBar />
                                             <Scene key="PreviousChallenges" component={PreviousChallenges} hideNavBar />
                                             <Scene key="AccountDetails" component={AccountDetails} hideNavBar />
-
-                                            <Scene
-                                                key="Notifications"
-                                                component={Notifications}
-                                                hideNavBar
-                                            />
+                                            <Scene key="Notifications" component={Notifications} hideNavBar />
                                         </Scene>
                                         <Scene key="MyChallengesTab" initial>
-                                            <Scene
-                                                key="Challenges"
-                                                component={MyChallenges}
-                                                hideNavBar
-                                            />
+                                            <Scene key="Challenges" component={MyChallenges} hideNavBar />
                                         </Scene>
                                         <Scene key="ExploreTab">
                                             <Scene key="Explore" component={Explore} hideNavBar />
                                         </Scene>
                                     </Scene>
-                                    <Scene
-                                        key="PlanOverview"
-                                        component={PlanOverview}
-                                        hideNavBar
-                                    />
-                                    <Scene
-                                        key="InviteToChallenge"
-                                        component={InviteToChallenge}
-                                        hideNavBar
-                                    />
-                                    <Scene
-                                        key="PastChallenges"
-                                        component={PastChallenges}
-                                        hideNavBar
-                                    />
+                                    <Scene key="PlanOverview" component={PlanOverview} hideNavBar />
+                                    <Scene key="InviteToChallenge" component={InviteToChallenge} hideNavBar />
+                                    <Scene key="PastChallenges" component={PastChallenges} hideNavBar />
                                     <Scene key="TaskOverview" component={TaskOverview} hideNavBar />
                                     <Scene key="ExplorePost" component={ExplorePost} hideNavBar />
-                                    <Scene
-                                        key="PickAUsername"
-                                        component={PickAUsername}
-                                        hideNavBar
-                                    />
-                                    <Scene
-                                        key="InviteFriendsToDash"
-                                        component={InviteFriendsToDash}
-                                        hideNavBar
-                                    />
+                                    <Scene key="PickAUsername" component={PickAUsername} hideNavBar />
+                                    <Scene key="InviteFriendsToDash" component={InviteFriendsToDash} hideNavBar />
                                     <Scene key="CameraRoll" component={CameraRoll} hideNavBar />
-                                    <Scene
-                                        key="ChallengeDetail"
-                                        component={ChallengeDetail}
-                                        hideNavBar
-                                    />
+                                    <Scene key="ChallengeDetail" component={ChallengeDetail} hideNavBar />
                                     <Scene key="PostPage" component={PostPage} hideNavBar />
                                     <Scene key="CreatePost" component={CreatePost} hideNavBar />
                                     <Scene key="Workout" component={Workout} hideNavBar />
                                     <Scene key="Completed" component={Completed} hideNavBar />
                                     <Scene key="WorkoutOverView" component={WorkoutOverView} hideNavBar />
                                     <Scene key="Search" component={Search} hideNavBar />
+
+                                    <Scene key="CreateNewChallenge" component={CreateNewChallenge} hideNavBar />
                                 </Scene>
                             </Router>
                             <AuthPopup ref={(e) => (AuthPopupRef = e)} />

@@ -8,21 +8,21 @@ const { height, width } = Dimensions.get('screen');
 export default function Component(props) {
     const { challenge, CarouselRef, onPress, versionNum, isVersionModalShow, showVersionModal, setVersionNum } = props;
 
-    const translateY = CarouselRef._scrollPos.interpolate({
-        inputRange: [0, width],
-        outputRange: [height, 0],
-        extrapolate: 'clamp',
-    });
-    const translateX = CarouselRef._scrollPos.interpolate({
-        inputRange: [0, width],
-        outputRange: [-width, 0],
-        extrapolate: 'clamp',
-    });
-    const scale = CarouselRef._scrollPos.interpolate({
-        inputRange: [0, width],
-        outputRange: [1, 1],
-        extrapolate: 'clamp',
-    });
+    // const translateY = CarouselRef._scrollPos.interpolate({
+    //     inputRange: [0, width],
+    //     outputRange: [height, 0],
+    //     extrapolate: 'clamp',
+    // });
+    // const translateX = CarouselRef._scrollPos.interpolate({
+    //     inputRange: [0, width],
+    //     outputRange: [-width, 0],
+    //     extrapolate: 'clamp',
+    // });
+    // const scale = CarouselRef._scrollPos.interpolate({
+    //     inputRange: [0, width],
+    //     outputRange: [1, 1],
+    //     extrapolate: 'clamp',
+    // });
 
     if (!challenge.type) {
         return null;
@@ -37,10 +37,10 @@ export default function Component(props) {
     return (
         <Animated.View
             style={{
-                transform: [{ translateY }, { translateX }, { scale }],
+                // transform: [{ translateY }, { translateX }, { scale }],
                 flex: 1,
                 flexDirection: 'column',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
             }}
         >
             <DailyTask

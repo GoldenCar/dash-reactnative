@@ -100,15 +100,16 @@ function Component(props) {
             <Plan
               value={value}
               // TODO: this is a mess. need to clean up asap
-              onPress={() => CreateNewChallengeRef.openCreateNew(null, () =>
-                CreateNewChallengeRef.onPressNext({
-                  call: () => {
-                    if (value.planTypeData && value.planTypeData.length > 0) {
-                      CreateNewChallengeRef.onChangeChallenge({ type: value });
-                    }
-                  }
-                })
-              )}
+              // onPress={() => CreateNewChallengeRef.openCreateNew(null, () =>
+              //   CreateNewChallengeRef.onPressNext({
+              //     call: () => {
+              //       if (value.planTypeData && value.planTypeData.length > 0) {
+              //         CreateNewChallengeRef.onChangeChallenge({ type: value });
+              //       }
+              //     }
+              //   })
+              // )}
+              onPress={() => Actions.CreateNewChallenge({ plan: value })}
               useDefaultMargin
             />
           ))}

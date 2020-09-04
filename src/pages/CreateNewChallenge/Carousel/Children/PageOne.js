@@ -6,17 +6,17 @@ import CreateNew from '../../CreateNew';
 export default function Component(props) {
     const { CarouselRef, onChangeChallenge, onPressNext } = props;
 
-    const opacity = CarouselRef._scrollPos.interpolate({
-        inputRange: [0, 300],
-        outputRange: [1, 0],
-        extrapolate: 'clamp',
-    });
+    // const opacity = CarouselRef._scrollPos.interpolate({
+    //     inputRange: [0, 300],
+    //     outputRange: [1, 0],
+    //     extrapolate: 'clamp',
+    // });
 
     return (
         <Animated.ScrollView
             keyboardShouldPersistTaps={'never'}
             showsVerticalScrollIndicator={false}
-            style={{ opacity }}
+            //style={{ opacity }}
             contentContainerStyle={[styles.contentContainerStyle]}>
             <View style={styles.titleContainer1}>
                 <Text style={styles.titles}>Start your 30 day</Text>
