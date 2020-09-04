@@ -31,25 +31,30 @@ const arrAvatar = [
 
 export default class Component extends React.Component {
   createAccount = async ({ userInfo }) => {
-    const { callbackButton } = this.props;
-    const res = await userActions.loginGoogleUser({
-      id_token: userInfo.idToken,
-      username: '',
-    });
-    if(!res.profileImage || res.profileImage && res.profileImage.slice(0,5) === 'https'){
-      await userActions.editUserPicture(res,Image.resolveAssetSource(arrAvatar[Math.floor(Math.random() * arrAvatar.length)]))
-    }
-    if (callbackButton) {
-      callbackButton({ userInfo });
-    }
-    if (res.username === '') {
-      Actions.PickAUsername({
-        userInfo,
-        callback: () => {
-          Actions.pop();
-        },
+    try {
+      const { callbackButton } = this.props;
+      const res = await userActions.loginGoogleUser({
+        id_token: userInfo.idToken,
+        username: '',
       });
+      if(!res.profileImage || res.profileImage && res.profileImage.slice(0,5) === 'https'){
+        await userActions.editUserPicture(res,Image.resolveAssetSource(arrAvatar[Math.floor(Math.random() * arrAvatar.length)]))
+      }
+      if (callbackButton) {
+        callbackButton({ userInfo });
+      }
+      if (res.username === '') {
+        Actions.PickAUsername({
+          userInfo,
+          callback: () => {
+            Actions.pop();
+          },
+        });
+      }
+    }catch (e) {
+      console.log(e)
     }
+
   };
   createAccountApple = async (data) => {
     const { callbackButton } = this.props;

@@ -12,42 +12,53 @@ import {
   ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import * as UserActions from '../../actions/user';
 
-import FriendItem from '../../components/FriendItem';
+import FriendItem from 'dash/src/components/FriendItem';
 import { Actions } from 'react-native-router-flux';
 
 const {height, width} = Dimensions.get('screen');
 
 const array = [
   {
-    displayname: 'Invite To Challenge',
-    username: 'Send invite to a new or existing challenge.',
+    name: 'Invite To Challenge',
+    link: 'Send invite to a new or existing challenge.',
     onPress: () => Actions.InviteToChallenge()
   },
   {
-    displayname: 'Remove Friend',
-    username: 'Unfriend this person. ',
+    name: 'Remove Friend',
+    link: 'Unfriend this person. ',
   },
   {
-    displayname: 'Report',
-    username: 'Unfriend this person. ',
+    name: 'Report',
+    link: 'Unfriend this person. ',
   },
 ];
 
-
+const array2 = [
+  {
+    name: 'Add Friend',
+    link: 'Friend this person. ',
+  },
+  {
+    name: 'Invite To Challenge',
+    link: 'Send invite to a new or existing challenge.',
+    onPress: () => Actions.InviteToChallenge()
+  },
+  {
+    name: 'Report',
+    link: 'Send invite to a new or existing challenge.',
+  },
+];
 
 export default class Component extends React.Component {
   translateY = new Animated.Value(1);
   state = {
     visible: false,
     item: {},
-    type: '',
   };
-  open = (item, type) => {
+  open = (item) => {
     this.setState(
       {
-        type,
         visible: true,
         item,
       },
@@ -75,12 +86,6 @@ export default class Component extends React.Component {
       }
     });
   };
-
-  AddFriend = async () =>{
-    const {item} = this.state;
-    await UserActions.sendFriendInvite(item._id)
-  }
-
   render() {
     const {item} = this.state;
     const backgroundColor = this.translateY.interpolate({
@@ -93,23 +98,7 @@ export default class Component extends React.Component {
       outputRange: [0, 500],
       extrapolate: 'clamp',
     });
-    const array2 = [
-      {
-        displayname: 'Add Friend',
-        username: 'Friend this person. ',
-        onPress: this.AddFriend
-      },
-      {
-        displayname: 'Invite To Challenge',
-        username: 'Send invite to a new or existing challenge.',
-        onPress: () => Actions.InviteToChallenge()
-      },
-      {
-        displayname: 'Report',
-        username: 'Send invite to a new or existing challenge.',
-      },
-    ];
-    const useArray = this.state.type === 'user' ? array2 : array;
+    const useArray = item.noFriend ? array2 : array;
     return (
       this.state.visible && (
         <View style={styles.overlay}>
