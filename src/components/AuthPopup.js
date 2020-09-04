@@ -26,7 +26,7 @@ export default class Component extends React.Component {
       toValue: 0,
       duration: 250,
       easing: Easing.ease,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
   }
 
@@ -39,7 +39,7 @@ export default class Component extends React.Component {
       toValue: 1,
       duration: 250,
       easing: Easing.ease,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start(({ finished }) => {
       if (finished) {
         this.setState({ visible: false });
@@ -48,10 +48,10 @@ export default class Component extends React.Component {
   }
 
   render() {
-    const backgroundColor = this.translateY.interpolate({
+    const opacity = this.translateY.interpolate({
       inputRange: [0, 1],
-      outputRange: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)'],
-      extrapolate: 'clamp',
+      outputRange: [1, 0],
+      extrapolate: 'clamp'
     });
 
     const translateY = this.translateY.interpolate({
@@ -64,7 +64,7 @@ export default class Component extends React.Component {
       this.state.visible && (
         <View style={styles.overlay}>
           <TouchableWithoutFeedback onPress={this.close}>
-            <Animated.View style={[styles.container, { backgroundColor }]} />
+            <Animated.View style={[styles.container, { opacity }]} />
           </TouchableWithoutFeedback>
           <Animated.View
             style={[
@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
     top: 0,
     flex: 1,
     zIndex: 1000,
+    backgroundColor: 'rgba(0,0,0,0.3)'
   },
   modalContainer: {
     marginTop: height - 350,
