@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Animated, Dimensions, Easing} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {connect} from 'react-redux';
-const {height, width} = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
 
 const center = width / 2 - 20 - 64 / 2;
 const left = width - 40 - 64;
@@ -20,6 +20,7 @@ class Component extends React.Component {
       }).start(({finished}) => {});
       return;
     }
+
     if (routeName === 'MyChallengesTab') {
       Animated.timing(this.transitionX, {
         toValue: 1,
@@ -29,6 +30,7 @@ class Component extends React.Component {
       }).start(({finished}) => {});
       return;
     }
+
     if (routeName === 'MyProfile') {
       Animated.timing(this.transitionX, {
         toValue: 0,
@@ -39,6 +41,7 @@ class Component extends React.Component {
       return;
     }
   }
+
   render() {
     const right = this.transitionX.interpolate({
       inputRange: [0, 1, 2],

@@ -19,67 +19,63 @@ import { mediaHost } from '../../config';
 export let CreateNewChallengeRef;
 export let FriendPopupRef;
 
+function getUserAvatar(user, activeTabIndex) {
+  if (user && user.profileImage && user.profileImage.length > 0) {
+    return (
+      <View style={styles.avatarContainer}>
+        <Image
+          resizeMode="cover"
+          source={{ uri: `${mediaHost}${user.profileImage}` }}
+          style={styles.avatar}
+        />
+      </View>
+    );
+  }
+
+  const stroke = activeTabIndex === 0 ? EStyleSheet.value('$lightBlue') : false;
+
+  return (
+    <User
+      stroke={stroke}
+      height={30}
+      width={30}
+    />
+  );
+};
+
 function Component(props) {
   const { user } = props;
   const { state } = props.navigation;
   const activeTabIndex = state.index;
 
-  const getUserAvatar = () => {
-    if (user && user.profileImage && user.profileImage.length > 0) {
-      return (
-        <View style={styles.avatarContainer}>
-          <Image
-            resizeMode="cover"
-            source={{ uri: `${mediaHost}${user.profileImage}` }}
-            style={styles.avatar}
-          />
-        </View>
-      );
+  const onAvatarPress = () => {
+    if (user !== null) {
+      ScrollViewRef && ScrollViewRef.scrollTo({ x: 0, y: 0, animated: true });
+      Actions.MyProfile();
+    } else {
+      AuthPopupRef.open();
     }
-    return (
-      <User
-        stroke={activeTabIndex === 0 ? EStyleSheet.value('$lightBlue') : false}
-        height={30}
-        width={30}
-      />
-    );
   };
+
+  const searchStroke = activeTabIndex === 2 ? EStyleSheet.value('$lightBlue') : false;
+  const exploreBorder = activeTabIndex === 2 ? EStyleSheet.value('$lightBlue') : 'white';
+
   return (
     <>
       <View style={styles.container}>
         <TopLine />
         <TouchableOpacity
           onPress={() => Actions.ExploreTab()}
-          style={[
-            styles.item,
-            {
-              borderTopColor:
-                activeTabIndex === 2
-                  ? EStyleSheet.value('$lightBlue')
-                  : 'white',
-            },
-          ]}>
-          <SearchIcon
-            stroke={
-              activeTabIndex === 2 ? EStyleSheet.value('$lightBlue') : false
-            }
-          />
+          style={[styles.item, { borderTopColor: exploreBorder }]}
+        >
+          <SearchIcon stroke={searchStroke} />
         </TouchableOpacity>
         <CenterButton />
         <TouchableOpacity
           style={styles.item}
-          onPress={() => {
-            console.log(user, user !== null)
-            if (user !== null) {
-              ScrollViewRef &&
-                ScrollViewRef.scrollTo({ x: 0, y: 0, animated: true });
-              Actions.MyProfile();
-            } else {
-              console.log(" elese osmsfsmf")
-              AuthPopupRef.open();
-            }
-          }}>
-          {getUserAvatar()}
+          onPress={onAvatarPress}
+        >
+          {getUserAvatar(user, activeTabIndex)}
         </TouchableOpacity>
       </View>
       <FriendPopup ref={(e) => (FriendPopupRef = e)} />
