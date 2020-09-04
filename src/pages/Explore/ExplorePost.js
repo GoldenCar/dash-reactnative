@@ -41,24 +41,32 @@ export default class Component extends React.Component {
   async onJoinPress() {
     const { user, challenge } = this.props;
 
+    const callback = () => Actions.ChallengeDetail({ challenge });
+
     if (!user) {
-      this.AuthPopupRef.open();
+      // TODO: take another look at this once AuthPopup refactor merged
+      this.AuthPopupRef.open(callback);
     } else {
-      const response = await userActions.editUser({
-        _id: user._id,
-        challengesIds: challenge._id
-      });
 
-      console.log('COMPETITION JOINED RESPONSE', response);
+      Actions.ChallengeDetail({ challenge });
 
-      const editChallengeData = {
-        _id: challenge._id,
-        joinedUsers: user._id
-      };
+      // TODO: re-enable once join challenge endpoint created
 
-      const addUserToChallengeResponse = await challengeActions.editChallenge(editChallengeData);
+      // const response = await userActions.editUser({
+      //   _id: user._id,
+      //   challengesIds: challenge._id
+      // });
 
-      console.log('USER ADDED TO COMPETITION RESPONSE', addUserToChallengeResponse);
+      // console.log('COMPETITION JOINED RESPONSE', response);
+
+      // const editChallengeData = {
+      //   _id: challenge._id,
+      //   joinedUsers: user._id
+      // };
+
+      // const addUserToChallengeResponse = await challengeActions.editChallenge(editChallengeData);
+
+      // console.log('USER ADDED TO COMPETITION RESPONSE', addUserToChallengeResponse);
     }
   }
 
