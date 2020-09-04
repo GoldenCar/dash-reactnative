@@ -12,7 +12,6 @@ import NavBar from 'dash/src/components/NavBar';
 import InformationContainer, {
   Title,
 } from 'dash/src/components/InformationContainer';
-// import Gender from 'dash/src/components/Gender';
 import { Upload } from 'dash/src/components/Icons';
 
 const array = [
