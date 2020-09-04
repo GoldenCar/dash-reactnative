@@ -23,6 +23,7 @@ export GEM_HOME=~/.gems
 export PATH=$PATH:~/.gems/bin
 ```
 4. Open another terminal window 
-5. Run `fastlane certificates` from the project root
-6. If there are auth problems with github running this, run `git config --global --add url."git@github.com:".insteadOf "https://github.com/"
+5. run `mkdir $GEM_HOME`
+6. Run `fastlane certificates` from the project root
+7. If there are auth problems with github running this, run `git config --global --add url."git@github.com:".insteadOf "https://github.com/"
 ` and try again - more info at https://jacopretorius.net/2018/05/git-error-could-not-read-username.html 
