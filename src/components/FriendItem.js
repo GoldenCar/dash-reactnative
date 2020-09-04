@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
+import {mediaHost} from 'dash/src/config';
 
 import Dots from '../pages/MyChallenges/Icons/Dots';
 import ChevronRight from '../pages/MyChallenges/Icons/ChevronRight';
@@ -33,14 +34,14 @@ export default function Component(props) {
           <View style={styles.pictureContainer}>
             <Image
               resizeMode="contain"
-              source={value.picture}
+              source={{uri: `${mediaHost}${value.profileImage}`}}
               style={styles.avatar}
             />
           </View>
         )}
         <View style={styles.centerContainer}>
-          <Text style={styles.name}>{value.name}</Text>
-          <Text style={styles.link}>{value.link}</Text>
+          <Text style={styles.name}>{value.displayname}</Text>
+          <Text style={styles.link}>{`@${value.username}`}</Text>
         </View>
       </View>
       {props.rightComponent ? (

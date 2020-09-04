@@ -53,7 +53,7 @@ class Component extends React.Component {
             {
               right,
             },
-          ]}></Animated.View>
+          ]}/>
       </View>
     );
   }

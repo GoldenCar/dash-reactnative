@@ -682,15 +682,6 @@ export default class extends React.Component {
                 <Text style={styles.storyTitle}>
                     {title ? title : ''}
                 </Text>
-                {/*{videos[currentIndex].cardType !== 'video' && (*/}
-                {/*    <Text style={[*/}
-                {/*        styles.storyDescription,*/}
-                {/*    ]}*/}
-                {/*          onTextLayout={this.onTextLayout}*/}
-                {/*    >*/}
-                {/*        {description ? description : ""}*/}
-                {/*    </Text>*/}
-                {/*)}*/}
                 {videos[currentIndex].cardType !== 'video' && (
                     <Text style={[
                         styles.storyDescription,
