@@ -17,7 +17,6 @@ export default function Component(props) {
           <Image
             style={[styles.viewedPicture, large ? {width: 50, height: 50} : {}]}
             resizeMode="cover"
-            // source={value.picture}
             source={require('dash/src/res/viewedBy/1.jpg')}
           />
         </View>
