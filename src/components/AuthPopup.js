@@ -10,7 +10,6 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import AppleGoogleSignInButtons from './AppleGoogleSignInButtons';
 
 const { height, width } = Dimensions.get('screen');
@@ -22,9 +21,7 @@ export default class Component extends React.Component {
     visible: false,
   };
 
-  open = () => {
-    this.setState({ visible: true });
-
+  showOpenAnimation = () => {
     Animated.timing(this.translateY, {
       toValue: 0,
       duration: 250,
@@ -33,14 +30,20 @@ export default class Component extends React.Component {
     }).start();
   }
 
-  close = () => {
-    this.setState({ visible: false });
+  open = () => {
+    this.setState({ visible: true }, () => this.showOpenAnimation());
+  }
 
+  close = () => {
     Animated.timing(this.translateY, {
       toValue: 1,
       duration: 250,
       easing: Easing.ease,
       useNativeDriver: false,
+    }).start(({ finished }) => {
+      if (finished) {
+        this.setState({ visible: false });
+      }
     });
   }
 
@@ -77,9 +80,7 @@ export default class Component extends React.Component {
               <Text style={styles.title}>Join Dash</Text>
               <Text style={styles.text}>Join Liza Koshy on her 30 day</Text>
               <Text style={styles.text}>challenge and get healthier.</Text>
-              <AppleGoogleSignInButtons
-              // callbackButton={this.callbackButton} 
-              />
+              <AppleGoogleSignInButtons onFinished={this.close} />
             </View>
           </Animated.View>
         </View>

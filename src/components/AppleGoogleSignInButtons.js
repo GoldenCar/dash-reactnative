@@ -1,164 +1,53 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Image } from 'react-native';
-import { GoogleSignin } from '@react-native-community/google-signin';
-import appleAuth, {
-  AppleAuthRequestOperation,
-  AppleAuthRequestScope,
-} from '@invertase/react-native-apple-authentication';
-import { Actions } from 'react-native-router-flux';
-import jwt_decode from 'jwt-decode';
-
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Google, Apple } from '../components/Icons';
-
-import * as userActions from '../actions/user';
-
-if (Platform.OS === 'android') {
-  GoogleSignin.configure({
-    webClientId:
-      //'942215840003-l4kldjpp92k91f1q07srekvunfpff3qt.apps.googleusercontent.com', // Debug
-      '799774940481-vfnnqtmfelum6v08o96r6vdm719qf906.apps.googleusercontent.com', // Live 
-    offlineAccess: false,
-  });
-}
-
-const arrAvatar = [
-  require('../res/Face/Face-1.png'),
-  require('../res/Face/Face-2.png'),
-  require('../res/Face/Face-3.png'),
-  require('../res/Face/Face-4.png'),
-  require('../res/Face/Face-5.png'),
-]
+import { requestAppleLogin, requestGoogleLogin } from '../helpers/auth';
 
 export default class Component extends React.Component {
-  createAccount = async ({ userInfo }) => {
-    // const { callbackButton } = this.props;
-    const res = await userActions.loginGoogleUser({
-      id_token: userInfo.idToken,
-      username: '',
-    });
+  onGoogleSignIn = async () => {
+    const response = await requestGoogleLogin();
+    // do something here
 
-    if (!res.profileImage || res.profileImage && res.profileImage.slice(0, 5) === 'https') {
-      await userActions.editUserPicture(res, Image.resolveAssetSource(arrAvatar[Math.floor(Math.random() * arrAvatar.length)]))
-    }
+    const { callback, onFinished } = this.props;
 
-    // if (callbackButton) {
-    //   callbackButton({ userInfo });
-    // }
+    onFinished();
 
-    if (res.username === '') {
-      Actions.PickAUsername({
-        userInfo,
-        callback: () => {
-          Actions.pop();
-        },
-      });
-      if (!res.profileImage || res.profileImage && res.profileImage.slice(0, 5) === 'https') {
-        await userActions.editUserPicture(res, Image.resolveAssetSource(arrAvatar[Math.floor(Math.random() * arrAvatar.length)]))
-      }
-      if (callbackButton) {
-        callbackButton({ userInfo });
-      }
-      if (res.username === '') {
-        Actions.PickAUsername({
-          userInfo,
-          callback: () => {
-            Actions.pop();
-          },
-        });
-      }
-    }catch (e) {
-      console.log(e)
-    }
-
-  };
-
-  createAccountApple = async (data) => {
-    // const { callbackButton } = this.props;
-    const identityData = jwt_decode(data.identityToken);
-    console.log('identity data', identityData);
-    // TODO: once server endpoint is fixed, need to remove this
-
-    const email = data.email || identityData.email;
-    const username = data.fullName.givenName || '';
-
-    const res = await userActions.loginAppleUser({
-      id_token: data.identityToken,
-      //username: data.fullName.givenName,
-      username: username,
-      //email: data.email,
-      email: email,
-      photo: '',
-      kid: data.user,
-    });
-
-    if (!res.profileImage) {
-      await userActions.editUserPicture(res, Image.resolveAssetSource(arrAvatar[Math.floor(Math.random() * arrAvatar.length)]))
-    }
-
-    // if (callbackButton) {
-    //   callbackButton({ userInfo: data });
-    // }
-
-  };
-
-  onPressGoogle = async () => {
-    try {
-      await GoogleSignin.hasPlayServices({
-        showPlayServicesUpdateDialog: true,
-      });
-      const userInfo = await GoogleSignin.signIn();
-      console.log({ userInfo })
-      this.createAccount({ userInfo });
-    } catch (e) {
-      console.log(e.message);
+    if (callback) {
+      callback();
     }
   };
 
-  onAppleButtonPress = async () => {
-    // try {
-    //   //const { callbackButton } = this.props;
-    //   const appleAuthRequestResponse = await appleAuth.performRequest({
-    //     requestedOperation: AppleAuthRequestOperation.LOGIN,
-    //     requestedScopes: [
-    //       AppleAuthRequestScope.EMAIL,
-    //       AppleAuthRequestScope.FULL_NAME,
-    //     ],
-    //   });
-    //   console.log(appleAuthRequestResponse)
+  onAppleSignIn = async () => {
+    const response = await requestAppleLogin();
+    // do something here
 
-    //   this.createAccountApple(appleAuthRequestResponse);
-    //   // if (callbackButton) {
-    //   //   callbackButton();
-    //   // }
-    // } catch (e) {
-    //   console.log('on apple auth', e);
-    // }
+    const { callback, onFinished } = this.props;
 
+    onFinished();
 
-    const response = requestAppleLogin();
-
-    console.log('APPLE LOGIN RESPONSE', response);
-
+    if (callback) {
+      callback();
+    }
   };
 
   render() {
     return Platform.OS === 'ios' ? (
       <TouchableOpacity
         style={styles.appleButtonContainer}
-        onPress={this.onAppleButtonPress}>
+        onPress={this.onAppleSignIn}>
         <Apple />
         <Text style={styles.signInAppleText}>Sign In With Apple</Text>
       </TouchableOpacity>
     ) : (
         <TouchableOpacity
           style={styles.googleButtonContainer}
-          onPress={this.onPressGoogle}>
+          onPress={this.onGoogleSignIn}>
           <View style={styles.googlePicture}>
             <Google />
           </View>
           <Text style={styles.signInGoogleText}>Sign In With Google</Text>
         </TouchableOpacity>
-      );
+      )
   }
 }
 
@@ -201,5 +90,3 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
 });
-
-Component.defaultProps = {};
