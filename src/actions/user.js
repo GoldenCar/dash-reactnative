@@ -16,6 +16,24 @@ export const getUserById = async (id) => {
   return response.data.data;
 };
 
+export const getUser = async () => {
+  const response = await api.get(`userapi`);
+  return response.data.data;
+};
+
+// export const sendFriendInvite = async (data) => {
+//   const response = await api.post(`sendFriendInvite`, data);
+//   return response.data.data;
+// };
+
+export const sendFriendInvite = async (id) => {
+  const response = await api.post(`sendFriendInvite`, {}, {headers:{
+      friendid:id
+    }});
+  console.log(response)
+  return response.data.data;
+};
+
 export const editUserPicture = async (data, picture) => {
   console.log(data, picture)
   try {
@@ -54,22 +72,27 @@ export const editUser = async (data) => {
 };
 
 export const loginGoogleUser = async ({ id_token, username }) => {
-  const response = await api.post('addGoogleUser', {
-    id_token,
-    username,
-  });
+  try {
+    const response = await api.post('addGoogleUser', {
+      id_token,
+      username,
+    });
 
-  console.log(" id_token ------", id_token, " user name ======", username);
+    console.log(" id_token ------", id_token, " user name ======", username);
 
-  api.defaults.headers.common.Authorization = `Bearer ${response.data.user_token}`;
-  AsyncStorage.setItem('@user', JSON.stringify(response.data.data));
-  AsyncStorage.setItem('@token', `Bearer ${response.data.user_token}`);
-  store.dispatch({
-    type: actionTypes.SET_USER,
-    payload: response.data.data,
-  });
-  getMyChallenges();
-  return response.data.data;
+    api.defaults.headers.common.Authorization = `Bearer ${response.data.user_token}`;
+    AsyncStorage.setItem('@user', JSON.stringify(response.data.data));
+    AsyncStorage.setItem('@token', `Bearer ${response.data.user_token}`);
+    store.dispatch({
+      type: actionTypes.SET_USER,
+      payload: response.data.data,
+    });
+    getMyChallenges();
+    return response.data.data;
+  }catch (e) {
+    console.log(e)
+  }
+
 };
 
 export const loginAppleUser = async (data) => {

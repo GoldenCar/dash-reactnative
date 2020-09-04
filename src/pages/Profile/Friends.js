@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  View,
-  StyleSheet,
-  ScrollView,
-  Text,
-  TouchableOpacity,
+    View,
+    StyleSheet,
+    ScrollView,
+    Text,
+    TouchableOpacity, SafeAreaView,
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 

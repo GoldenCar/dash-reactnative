@@ -28,7 +28,7 @@ const array = [
   {},
 ];
 
-export default function Component() {
+export default function Component(props) {
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -38,7 +38,7 @@ export default function Component() {
         </TouchableOpacity>
       </View>
       <View style={styles.bottom}>
-        <ViewedBy viewedBy={array} />
+        <ViewedBy viewedBy={props.list} />
         <LightButton
           title="Add New"
           iconLeft={<Add stroke="#1AA0FF" height="10" width="10" />}
