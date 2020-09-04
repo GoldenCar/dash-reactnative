@@ -30,7 +30,10 @@ const PreviousChallenges = props => {
 
     return (
         <View style={styles.container}>
-            <NavBar styleContainer={{backgroundColor: 'white'}} shadow={false} title="My Past Challenges"/>
+            <NavBar styleContainer={{backgroundColor: 'white'}}
+                    shadow={false}
+                    title="My Past Challenges"
+            />
             <ScrollView contentContainerStyle={{backgroundColor: '#F0F5FA', paddingTop: 100, paddingHorizontal: 16}}
                         style={{marginBottom: 70}}>
                 {list.map(value => {
