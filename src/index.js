@@ -81,7 +81,6 @@ export default () => {
                                 <Scene key="root" hideNavBar>
                                     <Scene initial key="Friends" component={Friends} hideNavBar />
                                     <Scene
-                                        
                                         key="HomePage"
                                         tabs={true}
                                         tabBarComponent={CustomTabBar}>
