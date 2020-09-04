@@ -8,10 +8,7 @@ export default class Component extends React.Component {
     const response = await requestGoogleLogin();
     // do something here
 
-    const { callback, onFinished } = this.props;
-
-    onFinished();
-
+    const { callback } = this.props;
     if (callback) {
       callback();
     }
@@ -21,10 +18,7 @@ export default class Component extends React.Component {
     const response = await requestAppleLogin();
     // do something here
 
-    const { callback, onFinished } = this.props;
-
-    onFinished();
-
+    const { callback } = this.props;
     if (callback) {
       callback();
     }

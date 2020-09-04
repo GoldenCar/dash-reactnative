@@ -80,7 +80,8 @@ export default class Component extends React.Component {
               <Text style={styles.title}>Join Dash</Text>
               <Text style={styles.text}>Join Liza Koshy on her 30 day</Text>
               <Text style={styles.text}>challenge and get healthier.</Text>
-              <AppleGoogleSignInButtons onFinished={this.close} />
+              { /*  */}
+              <AppleGoogleSignInButtons callback={this.close} />
             </View>
           </Animated.View>
         </View>
