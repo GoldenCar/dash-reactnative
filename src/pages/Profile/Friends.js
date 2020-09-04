@@ -4,7 +4,8 @@ import {
     StyleSheet,
     ScrollView,
     Text,
-    TouchableOpacity, SafeAreaView,
+    TouchableOpacity,
+    SafeAreaView,
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
