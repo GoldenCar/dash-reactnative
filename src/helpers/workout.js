@@ -55,7 +55,7 @@ async function parseTaskData(exercise) {
         data = getVideoData(exercise);
     } else if (exercise.flag === "rest") {
         data = getRestData(exercise);
-    } else if (temp.flag === "note") {
+    } else if (exercise.flag === "note") {
         data = getNoteData(exercise);
     } else if (exercise.flag === "exercise") {
         data = await getExerciseData(exercise);
@@ -80,7 +80,7 @@ async function getCiruitData(exercise, exerciseCards, userDisplayName) {
         user: userDisplayName,
         avatar: require('dash/src/res/friends/friend1.png'),
         timer: [],
-        videos: arrayCircuitVideos,
+        videos: videos,
         flag: 'circuit'
     };
 
