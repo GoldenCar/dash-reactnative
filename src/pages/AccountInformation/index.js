@@ -43,7 +43,6 @@ export default function Component() {
           <Text style={styles.uploadText}>Upload Profile Picture</Text>
         </View>
         <Title>Gender</Title>
-        {/* <Gender /> */}
         <InformationContainer title="Details" items={array} />
         <TouchableOpacity style={styles.confirmContainer}>
           <Text style={styles.confirmText}>Confirm Account</Text>
