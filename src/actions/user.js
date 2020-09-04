@@ -21,11 +21,6 @@ export const getUser = async () => {
   return response.data.data;
 };
 
-// export const sendFriendInvite = async (data) => {
-//   const response = await api.post(`sendFriendInvite`, data);
-//   return response.data.data;
-// };
-
 export const sendFriendInvite = async (id) => {
   const response = await api.post(`sendFriendInvite`, {}, {headers:{
       friendid:id
