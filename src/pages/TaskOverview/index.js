@@ -25,15 +25,15 @@ function Component(props) {
 
     useEffect(() => {
         const getWorkout = async () => {
-            const workoutData = await getWorkoutData(day, user);
-           // setStories(workoutData);
+            // const workoutData = await getWorkoutData(day, user);
+            // setStories(workoutData);
             // TODO: disable onPress til we get this data
 
-            console.log('WORKOUT DATA', workoutData);
+            //  console.log('WORKOUT DATA', workoutData);
 
             const newWorkoutData = await getWorkoutDataNew(day, user);
 
-            //console.log('NEW WORKOUT DATA', newWorkoutData);
+            console.log('NEW WORKOUT DATA', newWorkoutData);
 
             setStories(newWorkoutData);
         }

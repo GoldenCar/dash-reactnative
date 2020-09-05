@@ -25,43 +25,133 @@ function getCircuitThumbnailUrl(exercise) {
     return thumbnailUrl;
 }
 
+// TODO: why do i need to do this? this info should be on the exercise data already
 async function getExerciseInformation(cardId) {
     const arrayResponse = await planActions.getExerciseData(cardId)
     return arrayResponse;
 }
 
+// TODO: make circuit exercise request once
+//       set isCircuit
+//       set loopNum
+//       set exerciseNum
+async function parseCircuitData(circuit) {
+    const data = [];
+
+    let exercises = circuit.exeerciseCards;
+
+    const loops = parseInt(circuit.Cycles);
+
+    // get data for all circuit exercises
+    for (let p = 0; p < exercises.length; p++) {
+        const exerciseNum = p + 1;
+
+        const taskData = await getTaskDataNew(exercises[p]);
+
+        taskData.isCircuit = true;
+        taskData.exerciseNum = exerciseNum;
+
+        exercises[p] = taskData;
+    }
+
+    // add loop num and exercises based on how many circuit loops
+    for (let i = 0; i < loops; i++) {
+        for (let p = 0; p < exercises.length; p++) {
+            const loopNum = i + 1;
+            const fullExercise = { ...exercises[p], loopNum, loops };
+
+            data.push(fullExercise);
+        }
+    }
+
+    // add circuit complete card
+    data.push({
+        flag: 'circuitComplete'
+    });
+
+    return data;
+}
+
 async function getWorkoutDataNew(day, user) {
     const userDisplayName = user && user.displayname ? user.displayname : '';
-    return Promise.all(
-        day.versionDayTaskCard.map(async (exercise) => {
-            if (exercise.flag === 'circuit') {
-                //     const circuitData = await getCiruitData(exercise, exercise.exeerciseCards, userDisplayName);
-                //     return circuitData;
-                return {};
-            } else {
-                const taskData = await getTaskDataNew(exercise, userDisplayName);
-                return taskData;
-            }
-        })
-    );
+
+    let cards = [];
+
+    // TODO: make circuit exercise request once
+    //       set isCircuit
+    //       set loopNum
+    //       set exerciseNum
+
+    for (let i = 0; i < day.versionDayTaskCard.length; i++) {
+        const exercise = day.versionDayTaskCard[i];
+
+        if (exercise.flag === 'circuit') {
+            // const exercises = exercise.exeerciseCards;
+            // const loops = parseInt(exercise.Cycles);
+
+            // for (let p = 0; p < loops; p++) {
+            //     cards = cards.concat(exercises);
+            // }
+
+            // cards.push({
+            //     flag: 'circuitComplete'
+            // });
+
+            const data = await parseCircuitData(exercise);
+
+            console.log('CIRCUIT DATA', data);
+
+            cards = cards.concat(data);
+
+        } else if (exercise.flag !== 'circuit') {
+            //  cards.push(exercise);
+            const taskData = await getTaskDataNew(exercise, userDisplayName);
+            //return taskData;
+            cards.push(taskData);
+        }
+    }
+
+    console.log('CARAAAAARRRDS', cards);
+
+    return cards;
+
+    // return Promise.all(
+    //     cards.map(async (exercise) => {
+    //         const taskData = await getTaskDataNew(exercise, userDisplayName);
+    //         return taskData;
+    //     })
+    // );
+
+
+    // return Promise.all(
+    //     day.versionDayTaskCard.map(async (exercise) => {
+    //         if (exercise.flag === 'circuit') {
+
+    //             console.log('CIRCUIT', exercise);
+
+    //             const circuitCards = exercise.exeerciseCards.map(async (exercise) => {
+    //                 return await getTaskDataNew(exercise, userDisplayName);
+    //             })
+
+    //             const cardData = Promise.all(circuitCards);
+
+    //             console.log('CIRCUIT CARDS', cardData);
+
+    //             return cardData;
+
+
+    //             //     const circuitData = await getCiruitData(exercise, exercise.exeerciseCards, userDisplayName);
+    //             //     return circuitData;
+    //             //return {};
+    //         } else {
+    //             const taskData = await getTaskDataNew(exercise, userDisplayName);
+    //             return taskData;
+    //         }
+    //     })
+    // );
 }
 
 async function getTaskDataNew(exercise, name) {
-   // let data = {};
-
-    // if (exercise.flag === "video" && exercise.fileName) {
-    //     data = getVideoData(exercise);
-    // } else if (exercise.flag === "rest") {
-    //     data = getRestData(exercise);
-    // } else if (exercise.flag === "note") {
-    //     data = getNoteData(exercise);
-    // } else if (exercise.flag === "exercise") {
-    //     data = await getExerciseData(exercise);
-    // }
-
-    //return data;
-
-
     let data = {
         title: exercise.title,
         description: exercise.description,
@@ -118,7 +208,7 @@ async function getTaskDataNew(exercise, name) {
     // const pushData = {
     //     id: '4',
     //     source: require('dash/src/res/friends/friend1.png'),
-    //     user: userDisplayName,
+    //     user: name,
     //     avatar: require('dash/src/res/friends/friend1.png'),
     //     timer: arrayVideoTimerNormal,
     //     videos: [videos],

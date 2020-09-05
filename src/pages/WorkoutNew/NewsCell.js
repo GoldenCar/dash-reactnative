@@ -3,10 +3,20 @@ import { View, Text, StyleSheet } from 'react-native';
 
 export default class App extends React.Component {
     render() {
+        const { currentWorkout } = this.props;
+
+        console.log(currentWorkout);
+
+        let text = currentWorkout.flag;
+        if (currentWorkout.isCircuit) {
+            text = `${text} Circuit ${currentWorkout.loopNum} of ${currentWorkout.loops}`;
+        }
+
         return (
             <View style={styles.news}>
                 <Text style={styles.newsText}>
-                    Exercise
+                    {/* Exercise */}
+                    {text}
                 </Text>
             </View>
         );

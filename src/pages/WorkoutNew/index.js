@@ -53,11 +53,11 @@ export default class App extends React.Component {
     }
 
     onPause = () => {
-        this.setState({ paused: !this.state.paused });
+        this.setState({ paused: !this.state.paused, timerPaused: !this.state.paused });
     }
 
     render() {
-        const { index, loading, paused } = this.state;
+        const { index, loading, paused, timerPaused } = this.state;
         const { data } = this.props;
 
         console.log('WORKOUT NEW SCREEN', this.props);
@@ -89,7 +89,7 @@ export default class App extends React.Component {
 
         return (
             <View style={styles.container}>
-                {(loading && showVideo) && <LoadingScreen />}
+                {/* {(loading && showVideo) && <LoadingScreen />} */}
 
                 {
                     showVideo ? (
@@ -104,10 +104,10 @@ export default class App extends React.Component {
                             paused={paused}
                         />
                     ) : (
-                        // TODO: pull this out
+                            // TODO: pull this out
                             <View style={styles.rest}>
                                 <CountdownCircleTimer
-                                    isPlaying
+                                    isPlaying={!timerPaused}
                                     duration={30}
                                     colors="gray"
                                     trailColor='#fff'
@@ -135,7 +135,7 @@ export default class App extends React.Component {
                     onPrevious={this.onPrevious}
                 />
 
-                <NewsCell />
+                <NewsCell currentWorkout={currentWorkout} />
                 <ExerciseTitle currentWorkout={currentWorkout} />
                 <LapText />
             </View>
