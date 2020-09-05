@@ -89,7 +89,7 @@ export default class App extends React.Component {
 
         return (
             <View style={styles.container}>
-                {/* {(loading && showVideo) && <LoadingScreen />} */}
+                {(loading && showVideo) && <LoadingScreen />}
 
                 {
                     showVideo ? (
@@ -109,7 +109,7 @@ export default class App extends React.Component {
                                 <CountdownCircleTimer
                                     isPlaying={!timerPaused}
                                     duration={30}
-                                    colors="gray"
+                                    colors={'gray'}
                                     trailColor='#fff'
                                     size={210}
                                     strokeWidth={18}

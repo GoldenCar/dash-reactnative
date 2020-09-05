@@ -45,7 +45,7 @@ async function parseCircuitData(circuit) {
     for (let p = 0; p < exercises.length; p++) {
         const exerciseNum = p + 1;
 
-        const taskData = await getTaskDataNew(exercises[p]);
+        const taskData = await getTaskData(exercises[p]);
 
         taskData.isCircuit = true;
         taskData.exerciseNum = exerciseNum;

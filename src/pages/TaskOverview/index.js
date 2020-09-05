@@ -22,12 +22,15 @@ function Component(props) {
     console.log('DAY INFO', day);
 
     const [stories, setStories] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const getWorkout = async () => {
+            setLoading(true);
             const workoutData = await getWorkoutData(day);
             console.log('NEW WORKOUT DATA', workoutData);
             setStories(workoutData);
+            setLoading(false);
         }
 
         getWorkout();
@@ -90,7 +93,11 @@ function Component(props) {
                     )}
                 </View>
             </ScrollView>
-            <TouchableOpacity style={styles.button} onPress={onPress}>
+            <TouchableOpacity
+                style={[styles.button, loading && styles.disabled]}
+                onPress={onPress}
+                disabled={loading}
+            >
                 <Text style={styles.buttonText}>
                     Start Day
                 </Text>
@@ -201,6 +208,9 @@ const styles = StyleSheet.create({
         right: 16,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    disabled: {
+        backgroundColor: 'rgba(0,0,0,0.3)'
     },
     buttonText: {
         fontFamily: 'Poppins-Medium',
