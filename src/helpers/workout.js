@@ -30,6 +30,106 @@ async function getExerciseInformation(cardId) {
     return arrayResponse;
 }
 
+async function getWorkoutDataNew(day, user) {
+    const userDisplayName = user && user.displayname ? user.displayname : '';
+    return Promise.all(
+        day.versionDayTaskCard.map(async (exercise) => {
+            if (exercise.flag === 'circuit') {
+                //     const circuitData = await getCiruitData(exercise, exercise.exeerciseCards, userDisplayName);
+                //     return circuitData;
+                return {};
+            } else {
+                const taskData = await getTaskDataNew(exercise, userDisplayName);
+                return taskData;
+            }
+        })
+    );
+}
+
+async function getTaskDataNew(exercise, name) {
+   // let data = {};
+
+    // if (exercise.flag === "video" && exercise.fileName) {
+    //     data = getVideoData(exercise);
+    // } else if (exercise.flag === "rest") {
+    //     data = getRestData(exercise);
+    // } else if (exercise.flag === "note") {
+    //     data = getNoteData(exercise);
+    // } else if (exercise.flag === "exercise") {
+    //     data = await getExerciseData(exercise);
+    // }
+
+    //return data;
+
+
+    let data = {
+        title: exercise.title,
+        description: exercise.description,
+        autoPlay: exercise.AutoPlay === 'checked',
+        autoPlayShowFlag: exercise.AutoPlayShowFlag,
+        flag: exercise.flag,
+        restTime: exercise.RestTime,
+        timer: false
+    };
+
+    if (exercise.flag === 'rest') {
+        data.thumbnailImage = bgimage_rest_inside_circuit;
+    }
+
+    if (exercise.flag === 'video') {
+        data.fileName = exercise.fileName;
+    }
+
+    if (exercise.flag === 'note') {
+        data.thumbnailImage = thumbnail_note_card;
+    }
+
+    if (exercise.flag === 'exercise') {
+        data.flag = 'video';
+        data.cardType = 'exercise';
+        data.reps = exercise.Reps;
+        data.sets = exercise.Sets;
+        data.repsCount = exercise.RepsCount;
+
+        const response = await getExerciseInformation(exercise.cardUUID);
+        if (response.exercisesData) {
+            const cardData = response.exercisesData.filter(data => data.id === exercise.cardExerciseID);
+            if (cardData.length > 0) {
+                const { BaseVideo_fileName, exerciseName } = cardData[0];
+                data.fileName = BaseVideo_fileName;
+                data.title = exerciseName;
+            }
+        }
+    }
+
+    return data;
+
+
+
+
+    // let arrayVideoTimerNormal = [];
+    // const videos = await parseTaskData(exercise);
+
+    // if (exercise.flag === 'rest') {
+    //     const timer = exercise.RestTime != "" ? exercise.RestTime : 15;
+    //     arrayVideoTimerNormal.push(timer);
+    // }
+
+    // const pushData = {
+    //     id: '4',
+    //     source: require('dash/src/res/friends/friend1.png'),
+    //     user: userDisplayName,
+    //     avatar: require('dash/src/res/friends/friend1.png'),
+    //     timer: arrayVideoTimerNormal,
+    //     videos: [videos],
+    //     flag: 'solo'
+    // };
+
+    // return pushData;
+}
+
+// ==================================================
+
 async function getWorkoutData(day, user) {
     const userDisplayName = user && user.displayname ? user.displayname : '';
 
@@ -70,7 +170,7 @@ async function getCiruitData(exercise, exerciseCards, userDisplayName) {
 
     for (let index = 0; index < exerciseCards.length; index++) {
         const temp = exercise.exeerciseCards[index];
-        const data = parseTaskData(temp);
+        const data = await parseTaskData(temp);
         videos.push(data);
     }
 
@@ -102,7 +202,7 @@ async function getTaskData(exercise, userDisplayName) {
         user: userDisplayName,
         avatar: require('dash/src/res/friends/friend1.png'),
         timer: arrayVideoTimerNormal,
-        videos: videos,
+        videos: [videos],
         flag: 'solo'
     };
 
@@ -113,13 +213,14 @@ function getVideoData(temp) {
     return {
         'title': temp.title,
         'description': temp.description,
-        'fileName': temp.fileName ? temp.fileName : '',
         'AutoPlay': temp.AutoPlay === 'checked' ? true : false,
         'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : true,
         'flag': temp.flag,
         'RestTime': temp.RestTime,
         'timer': false,
-        "cardType": "video"
+        "cardType": 'video',
+        'fileName': temp.fileName ? temp.fileName : '',
+
     }
 }
 
@@ -127,13 +228,13 @@ function getRestData(temp) {
     return {
         'title': temp.title,
         'description': temp.description,
+        'AutoPlay': temp.AutoPlay === 'checked' ? true : false,
+        'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : true,
         'flag': temp.flag,
-        'thumbnailImage': bgimage_rest_inside_circuit,
         'RestTime': temp.RestTime,
         'timer': false,
         'cardType': 'rest',
-        'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : '',
-        'AutoPlay': temp.AutoPlay === 'checked' ? true : false,
+        'thumbnailImage': bgimage_rest_inside_circuit
     }
 
     // diff from getTaskData
@@ -147,13 +248,13 @@ function getNoteData(temp) {
     return {
         'title': temp.title,
         'description': temp.description,
+        'AutoPlay': false,
+        'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : true,
         'flag': temp.flag,
-        'thumbnailImage': thumbnail_note_card,
         'RestTime': temp.RestTime,
         'timer': false,
         'cardType': 'note',
-        'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : '',
-        'AutoPlay': false,
+        'thumbnailImage': thumbnail_note_card
     }
 }
 
@@ -178,6 +279,7 @@ async function getExerciseData(temp) {
         'title': exerciseName ? exerciseName : '',
         'description': exerciseDescription ? exerciseDescription : '',
         'fileName': BaseVideo_fileName ? BaseVideo_fileName : '',
+        'AutoPlay': temp.AutoPlay == 'checked' ? true : false,
         'AutoPlayShowFlag': false,
         'flag': 'video',
         'RestTime': temp.RestTime,
@@ -185,8 +287,7 @@ async function getExerciseData(temp) {
         'Reps': temp.Reps,
         "Sets": temp.Sets,
         'RepsCount': temp.RepsCount,
-        'AutoPlay': temp.AutoPlay == 'checked' ? true : false,
     }
 }
 
-export { getCircuitThumbnailUrl, getWorkoutData }
+export { getCircuitThumbnailUrl, getWorkoutData, getWorkoutDataNew }

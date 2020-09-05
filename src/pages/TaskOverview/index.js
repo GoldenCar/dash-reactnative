@@ -5,7 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { mediaHost } from 'dash/src/config';
-import { getWorkoutData } from '../../helpers/workout';
+import { getWorkoutData, getWorkoutDataNew } from '../../helpers/workout';
 import { getCurrentDay } from '../../helpers/date';
 
 import { BackArrow } from '../../components/Icons';
@@ -26,19 +26,31 @@ function Component(props) {
     useEffect(() => {
         const getWorkout = async () => {
             const workoutData = await getWorkoutData(day, user);
-            setStories(workoutData);
+           // setStories(workoutData);
             // TODO: disable onPress til we get this data
+
+            console.log('WORKOUT DATA', workoutData);
+
+            const newWorkoutData = await getWorkoutDataNew(day, user);
+
+            //console.log('NEW WORKOUT DATA', newWorkoutData);
+
+            setStories(newWorkoutData);
         }
 
         getWorkout();
     }, []);
 
-    const onPress = () => Actions.Workout({
-        challenge: challenge,
-        user: user,
-        stories: stories,
-        arrayVersionTask: day
-    });
+    // const onPress = () => Actions.Workout({
+    //     challenge: challenge,
+    //     user: user,
+    //     stories: stories,
+    //     arrayVersionTask: day
+    // });
+
+    const onPress = () => {
+        Actions.WorkoutNew({ data: stories });
+    }
 
     return (
         <View style={{ flex: 1 }}>
