@@ -137,7 +137,7 @@ export default class App extends React.Component {
 
                 <NewsCell currentWorkout={currentWorkout} />
                 <ExerciseTitle currentWorkout={currentWorkout} />
-                <LapText />
+                <LapText currentWorkout={currentWorkout} />
             </View>
         );
     }

@@ -9,13 +9,12 @@ export default class App extends React.Component {
 
         let text = currentWorkout.flag;
         if (currentWorkout.isCircuit) {
-            text = `${text} Circuit ${currentWorkout.loopNum} of ${currentWorkout.loops}`;
+            text = `Exercise ${currentWorkout.exerciseNum} of ${currentWorkout.totalExercises}`;
         }
 
         return (
             <View style={styles.news}>
                 <Text style={styles.newsText}>
-                    {/* Exercise */}
                     {text}
                 </Text>
             </View>
@@ -30,7 +29,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 18,
         left: 17,
-        width: 69,
+        paddingHorizontal: 8,
         height: 32,
         justifyContent: 'center',
         alignItems: 'center'
