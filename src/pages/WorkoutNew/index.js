@@ -1,19 +1,22 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import _ from 'lodash';
 import Video from 'react-native-video';
 import { Actions } from 'react-native-router-flux';
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 
 import { mediaHost } from '../../config';
 
 import LoadingScreen from './LoadingScreen';
 import NavButtons from './NavButtons';
+import ExerciseTitle from './ExerciseTitle';
+import LapText from './LapText';
+import NewsCell from './NewsCell';
 
 export default class App extends React.Component {
     state = {
         index: 0,
         loading: false,
-        //loading: true,
         paused: false
     }
 
@@ -65,44 +68,66 @@ export default class App extends React.Component {
 
         console.log('WORKOUT CURRENT WORKOUT ', currentWorkout);
 
+
+
         // TODO: handle this better
         if (_.isEmpty(currentWorkout) || !currentWorkout) {
             this.onNext();
             return null;
         }
 
+        let showVideo = true;
         if (!currentWorkout.fileName) {
-            this.onNext();
-            return null;
+            //this.onNext();
+            console.log('NO FILE HERE', currentWorkout);
+            //return null;
+
+            showVideo = false;
         }
 
         const source = { uri: encodeURI(`${mediaHost}${currentWorkout.fileName}`) };
 
-        // TODO: handle this better
-        let title = '';
-        if (currentWorkout.cardType === 'exercise' && currentWorkout.title) {
-            title = currentWorkout.title;
-        }
-
-        let reps = '';
-        if (currentWorkout.reps && currentWorkout.repsCount) {
-            reps = `${currentWorkout.repsCount} ${currentWorkout.reps}`;
-        }
-
         return (
             <View style={styles.container}>
-                {loading && <LoadingScreen />}
+                {(loading && showVideo) && <LoadingScreen />}
 
-                <Video
-                    source={source}
-                    // ref={this.videoRef}
-                    onLoadStart={this.onLoadStart}
-                    onReadyForDisplay={this.showVideo}
-                    resizeMode='cover'
-                    style={styles.video}
-                    repeat={true}
-                    paused={paused}
-                />
+                {
+                    showVideo ? (
+                        <Video
+                            source={source}
+                            // ref={this.videoRef}
+                            onLoadStart={this.onLoadStart}
+                            onReadyForDisplay={this.showVideo}
+                            resizeMode='cover'
+                            style={styles.video}
+                            repeat={true}
+                            paused={paused}
+                        />
+                    ) : (
+                        // TODO: pull this out
+                            <View style={styles.rest}>
+                                <CountdownCircleTimer
+                                    isPlaying
+                                    duration={30}
+                                    colors="gray"
+                                    trailColor='#fff'
+                                    size={210}
+                                    strokeWidth={18}
+                                >
+                                    {({ remainingTime }) => (
+                                        <View>
+                                            <Text style={styles.timerText}>
+                                                {remainingTime}
+                                            </Text>
+                                            <Text style={styles.timerSubText}>
+                                                Rest
+                                        </Text>
+                                        </View>
+                                    )}
+                                </CountdownCircleTimer>
+                            </View>
+                        )
+                }
 
                 <NavButtons
                     onNext={this.onNext}
@@ -110,29 +135,9 @@ export default class App extends React.Component {
                     onPrevious={this.onPrevious}
                 />
 
-                { /* TODO: move to component */}
-                <View style={styles.news}>
-                    <Text style={styles.newsText}>Exercise</Text>
-                </View>
-
-                { /* TODO: move to component */}
-                <View style={styles.titleContainer}>
-                    <Text style={styles.title}>
-                        {/* Overhead Single Arm Strict Shoulder Press */}
-                        {title}
-                    </Text>
-                    <Text style={styles.reps}>
-                        {/* 20 Reps */}
-                        {reps}
-                    </Text>
-                </View>
-
-                { /* TODO: move to component */}
-                <View style={styles.lap}>
-                    <Text style={styles.lapText}>
-                        Lap 1 of 3
-                    </Text>
-                </View>
+                <NewsCell />
+                <ExerciseTitle currentWorkout={currentWorkout} />
+                <LapText />
             </View>
         );
     }
@@ -147,52 +152,26 @@ const styles = StyleSheet.create({
         width: null,
         height: null,
     },
-    news: {
-        backgroundColor: 'rgba(63, 67, 79, 0.4)',
-        borderRadius: 4,
-        position: 'absolute',
-        top: 18,
-        left: 17,
-        width: 69,
-        height: 32,
+
+    rest: {
+        flex: 1,
+        backgroundColor: '#1AA0FF',
         justifyContent: 'center',
         alignItems: 'center'
     },
-    newsText: {
+
+    timerText: {
+        fontFamily: 'Poppins-Regular',
+        fontSize: 56,
         color: '#ffffff'
     },
-    titleContainer: {
-        position: 'absolute',
-        left: 16,
-        right: 16,
-        top: 60
-    },
-    title: {
-        fontFamily: 'Poppins-Bold',
-        fontSize: 24,
-        lineHeight: 32,
-        color: '#FFFFFF',
-        //text-shadow: 0px 4.50549px 20px rgba(63, 67, 79, 0.35),
-        marginBottom: 8
-    },
-    reps: {
-        fontFamily: 'Poppins-Bold',
-        fontSize: 32,
-        lineHeight: 39,
-        color: '#FFFFFF'
-        //text-shadow: 0px 4.50549px 20px rgba(63, 67, 79, 0.35);
-    },
-    lap: {
-        height: 16,
-        bottom: 16,
-        alignSelf: 'center'
-    },
-    lapText: {
+    timerSubText: {
         fontFamily: 'Poppins-Bold',
         fontSize: 12,
         lineHeight: 16,
         letterSpacing: 1.6,
         textTransform: 'uppercase',
-        color: '#FFFFFF'
+        color: '#FFFFFF',
+        textAlign: 'center'
     }
 });
