@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Dimensions } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 
 import Pause from './Icons/Pause';
 import Next from './Icons/Next';
@@ -15,22 +15,13 @@ export default class App extends React.Component {
         const { onNext, onPause, onPrevious } = this.props;
         return (
             <View style={styles.navButtons}>
-                <TouchableOpacity
-                    style={styles.prevButton}
-                    onPress={onPrevious}
-                >
+                <TouchableOpacity style={styles.prevButton} onPress={onPrevious}>
                     <Previous />
                 </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.pauseButton}
-                    onPress={onPause}
-                >
+                <TouchableOpacity style={styles.pauseButton} onPress={onPause}>
                     <Pause />
                 </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.nextButton}
-                    onPress={onNext}
-                >
+                <TouchableOpacity style={styles.nextButton} onPress={onNext}>
                     <Next />
                 </TouchableOpacity>
             </View>

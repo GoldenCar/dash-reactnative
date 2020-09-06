@@ -4,25 +4,18 @@ import { View, StyleSheet, Text } from 'react-native';
 export default class App extends React.Component {
     render() {
         const { currentWorkout } = this.props;
+        const { cardType, title, reps, repsCount } = currentWorkout;
 
-        // TODO: handle this better
-        let title = '';
-        if (currentWorkout.cardType === 'exercise' && currentWorkout.title) {
-            title = currentWorkout.title;
-        }
-
-        let reps = '';
-        if (currentWorkout.reps && currentWorkout.repsCount) {
-            reps = `${currentWorkout.repsCount} ${currentWorkout.reps}`;
-        }
+        const titleText = (cardType === 'exercise' && title) && title;
+        const repsText = (reps && repsCount) && `${repsCount} ${reps}`;
 
         return (
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>
-                    {title}
+                    {titleText}
                 </Text>
                 <Text style={styles.reps}>
-                    {reps}
+                    {repsText}
                 </Text>
             </View>
         );

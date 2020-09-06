@@ -4,11 +4,12 @@ import { View, Text, StyleSheet } from 'react-native';
 export default class App extends React.Component {
     render() {
         const { currentWorkout } = this.props;
+        let { isCircuit, totalLoops, loopNum } = currentWorkout
 
         let text = '';
-        if (currentWorkout.isCircuit) {
-            const totalLoops = currentWorkout.totalLoops || 0;
-            const loopNum = currentWorkout.loopNum || 0;
+        if (isCircuit) {
+            totalLoops = totalLoops || 0;
+            loopNum = loopNum || 0;
             text = `Circuit • Lap ${loopNum} of ${totalLoops}`;
         }
 

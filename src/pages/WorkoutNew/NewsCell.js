@@ -4,12 +4,13 @@ import { View, Text, StyleSheet } from 'react-native';
 export default class App extends React.Component {
     render() {
         const { currentWorkout } = this.props;
+        const { flag, isCircuit, exerciseNum, totalExercises } = currentWorkout;
 
         console.log(currentWorkout);
 
-        let text = currentWorkout.flag;
-        if (currentWorkout.isCircuit) {
-            text = `Exercise ${currentWorkout.exerciseNum} of ${currentWorkout.totalExercises}`;
+        let text = flag;
+        if (isCircuit) {
+            //   text = `Exercise ${exerciseNum} of ${totalExercises}`;
         }
 
         return (
