@@ -20,13 +20,13 @@ export default class extends React.Component {
     Animated.timing(this.animation, {
       toValue: 1,
       duration: 500,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start(() => {
       setTimeout(() => {
         Animated.timing(this.animation, {
           toValue: 2,
           duration: 500,
-          useNativeDriver: false,
+          useNativeDriver: true,
         }).start(() => {
           this.setState(
             (prev) => {

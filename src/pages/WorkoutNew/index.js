@@ -80,7 +80,7 @@ export default class App extends React.Component {
                 ) : flag === 'circuitComplete' ? (
                     <CircuitComplete />
                 ) : flag === 'rest' ? (
-                    <RestScreen isPlaying={!paused} />
+                    <RestScreen isPlaying={!paused} onComplete={this.onNext} />
                 ) : flag === 'video' ? (
                     <VideoScreen currentWorkout={currentWorkout} paused={paused} />
                 ) : null}

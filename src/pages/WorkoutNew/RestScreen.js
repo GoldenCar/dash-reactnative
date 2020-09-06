@@ -4,7 +4,7 @@ import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 
 export default class App extends React.Component {
     render() {
-        const { isPlaying } = this.props;
+        const { isPlaying, onComplete } = this.props;
 
         return (
             <View style={styles.rest}>
@@ -15,6 +15,7 @@ export default class App extends React.Component {
                     trailColor='#fff'
                     size={210}
                     strokeWidth={18}
+                    onComplete={onComplete}
                 >
                     {({ remainingTime }) => (
                         <View>
