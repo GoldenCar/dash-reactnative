@@ -25,168 +25,118 @@ function getCircuitThumbnailUrl(exercise) {
     return thumbnailUrl;
 }
 
+// TODO: why do i need to do this? this info should be on the exercise data already
 async function getExerciseInformation(cardId) {
     const arrayResponse = await planActions.getExerciseData(cardId)
     return arrayResponse;
 }
 
-async function getWorkoutData(day, user) {
-    const userDisplayName = user && user.displayname ? user.displayname : '';
+// TODO: make circuit exercise request once
+//       set isCircuit
+//       set loopNum
+//       set exerciseNum
+async function parseCircuitData(circuit) {
+    const data = [];
 
-    //  Getting videos and set them in the story 
-    return Promise.all(
-        day.versionDayTaskCard.map(async (exercise) => {
-            if (exercise.flag === 'circuit') {
-                const circuitData = await getCiruitData(exercise, exercise.exeerciseCards, userDisplayName);
-                return circuitData;
-            } else {
-                const taskData = await getTaskData(exercise, userDisplayName);
-                return taskData;
-            }
-        })
-    );
-}
+    let exercises = circuit.exeerciseCards;
+    const loops = parseInt(circuit.Cycles);
 
-// TODO: can getData functions be combined?
-async function parseTaskData(exercise) {
-    let data = {};
+    // get data for all circuit exercises
+    for (let p = 0; p < exercises.length; p++) {
+        const exerciseNum = p + 1;
 
-    if (exercise.flag === "video" && exercise.fileName) {
-        data = getVideoData(exercise);
-    } else if (exercise.flag === "rest") {
-        data = getRestData(exercise);
-    } else if (exercise.flag === "note") {
-        data = getNoteData(exercise);
-    } else if (exercise.flag === "exercise") {
-        data = await getExerciseData(exercise);
+        const taskData = await getTaskData(exercises[p]);
+
+        taskData.isCircuit = true;
+        taskData.exerciseNum = exerciseNum;
+
+        exercises[p] = taskData;
     }
+
+    // add loop num and exercises based on how many circuit loops
+    for (let i = 0; i < loops; i++) {
+        for (let p = 0; p < exercises.length; p++) {
+            const loopNum = i + 1;
+            const fullExercise = {
+                ...exercises[p],
+                loopNum,
+                totalLoops: loops,
+                totalExercises: exercises.length
+            };
+
+            data.push(fullExercise);
+        }
+    }
+
+    // add circuit complete card
+    data.push({ flag: 'circuitComplete' });
 
     return data;
 }
 
+async function getWorkoutData(day) {
+    let cards = [];
 
-async function getCiruitData(exercise, exerciseCards, userDisplayName) {
-    const videos = [];
+    for (let i = 0; i < day.versionDayTaskCard.length; i++) {
+        const exercise = day.versionDayTaskCard[i];
 
-    for (let index = 0; index < exerciseCards.length; index++) {
-        const temp = exercise.exeerciseCards[index];
-        const data = parseTaskData(temp);
-        videos.push(data);
+        if (exercise.flag === 'circuit') {
+            const data = await parseCircuitData(exercise);
+            cards = cards.concat(data);
+        } else if (exercise.flag !== 'circuit') {
+            const taskData = await getTaskData(exercise);
+            cards.push(taskData);
+        }
     }
 
-    const pushData = {
-        id: '2',
-        source: require('dash/src/res/friends/friend1.png'),
-        user: userDisplayName,
-        avatar: require('dash/src/res/friends/friend1.png'),
-        timer: [],
-        videos: videos,
-        flag: 'circuit'
-    };
-
-    return pushData;
+    return cards;
 }
 
-async function getTaskData(exercise, userDisplayName) {
-    let arrayVideoTimerNormal = [];
-    const videos = await parseTaskData(exercise);
+async function getTaskData(exercise) {
+    let data = {
+        title: exercise.title,
+        description: exercise.description,
+        autoPlay: exercise.AutoPlay === 'checked',
+        autoPlayShowFlag: exercise.AutoPlayShowFlag,
+        flag: exercise.flag,
+        timer: false
+    };
+
+    if (exercise.RestTime) {
+        data.restTime = parseInt(exercise.RestTime);
+    }
 
     if (exercise.flag === 'rest') {
-        const timer = exercise.RestTime != "" ? exercise.RestTime : 15;
-        arrayVideoTimerNormal.push(timer);
+        data.thumbnailImage = bgimage_rest_inside_circuit;
     }
 
-    const pushData = {
-        id: '4',
-        source: require('dash/src/res/friends/friend1.png'),
-        user: userDisplayName,
-        avatar: require('dash/src/res/friends/friend1.png'),
-        timer: arrayVideoTimerNormal,
-        videos: videos,
-        flag: 'solo'
-    };
-
-    return pushData;
-}
-
-function getVideoData(temp) {
-    return {
-        'title': temp.title,
-        'description': temp.description,
-        'fileName': temp.fileName ? temp.fileName : '',
-        'AutoPlay': temp.AutoPlay === 'checked' ? true : false,
-        'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : true,
-        'flag': temp.flag,
-        'RestTime': temp.RestTime,
-        'timer': false,
-        "cardType": "video"
-    }
-}
-
-function getRestData(temp) {
-    return {
-        'title': temp.title,
-        'description': temp.description,
-        'flag': temp.flag,
-        'thumbnailImage': bgimage_rest_inside_circuit,
-        'RestTime': temp.RestTime,
-        'timer': false,
-        'cardType': 'rest',
-        'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : '',
-        'AutoPlay': temp.AutoPlay === 'checked' ? true : false,
+    if (exercise.flag === 'video') {
+        data.fileName = exercise.fileName;
     }
 
-    // diff from getTaskData
-    // let dict = {
-    //     'thumbnailImage': thumbnail_rest_outside_circuit,
-    //     'timer': true,
-    // }
-}
-
-function getNoteData(temp) {
-    return {
-        'title': temp.title,
-        'description': temp.description,
-        'flag': temp.flag,
-        'thumbnailImage': thumbnail_note_card,
-        'RestTime': temp.RestTime,
-        'timer': false,
-        'cardType': 'note',
-        'AutoPlayShowFlag': temp.AutoPlayShowFlag ? temp.AutoPlayShowFlag : '',
-        'AutoPlay': false,
-    }
-}
-
-async function getExerciseData(temp) {
-    const response = await getExerciseInformation(temp.cardUUID);
-    if (!response.exercisesData) {
-        return {};
+    if (exercise.flag === 'note') {
+        data.thumbnailImage = thumbnail_note_card;
     }
 
-    const cardData = response.exercisesData.filter(data => data.id === temp.cardExerciseID);
-    if (cardData.length <= 0) {
-        return {};
+    if (exercise.flag === 'exercise') {
+        data.flag = 'video';
+        data.cardType = 'exercise';
+        data.reps = exercise.Reps;
+        data.sets = exercise.Sets;
+        data.repsCount = exercise.RepsCount;
+
+        const response = await getExerciseInformation(exercise.cardUUID);
+        if (response.exercisesData) {
+            const cardData = response.exercisesData.filter(data => data.id === exercise.cardExerciseID);
+            if (cardData.length > 0) {
+                const { BaseVideo_fileName, exerciseName } = cardData[0];
+                data.fileName = BaseVideo_fileName;
+                data.title = exerciseName;
+            }
+        }
     }
 
-    const {
-        BaseVideo_fileName,
-        exerciseDescription,
-        exerciseName,
-    } = cardData[0];
-
-    return {
-        'title': exerciseName ? exerciseName : '',
-        'description': exerciseDescription ? exerciseDescription : '',
-        'fileName': BaseVideo_fileName ? BaseVideo_fileName : '',
-        'AutoPlayShowFlag': false,
-        'flag': 'video',
-        'RestTime': temp.RestTime,
-        'cardType': 'exercise',
-        'Reps': temp.Reps,
-        "Sets": temp.Sets,
-        'RepsCount': temp.RepsCount,
-        'AutoPlay': temp.AutoPlay == 'checked' ? true : false,
-    }
+    return data;
 }
 
 export { getCircuitThumbnailUrl, getWorkoutData }

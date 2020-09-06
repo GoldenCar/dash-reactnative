@@ -22,23 +22,21 @@ function Component(props) {
     console.log('DAY INFO', day);
 
     const [stories, setStories] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const getWorkout = async () => {
-            const workoutData = await getWorkoutData(day, user);
+            setLoading(true);
+            const workoutData = await getWorkoutData(day);
+            console.log('NEW WORKOUT DATA', workoutData);
             setStories(workoutData);
-            // TODO: disable onPress til we get this data
+            setLoading(false);
         }
 
         getWorkout();
     }, []);
 
-    const onPress = () => Actions.Workout({
-        challenge: challenge,
-        user: user,
-        stories: stories,
-        arrayVersionTask: day
-    });
+    const onPress = () => Actions.WorkoutNew({ data: stories });
 
     return (
         <View style={{ flex: 1 }}>
@@ -95,7 +93,11 @@ function Component(props) {
                     )}
                 </View>
             </ScrollView>
-            <TouchableOpacity style={styles.button} onPress={onPress}>
+            <TouchableOpacity
+                style={[styles.button, loading && styles.disabled]}
+                onPress={onPress}
+                disabled={loading}
+            >
                 <Text style={styles.buttonText}>
                     Start Day
                 </Text>
@@ -207,13 +209,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    disabled: {
+        backgroundColor: 'rgba(0,0,0,0.3)'
+    },
     buttonText: {
         fontFamily: 'Poppins-Medium',
         fontSize: 16,
         lineHeight: 24,
         color: '#FFFFFF'
     }
-
 });
 
 export default connect(({ challenges, user }) => ({
