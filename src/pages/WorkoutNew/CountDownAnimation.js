@@ -11,7 +11,9 @@ export default class extends React.Component {
     count: 3,
   };
   componentDidMount() {
-    this.start();
+    setTimeout(() => {
+      this.start();
+    }, 500);
   }
   start = () => {
     this.animation.setValue(0);

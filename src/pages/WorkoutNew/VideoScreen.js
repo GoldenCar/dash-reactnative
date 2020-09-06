@@ -8,13 +8,21 @@ import { mediaHost } from '../../config';
 
 export default class App extends React.Component {
     state = {
-        loading: true
+        loading: true,
+        animationRunning: true
+    }
+
+    componentDidUpdate(prevProps) {
+        // TODO: use workout id instead of fileName?
+        if (this.props.currentWorkout.fileName !== prevProps.currentWorkout.fileName) {
+            this.setState({ animationRunning: true });
+        }
     }
 
     setLoading = (loading) => this.setState({ loading })
 
     render() {
-        const { loading } = this.state;
+        const { loading, animationRunning } = this.state;
         const { currentWorkout, paused } = this.props;
 
         const uri = encodeURI(`${mediaHost}${currentWorkout.fileName}`);
@@ -22,28 +30,28 @@ export default class App extends React.Component {
 
         return (
             <>
-                {/* {loading && <LoadingScreen />} */}
+                <View style={{ backgroundColor: 'black', flex: 1 }}>
+                    {(loading && !animationRunning) && <LoadingScreen />}
 
-                {
-                    !loading && (
+                    <Video
+                        source={source}
+                        // ref={this.videoRef}
+                        onLoadStart={() => this.setLoading(true)}
+                        onReadyForDisplay={() => this.setLoading(false)}
+                        resizeMode='cover'
+                        style={styles.video}
+                        repeat={true}
+                        paused={paused || animationRunning}
+                    />
+
+                    {animationRunning && (
                         <View style={styles.countDownContainer}>
                             <CountDownAnimation
-                                onEnd={() => { }}
+                                onEnd={() => this.setState({ animationRunning: false })}
                             />
                         </View>
-                    )
-                }
-
-                {/* <Video
-                    source={source}
-                    // ref={this.videoRef}
-                    onLoadStart={() => this.setLoading(true)}
-                    onReadyForDisplay={() => this.setLoading(false)}
-                    resizeMode='cover'
-                    style={styles.video}
-                    repeat={true}
-                    paused={paused}
-                /> */}
+                    )}
+                </View>
             </>
         );
     }

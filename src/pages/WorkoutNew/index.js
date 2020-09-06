@@ -19,6 +19,12 @@ export default class App extends React.Component {
         paused: false
     }
 
+    setTimers(nextWorkout) {
+        if (nextWorkout.flag === 'circuitComplete') {
+            setTimeout(() => this.onNext(), 4000);
+        }
+    }
+
     onNext = () => {
         const { data } = this.props;
         const { index } = this.state;
@@ -32,11 +38,8 @@ export default class App extends React.Component {
 
         this.setState({ index: nextIndex });
 
-        // TODO: put this somewhere else
         const nextWorkout = data[nextIndex];
-        if (nextWorkout.flag === 'circuitComplete') {
-            setTimeout(() => this.onNext(), 4000);
-        }
+        this.setTimers(nextWorkout);
     }
 
     onPrevious = () => {
