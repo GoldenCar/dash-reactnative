@@ -11,6 +11,7 @@ import NoteScreen from './NoteScreen';
 import CircuitComplete from './CircuitComplete';
 import RestScreen from './RestScreen';
 import VideoScreen from './VideoScreen';
+import PauseScreen from './PauseScreen';
 
 export default class App extends React.Component {
     state = {
@@ -30,6 +31,12 @@ export default class App extends React.Component {
         }
 
         this.setState({ index: nextIndex });
+
+        // TODO: put this somewhere else
+        const nextWorkout = data[nextIndex];
+        if (nextWorkout.flag === 'circuitComplete') {
+            setTimeout(() => this.onNext(), 4000);
+        }
     }
 
     onPrevious = () => {
@@ -51,33 +58,47 @@ export default class App extends React.Component {
         const { data } = this.props;
 
         const currentWorkout = data[index];
+        const { flag } = currentWorkout;
 
         console.log('WORKOUT NEW SCREEN', this.props);
         console.log('WORKOUT NEW INDEX', index);
         console.log('WORKOUT CURRENT WORKOUT ', currentWorkout);
 
+        const showButtons = flag !== 'circuitComplete';
+        const showContent = !paused && showButtons;
+
         return (
             <View style={styles.container}>
 
-                {currentWorkout.flag === 'note' ? (
+                {paused ? (
+                    <PauseScreen />
+                ) : flag === 'note' ? (
                     <NoteScreen />
-                ) : currentWorkout.flag === 'circuitComplete' ? (
+                ) : flag === 'circuitComplete' ? (
                     <CircuitComplete />
-                ) : currentWorkout.flag === 'rest' ? (
+                ) : flag === 'rest' ? (
                     <RestScreen isPlaying={!paused} />
-                ) : currentWorkout.flag === 'video' ? (
+                ) : flag === 'video' ? (
                     <VideoScreen currentWorkout={currentWorkout} paused={paused} />
                 ) : null}
 
-                <NavButtons
-                    onNext={this.onNext}
-                    onPause={this.onPause}
-                    onPrevious={this.onPrevious}
-                />
+                {showButtons && (
+                    <NavButtons
+                        onNext={this.onNext}
+                        onPause={this.onPause}
+                        onPrevious={this.onPrevious}
+                        paused={paused}
+                    />
+                )}
 
-                <NewsCell currentWorkout={currentWorkout} />
-                <ExerciseTitle currentWorkout={currentWorkout} />
-                <LapText currentWorkout={currentWorkout} />
+                {showContent && (
+                    <>
+                        <NewsCell currentWorkout={currentWorkout} />
+                        <ExerciseTitle currentWorkout={currentWorkout} />
+                        <LapText currentWorkout={currentWorkout} />
+                    </>
+                )}
+
             </View>
         );
     }
