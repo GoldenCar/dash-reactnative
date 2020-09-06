@@ -7,11 +7,11 @@ import ExerciseTitle from './ExerciseTitle';
 import LapText from './LapText';
 import NewsCell from './NewsCell';
 
-import NoteScreen from './NoteScreen';
-import CircuitComplete from './CircuitComplete';
-import RestScreen from './RestScreen';
-import VideoScreen from './VideoScreen';
-import PauseScreen from './PauseScreen';
+import NoteScreen from './Screens/NoteScreen';
+import CircuitComplete from './Screens/CircuitComplete';
+import RestScreen from './Screens/RestScreen';
+import VideoScreen from './Screens/VideoScreen';
+import PauseScreen from './Screens/PauseScreen';
 
 export default class App extends React.Component {
     state = {

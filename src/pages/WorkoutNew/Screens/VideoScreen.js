@@ -3,8 +3,8 @@ import { View, StyleSheet } from 'react-native';
 import Video from 'react-native-video';
 
 import LoadingScreen from './LoadingScreen';
-import CountDownAnimation from './CountDownAnimation';
-import { mediaHost } from '../../config';
+import CountDownAnimation from '../CountDownAnimation';
+import { mediaHost } from '../../../config';
 
 export default class App extends React.Component {
     state = {
