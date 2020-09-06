@@ -6,8 +6,19 @@ export default class App extends React.Component {
         const { currentWorkout } = this.props;
         const { cardType, title, reps, repsCount } = currentWorkout;
 
+        if (!reps && !repsCount) {
+            return null;
+        }
+
         const titleText = (cardType === 'exercise' && title) && title;
-        const repsText = (reps && repsCount) && `${repsCount} ${reps}`;
+
+        // TODO: hook up timer
+        let repsText = '';
+        if (reps === 'Seconds') {
+            repsText = `00:${repsCount}`;
+        } else {
+            repsText = `${repsCount} ${reps}`;
+        }
 
         return (
             <View style={styles.titleContainer}>

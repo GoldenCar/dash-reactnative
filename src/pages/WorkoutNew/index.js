@@ -43,6 +43,7 @@ export default class App extends React.Component {
     }
 
     onPrevious = () => {
+        const { data } = this.props;
         const { index } = this.state;
         const previousIndex = index - 1;
 
@@ -52,6 +53,9 @@ export default class App extends React.Component {
         }
 
         this.setState({ index: previousIndex });
+
+        const nextWorkout = data[previousIndex];
+        this.setTimers(nextWorkout);
     }
 
     onPause = () => this.setState({ paused: !this.state.paused })
@@ -61,7 +65,7 @@ export default class App extends React.Component {
         const { data } = this.props;
 
         const currentWorkout = data[index];
-        const { flag } = currentWorkout;
+        const { flag, restTime } = currentWorkout;
 
         console.log('WORKOUT NEW SCREEN', this.props);
         console.log('WORKOUT NEW INDEX', index);
@@ -80,7 +84,11 @@ export default class App extends React.Component {
                 ) : flag === 'circuitComplete' ? (
                     <CircuitComplete />
                 ) : flag === 'rest' ? (
-                    <RestScreen isPlaying={!paused} onComplete={this.onNext} />
+                    <RestScreen
+                        isPlaying={!paused}
+                        onComplete={this.onNext}
+                        restTime={restTime}
+                    />
                 ) : flag === 'video' ? (
                     <VideoScreen currentWorkout={currentWorkout} paused={paused} />
                 ) : null}

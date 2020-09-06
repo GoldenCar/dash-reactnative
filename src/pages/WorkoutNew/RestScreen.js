@@ -6,11 +6,13 @@ export default class App extends React.Component {
     render() {
         const { isPlaying, onComplete } = this.props;
 
+        const restTime = this.props.restTime || 30;
+
         return (
             <View style={styles.rest}>
                 <CountdownCircleTimer
                     isPlaying={isPlaying}
-                    duration={30}
+                    duration={restTime}
                     colors={'gray'}
                     trailColor='#fff'
                     size={210}

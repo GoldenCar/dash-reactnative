@@ -99,9 +99,12 @@ async function getTaskData(exercise) {
         autoPlay: exercise.AutoPlay === 'checked',
         autoPlayShowFlag: exercise.AutoPlayShowFlag,
         flag: exercise.flag,
-        restTime: exercise.RestTime,
         timer: false
     };
+
+    if (exercise.RestTime) {
+        data.restTime = parseInt(exercise.RestTime);
+    }
 
     if (exercise.flag === 'rest') {
         data.thumbnailImage = bgimage_rest_inside_circuit;
