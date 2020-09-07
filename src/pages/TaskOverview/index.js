@@ -36,7 +36,14 @@ function Component(props) {
         getWorkout();
     }, []);
 
-    const onPress = () => Actions.WorkoutNew({ data: stories });
+    const onPress = () => {
+        Actions.Workout({
+            data: stories,
+            currentDay,
+            user,
+            challenge
+        });
+    }
 
     return (
         <View style={{ flex: 1 }}>

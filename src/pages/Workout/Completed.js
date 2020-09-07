@@ -5,14 +5,30 @@ import {
     Text,
     TouchableOpacity
 } from 'react-native';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
+
+import * as userActions from '../../actions/user';
 
 export default class Completed extends React.Component {
 
     render() {
         console.log(" Comleeted props =", this.props);
+
+        const { currentDay, user, challenge } = this.props;
+
+        const onPress = async () => {
+            try {
+                const response = await userActions.setDayCompleted(challenge._id, user._id, currentDay - 1);
+                console.log('DAY COMPLETE', response);
+            } catch (e) {
+                console.log(e);
+            }
+
+            Actions.ChallengeDetail({ challenge });
+        }
+
         return (
-            <View style={{flex: 1, backgroundColor: 'rgb(0, 154, 255)'}}>
+            <View style={{ flex: 1, backgroundColor: 'rgb(0, 154, 255)' }}>
                 <View style={{
                     height: '100%', width: '100%'
                 }}>
@@ -27,8 +43,8 @@ export default class Completed extends React.Component {
                         <Image style={{
                             top: 84, position: 'absolute', alignSelf: 'center', width: 136,
                             height: 136
-                        }} source={require('../../res/checkComplete.png')}/>
-                        <View style={{alignItems: 'center'}}>
+                        }} source={require('../../res/checkComplete.png')} />
+                        <View style={{ alignItems: 'center' }}>
                             <Text
                                 style={{
                                     color: 'white',
@@ -76,7 +92,7 @@ export default class Completed extends React.Component {
                                                 paddingTop: 27,
                                                 // lineHeight: 24,
                                                 alignSelf: 'center',
-                                            }}>Day 1</Text>
+                                            }}>Day {currentDay}</Text>
                                         <Text
                                             style={{
                                                 color: '#8A98B7',
@@ -96,13 +112,7 @@ export default class Completed extends React.Component {
                                             width: 255,
                                             alignSelf: 'center'
 
-                                        }} onPress={() => {
-                                            Actions.ChallengeDetail({
-                                                challenge: this.props.challenge,
-                                                user: this.props.user,
-                                                isTaskCompleted: true
-                                            })
-                                        }}>
+                                        }} onPress={onPress}>
                                             <View
                                                 style={{
                                                     backgroundColor: '#1AA0FF',
