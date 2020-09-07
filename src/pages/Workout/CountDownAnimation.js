@@ -1,7 +1,9 @@
 import React from 'react';
-import {View, StyleSheet, Animated, Text} from 'react-native';
+import { View, StyleSheet, Animated, Text } from 'react-native';
 
 const GO = 'GO!';
+
+// TODO: clean up
 
 export default class extends React.Component {
   animation = new Animated.Value(0);
@@ -9,20 +11,22 @@ export default class extends React.Component {
     count: 3,
   };
   componentDidMount() {
-    this.start();
+    setTimeout(() => {
+      this.start();
+    }, 500);
   }
   start = () => {
     this.animation.setValue(0);
     Animated.timing(this.animation, {
       toValue: 1,
       duration: 500,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start(() => {
       setTimeout(() => {
         Animated.timing(this.animation, {
           toValue: 2,
           duration: 500,
-          useNativeDriver: false,
+          useNativeDriver: true,
         }).start(() => {
           this.setState(
             (prev) => {
@@ -30,8 +34,8 @@ export default class extends React.Component {
                 prev.count === GO
                   ? -1
                   : prev.count - 1 === 0
-                  ? GO
-                  : prev.count - 1;
+                    ? GO
+                    : prev.count - 1;
               return {
                 count,
               };
@@ -51,7 +55,7 @@ export default class extends React.Component {
     });
   };
   render() {
-    const {count} = this.state;
+    const { count } = this.state;
     const opacity = this.animation.interpolate({
       inputRange: [0, 1, 2],
       outputRange: [0, 1, 0],
@@ -68,7 +72,7 @@ export default class extends React.Component {
           styles.container,
           {
             opacity,
-            transform: [{scale}],
+            transform: [{ scale }],
           },
         ]}>
         <Text

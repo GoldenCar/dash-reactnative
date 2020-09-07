@@ -28,8 +28,6 @@ import Search from './pages/Search';
 import PostPage from 'dash/src/pages/ChallengeDetail/Social/PostPage';
 import CreatePost from 'dash/src/pages/ChallengeDetail/Social/CreatePost';
 import Completed from './pages/Workout/Completed';
-import WorkoutOverView from './pages/Workout/WorkoutOverView';
-
 import Workout from 'dash/src/pages/Workout/index';
 
 // Profile
@@ -40,9 +38,6 @@ import AccountDetails from './pages/Profile/AccountDetails';
 
 import * as settingsActions from 'dash/src/actions/settings';
 import * as userActions from 'dash/src/actions/user';
-import NewView from './pages/Workout/NewView';
-
-import WorkoutNew from './pages/WorkoutNew';
 
 import themes from './themes';
 
@@ -147,9 +142,7 @@ export default () => {
                                     <Scene key="CreatePost" component={CreatePost} hideNavBar />
                                     <Scene key="Workout" component={Workout} hideNavBar />
                                     <Scene key="Completed" component={Completed} hideNavBar />
-                                    <Scene key="WorkoutOverView" component={WorkoutOverView} hideNavBar />
                                     <Scene key="Search" component={Search} hideNavBar />
-                                    <Scene key="WorkoutNew" component={WorkoutNew} hideNavBar />
                                 </Scene>
                             </Router>
                             <AuthPopup ref={(e) => (AuthPopupRef = e)} />
