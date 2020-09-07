@@ -4,66 +4,58 @@ import {
   StyleSheet,
   Dimensions,
   Text,
+  TouchableOpacity,
   ScrollView,
   Image,
 } from 'react-native';
+import { mediaHost } from 'dash/src/config';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-const arrayInvitations = [
-  {
-    avatar: require('dash/src/res/invitations.png'),
-    name: 'ralphedwards',
-    challenge: 'Chris Bumstead 30 Day Challen...',
-  },
-  {
-    avatar: require('dash/src/res/invitations.png'),
-    name: 'ralphedwards',
-    challenge: 'Chris Bumstead 30 Day Challen...',
-  },
-];
 
 export default function Component(props) {
-  const {type} = props;
+  const { type, list, Accept } = props;
   return (
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      {arrayInvitations.map((value, index) => (
+      {list.map((value, index) => (
         <View
           key={index}
           style={[
             styles.invitationItem,
-            index === arrayInvitations.length - 1
+            index === list.length - 1
               ? {
-                  marginRight: 15,
-                }
+                marginRight: 15,
+              }
               : {},
           ]}>
           <View style={styles.invitationItemHeader}>
             <View style={styles.invitationItemAvatarContainer}>
               <Image
                 resizeMode="cover"
-                source={value.avatar}
+                source={{ uri: `${mediaHost}${value.profileImage}` }}
                 style={styles.invitationItemAvatar}
               />
             </View>
             <View style={styles.invitationTextContainer}>
               <Text style={styles.invitationName}>
-                {value.name}{' '}
+                {/*{value.username}{' '}*/}
+                {'312321312'}{' '}
                 {type !== 'request' && (
                   <Text style={styles.invitedToThe}>Invited you to the</Text>
                 )}
               </Text>
               {type === 'request' ? (
-                <Text style={[styles.inviteChallenge, {color: '#21293D'}]}>
+                <Text style={[styles.inviteChallenge, { color: '#21293D' }]}>
                   Sent Friend Request
-                </Text>
+                                </Text>
               ) : (
-                <Text style={styles.inviteChallenge}>{value.challenge}</Text>
-              )}
+                  <Text style={styles.inviteChallenge}>{value.challenge}</Text>
+                )}
             </View>
           </View>
           <View style={styles.inviteActionsContainer}>
-            <View
+            <TouchableOpacity
+              onPress={() => Accept(value, 'accept')}
               style={[
                 styles.inviteAction,
                 {
@@ -72,10 +64,10 @@ export default function Component(props) {
                 },
               ]}>
               <Text style={styles.inviteAccept}>Accept</Text>
-            </View>
-            <View style={styles.inviteAction}>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => Accept(value, 'reject')} style={styles.inviteAction}>
               <Text style={styles.inviteIgnore}>Ignore</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       ))}
@@ -128,17 +120,9 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    overflow: 'hidden',
+    // overflow: 'hidden',
     borderWidth: 2,
     borderColor: 'white',
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowRadius: 2,
-    shadowOpacity: 0.5,
   },
   invitationItemHeader: {
     flexDirection: 'row',
@@ -149,10 +133,11 @@ const styles = StyleSheet.create({
     borderBottomColor: '#F0F5FA',
   },
   invitationItem: {
+    backgroundColor: '#fff',
     width: width - 80,
     borderWidth: 1,
-    borderColor: '#F0F5FA',
-    borderRadius: 15,
+    borderColor: '#E7EEF5',
+    borderRadius: 16,
     marginVertical: 25,
     marginLeft: 15,
   },

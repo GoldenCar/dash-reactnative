@@ -1,13 +1,13 @@
 import React from 'react';
-import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
-import {mediaHost} from 'dash/src/config';
+import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
+import { mediaHost } from 'dash/src/config';
 
 import Dots from '../pages/MyChallenges/Icons/Dots';
 import ChevronRight from '../pages/MyChallenges/Icons/ChevronRight';
 
 export default function Component(props) {
-  const {value} = props;
-  const Touch = props.dissablePress ? View : TouchableOpacity;
+  const { value, dissablePress } = props;
+  const Touch = dissablePress ? View : TouchableOpacity;
   return (
     <Touch
       style={[
@@ -15,10 +15,11 @@ export default function Component(props) {
         props.containerStyle,
         props.underline
           ? {
-              borderBottomWidth: 1,
-              borderBottomColor: '#E0EAF3',
-            }
+            borderBottomWidth: 1,
+            borderBottomColor: '#E0EAF3',
+          }
           : {},
+        dissablePress && { opacity: 0.3 }
       ]}
       onPress={() => {
         if (props.onPress) {
@@ -34,7 +35,7 @@ export default function Component(props) {
           <View style={styles.pictureContainer}>
             <Image
               resizeMode="contain"
-              source={{uri: `${mediaHost}${value.profileImage}`}}
+              source={{ uri: `${mediaHost}${value.profileImage}` }}
               style={styles.avatar}
             />
           </View>
@@ -47,11 +48,11 @@ export default function Component(props) {
       {props.rightComponent ? (
         props.rightComponent
       ) : (
-        <>
-          {props.dots && <Dots />}
-          {props.arrow && <ChevronRight />}
-        </>
-      )}
+          <>
+            {props.dots && <Dots />}
+            {props.arrow && <ChevronRight />}
+          </>
+        )}
     </Touch>
   );
 }

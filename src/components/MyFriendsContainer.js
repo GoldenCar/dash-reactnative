@@ -1,32 +1,11 @@
 import React from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-import ViewedBy from 'dash/src/components/Challenge/ViewedBy';
+import ViewedBy from '../components/Challenge/ViewedBy';
 import LightButton from 'dash/src/components/LightButton';
 
-import {Add} from 'dash/src/components/Icons';
-import {Actions} from 'react-native-router-flux';
-
-const array = [
-  {
-    picture: require('dash/src/res/viewedBy/1.jpg'),
-  },
-  {
-    picture: require('dash/src/res/viewedBy/2.jpg'),
-  },
-  {
-    picture: require('dash/src/res/viewedBy/3.png'),
-  },
-  {
-    picture: require('dash/src/res/viewedBy/4.png'),
-  },
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-];
+import { Add } from 'dash/src/components/Icons';
+import { Actions } from 'react-native-router-flux';
 
 export default function Component(props) {
   return (
