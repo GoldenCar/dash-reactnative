@@ -18,6 +18,7 @@ export default class Completed extends React.Component {
 
         const onPress = async () => {
             try {
+                // TODO: refresh my challenge data
                 const response = await userActions.setDayCompleted(challenge._id, user._id, currentDay - 1);
                 console.log('DAY COMPLETE', response);
             } catch (e) {
