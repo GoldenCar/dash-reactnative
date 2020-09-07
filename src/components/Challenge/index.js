@@ -11,6 +11,8 @@ const { width } = Dimensions.get('window');
 const GUTTER = 15;
 const CARD_WIDTH = width - (GUTTER * 2);
 
+// TODO - CLEAN UP
+
 export default function Component(props) {
   const { explore, value, past, viewedBy, cardWidth } = props;
 
