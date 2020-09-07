@@ -13,7 +13,7 @@ import Video from '../../components/Video';
 import ScheduleRow from '../../components/ScheduleRow';
 
 export default function Component(props) {
-	const { challenge, plan } = props;
+	const { challenge, plan, daysCompleted } = props;
 	console.log('PLAN IN OVERVIEW', plan);
 
 	const now = moment(new Date());
@@ -109,12 +109,14 @@ export default function Component(props) {
 				{dayData.map((d, index) => {
 					const showSeperator = dayData.length - 1 !== index;
 					const showEyebrow = (currentDay - 1) === index;
+					const dayComplete = daysCompleted[index] === 1;
 					return (
 						<ScheduleRow
 							data={d}
 							index={index}
 							showSeperator={showSeperator}
 							showEyebrow={showEyebrow}
+							dayComplete={dayComplete}
 						/>
 					)
 				})}

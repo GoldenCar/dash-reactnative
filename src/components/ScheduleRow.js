@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-export default function Component({ data, showSeperator, index, showEyebrow }) {
+export default function Component({ data, showSeperator, index, showEyebrow, dayComplete }) {
     const day = data.versionDay || (index + 1);
 
     const contentContainerStyles = [styles.contentContainer];
@@ -15,7 +15,7 @@ export default function Component({ data, showSeperator, index, showEyebrow }) {
 
     return (
         <>
-            <View style={styles.row}>
+            <View style={[styles.row, dayComplete && { backgroundColor: 'red' }]}>
                 {showEyebrow && (
                     <View style={styles.eyebrow}>
                         <Text style={styles.eyebrowText}>

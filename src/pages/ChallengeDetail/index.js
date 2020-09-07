@@ -18,16 +18,10 @@ const { width, height } = Dimensions.get('screen');
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
 class Component extends React.Component {
-    constructor(props) {
-        super(props);
-        const { challenge, user } = this.props;
-
-        this.state = {
-            user: challenge.createdBy === user._id ? user : {},
-            plan: {},
-            contentHeight: 1000
-        };
-    }
+    state = {
+        plan: {},
+        contentHeight: 1000
+    };
 
     ScrollViewAnimation = new Animated.Value(0);
 
@@ -44,9 +38,10 @@ class Component extends React.Component {
     }
 
     render() {
-        const { plan, user, contentHeight } = this.state;
-        const { challenge } = this.props;
+        const { plan, contentHeight } = this.state;
+        const { challenge, user } = this.props;
         console.log(" challenge is ", challenge);
+        console.log('my steps', user)
 
         // TODO: 
         //          1. Figure out how to find if plan started

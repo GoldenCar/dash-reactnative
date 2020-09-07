@@ -59,6 +59,15 @@ export default class Component extends React.Component {
 
     // TODO: get current days plan data (title, date)
 
+    // TODO: make into helper
+    let daysCompleted = [];
+    if (user && user.myStep && user.myStep.length > 0) {
+      const foundChallenge = user.myStep.find(challengeProgress => challengeProgress.id === challenge._id);
+      if (foundChallenge) {
+        daysCompleted = foundChallenge.daysCompleted;
+      }
+    }
+
     return (
       <View style={styles.container}>
         <View style={styles.innerContainer}>
@@ -94,7 +103,7 @@ export default class Component extends React.Component {
                   dayData={dayData}
                   challenge={challenge}
                   user={user}
-                  onPress={() => Actions.PlanOverview({ challenge, plan })}
+                  onPress={() => Actions.PlanOverview({ challenge, plan, daysCompleted })}
                   plan={plan}
                 />
               )}
