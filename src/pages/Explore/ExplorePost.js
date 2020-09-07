@@ -37,36 +37,22 @@ export default class Component extends React.Component {
   }
 
   // TODO: needs to handle flow after user logs in
-  //       needs to navigate after join
   async onJoinPress() {
     const { user, challenge } = this.props;
 
-    const callback = () => Actions.ChallengeDetail({ challenge });
+    const joinRequest = async () => {
+      const response = await userActions.joinChallenge(challenge._id, user._id);
+      if (response.status === 200) {
+        Actions.ChallengeDetail({ challenge });
+      }
+    }
 
     if (!user) {
       // TODO: take another look at this once AuthPopup refactor merged
-      this.AuthPopupRef.open(callback);
+      this.AuthPopupRef.open(joinRequest);
     } else {
-
-      Actions.ChallengeDetail({ challenge });
-
-      // TODO: re-enable once join challenge endpoint created
-
-      // const response = await userActions.editUser({
-      //   _id: user._id,
-      //   challengesIds: challenge._id
-      // });
-
-      // console.log('COMPETITION JOINED RESPONSE', response);
-
-      // const editChallengeData = {
-      //   _id: challenge._id,
-      //   joinedUsers: user._id
-      // };
-
-      // const addUserToChallengeResponse = await challengeActions.editChallenge(editChallengeData);
-
-      // console.log('USER ADDED TO COMPETITION RESPONSE', addUserToChallengeResponse);
+      // TODO: do i need to re-request challenges?
+      joinRequest();
     }
   }
 

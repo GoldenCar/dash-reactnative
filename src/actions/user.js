@@ -152,3 +152,23 @@ export const sendFriendAccept = async (id, status) => {
   console.log(res)
   await getCurrentUser()
 };
+
+export const joinChallenge = async (challenge_id, user_id) => {
+  const URL = `/challengesapi/${challenge_id}/join`;
+
+  const response = await api.post(URL, {
+    user_id: user_id
+  });
+
+  return response;
+};
+
+export const leaveChallenge = async (challenge_id, user_id) => {
+  const URL = `/challengesapi/${challenge_id}/leave`;
+
+  const response = await api.post(URL, {
+    user_id: user_id
+  });
+
+  return response;
+};
