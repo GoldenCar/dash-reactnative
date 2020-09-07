@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
-import {Actions} from 'react-native-router-flux';
+import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 import {
     Logout,
@@ -14,49 +14,49 @@ import {
     PushNotifications,
     LeaveAReview,
     EmailSupport,
-} from 'dash/src/components/Icons';
-import MyFriendsContainer from 'dash/src/components/MyFriendsContainer';
+} from '../..//components/Icons';
+import MyFriendsContainer from '../../components/MyFriendsContainer';
 
 import * as UserActions from 'dash/src/actions/user';
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 
 const array = [
     {
-        icon: <AccountDetails/>,
+        icon: <AccountDetails />,
         title: 'Account Details',
         onPress: () => {
             Actions.AccountDetails();
         },
     },
     {
-        icon: <PushNotifications/>,
+        icon: <PushNotifications />,
         title: 'Push Notifications',
     },
     {
-        icon: <PreviousChallenges/>,
+        icon: <PreviousChallenges />,
         title: 'Previous Challenges',
         onPress: () => {
             Actions.PreviousChallenges();
         },
     },
     {
-        icon: <LeaveAReview/>,
+        icon: <LeaveAReview />,
         title: 'Leave a Review',
     },
     {
-        icon: <Instagram/>,
+        icon: <Instagram />,
         title: 'Follow Us On Instagram',
     },
     {
-        icon: <Facebook/>,
+        icon: <Facebook />,
         title: 'Follow Us On Facebook',
     },
     {
-        icon: <EmailSupport/>,
+        icon: <EmailSupport />,
         title: 'Email Support',
     },
     {
-        icon: <Logout/>,
+        icon: <Logout />,
         title: 'Logout',
         onPress: () => {
             UserActions.logout();
@@ -68,7 +68,7 @@ function Component(props) {
     return (
         <View style={styles.container}>
             {props.user && (
-                <MyFriendsContainer list={props.user.friendsIds}/>
+                <MyFriendsContainer list={props.user.friendsIds} />
             )}
             <View style={styles.itemsContainer}>
                 {array.map((value, index) => {
@@ -85,7 +85,7 @@ function Component(props) {
                                 <View style={styles.iconContainer}>{value.icon}</View>
                                 <Text style={styles.itemTitle}>{value.title}</Text>
                             </View>
-                            <ChevronRight/>
+                            <ChevronRight />
                         </TouchableOpacity>
                     );
                 })}
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connect(({user}) => ({
+export default connect(({ user }) => ({
     user,
 }))(Component);
 

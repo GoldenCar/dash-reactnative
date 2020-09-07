@@ -22,10 +22,14 @@ export const getUser = async () => {
 };
 
 export const sendFriendInvite = async (id) => {
-  const response = await api.post(`sendFriendInvite`, {}, {headers:{
-      friendid:id
-    }});
+
+  const response = await api.post(`sendFriendInvite`, {}, {
+    headers: {
+      friendid: id
+    }
+  });
   console.log(response)
+  await getCurrentUser();
   return response.data.data;
 };
 
@@ -84,7 +88,7 @@ export const loginGoogleUser = async ({ id_token, username }) => {
     });
     getMyChallenges();
     return response.data.data;
-  }catch (e) {
+  } catch (e) {
     console.log(e)
   }
 
@@ -127,4 +131,24 @@ export const logout = async () => {
     type: actionTypes.DEFAULT,
   });
   Actions.MyChallengesTab();
+};
+
+export const removeFriend = async (id) => {
+  await api.delete(`delFriend`, {
+    headers: {
+      friendid: id
+    }
+  });
+  await getCurrentUser()
+};
+
+export const sendFriendAccept = async (id, status) => {
+  const res = await api.post(`receiveFriendInvite`, {}, {
+    headers: {
+      friendid: id,
+      status: status
+    }
+  });
+  console.log(res)
+  await getCurrentUser()
 };

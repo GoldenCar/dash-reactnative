@@ -1,8 +1,9 @@
 import React from 'react';
-import {View, StyleSheet, Image, Text} from 'react-native';
+import { View, StyleSheet, Image, Text } from 'react-native';
+import { mediaHost } from 'dash/src/config';
 
 export default function Component(props) {
-  const {viewedBy, large} = props;
+  const { viewedBy, large } = props;
   return (
     <View style={styles.viewedByContainer}>
       {viewedBy.slice(0, 4).map((value, index) => (
@@ -11,25 +12,27 @@ export default function Component(props) {
           style={[
             styles.viewdPictureContainer,
             large
-              ? {width: 50, height: 50, borderRadius: 25, marginLeft: -20}
+              ? { width: 50, height: 50, borderRadius: 25, marginLeft: -20 }
               : {},
           ]}>
           <Image
-            style={[styles.viewedPicture, large ? {width: 50, height: 50} : {}]}
+            style={[styles.viewedPicture, large ? { width: 50, height: 50 } : {}]}
             resizeMode="cover"
-            source={require('dash/src/res/viewedBy/1.jpg')}
+            source={{ uri: `${mediaHost}${value.profileImage}` }}
           />
         </View>
       ))}
-      <View
-        style={[
-          styles.viewdPictureContainer,
-          large ? {width: 50, height: 50, borderRadius: 25} : {},
-        ]}>
-        <Text style={styles.moreViewed}>{`+ ${
-          viewedBy.slice(4, viewedBy.length).length
-        }`}</Text>
-      </View>
+      {viewedBy.length > 4 && (
+        <View
+          style={[
+            styles.viewdPictureContainer,
+            large ? { width: 50, height: 50, borderRadius: 25 } : {},
+          ]}>
+          <Text style={styles.moreViewed}>{`+ ${
+            viewedBy.slice(4, viewedBy.length).length
+            }`}</Text>
+        </View>
+      )}
     </View>
   );
 }

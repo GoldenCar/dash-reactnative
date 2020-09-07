@@ -81,7 +81,6 @@ export default () => {
                         <>
                             <Router createReducer={createReducer}>
                                 <Scene key="root" hideNavBar>
-                                    <Scene key="Friends" component={Friends} hideNavBar />
                                     <Scene
                                         key="HomePage"
                                         tabs={true}
@@ -92,6 +91,7 @@ export default () => {
                                             <Scene key="Profile" component={Profile} hideNavBar />
                                             <Scene key="PreviousChallenges" component={PreviousChallenges} hideNavBar />
                                             <Scene key="AccountDetails" component={AccountDetails} hideNavBar />
+                                            <Scene key="Friends" component={Friends} hideNavBar />
 
                                             <Scene
                                                 key="Notifications"

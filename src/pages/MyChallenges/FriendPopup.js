@@ -10,57 +10,34 @@ import {
   TouchableWithoutFeedback,
   Image,
   ScrollView,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import * as UserActions from '../../actions/user';
 
-import FriendItem from 'dash/src/components/FriendItem';
+import FriendItem from '../../components/FriendItem';
 import { Actions } from 'react-native-router-flux';
 
-const {height, width} = Dimensions.get('screen');
+const { height, width } = Dimensions.get('screen');
 
-const array = [
-  {
-    name: 'Invite To Challenge',
-    link: 'Send invite to a new or existing challenge.',
-    onPress: () => Actions.InviteToChallenge()
-  },
-  {
-    name: 'Remove Friend',
-    link: 'Unfriend this person. ',
-  },
-  {
-    name: 'Report',
-    link: 'Unfriend this person. ',
-  },
-];
 
-const array2 = [
-  {
-    name: 'Add Friend',
-    link: 'Friend this person. ',
-  },
-  {
-    name: 'Invite To Challenge',
-    link: 'Send invite to a new or existing challenge.',
-    onPress: () => Actions.InviteToChallenge()
-  },
-  {
-    name: 'Report',
-    link: 'Send invite to a new or existing challenge.',
-  },
-];
+
+
 
 export default class Component extends React.Component {
   translateY = new Animated.Value(1);
   state = {
     visible: false,
     item: {},
+    type: '',
   };
-  open = (item) => {
+  open = (item, type, isRequested) => {
     this.setState(
       {
+        type,
         visible: true,
         item,
+        isRequested,
       },
       () => {
         Animated.timing(this.translateY, {
@@ -78,16 +55,37 @@ export default class Component extends React.Component {
       duration: 200,
       easing: Easing.ease,
       useNativeDriver: false,
-    }).start(({finished}) => {
+    }).start(({ finished }) => {
       if (finished) {
-        this.setState({visible: false, item: {}}, () => {
+        this.setState({ visible: false, item: {} }, () => {
           this.props.callbackClose();
         });
       }
     });
   };
+
+  AddFriend = async () => {
+    try {
+      const { item } = this.state;
+      await UserActions.sendFriendInvite(item._id)
+      this.close()
+    } catch (e) {
+      Alert.alert('Error', e.messages)
+    }
+  }
+
+  RemoveFriend = async () => {
+    try {
+      const { item } = this.state;
+      await UserActions.removeFriend(item._id)
+      this.close()
+    } catch (e) {
+      Alert.alert('Error', e.messages)
+    }
+  }
+
   render() {
-    const {item} = this.state;
+    const { item, type, isRequested } = this.state;
     const backgroundColor = this.translateY.interpolate({
       inputRange: [0, 1],
       outputRange: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)'],
@@ -98,17 +96,50 @@ export default class Component extends React.Component {
       outputRange: [0, 500],
       extrapolate: 'clamp',
     });
-    const useArray = item.noFriend ? array2 : array;
+    const array = [
+      {
+        displayname: 'Invite To Challenge',
+        username: 'Send invite to a new or existing challenge.',
+        onPress: () => Actions.InviteToChallenge()
+      },
+      {
+        displayname: 'Remove Friend',
+        username: 'Unfriend this person. ',
+        onPress: this.RemoveFriend
+      },
+      {
+        displayname: 'Report',
+        username: 'Unfriend this person. ',
+      },
+    ];
+    const array2 = [
+      {
+        displayname: 'Add Friend',
+        username: 'Friend this person. ',
+        onPress: this.AddFriend
+      },
+      {
+        displayname: 'Invite To Challenge',
+        username: 'Send invite to a new or existing challenge.',
+        onPress: () => Actions.InviteToChallenge()
+      },
+      {
+        displayname: 'Report',
+        username: 'Send invite to a new or existing challenge.',
+      },
+    ];
+    const useArray = type === 'user' ? array2 : array;
+
     return (
       this.state.visible && (
         <View style={styles.overlay}>
           <TouchableWithoutFeedback onPress={this.close}>
-            <Animated.View style={[styles.container, {backgroundColor}]} />
+            <Animated.View style={[styles.container, { backgroundColor }]} />
           </TouchableWithoutFeedback>
           <Animated.View
             style={[
               {
-                transform: [{translateY}],
+                transform: [{ translateY }],
               },
               styles.modalContainer,
             ]}>
@@ -126,6 +157,7 @@ export default class Component extends React.Component {
               />
               {useArray.map((value, index) => (
                 <FriendItem
+                  dissablePress={value.displayname !== 'Report' && isRequested}
                   key={index}
                   value={value}
                   underline={true}
@@ -190,5 +222,5 @@ const styles = StyleSheet.create({
 });
 
 Component.defaultProps = {
-  callbackClose: () => {},
+  callbackClose: () => { },
 };

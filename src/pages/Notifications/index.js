@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Text, ScrollView} from 'react-native';
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
 
 import NavBar from 'dash/src/components/NavBar';
 import InvitationScroll from 'dash/src/components/InvitationScroll';
@@ -30,7 +30,7 @@ export default function Component() {
           <Text style={styles.heading}>Invitations</Text>
           <Text style={styles.friendsOnly}>Friends Only</Text>
         </View>
-        <InvitationScroll />
+        <InvitationScroll list={[]} />
         <View style={styles.paddingHorizontal}>
           <Text style={styles.heading}>Community</Text>
           <Text style={styles.actionDay}>Today</Text>
