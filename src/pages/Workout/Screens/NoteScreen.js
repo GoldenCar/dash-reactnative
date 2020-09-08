@@ -4,14 +4,10 @@ import { View, Text, StyleSheet } from 'react-native';
 export default class App extends React.Component {
     render() {
         const { currentWorkout } = this.props;
-        console.log('NOTE SCREEN', currentWorkout);
-
-        // TODO: what property is text
-
         return (
             <View style={styles.container}>
                 <Text style={styles.text}>
-                    {/* Great job on that last exercise, now lets step it up more for the following exercises. */}
+                    {currentWorkout.title}
                 </Text>
             </View>
         );

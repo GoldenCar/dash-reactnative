@@ -80,7 +80,7 @@ export default class App extends React.Component {
                 {paused ? (
                     <PauseScreen />
                 ) : flag === 'note' ? (
-                    <NoteScreen />
+                    <NoteScreen currentWorkout={currentWorkout} />
                 ) : flag === 'circuitComplete' ? (
                     <CircuitComplete />
                 ) : flag === 'rest' ? (
