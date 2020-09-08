@@ -6,21 +6,19 @@ import { requestAppleLogin, requestGoogleLogin } from '../helpers/auth';
 export default class Component extends React.Component {
   onGoogleSignIn = async () => {
     const response = await requestGoogleLogin();
-    // do something here
 
     const { callback } = this.props;
     if (callback) {
-      callback();
+      callback(response);
     }
   };
 
   onAppleSignIn = async () => {
     const response = await requestAppleLogin();
-    // do something here
 
     const { callback } = this.props;
     if (callback) {
-      callback();
+      callback(response);
     }
   };
 

@@ -19,6 +19,7 @@ export default class Component extends React.Component {
 
   state = {
     visible: false,
+    callback: null
   };
 
   showOpenAnimation = () => {
@@ -30,11 +31,16 @@ export default class Component extends React.Component {
     }).start();
   }
 
-  open = () => {
+  open = (callback) => {
+    if (callback) {
+      this.setState({ callback });
+    }
+
     this.setState({ visible: true }, () => this.showOpenAnimation());
   }
 
-  close = () => {
+  close = (user) => {
+    const { callback } = this.state;
     Animated.timing(this.translateY, {
       toValue: 1,
       duration: 250,
@@ -43,6 +49,11 @@ export default class Component extends React.Component {
     }).start(({ finished }) => {
       if (finished) {
         this.setState({ visible: false });
+
+        if (callback) {
+          callback(user);
+        }
+
       }
     });
   }
@@ -80,7 +91,6 @@ export default class Component extends React.Component {
               <Text style={styles.title}>Join Dash</Text>
               <Text style={styles.text}>Join Liza Koshy on her 30 day</Text>
               <Text style={styles.text}>challenge and get healthier.</Text>
-              { /*  */}
               <AppleGoogleSignInButtons callback={this.close} />
             </View>
           </Animated.View>
