@@ -1,18 +1,29 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import LottieView from 'lottie-react-native';
+
+import Checkmark from '../Lottie/checkmark.json';
+import Confetti from '../Lottie/confetti.json';
 
 export default class App extends React.Component {
     render() {
-        // TODO: add lottie file
-
         return (
             <View style={styles.container}>
                 <Text style={styles.title}>
                     Circuit {'\n'} Completed!
                 </Text>
-                <View style={styles.graphic}>
-
-                </View>
+                <LottieView
+                    source={Checkmark}
+                    autoPlay
+                    loop={false}
+                    style={styles.check}
+                />
+                <LottieView
+                    source={Confetti}
+                    autoPlay
+                    loop={false}
+                    style={styles.confetti}
+                />
             </View>
         );
     }
@@ -32,11 +43,13 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         marginBottom: 32
     },
-    graphic: {
+    check: {
         height: 161,
         width: 161,
-        borderWidth: 1,
-        borderColor: '#ffffff',
+        alignSelf: 'center'
+    },
+    confetti: {
+        height: 300,
         alignSelf: 'center'
     }
 });
