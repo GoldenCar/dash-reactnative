@@ -110,6 +110,7 @@ export default function Component(props) {
 					const showSeperator = dayData.length - 1 !== index;
 					const showEyebrow = (currentDay - 1) === index;
 					const dayComplete = daysCompleted[index] === 1;
+					const showCircle = (currentDay - 1) > index;
 					return (
 						<ScheduleRow
 							data={d}
@@ -117,6 +118,7 @@ export default function Component(props) {
 							showSeperator={showSeperator}
 							showEyebrow={showEyebrow}
 							dayComplete={dayComplete}
+							showCircle={showCircle}
 						/>
 					)
 				})}
