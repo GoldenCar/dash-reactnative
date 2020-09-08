@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StatusBar } from 'react-native';
+import { View, StatusBar, SafeAreaView } from 'react-native';
 import { Router, Scene, Reducer } from 'react-native-router-flux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -67,90 +67,90 @@ export default () => {
         };
         init();
     }, []);
-    return (
-        <>
-            <StatusBar translucent barStyle="light-content" />
-            <View style={{ flex: 1, paddingTop: 20, }}>
-                <Provider store={store}>
-                    {!loading && (
-                        <>
-                            <Router createReducer={createReducer}>
-                                <Scene key="root" hideNavBar>
-                                    <Scene
-                                        key="HomePage"
-                                        tabs={true}
-                                        tabBarComponent={CustomTabBar}
-                                        initial
-                                    >
-                                        <Scene key="MyProfile">
-                                            <Scene key="Profile" component={Profile} hideNavBar />
-                                            <Scene key="PreviousChallenges" component={PreviousChallenges} hideNavBar />
-                                            <Scene key="AccountDetails" component={AccountDetails} hideNavBar />
-                                            <Scene key="Friends" component={Friends} hideNavBar />
 
-                                            <Scene
-                                                key="Notifications"
-                                                component={Notifications}
-                                                hideNavBar
-                                            />
-                                        </Scene>
-                                        <Scene key="MyChallengesTab" initial>
-                                            <Scene
-                                                key="Challenges"
-                                                component={MyChallenges}
-                                                hideNavBar
-                                            />
-                                        </Scene>
-                                        <Scene key="ExploreTab">
-                                            <Scene key="Explore" component={Explore} hideNavBar />
-                                        </Scene>
+    // TODO: does android need light-content? need to handle iOS dark mode
+    return (
+        <SafeAreaView style={{ flex: 1 }}>
+            <StatusBar barStyle="dark-content" />
+            <Provider store={store}>
+                {!loading && (
+                    <>
+                        <Router createReducer={createReducer}>
+                            <Scene key="root" hideNavBar>
+                                <Scene
+                                    key="HomePage"
+                                    tabs={true}
+                                    tabBarComponent={CustomTabBar}
+                                    initial
+                                >
+                                    <Scene key="MyProfile">
+                                        <Scene key="Profile" component={Profile} hideNavBar />
+                                        <Scene key="PreviousChallenges" component={PreviousChallenges} hideNavBar />
+                                        <Scene key="AccountDetails" component={AccountDetails} hideNavBar />
+                                        <Scene key="Friends" component={Friends} hideNavBar />
+
+                                        <Scene
+                                            key="Notifications"
+                                            component={Notifications}
+                                            hideNavBar
+                                        />
                                     </Scene>
-                                    <Scene
-                                        key="PlanOverview"
-                                        component={PlanOverview}
-                                        hideNavBar
-                                    />
-                                    <Scene
-                                        key="InviteToChallenge"
-                                        component={InviteToChallenge}
-                                        hideNavBar
-                                    />
-                                    <Scene
-                                        key="PastChallenges"
-                                        component={PastChallenges}
-                                        hideNavBar
-                                    />
-                                    <Scene key="TaskOverview" component={TaskOverview} hideNavBar />
-                                    <Scene key="ExplorePost" component={ExplorePost} hideNavBar />
-                                    <Scene
-                                        key="PickAUsername"
-                                        component={PickAUsername}
-                                        hideNavBar
-                                    />
-                                    <Scene
-                                        key="InviteFriendsToDash"
-                                        component={InviteFriendsToDash}
-                                        hideNavBar
-                                    />
-                                    <Scene key="CameraRoll" component={CameraRoll} hideNavBar />
-                                    <Scene
-                                        key="ChallengeDetail"
-                                        component={ChallengeDetail}
-                                        hideNavBar
-                                    />
-                                    <Scene key="PostPage" component={PostPage} hideNavBar />
-                                    <Scene key="CreatePost" component={CreatePost} hideNavBar />
-                                    <Scene key="Workout" component={Workout} hideNavBar />
-                                    <Scene key="Completed" component={Completed} hideNavBar />
-                                    <Scene key="Search" component={Search} hideNavBar />
+                                    <Scene key="MyChallengesTab" initial>
+                                        <Scene
+                                            key="Challenges"
+                                            component={MyChallenges}
+                                            hideNavBar
+                                        />
+                                    </Scene>
+                                    <Scene key="ExploreTab">
+                                        <Scene key="Explore" component={Explore} hideNavBar />
+                                    </Scene>
                                 </Scene>
-                            </Router>
-                            <AuthPopup ref={(e) => (AuthPopupRef = e)} />
-                            <InviteFriends ref={(e) => (InviteFriendsRef = e)} />
-                        </>
-                    )}
-                </Provider>
-            </View>
-        </>
+                                <Scene
+                                    key="PlanOverview"
+                                    component={PlanOverview}
+                                    hideNavBar
+                                />
+                                <Scene
+                                    key="InviteToChallenge"
+                                    component={InviteToChallenge}
+                                    hideNavBar
+                                />
+                                <Scene
+                                    key="PastChallenges"
+                                    component={PastChallenges}
+                                    hideNavBar
+                                />
+                                <Scene key="TaskOverview" component={TaskOverview} hideNavBar />
+                                <Scene key="ExplorePost" component={ExplorePost} hideNavBar />
+                                <Scene
+                                    key="PickAUsername"
+                                    component={PickAUsername}
+                                    hideNavBar
+                                />
+                                <Scene
+                                    key="InviteFriendsToDash"
+                                    component={InviteFriendsToDash}
+                                    hideNavBar
+                                />
+                                <Scene key="CameraRoll" component={CameraRoll} hideNavBar />
+                                <Scene
+                                    key="ChallengeDetail"
+                                    component={ChallengeDetail}
+                                    hideNavBar
+                                />
+                                <Scene key="PostPage" component={PostPage} hideNavBar />
+                                <Scene key="CreatePost" component={CreatePost} hideNavBar />
+                                <Scene key="Workout" component={Workout} hideNavBar />
+                                <Scene key="Completed" component={Completed} hideNavBar />
+                                <Scene key="Search" component={Search} hideNavBar />
+                            </Scene>
+                        </Router>
+                        <AuthPopup ref={(e) => (AuthPopupRef = e)} />
+                        <InviteFriends ref={(e) => (InviteFriendsRef = e)} />
+                    </>
+                )}
+            </Provider>
+        </SafeAreaView>
     );
 };
