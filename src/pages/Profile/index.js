@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, ScrollView, Animated} from 'react-native';
+import { View, StyleSheet, ScrollView, Animated } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LinearGradient from 'react-native-linear-gradient';
 import Layout from './Layout';
@@ -24,7 +24,7 @@ export default class Component extends React.Component {
         <Animated.View
           style={[
             {
-              transform: [{translateY}],
+              transform: [{ translateY }],
               opacity,
             },
             styles.containerBackground,
@@ -36,22 +36,22 @@ export default class Component extends React.Component {
             style={styles.containerGradiend}
           />
         </Animated.View>
-        <ScrollView
+        <Animated.ScrollView
           ref={(e) => (ScrollViewRef = e)}
           scrollEventThrottle={16}
           onScroll={Animated.event(
             [
               {
-                nativeEvent: {contentOffset: {y: this.ScrollViewAnimation}},
+                nativeEvent: { contentOffset: { y: this.ScrollViewAnimation } },
               },
             ],
             {
-              useNativeDriver: false,
+              useNativeDriver: true,
             },
           )}
           contentContainerStyle={styles.contentContainerStyle}>
           <Layout />
-        </ScrollView>
+        </Animated.ScrollView>
         <Top ScrollViewAnimation={this.ScrollViewAnimation} />
       </View>
     );

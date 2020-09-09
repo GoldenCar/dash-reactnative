@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, Animated, Dimensions, Easing} from 'react-native';
+import { View, Animated, Dimensions, Easing } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {connect} from 'react-redux';
-const {height, width} = Dimensions.get('screen');
+import { connect } from 'react-redux';
+const { height, width } = Dimensions.get('screen');
 
 const center = width / 2 - 20 - 64 / 2;
 const left = width - 40 - 64;
@@ -10,14 +10,14 @@ const left = width - 40 - 64;
 class Component extends React.Component {
   transitionX = new Animated.Value(1);
   componentDidUpdate(prevProps) {
-    const {routeName} = this.props.routes.params;
+    const { routeName } = this.props.routes.params;
     if (routeName === 'ExploreTab') {
       Animated.timing(this.transitionX, {
-        toValue: 2,
+        toValue: 0,
         duration: 200,
         easing: Easing.ease,
-        useNativeDriver: false,
-      }).start(({finished}) => {});
+        useNativeDriver: true,
+      }).start(({ finished }) => { });
       return;
     }
     if (routeName === 'MyChallengesTab') {
@@ -25,17 +25,17 @@ class Component extends React.Component {
         toValue: 1,
         duration: 200,
         easing: Easing.ease,
-        useNativeDriver: false,
-      }).start(({finished}) => {});
+        useNativeDriver: true,
+      }).start(({ finished }) => { });
       return;
     }
     if (routeName === 'MyProfile') {
       Animated.timing(this.transitionX, {
-        toValue: 0,
+        toValue: 2,
         duration: 200,
         easing: Easing.ease,
-        useNativeDriver: false,
-      }).start(({finished}) => {});
+        useNativeDriver: true,
+      }).start(({ finished }) => { });
       return;
     }
   }
@@ -50,15 +50,13 @@ class Component extends React.Component {
         <Animated.View
           style={[
             styles.line,
-            {
-              right,
-            },
-          ]}/>
+            { transform: [{ translateX: right }] }
+          ]} />
       </View>
     );
   }
 }
-export default connect(({routes}) => ({
+export default connect(({ routes }) => ({
   routes,
 }))(Component);
 
