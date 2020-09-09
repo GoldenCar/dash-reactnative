@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import Timer from './Timer';
 
 export default class App extends React.Component {
     render() {
@@ -15,9 +16,13 @@ export default class App extends React.Component {
         // TODO: hook up timer
         let repsText = '';
         if (reps === 'Seconds') {
-            repsText = `00:${repsCount}`;
+            repsText = <Timer initialTime={repsCount} />;
         } else {
-            repsText = `${repsCount} ${reps}`;
+            repsText = (
+                <Text style={styles.reps}>
+                    {repsCount} {reps}
+                </Text>
+            )
         }
 
         return (
@@ -25,9 +30,7 @@ export default class App extends React.Component {
                 <Text style={styles.title}>
                     {titleText}
                 </Text>
-                <Text style={styles.reps}>
-                    {repsText}
-                </Text>
+                {repsText}
             </View>
         );
     }

@@ -13,8 +13,8 @@ export default class App extends React.Component {
                 <CountdownCircleTimer
                     isPlaying={isPlaying}
                     duration={restTime}
-                    colors={'gray'}
-                    trailColor='#fff'
+                    colors={'#fff'}
+                    trailColor={'rgba(0, 0, 0, 0.1)'}
                     size={210}
                     strokeWidth={18}
                     onComplete={onComplete}
@@ -26,7 +26,7 @@ export default class App extends React.Component {
                             </Text>
                             <Text style={styles.timerSubText}>
                                 Rest
-                    </Text>
+                            </Text>
                         </View>
                     )}
                 </CountdownCircleTimer>
