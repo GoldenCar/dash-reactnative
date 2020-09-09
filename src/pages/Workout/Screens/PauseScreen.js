@@ -27,7 +27,9 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F8FAFC',
         alignItems: 'center',
-        paddingTop: 57
+        paddingTop: 57,
+        position: 'absolute',
+        ...StyleSheet.absoluteFill
     },
     title: {
         fontFamily: 'Poppins-Bold',

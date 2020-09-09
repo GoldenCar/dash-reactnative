@@ -50,7 +50,6 @@ export default function Component(props) {
             </TouchableOpacity>
         </View>
     );
-
 }
 
 const styles = StyleSheet.create({
