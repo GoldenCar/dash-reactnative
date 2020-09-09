@@ -82,7 +82,7 @@ export default class App extends React.Component {
             <View style={styles.container}>
 
                 {completed ? (
-                    <Completed currentDay={currentDay} challenge={challenge} user={user} />
+                    <Completed currentDay={currentDay} challenge={challenge} user={user} day={day} />
                 ) : flag === 'note' ? (
                     <NoteScreen currentWorkout={currentWorkout} />
                 ) : flag === 'circuitComplete' ? (

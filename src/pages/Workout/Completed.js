@@ -11,7 +11,7 @@ export default class Completed extends React.Component {
     render() {
         console.log(" Comleeted props =", this.props);
 
-        const { currentDay, user, challenge } = this.props;
+        const { currentDay, user, challenge, day } = this.props;
 
         const onPress = async () => {
             try {
@@ -46,11 +46,9 @@ export default class Completed extends React.Component {
                         <Text style={styles.eyebrowText}>Todays Task</Text>
                     </View>
 
-                    { /* TODO: add actual values here */}
                     <Text style={styles.infoTitle}>
-                        Full Body Stretching
+                        {day.taskTitle}
                     </Text>
-
                     <Text style={styles.infoSubtitle}>
                         Day {currentDay}
                     </Text>
