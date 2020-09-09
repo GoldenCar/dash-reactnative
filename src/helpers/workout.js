@@ -36,11 +36,16 @@ async function getExerciseInformation(cardId) {
 //       set isCircuit
 //       set loopNum
 //       set exerciseNum
-async function parseCircuitData(circuit) {
+async function parseCircuitData(circuit, index) {
     const data = [];
 
     let exercises = circuit.exeerciseCards;
     const loops = parseInt(circuit.Cycles);
+
+    // push circuit preview card if circuit isn't first task
+    if (index > 0) {
+        data.push({ flag: 'circuitPreview' });
+    }
 
     // get data for all circuit exercises
     for (let p = 0; p < exercises.length; p++) {
@@ -82,7 +87,7 @@ async function getWorkoutData(day) {
         const exercise = day.versionDayTaskCard[i];
 
         if (exercise.flag === 'circuit') {
-            const data = await parseCircuitData(exercise);
+            const data = await parseCircuitData(exercise, i);
             cards = cards.concat(data);
         } else if (exercise.flag !== 'circuit') {
             const taskData = await getTaskData(exercise);

@@ -11,6 +11,7 @@ import RestScreen from './Screens/RestScreen';
 import VideoScreen from './Screens/VideoScreen';
 import PauseScreen from './Screens/PauseScreen';
 import Completed from './Completed';
+import CircuitPreview from './Screens/CircuitPreview';
 
 export default class App extends React.Component {
     state = {
@@ -71,7 +72,8 @@ export default class App extends React.Component {
         console.log('WORKOUT NEW INDEX', index);
         console.log('WORKOUT CURRENT WORKOUT ', currentWorkout);
 
-        const showButtons = flag !== 'circuitComplete' && !completed;
+        // TODO: put flag in helper 
+        const showButtons = (flag !== 'circuitComplete' && flag !== 'circuitPreview') && !completed;
 
         // TODO: hide for note, what else?
         const showContent = !paused && showButtons;
@@ -85,6 +87,8 @@ export default class App extends React.Component {
                     <NoteScreen currentWorkout={currentWorkout} />
                 ) : flag === 'circuitComplete' ? (
                     <CircuitComplete />
+                ) : flag === 'circuitPreview' ? (
+                    <CircuitPreview onPress={this.onNext} />
                 ) : flag === 'rest' ? (
                     <RestScreen
                         isPlaying={!paused}
