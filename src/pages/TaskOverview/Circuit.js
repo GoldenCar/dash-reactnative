@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, Image } from 'react-native';
 
 import CircuitIcon from './CircuitIcon';
 
-import { getCircuitThumbnailUrl } from '../../helpers/workout';
+import { getCircuitThumbnail } from '../../helpers/workout';
 import * as planActions from '../../actions/plans';
 
 export default function Component(props) {
@@ -48,7 +48,7 @@ export default function Component(props) {
           5 Rounds
         </Text>
         {cards.map((exercise) => {
-          const thumbnailUrl = getCircuitThumbnailUrl(exercise);
+          const thumbnailUrl = getCircuitThumbnail(exercise);
 
           let subtitle = '';
           if (exercise.flag === 'exercise') {

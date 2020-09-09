@@ -1,9 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 
 import NavButtons from './NavButtons';
-import ExerciseTitle from './ExerciseTitle';
 import LapText from './LapText';
 import NewsCell from './NewsCell';
 
@@ -12,11 +10,14 @@ import CircuitComplete from './Screens/CircuitComplete';
 import RestScreen from './Screens/RestScreen';
 import VideoScreen from './Screens/VideoScreen';
 import PauseScreen from './Screens/PauseScreen';
+import Completed from './Completed';
+import CircuitPreview from './Screens/CircuitPreview';
 
 export default class App extends React.Component {
     state = {
         index: 0,
-        paused: false
+        paused: false,
+        completed: false
     }
 
     setTimers(nextWorkout) {
@@ -26,13 +27,13 @@ export default class App extends React.Component {
     }
 
     onNext = () => {
-        const { data, currentDay, challenge, user } = this.props;
+        const { data } = this.props;
         const { index } = this.state;
         const nextIndex = index + 1;
 
         // if end reached, navigate to Completed page
         if (nextIndex === data.length) {
-            Actions.Completed({ currentDay, challenge, user });
+            this.setState({ completed: true });
             return;
         }
 
@@ -61,8 +62,8 @@ export default class App extends React.Component {
     onPause = () => this.setState({ paused: !this.state.paused })
 
     render() {
-        const { index, paused } = this.state;
-        const { data } = this.props;
+        const { index, paused, completed } = this.state;
+        const { data, currentDay, day, plan, user, challenge } = this.props;
 
         const currentWorkout = data[index];
         const { flag, restTime } = currentWorkout;
@@ -71,18 +72,23 @@ export default class App extends React.Component {
         console.log('WORKOUT NEW INDEX', index);
         console.log('WORKOUT CURRENT WORKOUT ', currentWorkout);
 
-        const showButtons = flag !== 'circuitComplete';
+        // TODO: put flag in helper 
+        const showButtons = (flag !== 'circuitComplete' && flag !== 'circuitPreview') && !completed;
+
+        // TODO: hide for note, what else?
         const showContent = !paused && showButtons;
 
         return (
             <View style={styles.container}>
 
-                {paused ? (
-                    <PauseScreen />
+                {completed ? (
+                    <Completed currentDay={currentDay} challenge={challenge} user={user} day={day} />
                 ) : flag === 'note' ? (
                     <NoteScreen currentWorkout={currentWorkout} />
                 ) : flag === 'circuitComplete' ? (
                     <CircuitComplete />
+                ) : flag === 'circuitPreview' ? (
+                    <CircuitPreview onPress={this.onNext} />
                 ) : flag === 'rest' ? (
                     <RestScreen
                         isPlaying={!paused}
@@ -90,8 +96,23 @@ export default class App extends React.Component {
                         restTime={restTime}
                     />
                 ) : flag === 'video' ? (
-                    <VideoScreen currentWorkout={currentWorkout} paused={paused} />
+                    <VideoScreen
+                        currentWorkout={currentWorkout}
+                        paused={paused}
+                        onComplete={this.onNext}
+                    />
                 ) : null}
+
+                {showContent && (
+                    <>
+                        <NewsCell currentWorkout={currentWorkout} />
+                        <LapText currentWorkout={currentWorkout} />
+                    </>
+                )}
+
+                {paused && (
+                    <PauseScreen currentDay={currentDay} day={day} plan={plan} />
+                )}
 
                 {showButtons && (
                     <NavButtons
@@ -101,15 +122,6 @@ export default class App extends React.Component {
                         paused={paused}
                     />
                 )}
-
-                {showContent && (
-                    <>
-                        <NewsCell currentWorkout={currentWorkout} />
-                        <ExerciseTitle currentWorkout={currentWorkout} />
-                        <LapText currentWorkout={currentWorkout} />
-                    </>
-                )}
-
             </View>
         );
     }

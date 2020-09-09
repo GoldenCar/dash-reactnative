@@ -1,7 +1,5 @@
-import thumbnail_rest_inside_circuit from '../res/workout/rest_inside_circuit.png';
 import thumbnail_note_card from '../res/workout/note_thumbnail.png';
 import bgimage_rest_inside_circuit from '../res/workoutimage.png';
-//import thumbnail_rest_outside_circuit from '../res/workout/rest_outside_circuit.png';
 
 import NoteThumbnail from '../res/workout-new/note.png';
 import RestThumbnail from '../res/workout-new/rest.png';
@@ -9,25 +7,23 @@ import RestThumbnail from '../res/workout-new/rest.png';
 import { mediaHost } from 'dash/src/config';
 import * as planActions from '../actions/plans';
 
-function getCircuitThumbnailUrl(exercise) {
-    let thumbnailUrl = '';
+function getCircuitThumbnail(exercise) {
+    let image = '';
     if (exercise.flag === "note") {
-        //thumbnailUrl = thumbnail_note_card;
-        thumbnailUrl = NoteThumbnail;
+        image = NoteThumbnail;
     } else if (exercise.flag === 'rest') {
-        //thumbnailUrl = thumbnail_rest_inside_circuit;
-        thumbnailUrl = RestThumbnail;
+        image = RestThumbnail;
     } else if (exercise.flag === 'video' && exercise.thumbnailFileName && exercise.thumbnailFileName != "") {
-        thumbnailUrl = { uri: `${mediaHost}${exercise.thumbnailFileName}` };
+        image = { uri: `${mediaHost}${exercise.thumbnailFileName}` };
     } else if (exercise.flag === "exercise") {
         if (exercise.exercisesData && exercise.exercisesData.length > 0) {
             // TODO: the data in exercisesData is not reliable
             const data = exercise.exercisesData.filter((e) => e.id === exercise.cardExerciseID);
-            thumbnailUrl = { uri: `${mediaHost}${data.BaseThumbnail_fileName}` };
+            image = { uri: `${mediaHost}${data.BaseThumbnail_fileName}` };
         }
     }
 
-    return thumbnailUrl;
+    return image;
 }
 
 // TODO: why do i need to do this? this info should be on the exercise data already
@@ -40,11 +36,16 @@ async function getExerciseInformation(cardId) {
 //       set isCircuit
 //       set loopNum
 //       set exerciseNum
-async function parseCircuitData(circuit) {
+async function parseCircuitData(circuit, index) {
     const data = [];
 
     let exercises = circuit.exeerciseCards;
     const loops = parseInt(circuit.Cycles);
+
+    // push circuit preview card if circuit isn't first task
+    if (index > 0) {
+        data.push({ flag: 'circuitPreview' });
+    }
 
     // get data for all circuit exercises
     for (let p = 0; p < exercises.length; p++) {
@@ -86,7 +87,7 @@ async function getWorkoutData(day) {
         const exercise = day.versionDayTaskCard[i];
 
         if (exercise.flag === 'circuit') {
-            const data = await parseCircuitData(exercise);
+            const data = await parseCircuitData(exercise, i);
             cards = cards.concat(data);
         } else if (exercise.flag !== 'circuit') {
             const taskData = await getTaskData(exercise);
@@ -144,4 +145,4 @@ async function getTaskData(exercise) {
     return data;
 }
 
-export { getCircuitThumbnailUrl, getWorkoutData }
+export { getCircuitThumbnail, getWorkoutData }

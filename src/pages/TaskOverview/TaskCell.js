@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 
-import { getCircuitThumbnailUrl } from '../../helpers/workout';
+import { getCircuitThumbnail } from '../../helpers/workout';
 import * as planActions from '../../actions/plans';
 
 export default function (props) {
@@ -32,7 +32,7 @@ export default function (props) {
     getData();
   }, []);
 
-  const thumbnailURL = getCircuitThumbnailUrl(fullTask);
+  const thumbnailURL = getCircuitThumbnail(fullTask);
 
   return (
     <View style={styles.container}>

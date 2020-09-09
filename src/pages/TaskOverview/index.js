@@ -36,12 +36,15 @@ function Component(props) {
         getWorkout();
     }, []);
 
+    // TODO: this needs to be put in store
     const onPress = () => {
         Actions.Workout({
             data: stories,
             currentDay,
             user,
-            challenge
+            challenge,
+            plan,
+            day
         });
     }
 

@@ -6,11 +6,15 @@ export default class App extends React.Component {
         const { currentWorkout } = this.props;
         const { flag, isCircuit, exerciseNum, totalExercises } = currentWorkout;
 
-        console.log(currentWorkout);
+        if (!isCircuit && flag !== 'video') {
+            return null;
+        }
 
-        let text = flag;
+        let text = '';
         if (isCircuit) {
-            //   text = `Exercise ${exerciseNum} of ${totalExercises}`;
+            text = `Exercise ${exerciseNum} of ${totalExercises}`;
+        } else if (flag === 'video') {
+            text = 'Exercise';
         }
 
         return (

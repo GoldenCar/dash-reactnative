@@ -14,6 +14,8 @@ import AppleGoogleSignInButtons from './AppleGoogleSignInButtons';
 
 const { height, width } = Dimensions.get('screen');
 
+// TODO: turn into page
+
 export default class Component extends React.Component {
   translateY = new Animated.Value(1);
 
