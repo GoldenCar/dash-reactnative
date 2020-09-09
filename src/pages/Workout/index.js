@@ -62,7 +62,7 @@ export default class App extends React.Component {
 
     render() {
         const { index, paused } = this.state;
-        const { data } = this.props;
+        const { data, currentDay, day, plan } = this.props;
 
         const currentWorkout = data[index];
         const { flag, restTime } = currentWorkout;
@@ -78,7 +78,7 @@ export default class App extends React.Component {
             <View style={styles.container}>
 
                 {paused ? (
-                    <PauseScreen />
+                    <PauseScreen currentDay={currentDay} day={day} plan={plan} />
                 ) : flag === 'note' ? (
                     <NoteScreen currentWorkout={currentWorkout} />
                 ) : flag === 'circuitComplete' ? (
