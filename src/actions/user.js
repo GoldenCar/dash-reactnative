@@ -172,3 +172,14 @@ export const leaveChallenge = async (challenge_id, user_id) => {
 
   return response;
 };
+
+export const setDayCompleted = async (challenge_id, user_id, dayIndex) => {
+  const URL = `/challengesapi/${challenge_id}/complete`;
+
+  const response = await api.post(URL, {
+    user_id: user_id,
+    day: dayIndex
+  });
+
+  return response;
+};

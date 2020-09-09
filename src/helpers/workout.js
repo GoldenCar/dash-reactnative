@@ -1,7 +1,10 @@
 import thumbnail_rest_inside_circuit from '../res/workout/rest_inside_circuit.png';
 import thumbnail_note_card from '../res/workout/note_thumbnail.png';
 import bgimage_rest_inside_circuit from '../res/workoutimage.png';
-import thumbnail_rest_outside_circuit from '../res/workout/rest_outside_circuit.png';
+//import thumbnail_rest_outside_circuit from '../res/workout/rest_outside_circuit.png';
+
+import NoteThumbnail from '../res/workout-new/note.png';
+import RestThumbnail from '../res/workout-new/rest.png';
 
 import { mediaHost } from 'dash/src/config';
 import * as planActions from '../actions/plans';
@@ -9,9 +12,11 @@ import * as planActions from '../actions/plans';
 function getCircuitThumbnailUrl(exercise) {
     let thumbnailUrl = '';
     if (exercise.flag === "note") {
-        thumbnailUrl = thumbnail_note_card;
+        //thumbnailUrl = thumbnail_note_card;
+        thumbnailUrl = NoteThumbnail;
     } else if (exercise.flag === 'rest') {
-        thumbnailUrl = thumbnail_rest_inside_circuit;
+        //thumbnailUrl = thumbnail_rest_inside_circuit;
+        thumbnailUrl = RestThumbnail;
     } else if (exercise.flag === 'video' && exercise.thumbnailFileName && exercise.thumbnailFileName != "") {
         thumbnailUrl = { uri: `${mediaHost}${exercise.thumbnailFileName}` };
     } else if (exercise.flag === "exercise") {

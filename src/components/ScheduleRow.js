@@ -1,8 +1,11 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { CheckMark } from './Icons';
 
-export default function Component({ data, showSeperator, index, showEyebrow }) {
+export default function Component(props) {
+    const { data, showSeperator, index, showEyebrow, dayComplete, showCircle } = props;
+
     const day = data.versionDay || (index + 1);
 
     const contentContainerStyles = [styles.contentContainer];
@@ -24,10 +27,14 @@ export default function Component({ data, showSeperator, index, showEyebrow }) {
                     </View>
                 )}
                 <View style={contentContainerStyles}>
-                    <View style={styles.day}>
-                        <Text style={styles.dayText}>{day}</Text>
+                    <View style={styles.contentRow}>
+                        <View style={styles.day}>
+                            <Text style={styles.dayText}>{day}</Text>
+                        </View>
+                        <Text style={styles.taskTitle}>{data.taskTitle}</Text>
                     </View>
-                    <Text style={styles.taskTitle}>{data.taskTitle}</Text>
+                    {(showCircle && !dayComplete) && <View style={styles.emptyCircle} />}
+                    {(showCircle && dayComplete) && <View style={styles.completeCircle}><CheckMark /></View>}
                 </View>
             </View>
             {showSeperator && <View style={styles.seperator} />}
@@ -42,6 +49,12 @@ const styles = EStyleSheet.create({
         alignItems: 'center',
     },
     contentContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flex: 1
+    },
+    contentRow: {
         flexDirection: 'row',
         alignItems: 'center'
     },
@@ -90,5 +103,23 @@ const styles = EStyleSheet.create({
         fontSize: 16,
         lineHeight: 24,
         color: '#3F434F'
+    },
+    emptyCircle: {
+        height: 32,
+        width: 32,
+        backgroundColor: '#F8FAFC',
+        borderWidth: 1,
+        borderColor: '#E0EAF3',
+        borderRadius: 16,
+    },
+    completeCircle: {
+        width: 32,
+        height: 32,
+        backgroundColor: '#E9F6FF',
+        borderRadius: 16,
+        borderWidth: 1,
+        borderColor: '#E0EAF3',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });

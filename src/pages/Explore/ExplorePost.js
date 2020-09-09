@@ -36,23 +36,22 @@ export default class Component extends React.Component {
     }
   }
 
-  // TODO: needs to handle flow after user logs in
   async onJoinPress() {
-    const { user, challenge } = this.props;
+    const { challenge } = this.props;
 
-    const joinRequest = async () => {
+    const joinRequest = async (challenge, user) => {
+      // TODO: this request is currently broken. getting 400 error
       const response = await userActions.joinChallenge(challenge._id, user._id);
       if (response.status === 200) {
+        // TODO: do i need to re-request challenges?
         Actions.ChallengeDetail({ challenge });
       }
     }
 
-    if (!user) {
-      // TODO: take another look at this once AuthPopup refactor merged
-      this.AuthPopupRef.open(joinRequest);
+    if (!this.props.user) {
+      this.AuthPopupRef.open((user) => joinRequest(challenge, user));
     } else {
-      // TODO: do i need to re-request challenges?
-      joinRequest();
+      joinRequest(challenge, this.props.user);
     }
   }
 

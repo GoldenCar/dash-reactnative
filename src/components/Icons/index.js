@@ -46,6 +46,7 @@ import ArrowNext from './ArrowNext';
 import Calendar from './Calendar';
 import Settings from './Settings';
 import ArrowRight from './ArrowRight';
+import CheckMark from './CheckMark';
 
 export {
   Play,
@@ -95,5 +96,6 @@ export {
   ArrowNext,
   Calendar,
   Settings,
-  ArrowRight
+  ArrowRight,
+  CheckMark
 };

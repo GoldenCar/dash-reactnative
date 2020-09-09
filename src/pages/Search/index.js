@@ -8,9 +8,9 @@ import {
   FlatList,
   Keyboard
 } from 'react-native';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
 
 import Search from '../../components/Search';
@@ -42,7 +42,16 @@ function Component(props) {
   if (search.length > 0) {
     results = props.challenges.filter((challenge) => {
       const { category, title } = challenge;
-      return category.includes(search) || title.includes(search);
+
+      if (title) {
+        return title.includes(search);
+      }
+
+      if (category) {
+        return category.includes(search);
+      }
+
+      return false;
     });
   }
 
@@ -50,13 +59,13 @@ function Component(props) {
     <View style={styles.container}>
       <View style={styles.searchSection}>
         <Text style={styles.title}>Search</Text>
-        <Search 
-          autoFocus 
+        <Search
+          autoFocus
           value={search}
           onChangeText={(value) => setSearchValue(value)}
           containerStyle={styles.search}
         />
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={() => Actions.pop()}
           style={styles.close}
         >
@@ -75,7 +84,7 @@ function Component(props) {
         )}
         contentContainerStyle={{ flexGrow: 1 }}
         ListEmptyComponent={
-          <LinearGradient 
+          <LinearGradient
             colors={['#F0F5FA', 'rgb(240, 245, 250)']}
             style={{ flex: 1 }}
           />
@@ -115,6 +124,6 @@ const styles = StyleSheet.create({
     borderWidth: 0
   }
 });
-export default connect(({challenges}) => ({
+export default connect(({ challenges }) => ({
   challenges,
 }))(Component);

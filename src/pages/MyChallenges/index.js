@@ -170,7 +170,8 @@ const styles = EStyleSheet.create({
     lineHeight: 39,
     color: '#3F434F',
     marginHorizontal: 16,
-    marginBottom: 13
+    marginBottom: 13,
+    //paddingTop: 30,
   },
   newButton: {
     width: 81,

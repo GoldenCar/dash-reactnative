@@ -1,45 +1,122 @@
 import React from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
-import Stories from './Stories';
+import { View, StyleSheet } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+
+import NavButtons from './NavButtons';
+import ExerciseTitle from './ExerciseTitle';
+import LapText from './LapText';
+import NewsCell from './NewsCell';
+
+import NoteScreen from './Screens/NoteScreen';
+import CircuitComplete from './Screens/CircuitComplete';
+import RestScreen from './Screens/RestScreen';
+import VideoScreen from './Screens/VideoScreen';
+import PauseScreen from './Screens/PauseScreen';
 
 export default class App extends React.Component {
-  state = {
-    ready: false
-  };
-
-  componentDidMount() {
-    this.setState({ ready: true });
-  }
-
-  render() {
-    const { ready } = this.state;
-    const { stories, arrayVersionTask, user, challenge } = this.props;
-
-    if (!ready) {
-      return (
-        <View style={styles.container}>
-          <ActivityIndicator size="large" color="white" />
-        </View>
-      );
+    state = {
+        index: 0,
+        paused: false
     }
 
-    return (
-      <View style={{ flex: 1 }}>
-        <Stories
-          stories={stories}
-          dayTasks={arrayVersionTask}
-          challenge={challenge}
-          user={user} />
-      </View>
-    );
-  }
+    setTimers(nextWorkout) {
+        if (nextWorkout.flag === 'circuitComplete') {
+            setTimeout(() => this.onNext(), 4000);
+        }
+    }
+
+    onNext = () => {
+        const { data, currentDay, challenge, user } = this.props;
+        const { index } = this.state;
+        const nextIndex = index + 1;
+
+        // if end reached, navigate to Completed page
+        if (nextIndex === data.length) {
+            Actions.Completed({ currentDay, challenge, user });
+            return;
+        }
+
+        this.setState({ index: nextIndex });
+
+        const nextWorkout = data[nextIndex];
+        this.setTimers(nextWorkout);
+    }
+
+    onPrevious = () => {
+        const { data } = this.props;
+        const { index } = this.state;
+        const previousIndex = index - 1;
+
+        // don't go below 0
+        if (previousIndex < 0) {
+            return;
+        }
+
+        this.setState({ index: previousIndex });
+
+        const nextWorkout = data[previousIndex];
+        this.setTimers(nextWorkout);
+    }
+
+    onPause = () => this.setState({ paused: !this.state.paused })
+
+    render() {
+        const { index, paused } = this.state;
+        const { data } = this.props;
+
+        const currentWorkout = data[index];
+        const { flag, restTime } = currentWorkout;
+
+        console.log('WORKOUT NEW SCREEN', this.props);
+        console.log('WORKOUT NEW INDEX', index);
+        console.log('WORKOUT CURRENT WORKOUT ', currentWorkout);
+
+        const showButtons = flag !== 'circuitComplete';
+        const showContent = !paused && showButtons;
+
+        return (
+            <View style={styles.container}>
+
+                {paused ? (
+                    <PauseScreen />
+                ) : flag === 'note' ? (
+                    <NoteScreen currentWorkout={currentWorkout} />
+                ) : flag === 'circuitComplete' ? (
+                    <CircuitComplete />
+                ) : flag === 'rest' ? (
+                    <RestScreen
+                        isPlaying={!paused}
+                        onComplete={this.onNext}
+                        restTime={restTime}
+                    />
+                ) : flag === 'video' ? (
+                    <VideoScreen currentWorkout={currentWorkout} paused={paused} />
+                ) : null}
+
+                {showButtons && (
+                    <NavButtons
+                        onNext={this.onNext}
+                        onPause={this.onPause}
+                        onPrevious={this.onPrevious}
+                        paused={paused}
+                    />
+                )}
+
+                {showContent && (
+                    <>
+                        <NewsCell currentWorkout={currentWorkout} />
+                        <ExerciseTitle currentWorkout={currentWorkout} />
+                        <LapText currentWorkout={currentWorkout} />
+                    </>
+                )}
+
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#222222',
-  },
+    container: {
+        flex: 1
+    },
 });
