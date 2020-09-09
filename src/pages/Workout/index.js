@@ -2,7 +2,6 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import NavButtons from './NavButtons';
-import ExerciseTitle from './ExerciseTitle';
 import LapText from './LapText';
 import NewsCell from './NewsCell';
 
@@ -93,13 +92,16 @@ export default class App extends React.Component {
                         restTime={restTime}
                     />
                 ) : flag === 'video' ? (
-                    <VideoScreen currentWorkout={currentWorkout} paused={paused} />
+                    <VideoScreen
+                        currentWorkout={currentWorkout}
+                        paused={paused}
+                        onComplete={this.onNext}
+                    />
                 ) : null}
 
                 {showContent && (
                     <>
                         <NewsCell currentWorkout={currentWorkout} />
-                        <ExerciseTitle currentWorkout={currentWorkout} />
                         <LapText currentWorkout={currentWorkout} />
                     </>
                 )}

@@ -4,6 +4,8 @@ import Video from 'react-native-video';
 
 import LoadingScreen from './LoadingScreen';
 import CountDownAnimation from '../CountDownAnimation';
+import ExerciseTitle from '../ExerciseTitle';
+
 import { mediaHost } from '../../../config';
 
 export default class App extends React.Component {
@@ -23,7 +25,7 @@ export default class App extends React.Component {
 
     render() {
         const { loading, animationRunning } = this.state;
-        const { currentWorkout, paused } = this.props;
+        const { currentWorkout, paused, onComplete } = this.props;
 
         const uri = encodeURI(`${mediaHost}${currentWorkout.fileName}`);
         const source = { uri };
@@ -51,6 +53,13 @@ export default class App extends React.Component {
                             />
                         </View>
                     )}
+
+                    <ExerciseTitle
+                        currentWorkout={currentWorkout}
+                        paused={paused}
+                        onComplete={onComplete}
+                        loading={loading}
+                    />
                 </View>
             </>
         );

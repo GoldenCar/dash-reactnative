@@ -1,96 +1,64 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-// Just shows the time, taking app state time as input prop
-const Timer = function (props) {
-    return (
-        <Text>
-            {props.time}
-        </Text>
-    );
-};
-
-// Resets the timer on click and clear the setInterval
-// const Reset = function (props) {
-//     return (
-//         <button onClick={props.onClickReset} className="reset">
-//             Reset
-// 		</button>
-//     );
-// };
-
-
-// Pause/ play button
-// class Control extends React.Component {
-//     constructor(props) {
-//         super(props);
-//     };
-
-//     onClickHandler = () => {
-//         if (this.props.paused) {
-//             this.props.start();
-//         }
-//         else {
-//             this.props.stop();
-//         }
-//     }
-
-//     render() {
-//         return (
-//             // <button className={this.props.paused ? "paused" : ""} onClick={this.onClickHandler}>
-//             //     {this.props.paused ? "play" : "pause"}
-//             // </button>
-//         );
-//     };
-// };
-
+// TODO: lots of special cases here that can be cleaned up
 
 export default class App extends React.Component {
     constructor(props) {
         super(props);
 
-        const type = typeof props.initialTime;
-        const initialTime = type === 'string' ? parseInt(props.initialTime) : props.initialTime;
+        let { initialTime } = props;
+
+        const type = typeof initialTime;
+        initialTime = type === 'string' ? parseInt(initialTime) : initialTime;
 
         const time = initialTime <= 0 ? 1 : initialTime;
+        const { total_seconds, minutes, seconds } = this.getTime(time + 1);
+
         this.state = {
-            timer: time,
-            minutes: '00',
-            seconds: '00'
-        }
+            timer: total_seconds,
+            minutes,
+            seconds
+        };
     };
 
-    componentDidMount() {
-        this.interval = setInterval(() => {
-            const total_seconds = this.state.timer - 1;
-            const total_minutes = parseInt(Math.floor(total_seconds / 60));
+    componentDidUpdate(prevProps) {
+        const { paused, onComplete, autoPlay, loading } = this.props;
+        const { timer } = this.state;
 
-            let seconds = parseInt(total_seconds % 60);
-            let minutes = parseInt(total_minutes % 60);
+        // start timer when video loading is complete
+        if (!loading && prevProps.loading) {
+            this.createInterval();
+            return;
+        }
 
-            if (minutes === 0) {
-                minutes = '00';
-            }
-
-            if (seconds === 0) {
-                seconds = '00';
-            }
-
-            if (seconds < 10) {
-                seconds = `0${seconds}`;
-            }
-
-            this.setState({
-                timer: total_seconds,
-                minutes,
-                seconds
-            });
-        }, 1000);
-    }
-
-    componentDidUpdate() {
-        if (this.state.timer === 0) {
+        // if timer somehow goes negative, clear interval
+        if (timer < 0) {
             clearInterval(this.interval);
+            return;
+        }
+
+        // when timer hits zero, clear interval & run callback
+        if (timer === 0) {
+            clearInterval(this.interval);
+
+            if (onComplete && autoPlay) {
+                setTimeout(() => onComplete(), 1000);
+            }
+        }
+
+        // playing -> paused
+        if (paused && !prevProps.paused) {
+            console.log('playing to pause', timer);
+            clearInterval(this.interval);
+            return;
+        }
+
+        // paused -> playing
+        if (!paused && prevProps.paused && timer > 0) {
+            console.log('paused to playing', timer);
+            this.createInterval();
+            return;
         }
     }
 
@@ -98,24 +66,36 @@ export default class App extends React.Component {
         clearInterval(this.interval);
     }
 
-    // tick = () => {
-    //     this.setState({ timer: this.state.timer + 1 });
-    // }
+    createInterval = () => {
+        this.interval = setInterval(() => {
+            const { total_seconds, minutes, seconds } = this.getTime(this.state.timer);
+            this.setState({
+                timer: total_seconds,
+                minutes,
+                seconds
+            })
+        }, 1000);
+    }
 
-    // startTimer = () => {
-    //     this.interval = setInterval(this.tick, 1000);
-    //   //  this.setState({ paused: false });
-    // }
+    getTime(time) {
+        const total_seconds = time - 1;
+        const total_minutes = parseInt(Math.floor(total_seconds / 60));
 
-    // stopTimer = () => {
-    //     clearInterval(this.interval);
-    //    // this.setState({ paused: true });
-    // }
+        let seconds = parseInt(total_seconds % 60);
+        let minutes = parseInt(total_minutes % 60);
 
-    // reset = () => {
-    //     this.setState({ timer: 0, paused: true });
-    //    // clearInterval(this.interval);
-    // }
+        if (minutes === 0) {
+            minutes = '00';
+        }
+
+        if (seconds === 0) {
+            seconds = '00';
+        } else if (seconds < 10) {
+            seconds = `0${seconds}`;
+        }
+
+        return { total_seconds, minutes, seconds };
+    }
 
     render() {
         const { minutes, seconds } = this.state;

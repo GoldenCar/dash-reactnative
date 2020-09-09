@@ -4,7 +4,7 @@ import Timer from './Timer';
 
 export default class App extends React.Component {
     render() {
-        const { currentWorkout } = this.props;
+        const { currentWorkout, paused, onComplete, loading } = this.props;
         const { cardType, title, reps, repsCount } = currentWorkout;
 
         if (!reps && !repsCount) {
@@ -13,10 +13,19 @@ export default class App extends React.Component {
 
         const titleText = (cardType === 'exercise' && title) && title;
 
-        // TODO: hook up timer
+        // TODO: pull out into own function
         let repsText = '';
         if (reps === 'Seconds') {
-            repsText = <Timer initialTime={repsCount} />;
+            const { autoPlay } = currentWorkout;
+            repsText = (
+                <Timer
+                    initialTime={repsCount}
+                    paused={paused}
+                    onComplete={onComplete}
+                    autoPlay={autoPlay}
+                    loading={loading}
+                />
+            );
         } else {
             repsText = (
                 <Text style={styles.reps}>
