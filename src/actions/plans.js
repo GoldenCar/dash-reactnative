@@ -17,8 +17,19 @@ export const getPlanTasks = async (id) => {
   return response.data.data;
 };
 
-export const getExerciseData = async (id) => {
+export const getExercisesArray = async (id) => {
   const response = await apiAdmin.get('/cardapi/' + id);
   return response.data.data;
 };
 
+// TODO: this data structure is a prime place to start cleaning up data structure
+export const getExerciseData = async (card_id, exercise_id) => {
+  try {
+    const response = await apiAdmin.get(`/cardapi/${card_id}/exercise/${exercise_id}`);
+    console.log('GET EXERCISE DATA NEW', response);
+    return response.data.data;
+  } catch (e) {
+    console.log('get exercise data', e);
+    return;
+  }
+}

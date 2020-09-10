@@ -13,23 +13,21 @@ function getCircuitThumbnail(exercise) {
         image = NoteThumbnail;
     } else if (exercise.flag === 'rest') {
         image = RestThumbnail;
-    } else if (exercise.flag === 'video' && exercise.thumbnailFileName && exercise.thumbnailFileName != "") {
-        image = { uri: `${mediaHost}${exercise.thumbnailFileName}` };
-    } else if (exercise.flag === "exercise") {
-        if (exercise.exercisesData && exercise.exercisesData.length > 0) {
-            // TODO: the data in exercisesData is not reliable
-            const data = exercise.exercisesData.filter((e) => e.id === exercise.cardExerciseID);
-            image = { uri: `${mediaHost}${data.BaseThumbnail_fileName}` };
+    } else {
+        if (exercise.thumbnailFileName && exercise.thumbnailFileName != "") {
+            image = { uri: `${mediaHost}${exercise.thumbnailFileName}` };
+        } else if (exercise.exerciseData) {
+            image = { uri: `${mediaHost}${exercise.exerciseData.BaseThumbnail_fileName}` };
         }
     }
+    // else if (exercise.flag === 'video' && exercise.thumbnailFileName && exercise.thumbnailFileName != "") {
+    //   image = { uri: `${mediaHost}${exercise.thumbnailFileName}` };
+    // }
+    // else if ((exercise.flag === "exercise" || exercise.flag === 'video') && exercise.exerciseData) {
+    //     image = { uri: `${mediaHost}${exercise.exerciseData.BaseThumbnail_fileName}` };
+    // }
 
     return image;
-}
-
-// TODO: why do i need to do this? this info should be on the exercise data already
-async function getExerciseInformation(cardId) {
-    const arrayResponse = await planActions.getExerciseData(cardId)
-    return arrayResponse;
 }
 
 // TODO: make circuit exercise request once
@@ -105,7 +103,9 @@ async function getTaskData(exercise) {
         autoPlay: exercise.AutoPlay === 'checked',
         autoPlayShowFlag: exercise.AutoPlayShowFlag,
         flag: exercise.flag,
-        timer: false
+        timer: false,
+        cardUUID: exercise.cardUUID,
+        cardExerciseID: exercise.cardExerciseID
     };
 
     if (exercise.RestTime) {
@@ -131,14 +131,16 @@ async function getTaskData(exercise) {
         data.sets = exercise.Sets;
         data.repsCount = exercise.RepsCount;
 
-        const response = await getExerciseInformation(exercise.cardUUID);
-        if (response.exercisesData) {
-            const cardData = response.exercisesData.filter(data => data.id === exercise.cardExerciseID);
-            if (cardData.length > 0) {
-                const { BaseVideo_fileName, exerciseName } = cardData[0];
-                data.fileName = BaseVideo_fileName;
-                data.title = exerciseName;
-            }
+        const cardID = exercise.cardUUID;
+        const exerciseID = exercise.cardExerciseID;
+
+        // TODO: why do i need to do this? this info should be on the exercise data already
+        // TODO: this is erasing values 
+        const response = await planActions.getExerciseData(cardID, exerciseID);
+        if (response) {
+            const { BaseVideo_fileName, exerciseName } = response;
+            data.fileName = BaseVideo_fileName;
+            data.title = exerciseName;
         }
     }
 
