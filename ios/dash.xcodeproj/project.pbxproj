@@ -788,7 +788,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dash.challenges;
 				PRODUCT_NAME = Dash;
-				PROVISIONING_PROFILE_SPECIFIER = "match Development com.test.gtech.org.reactjs.native.example.dash";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.dash.challenges";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -816,7 +816,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dash.challenges;
 				PRODUCT_NAME = Dash;
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.test.gtech.org.reactjs.native.example.dash";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.dash.challenges";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
