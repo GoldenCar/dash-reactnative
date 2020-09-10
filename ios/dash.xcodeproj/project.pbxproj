@@ -786,9 +786,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dash.challenges;
+				PRODUCT_BUNDLE_IDENTIFIER = com.team.dash;
 				PRODUCT_NAME = Dash;
-				PROVISIONING_PROFILE_SPECIFIER = "match Development com.dash.challenges";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development com.team.dash";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -814,9 +814,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dash.challenges;
+				PRODUCT_BUNDLE_IDENTIFIER = com.team.dash;
 				PRODUCT_NAME = Dash;
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.dash.challenges";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.team.dash";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
