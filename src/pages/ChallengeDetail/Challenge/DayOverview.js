@@ -3,16 +3,16 @@ import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 import { getCurrentDay } from '../../../helpers/date';
+import { getDayData } from '../../../helpers/plan';
 
 import { ArrowRight } from '../../../components/Icons';
 
 export default function Component(props) {
   const { currentDay, dayData, challenge, user, onPress, plan } = props;
 
-  // TODO: move this to store
-  const day = dayData[currentDay] || {};
+  const day = getDayData(dayData, currentDay);
 
-  // TODO: put in store
+  // TODO - ASAP: put in store
   const onStartPress = () => Actions.TaskOverview({
     challenge: challenge,
     user: user,

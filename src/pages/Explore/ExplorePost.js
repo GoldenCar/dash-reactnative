@@ -28,6 +28,8 @@ export default class Component extends React.Component {
   async componentDidMount() {
     const { challenge } = this.props;
     const data = await plansActions.getPlans();
+
+    // TODO: change to find
     let plan = data.filter((plan) => plan.status === 'current' && challenge.PlanID === plan._id);
 
     if (plan.length > 0) {

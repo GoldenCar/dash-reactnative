@@ -2,9 +2,10 @@ import React from 'react';
 import { View, Dimensions, Text } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Actions } from 'react-native-router-flux';
-import moment from 'moment';
 
-import * as planActions from '../../../actions/plans';
+import { getDaysCompleted, getDaysElapsed } from '../../../helpers/challenge';
+import { getSecondsTilStart } from '../../../helpers/date';
+import { getPlanDayData } from '../../../helpers/plan';
 
 import Countdown from '../../../components/Countdown';
 import Plan from '../../../components/Plan';
@@ -23,26 +24,10 @@ export default class Component extends React.Component {
     dayData: []
   }
 
+  // TODO: there should be a redux action here to push plan day data to store
   async componentDidMount() {
     const { plan, challenge } = this.props;
-
-    console.log(plan, challenge);
-
-    const planID = plan._id || challenge.PlanID;
-
-    // TODO: clean this up & pull into it's own function
-    const planData = await planActions.getPlanTasks(planID);
-    if (planData.planTypeData.length === 0) {
-      return;
-    }
-
-    // TODO: is it okay to assume it's the first one? need to test with plan with 2 versions
-    const versionData = planData.planTypeData[0];
-    if (!versionData || !versionData.versionData || versionData.versionData.length === 0) {
-      return;
-    }
-
-    const dayData = versionData.versionData[0].planVersionDayTaskData;
+    const dayData = await getPlanDayData(plan, challenge);
     this.setState({ dayData });
   }
 
@@ -50,23 +35,14 @@ export default class Component extends React.Component {
     const { dayData } = this.state;
     const { challenge, plan, user, setContentContainerHeight } = this.props;
 
-    const now = moment(new Date());
-    const startDate = new Date(challenge.startDate);
+    const currentDay = getDaysElapsed(challenge);
 
-    const secondsTilStart = moment(startDate).diff(now, 'seconds');
+    // TODO: move to helper
+    const secondsTilStart = getSecondsTilStart(challenge);
     const hasStarted = secondsTilStart <= 0;
-    const currentDay = moment(now).diff(startDate, 'days');
 
-    // TODO: get current days plan data (title, date)
-
-    // TODO: make into helper
-    let daysCompleted = [];
-    if (user && user.myStep && user.myStep.length > 0) {
-      const foundChallenge = user.myStep.find(challengeProgress => challengeProgress.id === challenge._id);
-      if (foundChallenge) {
-        daysCompleted = foundChallenge.daysCompleted;
-      }
-    }
+    // TODO: why doesn't plan overview do this? or put in store?
+    const daysCompleted = getDaysCompleted(user.myStep, challenge);
 
     return (
       <View style={styles.container}>

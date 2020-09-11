@@ -112,6 +112,7 @@ export default function Component(props) {
 					const showEyebrow = (currentDay - 1) === index;
 					const dayComplete = daysCompleted[index] === 1;
 					const showCircle = (currentDay - 1) > index;
+					// TODO: these need to have dates like (Friday Jun 6)
 					return (
 						<ScheduleRow
 							data={d}
