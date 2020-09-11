@@ -17,6 +17,6 @@ default_platform(:ios)
 platform :ios do
   desc "Get fastlane match certificates and provisioning profiles"
   lane :certificates do
-      match(app_identifier: ["com.test.gtech.org.reactjs.native.example.dash"])
+      match(app_identifier: ["com.team.dash"])
   end
 end

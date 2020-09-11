@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "799774940481",
     "firebase_url": "https://dash-fitness.firebaseio.com",
-    "project_id": "dash-fitness",
+    "project_id": "dash",
     "storage_bucket": "dash-fitness.appspot.com"
   },
   "client": [
@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:799774940481:android:a06b0f696021c03836d5c0",
         "android_client_info": {
-          "package_name": "com.fitnessfer"
+          "package_name": "com.team.dash"
         }
       },
       "oauth_client": [

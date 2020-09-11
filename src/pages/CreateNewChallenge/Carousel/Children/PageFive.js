@@ -8,20 +8,20 @@ export default function Component(props) {
     let animation = new Animated.Value(100);
     const { CarouselRef, onChangeChallenge, onPressNext, challenge } = props;
 
-    const hideHeader = () =>{
+    const hideHeader = () => {
         Animated.timing(animation, {
             toValue: -100,
             duration: 500,
-            useNativeDriver: false,
+            useNativeDriver: true,
         }).start()
     }
 
-    const showHeader = (y) =>{
-        if(y < 10){
+    const showHeader = (y) => {
+        if (y < 10) {
             Animated.timing(animation, {
                 toValue: 100,
                 duration: 500,
-                useNativeDriver: false,
+                useNativeDriver: true,
             }).start()
         }
     }
@@ -63,11 +63,11 @@ export default function Component(props) {
                     ))}
                 </View>
             </Animated.View>
-            <ScrollView onScrollEndDrag={(e)=>showHeader(e.nativeEvent.contentOffset.y)}  onScrollBeginDrag={hideHeader}>
-                    <StartDate
-                        challenge={challenge}
-                        onPress={(startDate) => onChangeChallenge({ startDate })}
-                    />    
+            <ScrollView onScrollEndDrag={(e) => showHeader(e.nativeEvent.contentOffset.y)} onScrollBeginDrag={hideHeader}>
+                <StartDate
+                    challenge={challenge}
+                    onPress={(startDate) => onChangeChallenge({ startDate })}
+                />
             </ScrollView>
             <TouchableWithoutFeedback
                 onPress={() => challenge.startDate !== null && onPressNext({})}
@@ -108,10 +108,10 @@ const styles = EStyleSheet.create({
     },
     nextButton: {
         borderRadius: 8,
-        width:width - 30,
+        width: width - 30,
         position: 'absolute',
         marginHorizontal: 15,
-        height:64,
+        height: 64,
         backgroundColor: '#1AA0FF',
         alignItems: 'center',
         justifyContent: 'center',

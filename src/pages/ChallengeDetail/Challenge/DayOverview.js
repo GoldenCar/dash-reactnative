@@ -8,8 +8,11 @@ import { ArrowRight } from '../../../components/Icons';
 
 export default function Component(props) {
   const { currentDay, dayData, challenge, user, onPress, plan } = props;
+
+  // TODO: move this to store
   const day = dayData[currentDay] || {};
 
+  // TODO: put in store
   const onStartPress = () => Actions.TaskOverview({
     challenge: challenge,
     user: user,

@@ -1,23 +1,23 @@
 import React from 'react';
-import {View, TouchableWithoutFeedback, Animated, Easing} from 'react-native';
-import {connect} from 'react-redux';
+import { View, TouchableWithoutFeedback, Animated, Easing } from 'react-native';
+import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 
-import {Logo} from 'dash/src/components/Icons';
+import { Logo } from 'dash/src/components/Icons';
 
 class Component extends React.Component {
   animation = new Animated.Value(1);
   componentDidUpdate(prevProps) {
-    const {routeName} = this.props.routes.params;
+    const { routeName } = this.props.routes.params;
     if (routeName === 'ExploreTab' || routeName === 'MyProfile') {
       Animated.timing(this.animation, {
         toValue: 0,
         duration: 200,
         easing: Easing.ease,
-        useNativeDriver: false,
-      }).start(({finished}) => {});
+        useNativeDriver: true,
+      }).start(({ finished }) => { });
       return;
     }
     if (routeName === 'MyChallengesTab') {
@@ -25,8 +25,8 @@ class Component extends React.Component {
         toValue: 1,
         duration: 200,
         easing: Easing.ease,
-        useNativeDriver: false,
-      }).start(({finished}) => {});
+        useNativeDriver: true,
+      }).start(({ finished }) => { });
     }
   }
   render() {
@@ -47,8 +47,8 @@ class Component extends React.Component {
           style={[
             styles.addContainer,
             {
-              transform: [{scale}],
-              transform: [{scale}, {translateY}],
+              transform: [{ scale }],
+              transform: [{ scale }, { translateY }],
             },
           ]}>
           <LinearGradient
@@ -96,6 +96,6 @@ const styles = EStyleSheet.create({
   },
 });
 
-export default connect(({routes}) => ({
+export default connect(({ routes }) => ({
   routes,
 }))(Component);

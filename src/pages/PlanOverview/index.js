@@ -16,6 +16,7 @@ export default function Component(props) {
 	const { challenge, plan, daysCompleted } = props;
 	console.log('PLAN IN OVERVIEW', plan);
 
+	// TODO - ASAP: move to store
 	const now = moment(new Date());
 	const startDate = new Date(challenge.startDate);
 	const currentDay = moment(now).diff(startDate, 'days');

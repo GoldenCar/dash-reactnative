@@ -6,33 +6,32 @@ import * as planActions from '../../actions/plans';
 
 export default function (props) {
   const { task } = props;
+  const [completeTask, setTask] = useState(task);
 
-  let subtitle = '';
-  if (task.flag === 'exercise') {
-    subtitle = `${task.RepsCount} ${task.Reps}`;
-  }
+  const { flag, title, RepsCount, Reps } = completeTask;
 
-  const [fullTask, setTask] = useState(task);
-
-  // TODO - DATA CLEAN UP: pull this out
+  // TODO - DATA CLEAN UP: pull this out (duplicated in Circuit)
   useEffect(() => {
     const getData = async () => {
-      if (fullTask.flag !== 'exercise') {
+      if (flag !== 'exercise') {
         return;
       }
 
-      const allExerciseData = await planActions.getExerciseData(fullTask.cardUUID);
-      const exerciseData = allExerciseData.exercisesData.filter((e) => e.id === fullTask.cardExerciseID);
-      if (exerciseData.length >= 1) {
-        fullTask.exerciseData = exerciseData[0];
-        setTask(task);
+      const cardID = completeTask.cardUUID;
+      const exerciseID = completeTask.cardExerciseID;
+
+      const response = await planActions.getExerciseData(cardID, exerciseID);
+      if (response) {
+        completeTask.exerciseData = response;
+        setTask(completeTask);
       }
     }
 
     getData();
   }, []);
 
-  const thumbnailURL = getCircuitThumbnail(fullTask);
+  const thumbnailURL = getCircuitThumbnail(completeTask);
+  const subtitle = flag === 'exercise' ? `${RepsCount} ${Reps}` : '';
 
   return (
     <View style={styles.container}>
@@ -43,7 +42,7 @@ export default function (props) {
         />
       </View>
       <View>
-        <Text style={styles.title}>{task.title}</Text>
+        <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
     </View>

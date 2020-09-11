@@ -11,21 +11,27 @@ export default function Component(props) {
   const [height, setHeight] = useState(300);
 
   const exerciseCards = task.exeerciseCards || [];
+  const rounds = task.Cycles;
+
   const [cards, setCards] = useState(exerciseCards);
 
   // TODO: pull this out
   useEffect(() => {
     const getCardData = async () => {
-      exerciseCards.map(async (exercise) => {
-        if (exercise.cardUUID) {
-          const arrayResponse = await planActions.getExerciseData(exercise.cardUUID)
-          exercise.exercisesData = arrayResponse
-        };
+      // TODO: this is a fucking mess. issues with request + data structure
+      for (let i = 0; i < exerciseCards.length; i++) {
+        let exercise = exerciseCards[i];
 
-        return exercise;
-      });
+        const cardID = exercise.cardUUID;
+        const exerciseID = exercise.cardExerciseID;
 
-      setCards(cards);
+        if (cardID && exerciseID) {
+          const response = await planActions.getExerciseData(cardID, exerciseID);
+          exerciseCards[i].exerciseData = response;
+        }
+      }
+
+      // setCards(exerciseCards);
     };
 
     getCardData();
@@ -44,9 +50,9 @@ export default function Component(props) {
       >
         <Text style={styles.heading}>Circuit</Text>
         <Text style={styles.headingSubtitle}>
-          { /* TODO: need real data here */}
-          5 Rounds
+          {rounds} Rounds
         </Text>
+
         {cards.map((exercise) => {
           const thumbnailUrl = getCircuitThumbnail(exercise);
 
