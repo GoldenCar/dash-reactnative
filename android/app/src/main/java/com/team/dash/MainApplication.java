@@ -1,4 +1,4 @@
-package com.fitnessfer;
+package com.team.dash;
 
 import android.app.Application;
 

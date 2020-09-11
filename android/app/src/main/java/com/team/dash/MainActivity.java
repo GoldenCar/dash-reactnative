@@ -1,4 +1,4 @@
-package com.fitnessfer;
+package com.team.dash;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
