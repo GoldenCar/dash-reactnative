@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 
 import NavButtons from './NavButtons';
 import LapText from './LapText';
@@ -13,7 +14,7 @@ import PauseScreen from './Screens/PauseScreen';
 import Completed from './Completed';
 import CircuitPreview from './Screens/CircuitPreview';
 
-export default class App extends React.Component {
+class Workout extends React.Component {
     state = {
         index: 0,
         paused: false,
@@ -132,3 +133,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
 });
+
+export default connect(({ user }) => ({
+    user
+}))(Workout);

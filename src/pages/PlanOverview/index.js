@@ -4,6 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Actions } from 'react-native-router-flux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
+import { connect } from 'react-redux';
 
 import { mediaHost } from 'dash/src/config';
 import * as planActions from '../../actions/plans';
@@ -12,8 +13,9 @@ import { BackArrow } from '../../components/Icons';
 import Video from '../../components/Video';
 import ScheduleRow from '../../components/ScheduleRow';
 
-export default function Component(props) {
-	const { challenge, plan, daysCompleted } = props;
+function Component(props) {
+	const { challenge, daysCompleted, MyChallenge } = props;
+	const { plan } = MyChallenge;
 	console.log('PLAN IN OVERVIEW', plan);
 
 	// TODO - ASAP: move to store
@@ -136,8 +138,11 @@ export default function Component(props) {
 			/>
 		</ScrollView>
 	);
-
 }
+
+export default connect(({ MyChallenge }) => ({
+	MyChallenge,
+}))(Component);
 
 const styles = StyleSheet.create({
 	container: {

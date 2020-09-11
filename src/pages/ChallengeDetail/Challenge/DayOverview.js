@@ -15,7 +15,7 @@ export default function Component(props) {
   // TODO - ASAP: put in store
   const onStartPress = () => Actions.TaskOverview({
     challenge: challenge,
-    user: user,
+    //user: user,
     day: day,
     currentDay: currentDay,
     plan: plan

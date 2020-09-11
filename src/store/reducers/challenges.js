@@ -11,7 +11,6 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case 'ADD_CHALLENGE':
       state.unshift(action.payload);
-      // return [...state, action.payload]
       return [...state];
     case 'SET_CHALLENGES':
       return action.payload;

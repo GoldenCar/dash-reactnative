@@ -69,7 +69,10 @@ export default class Component extends React.Component {
                   <Plan
                     value={plan}
                     blueButton
-                    onPress={() => Actions.PlanOverview({ challenge, plan })}
+                    onPress={() => Actions.PlanOverview({
+                      challenge,
+                      plan
+                    })}
                   />
                 </View>
               </>
@@ -79,7 +82,11 @@ export default class Component extends React.Component {
                   dayData={dayData}
                   challenge={challenge}
                   user={user}
-                  onPress={() => Actions.PlanOverview({ challenge, plan, daysCompleted })}
+                  onPress={() => Actions.PlanOverview({
+                    challenge,
+                    //plan,
+                    daysCompleted
+                  })}
                   plan={plan}
                 />
               )}

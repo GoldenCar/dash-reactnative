@@ -41,7 +41,6 @@ function Component(props) {
         Actions.Workout({
             data: stories,
             currentDay,
-            user,
             challenge,
             plan,
             day
@@ -230,7 +229,6 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(({ challenges, user }) => ({
-    challenges,
-    user
+export default connect(({ user }) => ({
+    // user
 }))(Component);
