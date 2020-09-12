@@ -14,11 +14,10 @@ export default function Component(props) {
 
   // TODO - ASAP: put in store
   const onStartPress = () => Actions.TaskOverview({
-    challenge: challenge,
-    //user: user,
-    day: day,
-    currentDay: currentDay,
-    plan: plan
+    //challenge: challenge,
+    //day: day,
+    //currentDay: currentDay,
+    // plan: plan
   });
 
   return (

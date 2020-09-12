@@ -64,7 +64,8 @@ class Workout extends React.Component {
 
     render() {
         const { index, paused, completed } = this.state;
-        const { data, currentDay, day, plan, user, challenge } = this.props;
+        const { data, currentDay, day, MyChallenge, user, challenge } = this.props;
+        const { plan } = MyChallenge;
 
         const currentWorkout = data[index];
         const { flag, restTime } = currentWorkout;
@@ -134,6 +135,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connect(({ user }) => ({
-    user
+export default connect(({ user, MyChallenge }) => ({
+    user,
+    MyChallenge
 }))(Workout);

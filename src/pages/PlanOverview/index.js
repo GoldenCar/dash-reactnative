@@ -3,26 +3,23 @@ import { View, StyleSheet, Text, Image, TouchableOpacity, ScrollView } from 'rea
 import LinearGradient from 'react-native-linear-gradient';
 import { Actions } from 'react-native-router-flux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import moment from 'moment';
 import { connect } from 'react-redux';
 
 import { mediaHost } from 'dash/src/config';
-import * as planActions from '../../actions/plans';
+import { getDaysElapsed } from '../../helpers/challenge';
+import { getPlanDayData } from '../../helpers/plan';
 
 import { BackArrow } from '../../components/Icons';
 import Video from '../../components/Video';
 import ScheduleRow from '../../components/ScheduleRow';
 
 function Component(props) {
-	const { challenge, daysCompleted, MyChallenge } = props;
-	const { plan } = MyChallenge;
-	console.log('PLAN IN OVERVIEW', plan);
+	const { daysCompleted, MyChallenge } = props;
+	const { plan, challenge } = MyChallenge;
 
-	// TODO - ASAP: move to store
-	const now = moment(new Date());
-	const startDate = new Date(challenge.startDate);
-	const currentDay = moment(now).diff(startDate, 'days');
+	const currentDay = getDaysElapsed(challenge);
 
+	// TODO: currentDay should be daysCompleted
 	const totalDays = 30;
 	const progress = `${(currentDay / totalDays) * 100}%`;
 
@@ -37,28 +34,12 @@ function Component(props) {
 	console.log('DAY DATA', dayData);
 
 	useEffect(() => {
-		const getPlanDayData = async () => {
-			// TODO: clean this up & pull into it's own function
-			//			 shouldn't have to request this data every time
-			try {
-				const planData = await planActions.getPlanTasks(plan._id);
-				if (planData.planTypeData.length === 0) {
-					return;
-				}
-
-				// TODO: is it okay to assume it's the first one? need to test with plan with 2 versions
-				const versionData = planData.planTypeData[0];
-				if (!versionData || !versionData.versionData || versionData.versionData.length === 0) {
-					return;
-				}
-
-				const dayData = versionData.versionData[0].planVersionDayTaskData;
-				setDayData(dayData);
-			} catch (e) {
-				console.log(e);
-			}
+		const getData = async () => {
+			// TODO: shouldn't have to request this data every time
+			const dayData = await getPlanDayData(plan);
+			setDayData(dayData);
 		};
-		getPlanDayData();
+		getData();
 	}, []);
 
 	return (

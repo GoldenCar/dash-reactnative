@@ -14,12 +14,10 @@ import Circuit from './Circuit';
 import TaskCell from './TaskCell';
 
 function Component(props) {
-    const { challenge, user, day, currentDay, plan } = props;
-    console.log(challenge, user, day, currentDay, plan);
+    const { challenge, day, currentDay, MyChallenge } = props;
+    const { plan } = MyChallenge;
 
     const imageURL = `${mediaHost}${plan.planImage}`;
-
-    console.log('DAY INFO', day);
 
     const [stories, setStories] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -40,10 +38,9 @@ function Component(props) {
     const onPress = () => {
         Actions.Workout({
             data: stories,
-            currentDay,
-            challenge,
-            plan,
-            day
+            //currentDay,
+            //challenge,
+            //day
         });
     }
 
@@ -114,6 +111,10 @@ function Component(props) {
         </View>
     );
 }
+
+export default connect(({ MyChallenge }) => ({
+    MyChallenge
+}))(Component);
 
 const styles = StyleSheet.create({
     container: {
@@ -228,7 +229,3 @@ const styles = StyleSheet.create({
         color: '#FFFFFF'
     }
 });
-
-export default connect(({ user }) => ({
-    // user
-}))(Component);

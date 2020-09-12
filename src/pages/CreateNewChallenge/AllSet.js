@@ -64,6 +64,7 @@ export default function Component(props) {
                 onPress={() => {
                   closeCreateNew({
                     call: () => {
+                      // TODO: move to MyChallenge store?
                       if (createdChallenge) {
                         Actions.ChallengeDetail({ challenge: createdChallenge });
                       }

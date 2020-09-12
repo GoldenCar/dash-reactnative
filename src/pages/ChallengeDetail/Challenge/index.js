@@ -2,10 +2,12 @@ import React from 'react';
 import { View, Dimensions, Text } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
 
 import { getDaysCompleted, getDaysElapsed } from '../../../helpers/challenge';
 import { getSecondsTilStart } from '../../../helpers/date';
 import { getPlanDayData } from '../../../helpers/plan';
+import * as MyChallengeActions from '../../../actions/MyChallenges';
 
 import Countdown from '../../../components/Countdown';
 import Plan from '../../../components/Plan';
@@ -16,7 +18,7 @@ import DayOverview from './DayOverview';
 
 const { height } = Dimensions.get('window');
 
-export default class Component extends React.Component {
+class Component extends React.Component {
   AuthPopupRef;
   PopupPostRef;
 
@@ -26,14 +28,21 @@ export default class Component extends React.Component {
 
   // TODO: there should be a redux action here to push plan day data to store
   async componentDidMount() {
-    const { plan, challenge } = this.props;
+    const { challenge, MyChallenge } = this.props;
+
+    const { plan } = MyChallenge;
+
+    // TODO: move to store
     const dayData = await getPlanDayData(plan, challenge);
     this.setState({ dayData });
+
+    MyChallengeActions.setMyChallenge(challenge);
   }
 
   render() {
     const { dayData } = this.state;
-    const { challenge, plan, user, setContentContainerHeight } = this.props;
+    const { challenge, user, setContentContainerHeight, MyChallenge } = this.props;
+    const { plan } = MyChallenge;
 
     const currentDay = getDaysElapsed(challenge);
 
@@ -69,10 +78,7 @@ export default class Component extends React.Component {
                   <Plan
                     value={plan}
                     blueButton
-                    onPress={() => Actions.PlanOverview({
-                      challenge,
-                      plan
-                    })}
+                    onPress={() => Actions.PlanOverview()}
                   />
                 </View>
               </>
@@ -83,9 +89,7 @@ export default class Component extends React.Component {
                   challenge={challenge}
                   user={user}
                   onPress={() => Actions.PlanOverview({
-                    challenge,
-                    //plan,
-                    daysCompleted
+                    //daysCompleted
                   })}
                   plan={plan}
                 />
@@ -145,3 +149,8 @@ const styles = EStyleSheet.create({
     marginBottom: 16
   },
 });
+
+export default connect(({ user, MyChallenge }) => ({
+  user,
+  MyChallenge
+}))(Component);

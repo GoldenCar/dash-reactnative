@@ -46,6 +46,7 @@ export default class Component extends React.Component {
       const response = await userActions.joinChallenge(challenge._id, user._id);
       if (response.status === 200) {
         // TODO: do i need to re-request challenges?
+        // TODO: move to MyChallenge store?
         Actions.ChallengeDetail({ challenge });
       }
     }

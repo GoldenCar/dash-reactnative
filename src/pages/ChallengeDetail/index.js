@@ -12,6 +12,7 @@ import { Close, Settings } from 'dash/src/components/Icons';
 import Plus from '../MyChallenges/Icons/Plus';
 
 import * as plansActions from '../../actions/plans';
+import * as MyChallengeActions from '../../actions/MyChallenges';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -19,34 +20,30 @@ const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
 class Component extends React.Component {
     state = {
-        plan: {},
         contentHeight: 1000
     };
 
     ScrollViewAnimation = new Animated.Value(0);
 
     // TODO: need way to get plan with id from server
+    //       what am i doing currently?
     async componentDidMount() {
         const { challenge } = this.props;
+
+        // TODO: move this to on challenge click?
+        //       move this to helper or action?
         const data = await plansActions.getPlans();
         let plan = data.filter((plan) => plan.status === 'current' && challenge.PlanID === plan._id);
 
         if (plan.length > 0) {
             plan = plan[0];
-            this.setState({ plan });
+            MyChallengeActions.setMyPlan(plan);
         }
     }
 
     render() {
-        const { plan, contentHeight } = this.state;
-        const { challenge, user } = this.props;
-        console.log(" challenge is ", challenge);
-        console.log('my steps', user)
-
-        // TODO: 
-        //          1. Figure out how to find if plan started
-        //          2. Only show countdown if not started
-        //          3. Figure out daily progression
+        const { contentHeight } = this.state;
+        const { challenge } = this.props;
 
         const onScroll = Animated.event(
             [{ nativeEvent: { contentOffset: { y: this.ScrollViewAnimation } } }],
@@ -79,8 +76,6 @@ class Component extends React.Component {
                 >
                     <Challenge
                         challenge={challenge}
-                        user={user}
-                        plan={plan}
                         ScrollViewAnimation={this.ScrollViewAnimation}
                         setContentContainerHeight={setContentContainerHeight}
                     />
@@ -109,8 +104,7 @@ class Component extends React.Component {
     }
 }
 
-export default connect(({ user }) => ({
-    user,
+export default connect(({ }) => ({
 }))(Component);
 
 const styles = EStyleSheet.create({

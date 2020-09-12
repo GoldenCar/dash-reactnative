@@ -27,6 +27,7 @@ class Component extends React.Component {
     plans: []
   };
 
+  // TODO: do we need to do these data calls? how can we improve?
   componentDidMount = async () => {
     this.getData();
     this.props.navigation.addListener('willFocus', () => {
@@ -58,6 +59,7 @@ class Component extends React.Component {
     return (
       <TouchableWithoutFeedback
         key={index}
+        // TODO: move to MyChallenge store?
         onPress={() => Actions.ChallengeDetail({ challenge: item })}
       >
         <View>
@@ -75,6 +77,7 @@ class Component extends React.Component {
     const { arrayAllChallenges, plans } = this.state;
     const { user } = this.props;
 
+    // TODO: implement my challenge endpoint
     let myChallenges = [];
     if (user && user._id) {
       myChallenges = arrayAllChallenges.filter((v) => {

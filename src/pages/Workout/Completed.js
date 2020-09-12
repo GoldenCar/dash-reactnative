@@ -22,6 +22,7 @@ export default class Completed extends React.Component {
                 console.log(e);
             }
 
+            // TODO: move to MyChallenge store?
             Actions.ChallengeDetail({ challenge });
         }
 
