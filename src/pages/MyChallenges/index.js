@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Dimensions, Text, SafeAreaView, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { View, Dimensions, Text, SafeAreaView, TouchableWithoutFeedback, TouchableOpacity, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -27,6 +27,7 @@ class Component extends React.Component {
     plans: []
   };
 
+  // TODO: do we need to do these data calls? how can we improve?
   componentDidMount = async () => {
     this.getData();
     this.props.navigation.addListener('willFocus', () => {
@@ -58,6 +59,7 @@ class Component extends React.Component {
     return (
       <TouchableWithoutFeedback
         key={index}
+        // TODO: move to MyChallenge store?
         onPress={() => Actions.ChallengeDetail({ challenge: item })}
       >
         <View>
@@ -75,6 +77,7 @@ class Component extends React.Component {
     const { arrayAllChallenges, plans } = this.state;
     const { user } = this.props;
 
+    // TODO: implement my challenge endpoint
     let myChallenges = [];
     if (user && user._id) {
       myChallenges = arrayAllChallenges.filter((v) => {
@@ -114,38 +117,40 @@ class Component extends React.Component {
           end={end}
           style={styles.gradient}
         >
-          <Text style={styles.heading}>Your {'\n'} Challenges</Text>
-          <TouchableOpacity
-            style={styles.newButton}
-            onPress={() => CreateNewChallengeRef.openCreateNew()}
-          >
-            <Plus />
-            <Text style={styles.buttonText}>New</Text>
-          </TouchableOpacity>
-          {myChallenges.length === 0 ? (
-            <View>
-              <Text style={styles.subtitle}>You currently have no challenges, let's create a new one!</Text>
-              {plans.map((value) => (
-                <Plan
-                  value={value}
-                  useDefaultMargin
-                  // TODO: this should open plan page
-                  onPress={() => CreateNewChallengeRef.openCreateNew()}
-                />
-              ))}
-            </View>
-          ) : (
+          <ScrollView>
+            <Text style={styles.heading}>Your {'\n'} Challenges</Text>
+            <TouchableOpacity
+              style={styles.newButton}
+              onPress={() => CreateNewChallengeRef.openCreateNew()}
+            >
+              <Plus />
+              <Text style={styles.buttonText}>New</Text>
+            </TouchableOpacity>
+            {myChallenges.length === 0 ? (
               <View>
-                <Carousel
-                  data={myChallenges}
-                  sliderWidth={width}
-                  itemWidth={ITEM_WIDTH}
-                  renderItem={this.renderItem}
-                  activeSlideAlignment='start'
-                  loop
-                />
+                <Text style={styles.subtitle}>You currently have no challenges, let's create a new one!</Text>
+                {plans.map((value) => (
+                  <Plan
+                    value={value}
+                    useDefaultMargin
+                    // TODO: this should open plan page
+                    onPress={() => CreateNewChallengeRef.openCreateNew()}
+                  />
+                ))}
               </View>
-            )}
+            ) : (
+                <View>
+                  <Carousel
+                    data={myChallenges}
+                    sliderWidth={width}
+                    itemWidth={ITEM_WIDTH}
+                    renderItem={this.renderItem}
+                    activeSlideAlignment='start'
+                    loop
+                  />
+                </View>
+              )}
+          </ScrollView>
         </LinearGradient>
       </SafeAreaView>
     );
@@ -162,7 +167,8 @@ const styles = EStyleSheet.create({
     flex: 1,
   },
   gradient: {
-    flex: 1
+    flex: 1,
+    marginBottom: 68
   },
   heading: {
     fontFamily: 'Poppins-Bold',

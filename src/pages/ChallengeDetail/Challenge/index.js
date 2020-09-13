@@ -2,9 +2,11 @@ import React from 'react';
 import { View, Dimensions, Text } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Actions } from 'react-native-router-flux';
-import moment from 'moment';
+import { connect } from 'react-redux';
 
-import * as planActions from '../../../actions/plans';
+import { hasChallengeStarted, getDaysSinceStart, getSecondsTilStart } from '../../../helpers/challenge';
+import { getPlanDayData, getDayData } from '../../../helpers/plan';
+import * as MyChallengeActions from '../../../actions/MyChallenges';
 
 import Countdown from '../../../components/Countdown';
 import Plan from '../../../components/Plan';
@@ -15,58 +17,38 @@ import DayOverview from './DayOverview';
 
 const { height } = Dimensions.get('window');
 
-export default class Component extends React.Component {
+class Component extends React.Component {
   AuthPopupRef;
   PopupPostRef;
 
-  state = {
-    dayData: []
-  }
-
+  // TODO: there should be a redux action here to push plan day data to store
+  //       move this to ChallengeDetail?
   async componentDidMount() {
-    const { plan, challenge } = this.props;
+    const { challenge, MyChallenge } = this.props;
+    const { plan } = MyChallenge;
 
-    console.log(plan, challenge);
+    const currentDay = getDaysSinceStart(challenge);
+    const dayData = await getPlanDayData(plan, challenge);
+    const day = getDayData(dayData, currentDay);
 
-    const planID = plan._id || challenge.PlanID;
-
-    // TODO: clean this up & pull into it's own function
-    const planData = await planActions.getPlanTasks(planID);
-    if (planData.planTypeData.length === 0) {
-      return;
+    const isChallengeActive = hasChallengeStarted(challenge);
+    if (isChallengeActive) {
+      MyChallengeActions.setMyDay(day);
     }
 
-    // TODO: is it okay to assume it's the first one? need to test with plan with 2 versions
-    const versionData = planData.planTypeData[0];
-    if (!versionData || !versionData.versionData || versionData.versionData.length === 0) {
-      return;
-    }
-
-    const dayData = versionData.versionData[0].planVersionDayTaskData;
-    this.setState({ dayData });
+    MyChallengeActions.setMyChallenge(challenge);
+    MyChallengeActions.setCurrentDay(currentDay);
+    MyChallengeActions.setPlanDayData(dayData);
   }
 
   render() {
-    const { dayData } = this.state;
-    const { challenge, plan, user, setContentContainerHeight } = this.props;
+    const { challenge, user, setContentContainerHeight, MyChallenge } = this.props;
+    const { plan, day, currentDay } = MyChallenge;
 
-    const now = moment(new Date());
-    const startDate = new Date(challenge.startDate);
+    const isChallengeActive = hasChallengeStarted(challenge);
+    const secondsTilStart = getSecondsTilStart(challenge);
 
-    const secondsTilStart = moment(startDate).diff(now, 'seconds');
-    const hasStarted = secondsTilStart <= 0;
-    const currentDay = moment(now).diff(startDate, 'days');
-
-    // TODO: get current days plan data (title, date)
-
-    // TODO: make into helper
-    let daysCompleted = [];
-    if (user && user.myStep && user.myStep.length > 0) {
-      const foundChallenge = user.myStep.find(challengeProgress => challengeProgress.id === challenge._id);
-      if (foundChallenge) {
-        daysCompleted = foundChallenge.daysCompleted;
-      }
-    }
+    const onPress = () => Actions.PlanOverview();
 
     return (
       <View style={styles.container}>
@@ -81,7 +63,7 @@ export default class Component extends React.Component {
               setContentContainerHeight(height - 100);
             }}
           >
-            {!hasStarted ? (
+            {!isChallengeActive ? (
               <>
                 <Countdown
                   initialTime={secondsTilStart}
@@ -93,18 +75,15 @@ export default class Component extends React.Component {
                   <Plan
                     value={plan}
                     blueButton
-                    onPress={() => Actions.PlanOverview({ challenge, plan })}
+                    onPress={onPress}
                   />
                 </View>
               </>
             ) : (
                 <DayOverview
                   currentDay={currentDay}
-                  dayData={dayData}
-                  challenge={challenge}
-                  user={user}
-                  onPress={() => Actions.PlanOverview({ challenge, plan, daysCompleted })}
-                  plan={plan}
+                  day={day}
+                  onPress={onPress}
                 />
               )}
           </View>
@@ -130,7 +109,7 @@ const styles = EStyleSheet.create({
     borderTopRightRadius: 20,
     backgroundColor: 'white',
     flex: 1,
-    marginTop: height / 2 - 20,
+    marginTop: height / 2 - 20, // TODO: make const
     paddingTop: 34,
     paddingBottom: 208,
   },
@@ -162,3 +141,8 @@ const styles = EStyleSheet.create({
     marginBottom: 16
   },
 });
+
+export default connect(({ user, MyChallenge }) => ({
+  user,
+  MyChallenge
+}))(Component);

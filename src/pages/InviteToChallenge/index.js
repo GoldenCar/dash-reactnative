@@ -17,7 +17,7 @@ const friend = {
   link: '@itsjuanita',
 };
 
-const array = [
+const SAMPLE_CHALLENGES = [
   {
     title: 'Chris Bumstead 30 Day Challenge',
     picture: require('dash/src/res/inviteChallenge1.png'),
@@ -44,7 +44,7 @@ export default function Component() {
           }
         />
         <View style={styles.itemsContainer}>
-          {array.map((value, index) => (
+          {SAMPLE_CHALLENGES.map((value, index) => (
             <View key={index} style={styles.item}>
               <View style={styles.itemTop}>
                 <View style={styles.pictureContainer}>

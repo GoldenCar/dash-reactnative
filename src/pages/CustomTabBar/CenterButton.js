@@ -11,30 +11,34 @@ class Component extends React.Component {
   animation = new Animated.Value(1);
   componentDidUpdate(prevProps) {
     const { routeName } = this.props.routes.params;
-    if (routeName === 'ExploreTab' || routeName === 'MyProfile') {
+
+    if (routeName === 'Explore' || routeName === 'MyProfile') {
       Animated.timing(this.animation, {
         toValue: 0,
         duration: 200,
         easing: Easing.ease,
         useNativeDriver: true,
-      }).start(({ finished }) => { });
+      }).start();
       return;
     }
-    if (routeName === 'MyChallengesTab') {
+
+    if (routeName === 'MyChallenges') {
       Animated.timing(this.animation, {
         toValue: 1,
         duration: 200,
         easing: Easing.ease,
         useNativeDriver: true,
-      }).start(({ finished }) => { });
+      }).start();
     }
   }
+
   render() {
     const scale = this.animation.interpolate({
       inputRange: [0, 1],
       outputRange: [1, 0.8],
       extrapolate: 'clamp',
     });
+
     const translateY = this.animation.interpolate({
       inputRange: [0, 1],
       outputRange: [-10, 0],
@@ -42,7 +46,7 @@ class Component extends React.Component {
     });
 
     return (
-      <TouchableWithoutFeedback onPress={() => Actions.MyChallengesTab()}>
+      <TouchableWithoutFeedback onPress={() => Actions.MyChallenges()}>
         <Animated.View
           style={[
             styles.addContainer,

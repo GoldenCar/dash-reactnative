@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 
 import NavButtons from './NavButtons';
 import LapText from './LapText';
@@ -13,7 +14,7 @@ import PauseScreen from './Screens/PauseScreen';
 import Completed from './Completed';
 import CircuitPreview from './Screens/CircuitPreview';
 
-export default class App extends React.Component {
+class Workout extends React.Component {
     state = {
         index: 0,
         paused: false,
@@ -63,9 +64,12 @@ export default class App extends React.Component {
 
     render() {
         const { index, paused, completed } = this.state;
-        const { data, currentDay, day, plan, user, challenge } = this.props;
+        
+        // TODO: is challenge undefined? might need to get from MyChallenge
+        const { cards, MyChallenge, user, challenge } = this.props;
+        const { plan, currentDay, day } = MyChallenge;
 
-        const currentWorkout = data[index];
+        const currentWorkout = cards[index];
         const { flag, restTime } = currentWorkout;
 
         console.log('WORKOUT NEW SCREEN', this.props);
@@ -132,3 +136,8 @@ const styles = StyleSheet.create({
         flex: 1
     },
 });
+
+export default connect(({ user, MyChallenge }) => ({
+    user,
+    MyChallenge
+}))(Workout);

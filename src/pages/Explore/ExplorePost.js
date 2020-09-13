@@ -28,6 +28,8 @@ export default class Component extends React.Component {
   async componentDidMount() {
     const { challenge } = this.props;
     const data = await plansActions.getPlans();
+
+    // TODO: change to find
     let plan = data.filter((plan) => plan.status === 'current' && challenge.PlanID === plan._id);
 
     if (plan.length > 0) {
@@ -44,6 +46,7 @@ export default class Component extends React.Component {
       const response = await userActions.joinChallenge(challenge._id, user._id);
       if (response.status === 200) {
         // TODO: do i need to re-request challenges?
+        // TODO: move to MyChallenge store?
         Actions.ChallengeDetail({ challenge });
       }
     }

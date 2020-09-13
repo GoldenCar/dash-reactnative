@@ -36,6 +36,7 @@ function Component(props) {
         </View>
       );
     }
+
     return (
       <User
         stroke={activeTabIndex === 0 ? EStyleSheet.value('$lightBlue') : false}
@@ -44,12 +45,13 @@ function Component(props) {
       />
     );
   };
+
   return (
     <>
       <View style={styles.container}>
         <TopLine />
         <TouchableOpacity
-          onPress={() => Actions.ExploreTab()}
+          onPress={() => Actions.Explore()}
           style={[
             styles.item,
             {

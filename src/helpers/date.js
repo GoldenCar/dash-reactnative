@@ -1,9 +1,10 @@
 import moment from 'moment';
 
-function getCurrentDay() {
+function getFormattedDay(format) {
+    const defaultFormat = 'dddd MMM D';
     const now = moment(new Date());
-    const date = moment(now).format('dddd MMM D');
+    const date = moment(now).format(format || defaultFormat);
     return date;
 }
 
-export { getCurrentDay }
+export { getFormattedDay }

@@ -1,26 +1,24 @@
 import React from 'react';
-import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import { connect } from "react-redux";
 
 import {
     Logout,
     Instagram,
     Facebook,
-    Lifebuoy,
     ChevronRight,
     AccountDetails,
     PreviousChallenges,
-    RemoveAds,
     PushNotifications,
     LeaveAReview,
     EmailSupport,
 } from '../..//components/Icons';
-import MyFriendsContainer from '../../components/MyFriendsContainer';
+import MyFriendsContainer from './MyFriendsContainer';
 
 import * as UserActions from 'dash/src/actions/user';
-import { connect } from "react-redux";
 
-const array = [
+const MENU_ITEMS = [
     {
         icon: <AccountDetails />,
         title: 'Account Details',
@@ -64,14 +62,14 @@ const array = [
     },
 ];
 
+// TODO: rename this to something ore descriptive
+
 function Component(props) {
     return (
         <View style={styles.container}>
-            {props.user && (
-                <MyFriendsContainer list={props.user.friendsIds} />
-            )}
+            {props.user && <MyFriendsContainer list={props.user.friendsIds} />}
             <View style={styles.itemsContainer}>
-                {array.map((value, index) => {
+                {MENU_ITEMS.map((value, index) => {
                     return (
                         <TouchableOpacity
                             key={index}
