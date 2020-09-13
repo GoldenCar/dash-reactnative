@@ -13,13 +13,35 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Actions } from 'react-native-router-flux';
 
+import * as UserActions from '../../actions/user';
+
 import FriendItem from 'dash/src/components/FriendItem';
 
 const { height, width } = Dimensions.get('screen');
 
 // TODO - ASAP: clean up
 
-const array = [
+async function RemoveFriend() {
+  try {
+    const { item } = this.state;
+    await UserActions.removeFriend(item._id)
+    this.close()
+  } catch (e) {
+    Alert.alert('Error', e.messages)
+  }
+}
+
+async function AddFriend() {
+  try {
+    const { item } = this.state;
+    await UserActions.sendFriendInvite(item._id)
+    this.close()
+  } catch (e) {
+    Alert.alert('Error', e.messages)
+  }
+}
+
+const friendMenu = [
   {
     name: 'Invite To Challenge',
     link: 'Send invite to a new or existing challenge.',
@@ -28,6 +50,7 @@ const array = [
   {
     name: 'Remove Friend',
     link: 'Unfriend this person. ',
+    //onPress: this.RemoveFriend
   },
   {
     name: 'Report',
@@ -35,10 +58,11 @@ const array = [
   },
 ];
 
-const array2 = [
+const notFriendMenu = [
   {
     name: 'Add Friend',
     link: 'Friend this person. ',
+    //onPress: this.AddFriend
   },
   {
     name: 'Invite To Challenge',
@@ -104,7 +128,7 @@ export default class Component extends React.Component {
       extrapolate: 'clamp',
     });
 
-    const useArray = item.noFriend ? array2 : array;
+    const menuItems = item.noFriend ? notFriendMenu : friendMenu;
 
     return (
       this.state.visible && (
@@ -131,7 +155,7 @@ export default class Component extends React.Component {
                 dots={false}
                 enablePicture={true}
               />
-              {useArray.map((value, index) => (
+              {menuItems.map((value, index) => (
                 // <FriendItem
                 //   key={index}
                 //   value={value}

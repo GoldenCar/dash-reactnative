@@ -10,7 +10,7 @@ import FriendItem from '../../components/FriendItem';
 import NavBar from '../../components/NavBar';
 import Search from '../../components/Search';
 import InvitationScroll from '../../components/InvitationScroll';
-import ChallengeYourFriends from '../MyChallenges/ChallengeYourFriends';
+import ChallengeYourFriends from './ChallengeYourFriends';
 
 import AddFriend from '../MyChallenges/Icons/AddFriend';
 import ChevronRight from '../MyChallenges/Icons/ChevronRight';
@@ -79,46 +79,46 @@ function Component(props) {
           )}
 
           {search.length === 0 ? ( // TODO - ASAP: clean this up
-              user.friendsIds.length === 0 ? (
-                <ChallengeYourFriends />
-              ) : (
-                  <View>
-                    <TouchableOpacity
-                      style={styles.container}
-                      onPress={() => Actions.InviteFriendsToDash()}>
-                      <View style={styles.startPart}>
-                        <View style={styles.pictureContainer}>
-                          <AddFriend />
-                        </View>
-                        <View style={styles.centerContainer}>
-                          <Text style={styles.inviteText}>
-                            Invite Friends to Dash
-                          </Text>
-                        </View>
+            user.friendsIds.length === 0 ? (
+              <ChallengeYourFriends />
+            ) : (
+                <View>
+                  <TouchableOpacity
+                    style={styles.container}
+                    onPress={() => Actions.InviteFriendsToDash()}>
+                    <View style={styles.startPart}>
+                      <View style={styles.pictureContainer}>
+                        <AddFriend />
                       </View>
-                      <ChevronRight />
-                    </TouchableOpacity>
-                    {props.user.friendsIds.map((value, index) => (
-                      <FriendItem
-                        key={index}
-                        value={value}
-                        onPress={() => onPressFriend(value, 'friend')}
-                      />
-                    ),
-                    )}
-                  </View>
-                )
-          ) : (     
-                found.map((value, index) => {
-                  if (value._id === props.user._id) return
-                  return (
+                      <View style={styles.centerContainer}>
+                        <Text style={styles.inviteText}>
+                          Invite Friends to Dash
+                          </Text>
+                      </View>
+                    </View>
+                    <ChevronRight />
+                  </TouchableOpacity>
+                  {props.user.friendsIds.map((value, index) => (
                     <FriendItem
                       key={index}
                       value={value}
-                      onPress={() => onPressFriend(value, 'user', isRequested(value))}
+                      onPress={() => onPressFriend(value, 'friend')}
                     />
-                  )
-                })
+                  ),
+                  )}
+                </View>
+              )
+          ) : (
+              found.map((value, index) => {
+                if (value._id === props.user._id) return
+                return (
+                  <FriendItem
+                    key={index}
+                    value={value}
+                    onPress={() => onPressFriend(value, 'user', isRequested(value))}
+                  />
+                )
+              })
             )}
         </ScrollView>
       </LinearGradient>
