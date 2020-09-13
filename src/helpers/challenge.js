@@ -15,6 +15,7 @@ function getDaysCompleted(challenges, challenge) {
     return daysCompleted;
 }
 
+// TODO: add description here 
 function getDaysSinceStart(challenge) {
     const now = moment(new Date());
     const startDate = new Date(challenge.startDate);
@@ -23,6 +24,7 @@ function getDaysSinceStart(challenge) {
     return daysElapsed;
 }
 
+// TODO: add description here
 function getSecondsTilStart(challenge) {
     const now = moment(new Date());
     const startDate = new Date(challenge.startDate);
