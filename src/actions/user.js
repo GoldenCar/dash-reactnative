@@ -21,18 +21,6 @@ export const getUser = async () => {
   return response.data.data;
 };
 
-export const sendFriendInvite = async (id) => {
-
-  const response = await api.post(`sendFriendInvite`, {}, {
-    headers: {
-      friendid: id
-    }
-  });
-  console.log(response)
-  await getCurrentUser();
-  return response.data.data;
-};
-
 export const editUserPicture = async (data, picture) => {
   console.log(data, picture)
   try {
@@ -133,13 +121,33 @@ export const logout = async () => {
   Actions.MyChallenge();
 };
 
+/*
+
+FRIENDS
+
+*/
+
+export const sendFriendInvite = async (id) => {
+  const response = await api.post(`sendFriendInvite`, {}, {
+    headers: {
+      friendid: id
+    }
+  });
+
+  console.log(response)
+  await getCurrentUser();
+
+  return response.data.data;
+};
+
 export const removeFriend = async (id) => {
   await api.delete(`delFriend`, {
     headers: {
       friendid: id
     }
   });
-  await getCurrentUser()
+
+  await getCurrentUser();
 };
 
 export const sendFriendAccept = async (id, status) => {
@@ -149,9 +157,17 @@ export const sendFriendAccept = async (id, status) => {
       status: status
     }
   });
+
   console.log(res)
-  await getCurrentUser()
+
+  await getCurrentUser();
 };
+
+/*
+
+CHALLENGE
+
+*/
 
 export const joinChallenge = async (challenge_id, user_id) => {
   const URL = `/challengesapi/${challenge_id}/join`;

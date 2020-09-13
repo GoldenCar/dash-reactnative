@@ -5,18 +5,18 @@ import {
   Dimensions,
   Animated,
   Easing,
-  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Image,
   ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import FriendItem from 'dash/src/components/FriendItem';
 import { Actions } from 'react-native-router-flux';
 
-const {height, width} = Dimensions.get('screen');
+import FriendItem from 'dash/src/components/FriendItem';
+
+const { height, width } = Dimensions.get('screen');
+
+// TODO - ASAP: clean up
 
 const array = [
   {
@@ -56,6 +56,7 @@ export default class Component extends React.Component {
     visible: false,
     item: {},
   };
+
   open = (item) => {
     this.setState(
       {
@@ -72,22 +73,25 @@ export default class Component extends React.Component {
       },
     );
   };
+
   close = () => {
     Animated.timing(this.translateY, {
       toValue: 1,
       duration: 200,
       easing: Easing.ease,
       useNativeDriver: false,
-    }).start(({finished}) => {
+    }).start(({ finished }) => {
       if (finished) {
-        this.setState({visible: false, item: {}}, () => {
+        this.setState({ visible: false, item: {} }, () => {
           this.props.callbackClose();
         });
       }
     });
   };
+
   render() {
-    const {item} = this.state;
+    const { item } = this.state;
+
     const backgroundColor = this.translateY.interpolate({
       inputRange: [0, 1],
       outputRange: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)'],
@@ -98,17 +102,19 @@ export default class Component extends React.Component {
       outputRange: [0, 500],
       extrapolate: 'clamp',
     });
+
     const useArray = item.noFriend ? array2 : array;
+
     return (
       this.state.visible && (
         <View style={styles.overlay}>
           <TouchableWithoutFeedback onPress={this.close}>
-            <Animated.View style={[styles.container, {backgroundColor}]} />
+            <Animated.View style={[styles.container, { backgroundColor }]} />
           </TouchableWithoutFeedback>
           <Animated.View
             style={[
               {
-                transform: [{translateY}],
+                transform: [{ translateY }],
               },
               styles.modalContainer,
             ]}>
@@ -190,5 +196,5 @@ const styles = StyleSheet.create({
 });
 
 Component.defaultProps = {
-  callbackClose: () => {},
+  callbackClose: () => { },
 };

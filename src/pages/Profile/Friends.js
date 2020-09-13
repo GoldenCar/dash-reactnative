@@ -1,51 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { View, StyleSheet, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import { connect } from "react-redux";
+import LinearGradient from "react-native-linear-gradient";
+
 import * as UserActions from '../../actions/user';
 
 import FriendItem from '../../components/FriendItem';
 import NavBar from '../../components/NavBar';
 import Search from '../../components/Search';
 import InvitationScroll from '../../components/InvitationScroll';
+import ChallengeYourFriends from '../MyChallenges/ChallengeYourFriends';
 
 import AddFriend from '../MyChallenges/Icons/AddFriend';
 import ChevronRight from '../MyChallenges/Icons/ChevronRight';
-import ChallengeYourFriends from '../MyChallenges/ChallengeYourFriends';
 
 import { FriendPopupRef } from 'dash/src/pages/CustomTabBar';
-import { connect } from "react-redux";
-import LinearGradient from "react-native-linear-gradient";
 
 // TODO - ASAP: clean up
 
 function Component(props) {
-  const [search, setSearch] = useState('')
-  const [list, setList] = useState([])
-  const [found, setFound] = useState([])
+  const { user } = props;
+
+  const [search, setSearch] = useState('');
+  const [list, setList] = useState([]);
+  const [found, setFound] = useState([]);
 
   const load = async () => {
-    const list = await UserActions.getUser()
-    setList(list)
+    const list = await UserActions.getUser();
+    setList(list);
   }
 
   useEffect(() => {
-    load()
-  }, [])
+    load();
+  }, []);
 
   useEffect(() => {
-    let foundList = []
+    let foundList = [];
+
     list.forEach((v) => {
       if (v.username.toLowerCase().indexOf(search.toLowerCase()) !== -1) {
         foundList = [...foundList, v]
       }
-    })
-    setFound(foundList)
+    });
+
+    setFound(foundList);
   }, [search])
 
   // TODO: pull these in to friend helpers?
@@ -54,13 +53,15 @@ function Component(props) {
   };
 
   const isRequested = (user) => {
-    return props.user.requestedUsers.findIndex(v => v._id === user._id) !== -1
+    return props.user.requestedUsers.findIndex(v => v._id === user._id) !== -1;
   }
 
   const Accept = async (item, status) => {
     await UserActions.sendFriendAccept(item._id, status)
     await load()
   }
+
+  const showInvitationScroll = search.length === 0 && props.user.receivedUsers.length !== 0;
 
   return (
     <View style={styles.containerMain}>
@@ -73,12 +74,12 @@ function Component(props) {
       >
         <ScrollView contentContainerStyle={styles.contentContainerStyle}>
           <Search onChangeText={(e) => setSearch(e)} placeholder="Find friends.." />
-          {search.length === 0 && props.user.receivedUsers.length !== 0 && ( // TODO: clean up
+          {showInvitationScroll && ( // TODO: clean up
             <InvitationScroll Accept={Accept} list={props.user.receivedUsers} type="request" />
           )}
+
           {search.length === 0 ? ( // TODO - ASAP: clean this up
-            <>
-              {props.user.friendsIds.length === 0 ? (
+              user.friendsIds.length === 0 ? (
                 <ChallengeYourFriends />
               ) : (
                   <View>
@@ -92,7 +93,7 @@ function Component(props) {
                         <View style={styles.centerContainer}>
                           <Text style={styles.inviteText}>
                             Invite Friends to Dash
-                                                </Text>
+                          </Text>
                         </View>
                       </View>
                       <ChevronRight />
@@ -106,11 +107,9 @@ function Component(props) {
                     ),
                     )}
                   </View>
-                )}
-            </>
-          ) : (
-              <>
-                {found.map((value, index) => {
+                )
+          ) : (     
+                found.map((value, index) => {
                   if (value._id === props.user._id) return
                   return (
                     <FriendItem
@@ -119,8 +118,7 @@ function Component(props) {
                       onPress={() => onPressFriend(value, 'user', isRequested(value))}
                     />
                   )
-                })}
-              </>
+                })
             )}
         </ScrollView>
       </LinearGradient>
