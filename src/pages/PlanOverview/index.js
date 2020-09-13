@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { createRef, useState } from 'react';
 import { View, StyleSheet, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Actions } from 'react-native-router-flux';
@@ -6,41 +6,28 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 
 import { mediaHost } from 'dash/src/config';
-import { getDaysElapsed } from '../../helpers/challenge';
-import { getPlanDayData } from '../../helpers/plan';
+import { getDaysCompleted, getTotalDaysCompleted } from '../../helpers/challenge';
 
 import { BackArrow } from '../../components/Icons';
 import Video from '../../components/Video';
 import ScheduleRow from '../../components/ScheduleRow';
 
+const TOTAL_DAYS = 30;
+
 function Component(props) {
-	const { daysCompleted, MyChallenge } = props;
-	const { plan, challenge } = MyChallenge;
+	const { MyChallenge, user } = props;
+	const { plan, challenge, currentDay, dayData } = MyChallenge;
 
-	const currentDay = getDaysElapsed(challenge);
+	const daysCompletedArray = getDaysCompleted(user.myStep, challenge);
+	const totalDaysCompleted = getTotalDaysCompleted(user.myStep, challenge);
 
-	// TODO: currentDay should be daysCompleted
-	const totalDays = 30;
-	const progress = `${(currentDay / totalDays) * 100}%`;
+	const progress = `${(totalDaysCompleted / TOTAL_DAYS) * 100}%`;
 
 	const imageURL = `${mediaHost}${plan.planImage}`;
 
 	const [play, setPlay] = useState(false);
 	const [load, setLoad] = useState(false);
 	const videoRef = createRef(null);
-
-	// TODO: get date subtitle (Thursday Jan 23)
-	const [dayData, setDayData] = useState([{}, {}, {}, {}]);
-	console.log('DAY DATA', dayData);
-
-	useEffect(() => {
-		const getData = async () => {
-			// TODO: shouldn't have to request this data every time
-			const dayData = await getPlanDayData(plan);
-			setDayData(dayData);
-		};
-		getData();
-	}, []);
 
 	return (
 		<ScrollView style={styles.container}>
@@ -60,7 +47,7 @@ function Component(props) {
 				</View>
 
 				<Text style={styles.daysCompleted}>
-					{currentDay} of {totalDays} Days Complete
+					{totalDaysCompleted} of {TOTAL_DAYS} Days Complete
 				</Text>
 
 				<Image
@@ -93,7 +80,7 @@ function Component(props) {
 				{dayData.map((d, index) => {
 					const showSeperator = dayData.length - 1 !== index;
 					const showEyebrow = (currentDay - 1) === index;
-					const dayComplete = daysCompleted[index] === 1;
+					const dayComplete = daysCompletedArray[index] === 1;
 					const showCircle = (currentDay - 1) > index;
 					// TODO: these need to have dates like (Friday Jun 6)
 					return (
@@ -121,8 +108,9 @@ function Component(props) {
 	);
 }
 
-export default connect(({ MyChallenge }) => ({
-	MyChallenge,
+export default connect(({ user, MyChallenge }) => ({
+	user,
+	MyChallenge
 }))(Component);
 
 const styles = StyleSheet.create({

@@ -15,8 +15,7 @@ function getDaysCompleted(challenges, challenge) {
     return daysCompleted;
 }
 
-// TODO: rename to daysSinceStart
-function getDaysElapsed(challenge) {
+function getDaysSinceStart(challenge) {
     const now = moment(new Date());
     const startDate = new Date(challenge.startDate);
 
@@ -24,4 +23,26 @@ function getDaysElapsed(challenge) {
     return daysElapsed;
 }
 
-export { getDaysCompleted, getDaysElapsed } 
+function getSecondsTilStart(challenge) {
+    const now = moment(new Date());
+    const startDate = new Date(challenge.startDate);
+
+    const seconds = moment(startDate).diff(now, 'seconds');
+    return seconds;
+}
+
+function getTotalDaysCompleted(challenges, challenge) {
+    const daysCompletedArray = getDaysCompleted(challenges, challenge);
+    let numberOfDaysCompleted = 0;
+    const daysCompleted = daysCompletedArray.filter(day => day === 1);
+    numberOfDaysCompleted = daysCompleted.length;
+
+    return numberOfDaysCompleted
+}
+
+function hasChallengeStarted(challenge) {
+    const secondsTilStart = getSecondsTilStart(challenge);
+    return secondsTilStart <= 0;
+}
+
+export { hasChallengeStarted, getSecondsTilStart, getDaysSinceStart, getTotalDaysCompleted, getDaysCompleted } 

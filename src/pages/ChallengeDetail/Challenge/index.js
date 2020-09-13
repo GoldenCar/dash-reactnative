@@ -4,9 +4,8 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
-import { getDaysCompleted, getDaysElapsed } from '../../../helpers/challenge';
-import { getSecondsTilStart } from '../../../helpers/date';
-import { getPlanDayData } from '../../../helpers/plan';
+import { hasChallengeStarted, getDaysSinceStart, getSecondsTilStart } from '../../../helpers/challenge';
+import { getPlanDayData, getDayData } from '../../../helpers/plan';
 import * as MyChallengeActions from '../../../actions/MyChallenges';
 
 import Countdown from '../../../components/Countdown';
@@ -22,36 +21,34 @@ class Component extends React.Component {
   AuthPopupRef;
   PopupPostRef;
 
-  state = {
-    dayData: []
-  }
-
   // TODO: there should be a redux action here to push plan day data to store
+  //       move this to ChallengeDetail?
   async componentDidMount() {
     const { challenge, MyChallenge } = this.props;
-
     const { plan } = MyChallenge;
 
-    // TODO: move to store
+    const currentDay = getDaysSinceStart(challenge);
     const dayData = await getPlanDayData(plan, challenge);
-    this.setState({ dayData });
+    const day = getDayData(dayData, currentDay);
+
+    const isChallengeActive = hasChallengeStarted(challenge);
+    if (isChallengeActive) {
+      MyChallengeActions.setMyDay(day);
+    }
 
     MyChallengeActions.setMyChallenge(challenge);
+    MyChallengeActions.setCurrentDay(currentDay);
+    MyChallengeActions.setPlanDayData(dayData);
   }
 
   render() {
-    const { dayData } = this.state;
     const { challenge, user, setContentContainerHeight, MyChallenge } = this.props;
-    const { plan } = MyChallenge;
+    const { plan, day, currentDay } = MyChallenge;
 
-    const currentDay = getDaysElapsed(challenge);
-
-    // TODO: move to helper
+    const isChallengeActive = hasChallengeStarted(challenge);
     const secondsTilStart = getSecondsTilStart(challenge);
-    const hasStarted = secondsTilStart <= 0;
 
-    // TODO: why doesn't plan overview do this? or put in store?
-    const daysCompleted = getDaysCompleted(user.myStep, challenge);
+    const onPress = () => Actions.PlanOverview();
 
     return (
       <View style={styles.container}>
@@ -66,7 +63,7 @@ class Component extends React.Component {
               setContentContainerHeight(height - 100);
             }}
           >
-            {!hasStarted ? (
+            {!isChallengeActive ? (
               <>
                 <Countdown
                   initialTime={secondsTilStart}
@@ -78,20 +75,15 @@ class Component extends React.Component {
                   <Plan
                     value={plan}
                     blueButton
-                    onPress={() => Actions.PlanOverview()}
+                    onPress={onPress}
                   />
                 </View>
               </>
             ) : (
                 <DayOverview
                   currentDay={currentDay}
-                  dayData={dayData}
-                  challenge={challenge}
-                  user={user}
-                  onPress={() => Actions.PlanOverview({
-                    //daysCompleted
-                  })}
-                  plan={plan}
+                  day={day}
+                  onPress={onPress}
                 />
               )}
           </View>
@@ -117,7 +109,7 @@ const styles = EStyleSheet.create({
     borderTopRightRadius: 20,
     backgroundColor: 'white',
     flex: 1,
-    marginTop: height / 2 - 20,
+    marginTop: height / 2 - 20, // TODO: make const
     paddingTop: 34,
     paddingBottom: 208,
   },

@@ -2,17 +2,19 @@ export const actionTypes = {
     SET_MY_CHALLENGE: 'SET_MY_CHALLENGE',
     SET_MY_DAY: 'SET_MY_DAY',
     SET_CURRENT_DAY: 'SET_CURRENT_DAY',
-    SET_MY_PLAN: 'SET_MY_PLAN'
+    SET_MY_PLAN: 'SET_MY_PLAN',
+    SET_PLAN_DAY_DATA: 'SET_PLAN_DAY_DATA'
 };
 
 const initialState = {
     challenge: {},
     day: {},
-    currentDay: {},
-    plan: {}
+    currentDay: 0,
+    plan: {},
+    dayData: []
 };
 
-// NOTE: this is a new reducer to mostly hold my challenge data
+// NOTE: this is a new reducer to mostly hold my challenge and plan data
 
 export default function (state = initialState, action) {
     switch (action.type) {
@@ -36,36 +38,12 @@ export default function (state = initialState, action) {
                 ...state,
                 plan: action.payload
             }
+        case 'SET_PLAN_DAY_DATA':
+            return {
+                ...state,
+                dayData: action.payload
+            }
         default:
             return state
     }
 }
-
-/*
-
-  const onStartPress = () => Actions.TaskOverview({
-    challenge: challenge,
-    user: user,
-    day: day,
-    currentDay: currentDay,
-    plan: plan
-  });
-
-*/
-
-
-// pages - TaskOverview (challenge: challenge, user: user, day: day, currentDay: currentDay, plan: plan)
-
-// pages - PlanOVerview ( challenge, plan, daysCompleted )
-
-// page - Workout (data: stories, currentDay, user, challenge, plan, day)
-
-/*
-
-import {connect} from 'react-redux';
-
-export default connect(({user}) => ({
-  user,
-}))(Component);
-
-*/

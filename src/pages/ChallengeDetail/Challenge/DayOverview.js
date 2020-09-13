@@ -2,23 +2,14 @@ import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
-import { getCurrentDay } from '../../../helpers/date';
-import { getDayData } from '../../../helpers/plan';
+import { getFormattedDay } from '../../../helpers/date';
 
 import { ArrowRight } from '../../../components/Icons';
 
 export default function Component(props) {
-  const { currentDay, dayData, challenge, user, onPress, plan } = props;
+  const { currentDay, onPress, day } = props;
 
-  const day = getDayData(dayData, currentDay);
-
-  // TODO - ASAP: put in store
-  const onStartPress = () => Actions.TaskOverview({
-    //challenge: challenge,
-    //day: day,
-    //currentDay: currentDay,
-    // plan: plan
-  });
+  const onStartPress = () => Actions.TaskOverview();
 
   return (
     <View style={styles.dayOverview}>
@@ -33,7 +24,7 @@ export default function Component(props) {
             {day.taskTitle}
           </Text>
           <Text style={styles.daySubtitle}>
-            {getCurrentDay()}
+            {getFormattedDay()}
           </Text>
         </View>
         <TouchableOpacity

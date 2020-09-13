@@ -24,7 +24,7 @@ export default function Component(props) {
 
     useEffect(() => {
         const getPlanDayData = async () => {
-            // TODO: clean this up & pull into it's own function
+            // TODO - ASAP: use helper instead, add versionNum param
             try {
                 const planData = await planActions.getPlanTasks(item._id);
                 if (planData.planTypeData.length === 0) {

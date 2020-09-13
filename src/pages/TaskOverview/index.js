@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
 
-import { mediaHost } from 'dash/src/config';
 import { getWorkoutData } from '../../helpers/workout';
-import { getCurrentDay } from '../../helpers/date';
+import { getFormattedDay } from '../../helpers/date';
+import { getImageURL } from '../../helpers/image';
 
 import { BackArrow } from '../../components/Icons';
 
@@ -14,35 +14,27 @@ import Circuit from './Circuit';
 import TaskCell from './TaskCell';
 
 function Component(props) {
-    const { challenge, day, currentDay, MyChallenge } = props;
-    const { plan } = MyChallenge;
+    const { MyChallenge } = props;
+    const { plan, currentDay, day } = MyChallenge;
 
-    const imageURL = `${mediaHost}${plan.planImage}`;
-
-    const [stories, setStories] = useState([]);
+    const [cards, setCards] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const getWorkout = async () => {
             setLoading(true);
             const workoutData = await getWorkoutData(day);
-            console.log('NEW WORKOUT DATA', workoutData);
-            setStories(workoutData);
+            setCards(workoutData);
             setLoading(false);
         }
 
         getWorkout();
     }, []);
 
-    // TODO: this needs to be put in store
-    const onPress = () => {
-        Actions.Workout({
-            data: stories,
-            //currentDay,
-            //challenge,
-            //day
-        });
-    }
+    const onPress = () => Actions.Workout({ cards });
+    const onBackPress = () => Actions.pop();
+
+    const imageURL = getImageURL(plan.planImage);
 
     return (
         <View style={{ flex: 1 }}>
@@ -57,7 +49,7 @@ function Component(props) {
                             Day {currentDay}
                         </Text>
                         <Text style={styles.dayBlueText}>
-                            {getCurrentDay()}
+                            {getFormattedDay()}
                         </Text>
                     </View>
                     <Image
@@ -67,7 +59,7 @@ function Component(props) {
                     />
                     <TouchableOpacity
                         style={styles.backButton}
-                        onPress={() => Actions.pop()}
+                        onPress={onBackPress}
                     >
                         <BackArrow />
                     </TouchableOpacity>

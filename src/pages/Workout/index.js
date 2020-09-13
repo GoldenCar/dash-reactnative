@@ -64,10 +64,10 @@ class Workout extends React.Component {
 
     render() {
         const { index, paused, completed } = this.state;
-        const { data, currentDay, day, MyChallenge, user, challenge } = this.props;
-        const { plan } = MyChallenge;
+        const { cards, MyChallenge, user, challenge } = this.props;
+        const { plan, currentDay, day } = MyChallenge;
 
-        const currentWorkout = data[index];
+        const currentWorkout = cards[index];
         const { flag, restTime } = currentWorkout;
 
         console.log('WORKOUT NEW SCREEN', this.props);
