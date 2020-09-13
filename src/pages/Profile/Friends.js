@@ -19,8 +19,71 @@ import { FriendPopupRef } from 'dash/src/pages/CustomTabBar';
 
 // TODO - ASAP: clean up
 
+function renderSearch(search, found, friendsIds, user, isRequested, onPressFriend) {
+  if (search.length === 0) {
+    return renderFriendContent(friendsIds, onFriendClick, onPressFriend);
+  }
+
+  return (
+    found.map((value, index) => {
+      if (value._id === user._id) {
+        return null;
+      }
+
+      const onSearchFriendClick = () => onPressFriend(value, 'user', isRequested(value))
+
+      return (
+        <FriendItem
+          key={index}
+          value={value}
+          onPress={onSearchFriendClick}
+        />
+      )
+    })
+  )
+}
+
+function renderFriendContent(friendsIds, onPressFriend) {
+  if (friendsIds.length === 0) {
+    return <ChallengeYourFriends />
+  }
+
+  return (
+    <View>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() => Actions.InviteFriendsToDash()}>
+        <View style={styles.startPart}>
+          <View style={styles.pictureContainer}>
+            <AddFriend />
+          </View>
+          <View style={styles.centerContainer}>
+            <Text style={styles.inviteText}>
+              Invite Friends to Dash
+            </Text>
+          </View>
+        </View>
+        <ChevronRight />
+      </TouchableOpacity>
+      {friendsIds.map((value, index) => {
+        const onFriendClick = () => onPressFriend(value, 'friend');
+
+        return (
+          <FriendItem
+            key={index}
+            value={value}
+            onPress={onFriendClick}
+          />
+        )
+      }
+      )}
+    </View>
+  )
+}
+
 function Component(props) {
   const { user } = props;
+  const { requestedUsers, receivedUsers, friendsIds } = user;
 
   const [search, setSearch] = useState('');
   const [list, setList] = useState([]);
@@ -39,7 +102,8 @@ function Component(props) {
     let foundList = [];
 
     list.forEach((v) => {
-      if (v.username.toLowerCase().indexOf(search.toLowerCase()) !== -1) {
+      const username = v.username.toLowerCase();
+      if (username.indexOf(search.toLowerCase()) !== -1) {
         foundList = [...foundList, v]
       }
     });
@@ -53,15 +117,15 @@ function Component(props) {
   };
 
   const isRequested = (user) => {
-    return props.user.requestedUsers.findIndex(v => v._id === user._id) !== -1;
+    return requestedUsers.findIndex(v => v._id === user._id) !== -1;
   }
 
-  const Accept = async (item, status) => {
-    await UserActions.sendFriendAccept(item._id, status)
-    await load()
+  const accept = async (item, status) => {
+    await UserActions.sendFriendAccept(item._id, status);
+    await load();
   }
 
-  const showInvitationScroll = search.length === 0 && props.user.receivedUsers.length !== 0;
+  const showInvitationScroll = search.length === 0 && receivedUsers.length !== 0;
 
   return (
     <View style={styles.containerMain}>
@@ -75,51 +139,10 @@ function Component(props) {
         <ScrollView contentContainerStyle={styles.contentContainerStyle}>
           <Search onChangeText={(e) => setSearch(e)} placeholder="Find friends.." />
           {showInvitationScroll && ( // TODO: clean up
-            <InvitationScroll Accept={Accept} list={props.user.receivedUsers} type="request" />
+            <InvitationScroll accept={accept} list={receivedUsers} type="request" />
           )}
 
-          {search.length === 0 ? ( // TODO - ASAP: clean this up
-            user.friendsIds.length === 0 ? (
-              <ChallengeYourFriends />
-            ) : (
-                <View>
-                  <TouchableOpacity
-                    style={styles.container}
-                    onPress={() => Actions.InviteFriendsToDash()}>
-                    <View style={styles.startPart}>
-                      <View style={styles.pictureContainer}>
-                        <AddFriend />
-                      </View>
-                      <View style={styles.centerContainer}>
-                        <Text style={styles.inviteText}>
-                          Invite Friends to Dash
-                          </Text>
-                      </View>
-                    </View>
-                    <ChevronRight />
-                  </TouchableOpacity>
-                  {props.user.friendsIds.map((value, index) => (
-                    <FriendItem
-                      key={index}
-                      value={value}
-                      onPress={() => onPressFriend(value, 'friend')}
-                    />
-                  ),
-                  )}
-                </View>
-              )
-          ) : (
-              found.map((value, index) => {
-                if (value._id === props.user._id) return
-                return (
-                  <FriendItem
-                    key={index}
-                    value={value}
-                    onPress={() => onPressFriend(value, 'user', isRequested(value))}
-                  />
-                )
-              })
-            )}
+          {renderSearch(search, found, friendsIds, user, isRequested, onPressFriend)}
         </ScrollView>
       </LinearGradient>
     </View>
