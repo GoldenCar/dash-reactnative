@@ -64,6 +64,8 @@ class Workout extends React.Component {
 
     render() {
         const { index, paused, completed } = this.state;
+        
+        // TODO: is challenge undefined? might need to get from MyChallenge
         const { cards, MyChallenge, user, challenge } = this.props;
         const { plan, currentDay, day } = MyChallenge;
 
