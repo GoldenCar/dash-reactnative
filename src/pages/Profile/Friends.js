@@ -21,7 +21,7 @@ import { FriendPopupRef } from 'dash/src/pages/CustomTabBar';
 
 function renderSearch(search, found, friendsIds, user, isRequested, onPressFriend) {
   if (search.length === 0) {
-    return renderFriendContent(friendsIds, onFriendClick, onPressFriend);
+    return renderFriendContent(friendsIds, onPressFriend);
   }
 
   return (
