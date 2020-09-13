@@ -127,7 +127,7 @@ FRIENDS
 
 */
 
-export const sendFriendInvite = async (id) => {
+export const sendFriendRequest = async (id) => {
   const response = await api.post(`sendFriendInvite`, {}, {
     headers: {
       friendid: id
@@ -150,6 +150,7 @@ export const removeFriend = async (id) => {
   await getCurrentUser();
 };
 
+// TODO: what is this doing? accepting friend request?
 export const sendFriendAccept = async (id, status) => {
   const res = await api.post(`receiveFriendInvite`, {}, {
     headers: {

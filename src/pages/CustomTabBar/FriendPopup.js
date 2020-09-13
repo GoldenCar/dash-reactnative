@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   ScrollView,
-  Text
+  Text,
+  Alert
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Actions } from 'react-native-router-flux';
@@ -27,18 +28,24 @@ async function RemoveFriend() {
     await UserActions.removeFriend(item._id)
     this.close()
   } catch (e) {
-    Alert.alert('Error', e.messages)
+    Alert.alert('Error', e)
   }
 }
 
-async function AddFriend() {
-  try {
-    const { item } = this.state;
-    await UserActions.sendFriendInvite(item._id)
-    this.close()
-  } catch (e) {
-    Alert.alert('Error', e.messages)
-  }
+async function sendFriendRequest(item) {
+  // try {
+  //   const { item } = this.state;
+  //   // await UserActions.sendFriendInvite(item._id)
+  //   this.close()
+  // } catch (e) {
+  //   Alert.alert('Error', e.messages)
+  // }
+
+  //const { item } = this.state;
+  console.log(item);
+
+  const response = await UserActions.sendFriendRequest(item._id);
+  console.log(response);
 }
 
 const friendMenu = [
@@ -62,7 +69,7 @@ const notFriendMenu = [
   {
     name: 'Add Friend',
     link: 'Friend this person. ',
-    //onPress: this.AddFriend
+    onPress: sendFriendRequest
   },
   {
     name: 'Invite To Challenge',
@@ -120,15 +127,18 @@ export default class Component extends React.Component {
     const backgroundColor = this.translateY.interpolate({
       inputRange: [0, 1],
       outputRange: ['rgba(0,0,0,0.3)', 'rgba(0,0,0,0)'],
-      extrapolate: 'clamp',
+      extrapolate: 'clamp'
     });
     const translateY = this.translateY.interpolate({
       inputRange: [0, 1],
       outputRange: [0, 500],
-      extrapolate: 'clamp',
+      extrapolate: 'clamp'
     });
 
-    const menuItems = item.noFriend ? notFriendMenu : friendMenu;
+    // TODO: determine if friend or not
+    //const menuItems = item.noFriend ? notFriendMenu : friendMenu;
+
+    const menuItems = notFriendMenu;
 
     return (
       this.state.visible && (
@@ -164,7 +174,7 @@ export default class Component extends React.Component {
                 //   arrow={true}
                 //   enablePicture={false}
                 // />
-                <TouchableOpacity onPress={value.onPress}>
+                <TouchableOpacity onPress={() => value.onPress(item)}>
                   <Text>{value.name}</Text>
                 </TouchableOpacity>
               ))}
