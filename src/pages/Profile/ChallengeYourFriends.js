@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, StyleSheet, Image, Dimensions, Text} from 'react-native';
+import { View, StyleSheet, Image, Dimensions, Text } from 'react-native';
 
-const {height, width} = Dimensions.get('screen');
+const { width } = Dimensions.get('screen');
 
 export default function Component() {
   return (
@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
   invite: {
     fontSize: 16,
     fontFamily: 'Poppins-Bold',
-      color: '#00A1FF',
-      marginTop: 20
+    color: '#00A1FF',
+    marginTop: 20
   }
 });
 

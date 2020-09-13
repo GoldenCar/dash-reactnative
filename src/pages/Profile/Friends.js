@@ -4,7 +4,7 @@ import {
   StyleSheet,
   ScrollView,
   Text,
-  TouchableOpacity, SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import * as UserActions from '../../actions/user';
@@ -21,55 +21,8 @@ import ChallengeYourFriends from '../MyChallenges/ChallengeYourFriends';
 import { FriendPopupRef } from 'dash/src/pages/CustomTabBar';
 import { connect } from "react-redux";
 import LinearGradient from "react-native-linear-gradient";
-import { getCurrentUser } from "../../actions/user";
 
-const array = [
-  {
-    first: true,
-  },
-  {
-    profileImage: "2020-8-1-2-16-44-1598993089056.jpg",
-    displayname: 'Cameron Mckinney',
-    username: 'itsjuanita',
-  },
-  {
-    profileImage: "2020-8-1-2-16-44-1598993089056.jpg",
-    displayname: 'Juanita Webb',
-    username: 'Juanita Webb',
-    noFriend: true,
-  },
-  {
-    profileImage: "2020-8-1-2-16-44-1598993089056.jpg",
-    displayname: 'Randall Williamson',
-    username: 'randallwilliamson',
-  },
-  {
-    profileImage: "2020-8-1-2-16-44-1598993089056.jpg",
-    displayname: 'Regina Mccoy',
-    username: 'Juanita Webb',
-    noFriend: true,
-  },
-  {
-    profileImage: "2020-8-1-2-16-44-1598993089056.jpg",
-    displayname: 'Cameron Mckinney',
-    username: 'Juanita Webb',
-  },
-  {
-    profileImage: "2020-8-1-2-16-44-1598993089056.jpg",
-    displayname: 'Juanita Webb',
-    username: 'Juanita Webb',
-  },
-  {
-    profileImage: "2020-8-1-2-16-44-1598993089056.jpg",
-    displayname: 'Randall Williamson',
-    username: 'Juanita Webb',
-  },
-  {
-    profileImage: "2020-8-1-2-16-44-1598993089056.jpg",
-    displayname: 'Regina Mccoy',
-    username: 'Juanita Webb',
-  },
-];
+// TODO - ASAP: clean up
 
 function Component(props) {
   const [search, setSearch] = useState('')
@@ -86,11 +39,6 @@ function Component(props) {
   }, [])
 
   useEffect(() => {
-    if (search.length === 1) {
-
-    } else if (search.length === 0) {
-
-    }
     let foundList = []
     list.forEach((v) => {
       if (v.username.toLowerCase().indexOf(search.toLowerCase()) !== -1) {
@@ -100,6 +48,7 @@ function Component(props) {
     setFound(foundList)
   }, [search])
 
+  // TODO: pull these in to friend helpers?
   const onPressFriend = (item, type, isRequested) => {
     FriendPopupRef.open(item, type, isRequested);
   };
@@ -124,10 +73,10 @@ function Component(props) {
       >
         <ScrollView contentContainerStyle={styles.contentContainerStyle}>
           <Search onChangeText={(e) => setSearch(e)} placeholder="Find friends.." />
-          {search.length === 0 && props.user.receivedUsers.length !== 0 && (
+          {search.length === 0 && props.user.receivedUsers.length !== 0 && ( // TODO: clean up
             <InvitationScroll Accept={Accept} list={props.user.receivedUsers} type="request" />
           )}
-          {search.length === 0 ? (
+          {search.length === 0 ? ( // TODO - ASAP: clean this up
             <>
               {props.user.friendsIds.length === 0 ? (
                 <ChallengeYourFriends />

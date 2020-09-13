@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,18 +8,18 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import {connect} from 'react-redux';
-import {Actions} from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 
-import {Bell, User} from 'dash/src/components/Icons';
+import { Bell, User } from 'dash/src/components/Icons';
 
 import * as userActions from 'dash/src/actions/user';
 
-import {mediaHost} from 'dash/src/config';
+import { mediaHost } from 'dash/src/config';
 
 function Component(props) {
   const [loadingAvatar, setLoadingAvatar] = useState(false);
-  const {ScrollViewAnimation, user} = props;
+  const { ScrollViewAnimation, user } = props;
   const translateY = ScrollViewAnimation.interpolate({
     inputRange: [0, 180],
     outputRange: [0, -280],
@@ -35,7 +35,7 @@ function Component(props) {
       <Animated.View
         style={[
           {
-            transform: [{translateY}],
+            transform: [{ translateY }],
             opacity,
           },
           styles.container,
@@ -44,6 +44,7 @@ function Component(props) {
           <TouchableOpacity
             style={styles.avatarContainer}
             onPress={() => {
+              // TODO: clean this up
               Actions.CameraRoll({
                 navBarTitle: 'Select New Profile Picture',
                 onePhoto: true,
@@ -62,11 +63,11 @@ function Component(props) {
               <Image
                 style={styles.avatar}
                 resizeMode="cover"
-                source={{uri: `${mediaHost}${user.profileImage}`}}
+                source={{ uri: `${mediaHost}${user.profileImage}` }}
               />
             ) : (
-              <User height={80} width={80} />
-            )}
+                <User height={80} width={80} />
+              )}
             {loadingAvatar ? (
               <View style={styles.loadingContainer}>
                 <ActivityIndicator size="small" color="#00A1FF" />
@@ -169,6 +170,6 @@ const styles = StyleSheet.create({
 
 Component.defaultProps = {};
 
-export default connect(({user}) => ({
+export default connect(({ user }) => ({
   user,
 }))(Component);

@@ -22,7 +22,6 @@ import Explore from './pages/Explore';
 import ExplorePost from './pages/Explore/ExplorePost';
 import PickAUsername from './pages/PickAUsername';
 import ChallengeDetail from './pages/ChallengeDetail';
-import InviteFriends from 'dash/src/pages/ChallengeDetail/InviteFriends';
 import Search from './pages/Search';
 
 import PostPage from 'dash/src/pages/ChallengeDetail/Social/PostPage';
@@ -44,7 +43,6 @@ import themes from './themes';
 EStyleSheet.build(themes.light);
 
 export let AuthPopupRef;
-export let InviteFriendsRef;
 
 const createReducer = (params) => {
     const defaultReducer = Reducer(params);
@@ -147,7 +145,6 @@ export default () => {
                             </Scene>
                         </Router>
                         <AuthPopup ref={(e) => (AuthPopupRef = e)} />
-                        <InviteFriends ref={(e) => (InviteFriendsRef = e)} />
                     </>
                 )}
             </Provider>
