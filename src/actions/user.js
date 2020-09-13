@@ -130,7 +130,7 @@ export const logout = async () => {
   store.dispatch({
     type: actionTypes.DEFAULT,
   });
-  Actions.MyChallengesTab();
+  Actions.MyChallenge();
 };
 
 export const removeFriend = async (id) => {

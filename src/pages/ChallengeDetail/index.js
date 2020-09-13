@@ -82,7 +82,7 @@ class Component extends React.Component {
                 </Animated.ScrollView>
                 <AnimatedTouchable
                     style={[styles.button, styles.backButton, { opacity: buttonOpacity }]}
-                    onPress={() => Actions.MyChallengesTab()}
+                    onPress={() => Actions.MyChallenge()}
                 >
                     <Close />
                 </AnimatedTouchable>

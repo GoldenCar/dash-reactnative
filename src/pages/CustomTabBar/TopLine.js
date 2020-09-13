@@ -2,49 +2,56 @@ import React from 'react';
 import { View, Animated, Dimensions, Easing } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { connect } from 'react-redux';
-const { height, width } = Dimensions.get('screen');
 
-const center = width / 2 - 20 - 64 / 2;
-const left = width - 40 - 64;
+const { width } = Dimensions.get('screen');
+
+const CENTER = width / 2 - 20 - 64 / 2;
+const LEFT = width - 40 - 64;
 
 class Component extends React.Component {
   transitionX = new Animated.Value(1);
+
   componentDidUpdate(prevProps) {
     const { routeName } = this.props.routes.params;
-    if (routeName === 'ExploreTab') {
+
+    if (routeName === 'Explore') {
       Animated.timing(this.transitionX, {
         toValue: 0,
         duration: 200,
         easing: Easing.ease,
         useNativeDriver: true,
-      }).start(({ finished }) => { });
+      }).start();
       return;
     }
-    if (routeName === 'MyChallengesTab') {
+
+    if (routeName === 'MyChallenges') {
       Animated.timing(this.transitionX, {
         toValue: 1,
         duration: 200,
         easing: Easing.ease,
         useNativeDriver: true,
-      }).start(({ finished }) => { });
+      }).start();
       return;
     }
+
     if (routeName === 'MyProfile') {
       Animated.timing(this.transitionX, {
         toValue: 2,
         duration: 200,
         easing: Easing.ease,
         useNativeDriver: true,
-      }).start(({ finished }) => { });
+      }).start();
       return;
     }
   }
+
   render() {
     const right = this.transitionX.interpolate({
       inputRange: [0, 1, 2],
-      outputRange: [0, center, left],
+      outputRange: [0, CENTER, LEFT],
       extrapolate: 'clamp',
     });
+
     return (
       <View style={styles.container}>
         <Animated.View
@@ -56,6 +63,7 @@ class Component extends React.Component {
     );
   }
 }
+
 export default connect(({ routes }) => ({
   routes,
 }))(Component);

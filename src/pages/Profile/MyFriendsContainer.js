@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-import ViewedBy from '../components/Challenge/ViewedBy';
-import LightButton from 'dash/src/components/LightButton';
+import ViewedBy from '../../components/Challenge/ViewedBy';
+import LightButton from '../..//components/LightButton';
 
 import { Add } from 'dash/src/components/Icons';
 import { Actions } from 'react-native-router-flux';
