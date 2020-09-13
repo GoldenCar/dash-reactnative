@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   ScrollView,
+  Text
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Actions } from 'react-native-router-flux';
@@ -131,14 +132,17 @@ export default class Component extends React.Component {
                 enablePicture={true}
               />
               {useArray.map((value, index) => (
-                <FriendItem
-                  key={index}
-                  value={value}
-                  underline={true}
-                  dots={false}
-                  arrow={true}
-                  enablePicture={false}
-                />
+                // <FriendItem
+                //   key={index}
+                //   value={value}
+                //   underline={true}
+                //   dots={false}
+                //   arrow={true}
+                //   enablePicture={false}
+                // />
+                <TouchableOpacity onPress={value.onPress}>
+                  <Text>{value.name}</Text>
+                </TouchableOpacity>
               ))}
             </ScrollView>
           </Animated.View>
