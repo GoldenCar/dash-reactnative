@@ -23,11 +23,10 @@ const { height, width } = Dimensions.get('screen');
 
 // TODO - ASAP: clean up
 
-async function RemoveFriend() {
+async function RemoveFriend(item) {
   try {
-    const { item } = this.state;
     await UserActions.removeFriend(item._id)
-    this.close()
+    // this.close()
   } catch (e) {
     Alert.alert('Error', e)
   }
@@ -42,9 +41,6 @@ async function sendFriendRequest(item) {
   //   Alert.alert('Error', e.messages)
   // }
 
-  //const { item } = this.state;
-  console.log(item);
-
   const response = await UserActions.sendFriendRequest(item._id);
   console.log(response);
 }
@@ -58,11 +54,12 @@ const friendMenu = [
   {
     title: 'Remove Friend',
     subtitle: 'Unfriend this person. ',
-    //onPress: this.RemoveFriend
+    onPress: RemoveFriend
   },
   {
     title: 'Report',
     subtitle: 'Unfriend this person. ',
+    onPress: () => { }
   },
 ];
 
@@ -80,6 +77,7 @@ const notFriendMenu = [
   {
     title: 'Report',
     subtitle: 'Send invite to a new or existing challenge.',
+    onPress: () => { }
   },
 ];
 
@@ -137,9 +135,9 @@ export default class Component extends React.Component {
     });
 
     // TODO: determine if friend or not
-    //const menuItems = item.noFriend ? notFriendMenu : friendMenu;
+    const menuItems = item.isFriend ? friendMenu : notFriendMenu;
 
-    const menuItems = notFriendMenu;
+    //const menuItems = notFriendMenu;
 
     return (
       this.state.visible && (
@@ -167,14 +165,6 @@ export default class Component extends React.Component {
                 enablePicture={true}
               />
               {menuItems.map((value, index) => (
-                // <FriendItem
-                //   key={index}
-                //   value={value}
-                //   underline={true}
-                //   dots={false}
-                //   arrow={true}
-                //   enablePicture={false}
-                // />
                 <TouchableOpacity
                   onPress={() => value.onPress(item)}
                   style={styles.row}
