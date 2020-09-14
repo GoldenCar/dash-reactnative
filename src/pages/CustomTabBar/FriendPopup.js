@@ -17,6 +17,7 @@ import { Actions } from 'react-native-router-flux';
 import * as UserActions from '../../actions/user';
 
 import FriendItem from 'dash/src/components/FriendItem';
+import ChevronRight from '../../pages/MyChallenges/Icons/ChevronRight';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -50,35 +51,35 @@ async function sendFriendRequest(item) {
 
 const friendMenu = [
   {
-    name: 'Invite To Challenge',
-    link: 'Send invite to a new or existing challenge.',
+    title: 'Invite To Challenge',
+    subtitle: 'Send invite to a new or existing challenge.',
     onPress: () => Actions.InviteToChallenge()
   },
   {
-    name: 'Remove Friend',
-    link: 'Unfriend this person. ',
+    title: 'Remove Friend',
+    subtitle: 'Unfriend this person. ',
     //onPress: this.RemoveFriend
   },
   {
-    name: 'Report',
-    link: 'Unfriend this person. ',
+    title: 'Report',
+    subtitle: 'Unfriend this person. ',
   },
 ];
 
 const notFriendMenu = [
   {
-    name: 'Add Friend',
-    link: 'Friend this person. ',
+    title: 'Add Friend',
+    subtitle: 'Friend this person. ',
     onPress: sendFriendRequest
   },
   {
-    name: 'Invite To Challenge',
-    link: 'Send invite to a new or existing challenge.',
+    title: 'Invite To Challenge',
+    subtitle: 'Send invite to a new or existing challenge.',
     onPress: () => Actions.InviteToChallenge()
   },
   {
-    name: 'Report',
-    link: 'Send invite to a new or existing challenge.',
+    title: 'Report',
+    subtitle: 'Send invite to a new or existing challenge.',
   },
 ];
 
@@ -174,8 +175,18 @@ export default class Component extends React.Component {
                 //   arrow={true}
                 //   enablePicture={false}
                 // />
-                <TouchableOpacity onPress={() => value.onPress(item)}>
-                  <Text>{value.name}</Text>
+                <TouchableOpacity
+                  onPress={() => value.onPress(item)}
+                  style={styles.row}
+                >
+                  <View style={styles.rowContent}>
+                    <View>
+                      <Text style={styles.title}>{value.title}</Text>
+                      <Text style={styles.subtitle}>{value.subtitle}</Text>
+                    </View>
+                    <ChevronRight />
+                  </View>
+                  <View style={styles.seperator} />
                 </TouchableOpacity>
               ))}
             </ScrollView>
@@ -231,6 +242,33 @@ const styles = StyleSheet.create({
   closeButton: {
     padding: 20,
   },
+
+  row: {
+    paddingHorizontal: 24,
+    marginBottom: 6
+  },
+  rowContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  title: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: 16,
+    lineHeight: 28,
+    color: '#000000'
+  },
+  subtitle: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: 12,
+    lineHeight: 20,
+    color: '#859AB6',
+    marginBottom: 8
+  },
+  seperator: {
+    backgroundColor: '#E7EEF5',
+    height: 1
+  }
 });
 
 Component.defaultProps = {
