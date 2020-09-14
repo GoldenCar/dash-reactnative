@@ -80,6 +80,7 @@ const notFriendMenu = [
   {
     title: 'Report',
     subtitle: 'Send invite to a new or existing challenge.',
+    onPress: () => { }
   },
 ];
 
