@@ -36,7 +36,7 @@ export default function Component() {
         <FriendItem
           value={friend}
           containerStyle={styles.friendContainerStyle}
-          dissablePress={true}
+          disablePress={true}
           rightComponent={
             <TouchableOpacity style={styles.inviteAllContainer}>
               <Text style={styles.inviteAllText}>Invite All</Text>

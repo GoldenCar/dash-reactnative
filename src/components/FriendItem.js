@@ -6,24 +6,24 @@ import Dots from '../pages/MyChallenges/Icons/Dots';
 import ChevronRight from '../pages/MyChallenges/Icons/ChevronRight';
 
 export default function Component(props) {
-  const { value, dissablePress } = props;
-  const Touch = dissablePress ? View : TouchableOpacity;
+  const { value, disablePress, onPress, enablePicture, underline, containerStyle, rightComponent } = props;
+  const { dots, arrow } = props;
+
+  const Touch = disablePress ? View : TouchableOpacity;
   return (
     <Touch
       style={[
         styles.container,
-        props.containerStyle,
-        props.underline
-          ? {
-            borderBottomWidth: 1,
-            borderBottomColor: '#E0EAF3',
-          }
-          : {},
-        dissablePress && { opacity: 0.3 }
+        containerStyle,
+        underline && {
+          borderBottomWidth: 1,
+          borderBottomColor: '#E0EAF3',
+        },
+        disablePress && { opacity: 0.3 }
       ]}
       onPress={() => {
-        if (props.onPress) {
-          props.onPress();
+        if (onPress) {
+          onPress();
         } else {
           if (value.onPress) {
             value.onPress();
@@ -31,7 +31,7 @@ export default function Component(props) {
         }
       }}>
       <View style={styles.startPart}>
-        {props.enablePicture && (
+        {enablePicture && (
           <View style={styles.pictureContainer}>
             <Image
               resizeMode="contain"
@@ -45,12 +45,12 @@ export default function Component(props) {
           <Text style={styles.link}>{`@${value.username}`}</Text>
         </View>
       </View>
-      {props.rightComponent ? (
-        props.rightComponent
+      {rightComponent ? (
+        rightComponent
       ) : (
           <>
-            {props.dots && <Dots />}
-            {props.arrow && <ChevronRight />}
+            {dots && <Dots />}
+            {arrow && <ChevronRight />}
           </>
         )}
     </Touch>
@@ -106,5 +106,5 @@ Component.defaultProps = {
   enablePicture: true,
   containerStyle: {},
   rightComponent: false,
-  dissablePress: false,
+  disablePress: false,
 };
