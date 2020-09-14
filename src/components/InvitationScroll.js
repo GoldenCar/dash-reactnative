@@ -10,11 +10,10 @@ import {
 } from 'react-native';
 import { mediaHost } from 'dash/src/config';
 
-const { width, height } = Dimensions.get('window');
-
+const { width } = Dimensions.get('window');
 
 export default function Component(props) {
-  const { type, list, Accept } = props;
+  const { type, list, accept } = props;
   return (
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
       {list.map((value, index) => (
@@ -23,10 +22,7 @@ export default function Component(props) {
           style={[
             styles.invitationItem,
             index === list.length - 1
-              ? {
-                marginRight: 15,
-              }
-              : {},
+            && { marginRight: 15 }
           ]}>
           <View style={styles.invitationItemHeader}>
             <View style={styles.invitationItemAvatarContainer}>
@@ -38,8 +34,7 @@ export default function Component(props) {
             </View>
             <View style={styles.invitationTextContainer}>
               <Text style={styles.invitationName}>
-                {/*{value.username}{' '}*/}
-                {'312321312'}{' '}
+                @{value.username}{' '}
                 {type !== 'request' && (
                   <Text style={styles.invitedToThe}>Invited you to the</Text>
                 )}
@@ -47,7 +42,7 @@ export default function Component(props) {
               {type === 'request' ? (
                 <Text style={[styles.inviteChallenge, { color: '#21293D' }]}>
                   Sent Friend Request
-                                </Text>
+                </Text>
               ) : (
                   <Text style={styles.inviteChallenge}>{value.challenge}</Text>
                 )}
@@ -55,7 +50,7 @@ export default function Component(props) {
           </View>
           <View style={styles.inviteActionsContainer}>
             <TouchableOpacity
-              onPress={() => Accept(value, 'accept')}
+              onPress={() => accept(value, 'accept')}
               style={[
                 styles.inviteAction,
                 {
@@ -65,7 +60,7 @@ export default function Component(props) {
               ]}>
               <Text style={styles.inviteAccept}>Accept</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => Accept(value, 'reject')} style={styles.inviteAction}>
+            <TouchableOpacity onPress={() => accept(value, 'reject')} style={styles.inviteAction}>
               <Text style={styles.inviteIgnore}>Ignore</Text>
             </TouchableOpacity>
           </View>

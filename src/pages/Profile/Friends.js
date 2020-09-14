@@ -66,6 +66,7 @@ function renderFriendContent(friendsIds, onPressFriend) {
         <ChevronRight />
       </TouchableOpacity>
       {friendsIds.map((value, index) => {
+        value.isFriend = true;
         const onFriendClick = () => onPressFriend(value, 'friend');
 
         return (
@@ -125,6 +126,7 @@ function Component(props) {
     await load();
   }
 
+  // shows pending friend requests
   const showInvitationScroll = search.length === 0 && receivedUsers.length !== 0;
 
   return (
@@ -138,7 +140,8 @@ function Component(props) {
       >
         <ScrollView contentContainerStyle={styles.contentContainerStyle}>
           <Search onChangeText={(e) => setSearch(e)} placeholder="Find friends.." />
-          {showInvitationScroll && ( // TODO: clean up
+
+          {showInvitationScroll && (
             <InvitationScroll accept={accept} list={receivedUsers} type="request" />
           )}
 

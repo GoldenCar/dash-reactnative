@@ -140,8 +140,9 @@ export const sendFriendRequest = async (id) => {
   return response.data.data;
 };
 
+// removes id from friendsIds array
 export const removeFriend = async (id) => {
-  await api.delete(`delFriend`, {
+  const response = await api.delete(`delFriend`, {
     headers: {
       friendid: id
     }
@@ -151,6 +152,8 @@ export const removeFriend = async (id) => {
 };
 
 // TODO: what is this doing? accepting friend request?
+
+// used to accept or reject friend request
 export const sendFriendAccept = async (id, status) => {
   const res = await api.post(`receiveFriendInvite`, {}, {
     headers: {
