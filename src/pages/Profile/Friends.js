@@ -113,6 +113,11 @@ function Component(props) {
 
     list.forEach((v) => {
       const username = v.username.toLowerCase();
+
+      if (username === 'admin') {
+        return;
+      }
+
       if (username.indexOf(search.toLowerCase()) !== -1) {
         foundList = [...foundList, v]
       }
@@ -140,7 +145,7 @@ function Component(props) {
 
   const showChallengeInvitationScroll = search.length === 0 && receivedUsers.length !== 0;
 
-  const friendRequests = receivedUsers.filter((invites) => invites.type !== 'challenge');
+  const friendRequests = receivedUsers.filter((invites) => !invites || invites.type !== 'challenge');
   const challengeInvites = receivedUsers.filter((invites) => invites.type === 'challenge');
 
   const acceptChallengeInvite = async (user, challenge) => {

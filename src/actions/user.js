@@ -110,6 +110,7 @@ export const setUser = (payload) => {
 export const getCurrentUser = async () => {
   const response = await api.get('getCurrentUser');
   setUser(response.data.data);
+  return response;
 };
 
 export const logout = async () => {
@@ -140,7 +141,8 @@ export const sendFriendRequest = async (id) => {
   });
 
   console.log(response)
-  await getCurrentUser();
+  const user = await getCurrentUser();
+  console.log(user);
 
   return response.data.data;
 };
@@ -181,9 +183,11 @@ CHALLENGE
 export const joinChallenge = async (challenge_id, user_id) => {
   const URL = `/challengesapi/${challenge_id}/join`;
 
-  const response = await api.post(URL, {
-    user_id: user_id
-  });
+  const response = await api.post(URL
+    //, {
+    //  user_id: user_id
+    //}
+  );
 
   return response;
 };
