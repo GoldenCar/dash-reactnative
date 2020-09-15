@@ -118,7 +118,7 @@ export const logout = async () => {
   store.dispatch({
     type: actionTypes.DEFAULT,
   });
-  Actions.MyChallenge();
+  Actions.MyChallenges();
 };
 
 /*
