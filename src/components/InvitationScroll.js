@@ -13,59 +13,65 @@ import { mediaHost } from 'dash/src/config';
 const { width } = Dimensions.get('window');
 
 export default function Component(props) {
-  const { type, list, accept } = props;
+  const { type, list, accept, user } = props;
+
   return (
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      {list.map((value, index) => (
-        <View
-          key={index}
-          style={[
-            styles.invitationItem,
-            index === list.length - 1
-            && { marginRight: 15 }
-          ]}>
-          <View style={styles.invitationItemHeader}>
-            <View style={styles.invitationItemAvatarContainer}>
-              <Image
-                resizeMode="cover"
-                source={{ uri: `${mediaHost}${value.profileImage}` }}
-                style={styles.invitationItemAvatar}
-              />
-            </View>
-            <View style={styles.invitationTextContainer}>
-              <Text style={styles.invitationName}>
-                @{value.username}{' '}
-                {type !== 'request' && (
-                  <Text style={styles.invitedToThe}>Invited you to the</Text>
-                )}
-              </Text>
-              {type === 'request' ? (
-                <Text style={[styles.inviteChallenge, { color: '#21293D' }]}>
-                  Sent Friend Request
+      {list.map((value, index) => {
+        const acceptOnPress = type === 'challenge' ? () => accept(user, value) : () => accept(value, 'accept');
+
+        return (
+          <View
+            key={index}
+            style={[
+              styles.invitationItem,
+              index === list.length - 1
+              && { marginRight: 15 }
+            ]}>
+            <View style={styles.invitationItemHeader}>
+              <View style={styles.invitationItemAvatarContainer}>
+                <Image
+                  resizeMode="cover"
+                  source={{ uri: `${mediaHost}${value.profileImage}` }}
+                  style={styles.invitationItemAvatar}
+                />
+              </View>
+              <View style={styles.invitationTextContainer}>
+                <Text style={styles.invitationName}>
+                  @{value.username}{' '}
+                  {type !== 'request' && (
+                    <Text style={styles.invitedToThe}>Invited you to the</Text>
+                  )}
                 </Text>
-              ) : (
-                  <Text style={styles.inviteChallenge}>{value.challenge}</Text>
-                )}
+                {type === 'request' ? (
+                  <Text style={[styles.inviteChallenge, { color: '#21293D' }]}>
+                    Sent Friend Request
+                </Text>
+                ) : (
+                    <Text style={styles.inviteChallenge}>{value.challenge}</Text>
+                  )}
+              </View>
+            </View>
+            <View style={styles.inviteActionsContainer}>
+              <TouchableOpacity
+                //onPress={() => accept(value, 'accept')}
+                onPress={() => acceptOnPress(value, 'accept')}
+                style={[
+                  styles.inviteAction,
+                  {
+                    borderRightWidth: 1,
+                    borderRightColor: '#F0F5FA',
+                  },
+                ]}>
+                <Text style={styles.inviteAccept}>Accept</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => accept(value, 'reject')} style={styles.inviteAction}>
+                <Text style={styles.inviteIgnore}>Ignore</Text>
+              </TouchableOpacity>
             </View>
           </View>
-          <View style={styles.inviteActionsContainer}>
-            <TouchableOpacity
-              onPress={() => accept(value, 'accept')}
-              style={[
-                styles.inviteAction,
-                {
-                  borderRightWidth: 1,
-                  borderRightColor: '#F0F5FA',
-                },
-              ]}>
-              <Text style={styles.inviteAccept}>Accept</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => accept(value, 'reject')} style={styles.inviteAction}>
-              <Text style={styles.inviteIgnore}>Ignore</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ))}
+        )
+      })}
     </ScrollView>
   );
 }

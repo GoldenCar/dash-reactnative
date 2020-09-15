@@ -1,15 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Text, Image } from 'react-native';
+import { View, StyleSheet, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
 import * as challengesActions from '../../actions/challenges';
+import * as userActions from '../../actions/challenges';
+
 import { mediaHost } from 'dash/src/config';
 
 import FriendItem from '../../components/FriendItem';
 import NavBar from '../../components/NavBar';
 
+function sendChallengeInvite(user, challenge, friend) {
+  console.log(friend);
+
+  // TODO: - send challenge invite
+
+  /*
+
+    {
+      userId: user._id,
+      challenge: challenge._id,
+      friendId: friend._id
+    }
+
+  */
+
+  // TODO: endpoint finds friend, pushes up challenge invite object to requestedUsers?
+}
+
 function Component(props) {
-  const { user } = props;
+  const { user, friend } = props;
 
   const [allChallenges, setAllChallenges] = useState([]);
 
@@ -46,7 +66,8 @@ function Component(props) {
   console.log(myChallenges, allChallenges);
   console.log(user);
 
-  const friend = {
+  // TODO: is this my or friend data?
+  const myUser = {
     profileImage: user.profileImage,
     displayname: user.displayname,
     username: `${user.displayname}`
@@ -57,7 +78,7 @@ function Component(props) {
       <NavBar title="Invite To Challenge" />
       <ScrollView contentContainerStyle={styles.contentContainerStyle}>
         <FriendItem
-          value={friend}
+          value={myUser}
           containerStyle={styles.friendContainerStyle}
           disablePress={true}
         />
@@ -80,9 +101,12 @@ function Component(props) {
                     <Text style={styles.itemSubTitle}>Plan: {value.Plan}</Text>
                   </View>
                 </View>
-                <View style={styles.inviteContainer}>
+                <TouchableOpacity
+                  style={styles.inviteContainer}
+                  onPress={() => sendChallengeInvite(user, value, friend)}
+                >
                   <Text style={styles.invite}>Invite</Text>
-                </View>
+                </TouchableOpacity>
               </View>
             )
           })}
