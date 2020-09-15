@@ -37,6 +37,7 @@ import AccountDetails from './pages/Profile/AccountDetails';
 
 import * as settingsActions from 'dash/src/actions/settings';
 import * as userActions from 'dash/src/actions/user';
+import * as challengesActions from 'dash/src/actions/challenges';
 
 import themes from './themes';
 
@@ -58,8 +59,11 @@ export default () => {
         const init = async () => {
             const data = await settingsActions.getStorage();
             if (data.user) {
-                userActions.getCurrentUser();
+                userActions.getUser();
+                await challengesActions.getMyChallenges();
+
             }
+
             setLoading(false);
 
         };

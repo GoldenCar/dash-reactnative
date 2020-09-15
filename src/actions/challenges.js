@@ -6,33 +6,36 @@ import store from 'dash/src/store';
 import { api, host } from '../config';
 
 export const getMyChallenges = async () => {
-  const response = await api.post('challengesapiPager', {
-    pageLength: 20,
-    pageNumber: 1,
-  });
-  response.data.data.reverse();
-  store.dispatch({
-    type: actionTypes.SET_CHALLENGES,
-    payload: response.data.data,
-  });
-  return response.data.data;
+  try {
+    const response = await api.post('challengesapiPager', {
+      pageLength: 20,
+      pageNumber: 1,
+    });
+
+    response.data.data.reverse();
+    store.dispatch({
+      type: actionTypes.SET_CHALLENGES,
+      payload: response.data.data,
+    });
+    return response.data.data;
+  } catch (e) {
+    console.log('get my challenges', e);
+    return undefined;
+  }
 };
 
-export const getAllChallengesOfDB = () => {
-
-  return axios({
-    method: 'get',
-    url: host + "/challengesapi",
-  })
-    .then(response => {
-      store.dispatch({
-        type: actionTypes.GET_CHALLENGES,
-        payload: response.data.data,
-      });
-      return response.data.data.reverse();
-    }).catch(err => {
-      console.log(" error is ", err);
-    })
+export const getAllChallengesOfDB = async () => {
+  try {
+    const response = await api.get('challengesapi');
+    store.dispatch({
+      type: actionTypes.GET_CHALLENGES,
+      payload: response.data.data
+    });
+    return response.data.data.reverse();
+  } catch (e) {
+    console.log('get all challenges of db', e);
+    return undefined;
+  }
 }
 
 export const postMyChallenge = async (data) => {
@@ -80,6 +83,7 @@ export const postMyChallenge = async (data) => {
 
   console.log(" form data ==================================", formData);
 
+  // TODO: use api instead
   return axios({
     method: 'post',
     url: host + "/challengesapi",
@@ -103,6 +107,7 @@ export const editChallenge = async (data) => {
   formData.append('editID', data._id);
   formData.append('joinedUsers', data.joinedUsers);
 
+  // TODO: use api instead
   return axios({
     method: 'patch',
     url: host + "/challengesapi",
