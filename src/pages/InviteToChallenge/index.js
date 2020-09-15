@@ -1,34 +1,57 @@
-import React from 'react';
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, ScrollView, Text, Image } from 'react-native';
+import { connect } from 'react-redux';
+
+import * as challengesActions from '../../actions/challenges';
+import { mediaHost } from 'dash/src/config';
 
 import FriendItem from '../../components/FriendItem';
 import NavBar from '../../components/NavBar';
 
-const friend = {
-  picture: require('dash/src/res/friends/friend1.png'),
-  name: 'Cameron Mckinney',
-  link: '@itsjuanita',
-};
+function Component(props) {
+  const { user } = props;
 
-const SAMPLE_CHALLENGES = [
-  {
-    title: 'Chris Bumstead 30 Day Challenge',
-    picture: require('dash/src/res/inviteChallenge1.png'),
-  },
-  {
-    title: 'David Dobrik Vlog Squad Fitness Challenge',
-    picture: require('dash/src/res/inviteChallenge2.png'),
-  },
-];
+  const [allChallenges, setAllChallenges] = useState([]);
 
-export default function Component() {
+  useEffect(() => {
+    const getAllChallenges = async () => {
+      const response = await challengesActions.getAllChallengesOfDB();
+      setAllChallenges(response);
+    }
+
+    getAllChallenges();
+  }, []);
+
+  // TODO: put in state
+  let myChallenges = [];
+  if (user && user._id) {
+    myChallenges = allChallenges.filter((v) => {
+      if (!v.status === 'start') {
+        return false;
+      }
+
+      if (v.createdBy === user._id) {
+        return true;
+      }
+
+      const hasUserJoined = (v.joinedUsers.indexOf(user._id) > -1);
+      if (hasUserJoined) {
+        return true;
+      }
+
+      return false;
+    });
+  }
+
+  console.log(myChallenges, allChallenges);
+  console.log(user);
+
+  const friend = {
+    profileImage: user.profileImage,
+    displayname: user.displayname,
+    username: `${user.displayname}`
+  };
+
   return (
     <View style={styles.container}>
       <NavBar title="Invite To Challenge" />
@@ -37,35 +60,42 @@ export default function Component() {
           value={friend}
           containerStyle={styles.friendContainerStyle}
           disablePress={true}
-          rightComponent={
-            <TouchableOpacity style={styles.inviteAllContainer}>
-              <Text style={styles.inviteAllText}>Invite All</Text>
-            </TouchableOpacity>
-          }
         />
         <View style={styles.itemsContainer}>
-          {SAMPLE_CHALLENGES.map((value, index) => (
-            <View key={index} style={styles.item}>
-              <View style={styles.itemTop}>
-                <View style={styles.pictureContainer}>
-                  <Image
-                    style={styles.picture}
-                    source={value.picture}
-                    resizeMode="cover"
-                  />
+          {myChallenges.map((value, index) => {
+            const imageURL = { uri: `${mediaHost}${value.challengeBGImage}` };
+
+            return (
+              <View key={index} style={styles.item}>
+                <View style={styles.itemTop}>
+                  <View style={styles.pictureContainer}>
+                    <Image
+                      style={styles.picture}
+                      source={imageURL}
+                      resizeMode="cover"
+                    />
+                  </View>
+                  <View>
+                    <Text style={styles.itemTitle}>{value.title}</Text>
+                    <Text style={styles.itemSubTitle}>Plan: {value.Plan}</Text>
+                  </View>
                 </View>
-                <Text style={styles.itemTitle}>{value.title}</Text>
+                <View style={styles.inviteContainer}>
+                  <Text style={styles.invite}>Invite</Text>
+                </View>
               </View>
-              <View style={styles.inviteContainer}>
-                <Text style={styles.invite}>Invite</Text>
-              </View>
-            </View>
-          ))}
+            )
+          })}
         </View>
       </ScrollView>
     </View>
   );
 }
+
+export default connect(({ user }) => ({
+  user,
+}))(Component);
+
 
 const styles = StyleSheet.create({
   invite: {
@@ -93,6 +123,13 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     flex: 1,
     marginLeft: 10,
+  },
+  itemSubTitle: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 12,
+    lineHeight: 20,
+    color: '#859AB6',
+    marginLeft: 10
   },
   picture: {
     width: 55,
