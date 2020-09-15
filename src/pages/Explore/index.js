@@ -46,9 +46,8 @@ function renderItem(item, index, user) {
 
 function Component(props) {
 
-  const challenges = props.challenges.filter(
-    (v) => v.Featured === "yes",
-  );
+  // TOOD: make helper
+  const challenges = props.challenges.filter(v => v.Featured);
 
   const [plans, setPlans] = useState([]);
   useEffect(() => {

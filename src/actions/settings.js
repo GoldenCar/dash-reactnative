@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
-import {api} from '../config';
+import { api } from '../config';
 
-import {setUser} from './user';
+import { setUser } from './user';
 
 export const getStorage = async () => {
   try {
@@ -62,8 +62,8 @@ export const getStorage = async () => {
     if (user) {
       setUser(user);
     }
-    return {user, token};
+    return { user, token };
   } catch (e) {
-    console.log({e});
+    console.log({ e });
   }
 };

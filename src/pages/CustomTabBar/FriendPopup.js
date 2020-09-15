@@ -49,7 +49,7 @@ const friendMenu = [
   {
     title: 'Invite To Challenge',
     subtitle: 'Send invite to a new or existing challenge.',
-    onPress: () => Actions.InviteToChallenge()
+    onPress: (friend) => Actions.InviteToChallenge({ friend })
   },
   {
     title: 'Remove Friend',
@@ -72,7 +72,7 @@ const notFriendMenu = [
   {
     title: 'Invite To Challenge',
     subtitle: 'Send invite to a new or existing challenge.',
-    onPress: () => Actions.InviteToChallenge()
+    onPress: (friend) => Actions.InviteToChallenge({ friend })
   },
   {
     title: 'Report',

@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import LinearGradient from "react-native-linear-gradient";
 
 import * as UserActions from '../../actions/user';
+import * as challengesActions from '../../actions/challenges';
 
 import FriendItem from '../../components/FriendItem';
 import NavBar from '../../components/NavBar';
@@ -68,7 +69,6 @@ function renderFriendContent(friendsIds, onPressFriend) {
       {friendsIds.map((value, index) => {
         value.isFriend = true;
         const onFriendClick = () => onPressFriend(value, 'friend');
-
         return (
           <FriendItem
             key={index}
@@ -84,7 +84,7 @@ function renderFriendContent(friendsIds, onPressFriend) {
 
 function Component(props) {
   const { user } = props;
-  const { requestedUsers, receivedUsers, friendsIds } = user;
+  let { requestedUsers, receivedUsers, friendsIds } = user;
 
   const [search, setSearch] = useState('');
   const [list, setList] = useState([]);
@@ -97,6 +97,15 @@ function Component(props) {
 
   useEffect(() => {
     load();
+
+    // TODO: get real data
+    // receivedUsers.push({
+    //   type: 'challenge',
+    //   challenge: `Shane's Challenge`,
+    //   profileImage: user.profileImage,
+    //   username: user.username,
+    //   challengeId: '5f5a891eb9289d49b7d18420'
+    // });
   }, []);
 
   useEffect(() => {
@@ -129,6 +138,29 @@ function Component(props) {
   // shows pending friend requests
   const showInvitationScroll = search.length === 0 && receivedUsers.length !== 0;
 
+  const showChallengeInvitationScroll = search.length === 0 && receivedUsers.length !== 0;
+
+  const friendRequests = receivedUsers.filter((invites) => invites.type !== 'challenge');
+  const challengeInvites = receivedUsers.filter((invites) => invites.type === 'challenge');
+
+  const acceptChallengeInvite = async (user, challenge) => {
+    // TODO: endpoint finds friend, pushes up challenge invite object to requestedUsers?
+
+    console.log(user, challenge);
+
+    const allChallenges = await challengesActions.getAllChallengesOfDB();
+
+    const challengeInfo = allChallenges.find(c => c._id === challenge.challengeId);
+    console.log(challengeInfo);
+
+    if (challengeInfo) {
+      const response = await UserActions.joinChallenge(challenge.challengeId, user._id);
+      if (response.status === 200) {
+        Actions.ChallengeDetail({ challenge: challengeInfo });
+      }
+    }
+  }
+
   return (
     <View style={styles.containerMain}>
       <NavBar title="Friends" />
@@ -142,7 +174,11 @@ function Component(props) {
           <Search onChangeText={(e) => setSearch(e)} placeholder="Find friends.." />
 
           {showInvitationScroll && (
-            <InvitationScroll accept={accept} list={receivedUsers} type="request" />
+            <InvitationScroll accept={accept} list={friendRequests} type="request" />
+          )}
+
+          {showChallengeInvitationScroll && (
+            <InvitationScroll accept={acceptChallengeInvite} list={challengeInvites} type="challenge" user={user} />
           )}
 
           {renderSearch(search, found, friendsIds, user, isRequested, onPressFriend)}

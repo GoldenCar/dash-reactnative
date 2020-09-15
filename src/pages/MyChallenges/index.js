@@ -39,8 +39,11 @@ class Component extends React.Component {
 
   callApiToGetChallenges = async () => {
     this.setState({ refresh: true });
+
     const response = await challengesActions.getAllChallengesOfDB();
-    this.setState({ arrayAllChallenges: response });
+    if (response) {
+      this.setState({ arrayAllChallenges: response });
+    }
   }
 
   getData = async () => {

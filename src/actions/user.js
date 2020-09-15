@@ -17,8 +17,13 @@ export const getUserById = async (id) => {
 };
 
 export const getUser = async () => {
-  const response = await api.get(`userapi`);
-  return response.data.data;
+  try {
+    const response = await api.get(`userapi`);
+    return response.data.data;
+  } catch (e) {
+    console.log('get user', e);
+    return undefined;
+  }
 };
 
 export const editUserPicture = async (data, picture) => {
@@ -118,7 +123,7 @@ export const logout = async () => {
   store.dispatch({
     type: actionTypes.DEFAULT,
   });
-  Actions.MyChallenge();
+  Actions.MyChallenges();
 };
 
 /*
