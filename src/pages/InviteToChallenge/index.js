@@ -35,7 +35,7 @@ function Component(props) {
 
   useEffect(() => {
     const getAllChallenges = async () => {
-      const response = await challengesActions.getAllChallengesOfDB();
+      const response = await challengesActions.getAllChallenges();
       setAllChallenges(response);
     }
 

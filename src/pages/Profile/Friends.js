@@ -153,7 +153,7 @@ function Component(props) {
 
     console.log(user, challenge);
 
-    const allChallenges = await challengesActions.getAllChallengesOfDB();
+    const allChallenges = await challengesActions.getAllChallenges();
 
     const challengeInfo = allChallenges.find(c => c._id === challenge.challengeId);
     console.log(challengeInfo);

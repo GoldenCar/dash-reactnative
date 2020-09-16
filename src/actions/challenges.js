@@ -1,39 +1,29 @@
 import { Platform } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import { actionTypes } from 'dash/src/store/reducers/challenges';
 import store from 'dash/src/store';
 import { api, host } from '../config';
 
-export const getMyChallenges = async () => {
-  try {
-    const response = await api.post('challengesapiPager', {
-      pageLength: 20,
-      pageNumber: 1,
-    });
+// TODO - ASAP: convert all this to /challenges api
 
-    response.data.data.reverse();
+export const getAllChallenges = async () => {
+  api.defaults.baseURL = "https://www.dashchallengesapi.com/";
+
+  try {
+    const response = await api.get('challenges');
+
+    if (response.status !== 200) {
+      return [];
+    }
+
     store.dispatch({
       type: actionTypes.SET_CHALLENGES,
-      payload: response.data.data,
+      payload: response.data
     });
-    return response.data.data;
-  } catch (e) {
-    console.log('get my challenges', e);
-    return undefined;
-  }
-};
 
-export const getAllChallengesOfDB = async () => {
-  try {
-    const response = await api.get('challengesapi');
-    store.dispatch({
-      type: actionTypes.GET_CHALLENGES,
-      payload: response.data.data
-    });
-    return response.data.data.reverse();
+    return response.data.reverse();
   } catch (e) {
-    console.log('get all challenges of db', e);
+    console.log('get all challenges', e);
     return undefined;
   }
 }

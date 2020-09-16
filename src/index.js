@@ -60,7 +60,7 @@ export default () => {
             const data = await settingsActions.getStorage();
             if (data.user) {
                 userActions.getUser();
-                await challengesActions.getMyChallenges();
+                await challengesActions.getAllChallenges();
 
             }
 

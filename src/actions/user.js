@@ -9,7 +9,7 @@ import store from 'dash/src/store';
 
 import { api } from '../config';
 
-import { getMyChallenges } from './challenges';
+import { getAllChallenges } from './challenges';
 
 export const getUserById = async (id) => {
   const response = await api.get(`userapi/${id}`);
@@ -79,7 +79,7 @@ export const loginGoogleUser = async ({ id_token, username }) => {
       type: actionTypes.SET_USER,
       payload: response.data.data,
     });
-    getMyChallenges();
+    getAllChallenges();
     return response.data.data;
   } catch (e) {
     console.log(e)
@@ -96,7 +96,7 @@ export const loginAppleUser = async (data) => {
     type: actionTypes.SET_USER,
     payload: response.data.data,
   });
-  getMyChallenges();
+  getAllChallenges();
   return response.data.data;
 };
 
@@ -180,14 +180,20 @@ CHALLENGE
 */
 
 export const joinChallenge = async (challenge_id, user_id) => {
-  const URL = `/challengesapi/${challenge_id}/join`;
+  //const URL = `/challengesapi/${challenge_id}/join`;
+
+  const URL = `/challenges/${challenge_id}/join`;
+
+  api.defaults.baseURL = "https://www.dashchallengesapi.com/";
 
   const response = await api.post(URL, {
     user_id: user_id
-  }
-  );
+  });
 
   console.log('join challenge', response);
+
+  // TODO: might have to reset url 
+  // api.defaults.baseURL = "https://www.dashchallengesapi.com/mobileapi"
 
   return response;
 };

@@ -40,7 +40,7 @@ class Component extends React.Component {
   callApiToGetChallenges = async () => {
     this.setState({ refresh: true });
 
-    const response = await challengesActions.getAllChallengesOfDB();
+    const response = await challengesActions.getAllChallenges();
     if (response) {
       this.setState({ arrayAllChallenges: response });
     }
@@ -54,7 +54,7 @@ class Component extends React.Component {
     this.setState({ plans: currentPlans });
 
     if (user) {
-      await challengesActions.getMyChallenges();
+      await challengesActions.getAllChallenges();
     }
   };
 
@@ -114,7 +114,7 @@ class Component extends React.Component {
     const end = myChallenges.length === 0 ? topToBottomGradientEnd : bottomLeftToTopRightEnd;
 
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} >
         <LinearGradient
           colors={['#E7EEF5', '#fff']}
           start={start}

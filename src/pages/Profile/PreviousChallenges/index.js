@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from "moment";
-import {View, ScrollView} from 'react-native';
+import { View, ScrollView } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import NavBar from '../../../components/NavBar';
 import Item from './Item';
@@ -10,7 +10,7 @@ const PreviousChallenges = props => {
     const [list, setList] = useState([])
 
     const load = async () => {
-        const response = await challengesActions.getAllChallengesOfDB()
+        const response = await challengesActions.getAllChallenges()
         let list = []
         response.forEach((v) => {
             const data = new Date(v.ActiveDate)
@@ -30,19 +30,19 @@ const PreviousChallenges = props => {
 
     return (
         <View style={styles.container}>
-            <NavBar styleContainer={{backgroundColor: 'white'}}
-                    shadow={false}
-                    title="My Past Challenges"
+            <NavBar styleContainer={{ backgroundColor: 'white' }}
+                shadow={false}
+                title="My Past Challenges"
             />
-            <ScrollView contentContainerStyle={{backgroundColor: '#F0F5FA', paddingTop: 100, paddingHorizontal: 16}}
-                        style={{marginBottom: 70}}>
+            <ScrollView contentContainerStyle={{ backgroundColor: '#F0F5FA', paddingTop: 100, paddingHorizontal: 16 }}
+                style={{ marginBottom: 70 }}>
                 {list.map(value => {
                     return (
                         <Item challengeBGImage={value.challengeBGImage}
-                              title={value.title}
-                              plan={value.plan}
-                              progress={15}
-                              max={Number(value.allStep)}
+                            title={value.title}
+                            plan={value.plan}
+                            progress={15}
+                            max={Number(value.allStep)}
                         />
                     )
                 })}
