@@ -134,11 +134,10 @@ FRIENDS
 */
 
 export const sendFriendRequest = async (id) => {
-  const response = await api.post(`sendFriendInvite`, {}, {
-    headers: {
-      friendid: id
-    }
-  });
+
+  const body = { friendId: id };
+
+  const response = await api.post(`sendFriendInvite`, body);
 
   console.log(response)
   const user = await getCurrentUser();
@@ -183,11 +182,12 @@ CHALLENGE
 export const joinChallenge = async (challenge_id, user_id) => {
   const URL = `/challengesapi/${challenge_id}/join`;
 
-  const response = await api.post(URL
-    //, {
-    //  user_id: user_id
-    //}
+  const response = await api.post(URL, {
+    user_id: user_id
+  }
   );
+
+  console.log('join challenge', response);
 
   return response;
 };

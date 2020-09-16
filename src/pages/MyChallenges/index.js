@@ -92,7 +92,8 @@ class Component extends React.Component {
           return true;
         }
 
-        const hasUserJoined = (v.joinedUsers.indexOf(user._id) > -1);
+        // looks for challenge id in users challengesIds
+        const hasUserJoined = (user.challengesIds.indexOf(v._id) > -1);
         if (hasUserJoined) {
           return true;
         }
