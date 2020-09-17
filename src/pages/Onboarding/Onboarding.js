@@ -13,96 +13,114 @@ function getPage(index, setActivePage) {
     const onNext = () => setActivePage(index + 1);
     const onEnd = () => Actions.MyChallenges();
 
+    // TODO: remove duplication
+
     switch (index) {
         case 0:
             return (
                 <View style={styles.page}>
-                    <Image source={ImageOne} style={styles.image} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.title}>
-                            Welcome To Dash
+                    <View>
+                        <Image source={ImageOne} style={styles.image} />
+                        <View style={styles.textContainer}>
+                            <Text style={styles.title}>
+                                Welcome To Dash
                         </Text>
-                        <Text style={styles.subtitle}>
-                            Participate in challenges and grow with your community. Start your journey today!
+                            <Text style={styles.subtitle}>
+                                Participate in challenges and grow with your community. Start your journey today!
                         </Text>
+                        </View>
+                        <View style={styles.dotContainer}>
+                            {DOTS.map((d, i) => <View style={[styles.dot, index === i && styles.whiteDot]} />)}
+                        </View>
                     </View>
-                    <View style={styles.dotContainer}>
-                        {DOTS.map((d, i) => <View style={[styles.dot, index === i && styles.whiteDot]} />)}
+                    <View>
+                        <TouchableOpacity style={styles.nextButton} onPress={onNext}>
+                            <Text style={styles.nextText}>Next</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.skipButton} onPress={onEnd}>
+                            <Text style={styles.skipText}>Skip</Text>
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity style={styles.nextButton} onPress={onNext}>
-                        <Text style={styles.nextText}>Next</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.skipButton} onPress={onEnd}>
-                        <Text style={styles.skipText}>Skip</Text>
-                    </TouchableOpacity>
                 </View>
             )
         case 1:
             return (
                 <View style={styles.page}>
-                    <Image source={ImageTwo} style={styles.image} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.title}>
-                            Create Challenges
+                    <View>
+                        <Image source={ImageTwo} style={styles.image} />
+                        <View style={styles.textContainer}>
+                            <Text style={styles.title}>
+                                Create Challenges
                         </Text>
-                        <Text style={styles.subtitle}>
-                            Challenge friends and family. Build your own challenge, set unique goals, and complete tasks.
+                            <Text style={styles.subtitle}>
+                                Challenge friends and family. Build your own challenge, set unique goals, and complete tasks.
                         </Text>
+                        </View>
+                        <View style={styles.dotContainer}>
+                            {DOTS.map((d, i) => <View style={[styles.dot, index === i && styles.whiteDot]} />)}
+                        </View>
                     </View>
-                    <View style={styles.dotContainer}>
-                        {DOTS.map((d, i) => <View style={[styles.dot, index === i && styles.whiteDot]} />)}
+                    <View>
+                        <TouchableOpacity style={styles.nextButton} onPress={onNext}>
+                            <Text style={styles.nextText}>Next</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.skipButton} onPress={onEnd}>
+                            <Text style={styles.skipText}>Skip</Text>
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity style={styles.nextButton} onPress={onNext}>
-                        <Text style={styles.nextText}>Next</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.skipButton} onPress={onEnd}>
-                        <Text style={styles.skipText}>Skip</Text>
-                    </TouchableOpacity>
                 </View>
             )
         case 2:
             return (
                 <View style={styles.page}>
-                    <Image source={ImageThree} style={styles.image} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.title}>
-                            Explore Challenges
+                    <View>
+                        <Image source={ImageThree} style={styles.image} />
+                        <View style={styles.textContainer}>
+                            <Text style={styles.title}>
+                                Explore Challenges
                         </Text>
-                        <Text style={styles.subtitle}>
-                            Join our community challenges hosted by Dash and your favorite influencers.
+                            <Text style={styles.subtitle}>
+                                Join our community challenges hosted by Dash and your favorite influencers.
                         </Text>
+                        </View>
+                        <View style={styles.dotContainer}>
+                            {DOTS.map((d, i) => <View style={[styles.dot, index === i && styles.whiteDot]} />)}
+                        </View>
                     </View>
-                    <View style={styles.dotContainer}>
-                        {DOTS.map((d, i) => <View style={[styles.dot, index === i && styles.whiteDot]} />)}
+                    <View>
+                        <TouchableOpacity style={styles.nextButton} onPress={onNext}>
+                            <Text style={styles.nextText}>Next</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.skipButton} onPress={onEnd}>
+                            <Text style={styles.skipText}>Skip</Text>
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity style={styles.nextButton} onPress={onNext}>
-                        <Text style={styles.nextText}>Next</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.skipButton} onPress={onEnd}>
-                        <Text style={styles.skipText}>Skip</Text>
-                    </TouchableOpacity>
                 </View>
             )
         case 3:
             return (
                 <View style={styles.page}>
-                    <Image source={ImageOne} style={styles.image} />
-                    <View style={styles.textContainer}>
-                        <Text style={styles.title}>
-                            Like, Comment, Share
+                    <View>
+                        <Image source={ImageOne} style={styles.image} />
+                        <View style={styles.textContainer}>
+                            <Text style={styles.title}>
+                                Like, Comment, Share
                         </Text>
-                        <Text style={styles.subtitle}>
-                            Track your progress and keep each other accountable in the challenge social feed.
+                            <Text style={styles.subtitle}>
+                                Track your progress and keep each other accountable in the challenge social feed.
                         </Text>
+                        </View>
+                        <View style={styles.dotContainer}>
+                            {DOTS.map((d, i) => <View style={[styles.dot, index === i && styles.whiteDot]} />)}
+                        </View>
                     </View>
-                    <View style={styles.dotContainer}>
-                        {DOTS.map((d, i) => <View style={[styles.dot, index === i && styles.whiteDot]} />)}
-                    </View>
-                    <TouchableOpacity style={styles.nextButton} onPress={onEnd}>
-                        <Text style={styles.nextText}>Get Started!</Text>
-                    </TouchableOpacity>
-                    <View style={styles.skipButton}>
-                        <Text style={styles.skipText}></Text>
+                    <View>
+                        <TouchableOpacity style={styles.nextButton} onPress={onEnd}>
+                            <Text style={styles.nextText}>Get Started!</Text>
+                        </TouchableOpacity>
+                        <View style={styles.skipButton}>
+                            <Text style={styles.skipText}></Text>
+                        </View>
                     </View>
                 </View>
             )
@@ -132,7 +150,7 @@ const styles = StyleSheet.create({
         // linear-gradient(189.97deg, #007BFF -10.81%, #00A1FF 85.05%)
         backgroundColor: '#00A1FF',
         alignItems: 'center',
-        //justifyContent: 'space-around'
+        justifyContent: 'space-around',
     },
     image: {
         height: 304,
@@ -157,7 +175,10 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     dotContainer: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 21,
+        marginBottom: 29
     },
     dot: {
         width: 6,
@@ -176,7 +197,8 @@ const styles = StyleSheet.create({
         // box-shadow: 0px 20px 20px rgba(26, 160, 255, 0.25);
         borderRadius: 32,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: 18
     },
     nextText: {
         fontFamily: 'Poppins-Medium',
@@ -186,7 +208,8 @@ const styles = StyleSheet.create({
     skipText: {
         fontFamily: 'Poppins-Medium',
         fontSize: 16,
-        color: '#FFFFFF'
+        color: '#FFFFFF',
+        textAlign: 'center'
     }
 });
 
