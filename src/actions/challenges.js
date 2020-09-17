@@ -36,6 +36,8 @@ export const postMyChallenge = async (data) => {
   const picture = data.graphic;
   const formData = new FormData();
 
+  // TODO: these all need to be cleaned up (casing and data types)
+
   formData.append('createdBy', user._id);
   formData.append('title', data.title);
   formData.append('accessType', data.public ? 'public' : 'private');

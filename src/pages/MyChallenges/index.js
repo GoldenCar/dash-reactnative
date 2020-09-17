@@ -150,7 +150,7 @@ class Component extends React.Component {
                     itemWidth={ITEM_WIDTH}
                     renderItem={this.renderItem}
                     activeSlideAlignment='start'
-                    loop
+                    loop={false}
                   />
                 </View>
               )}
