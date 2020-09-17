@@ -11,39 +11,36 @@ const { width } = Dimensions.get('window');
 const GUTTER = 15;
 const CARD_WIDTH = width - (GUTTER * 2);
 
+const PAST_HEIGHT = width / 2;
+const PAST_IMAGE_HEIGHT = width / 2 + 50;
+
 // TODO - CLEAN UP
 
 export default function Component(props) {
   const { explore, value, past, viewedBy, cardWidth } = props;
 
+  const imageURL = `${mediaHost}${value.challengeBGImage}`;
+
   const exploreContainerStyle = explore ? { width: cardWidth } : {};
+
+  const imageContainerStyles = [styles.pictureContainer, { width: cardWidth }];
+  const imageStyles = [styles.picture, { width: cardWidth }];
+
+  if (past) {
+    imageContainerStyles.push({ height: PAST_HEIGHT });
+    imageStyles.push({ height: PAST_IMAGE_HEIGHT });
+  }
+
+  const isStarted = moment(new Date()).diff(moment(new Date(value.startDate)), 'days') > 0;
 
   return (
     <View style={[styles.container, exploreContainerStyle]}>
-      <View
-        style={[
-          styles.pictureContainer,
-          past
-            ? {
-              height: width / 2,
-            }
-            : {},
-          { width: cardWidth }
-        ]}>
+      <View style={imageContainerStyles}>
         <Image
-          source={{ uri: `${mediaHost}${value.challengeBGImage}` }} // Chandni will enbale for uploaded images 
+          source={{ uri: imageURL }}
           resizeMode="cover"
           PlaceholderContent={<ActivityIndicator />}
-          style={[
-            styles.picture,
-            ,
-            past
-              ? {
-                height: width / 2 + 50,
-              }
-              : {},
-            { width: cardWidth }
-          ]}
+          style={imageStyles}
         />
         {value.newPosts && (
           <View style={styles.newPostsContainer}>
@@ -63,7 +60,7 @@ export default function Component(props) {
               <Text style={styles.plan}>Plan: {value.Plan}</Text>
             </View>
           </>
-        ) : moment(new Date()).diff(moment(new Date(value.startDate)), 'days') > 0 ? (
+        ) : isStarted ? (
           <>
             {value.allStep && (
               <View style={styles.progress}>
@@ -75,10 +72,9 @@ export default function Component(props) {
               </View>
             )}
             {value.allStep && (
-              <Text
-                style={
-                  styles.completed
-                }>{`${value.myStep}/${value.allStep} Completed`}</Text>
+              <Text style={styles.completed}>
+                {`${value.myStep}/${value.allStep} Completed`}
+              </Text>
             )}
           </>
         ) : (
@@ -111,6 +107,33 @@ Component.defaultProps = {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    marginHorizontal: 15,
+    borderRadius: 15,
+    marginBottom: 25,
+    elevation: 1,
+    opacity: 0.99,
+    shadowOffset: {
+      width: 1,
+      height: 3
+    },
+    shadowRadius: 12,
+    shadowOpacity: 1,
+    shadowColor: 'rgba(0, 0, 0, 0.08)',
+    width: CARD_WIDTH
+  },
+  pictureContainer: {
+    width: CARD_WIDTH,
+    height: 230,
+    overflow: 'hidden',
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15
+  },
+  picture: {
+    width: CARD_WIDTH,
+    height: 230
+  },
   date: {
     fontFamily: 'Poppins-Medium',
     fontSize: 14,
@@ -174,33 +197,6 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     padding: 25,
-  },
-  container: {
-    backgroundColor: 'white',
-    marginHorizontal: 15,
-    borderRadius: 15,
-    marginBottom: 25,
-    elevation: 1,
-    opacity: 0.99,
-    shadowOffset: {
-      width: 1,
-      height: 3
-    },
-    shadowRadius: 12,
-    shadowOpacity: 1,
-    shadowColor: 'rgba(0, 0, 0, 0.08)',
-    width: CARD_WIDTH
-  },
-  pictureContainer: {
-    width: CARD_WIDTH,
-    height: CARD_WIDTH,
-    overflow: 'hidden',
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15
-  },
-  picture: {
-    width: CARD_WIDTH,
-    height: CARD_WIDTH
   },
   seperator: {
     width: '100%',

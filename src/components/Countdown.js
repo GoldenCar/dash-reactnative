@@ -56,6 +56,8 @@ class Countdown extends Component {
         const { days, hours, minutes, seconds } = this.state;
         const { showButton, countdownBackground, containerStyle, centerTitle, onPress } = this.props;
 
+        /* TODO: remove showButton & onPress props */
+
         return (
             <View style={[styles.countdownContainer, containerStyle]}>
                 <View style={[styles.countdownTitleContainer, centerTitle && { left: CENTERED_MARGIN }]}>
@@ -101,10 +103,10 @@ class Countdown extends Component {
 const styles = StyleSheet.create({
     countdownContainer: {
         height: 115,
-        backgroundColor: '#1AA0FF',
+        backgroundColor: '#3F434F',
         //box-shadow: 0px 20px 20px rgba(26, 160, 255, 0.25);
-        borderRadius: 16,
         padding: 16,
+        paddingHorizontal: 36,
         justifyContent: 'center',
     },
     countdownTitleContainer: {
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         letterSpacing: 2,
         textTransform: 'uppercase',
-        color: '#1AA0FF'
+        color: '#3F434F'
     },
     countdownContent: {
         flexDirection: 'row',

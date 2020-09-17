@@ -17,6 +17,9 @@ import { mediaHost } from 'dash/src/config';
 
 const { height } = Dimensions.get('window');
 
+// header height - 20px
+const CONTAINER_MARGIN_TOP = 244;
+
 export default class Component extends React.Component {
   AuthPopupRef;
   ScrollViewAnimation = new Animated.Value(0);
@@ -38,7 +41,7 @@ export default class Component extends React.Component {
     }
   }
 
-  async onJoinPress() {
+  onJoinPress = async () => {
     const { challenge } = this.props;
 
     const joinRequest = async (challenge, user) => {
@@ -77,7 +80,11 @@ export default class Component extends React.Component {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.innerContainer}>
-            <View style={styles.circle}></View>
+            <Countdown
+              initialTime={timeTilStart}
+              countdownBackground={styles.countdownBackground}
+              centerTitle
+            />
             <View style={styles.padding}>
               <Text style={styles.host}>Hosted by {challenge.Host}</Text>
               <Text style={styles.title}>{challenge.title}</Text>
@@ -114,13 +121,9 @@ export default class Component extends React.Component {
         </Animated.ScrollView>
         <AuthPopup ref={(e) => (this.AuthPopupRef = e)} />
 
-        <Countdown
-          initialTime={timeTilStart}
-          containerStyle={styles.countdownContainer}
-          showButton
-          countdownBackground={styles.countdownBackground}
-          onPress={() => this.onJoinPress()}
-        />
+        <TouchableOpacity style={styles.joinButton} onPress={this.onJoinPress}>
+          <Text style={styles.joinText}>Join Challenge</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -129,7 +132,7 @@ export default class Component extends React.Component {
 const styles = StyleSheet.create({
   padding: {
     paddingHorizontal: 15,
-    paddingTop: 10
+    paddingTop: 31
   },
   container: {
     flex: 1
@@ -138,25 +141,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     backgroundColor: 'white',
-    paddingTop: 35,
-    marginTop: height / 2 - 20,
+    marginTop: CONTAINER_MARGIN_TOP,
     marginBottom: 208
-  },
-  circle: {
-    height: 56,
-    width: 56,
-    backgroundColor: '#FBFBFB',
-    position: 'absolute',
-    top: -28,
-    borderRadius: 28,
-    alignSelf: 'center',
-    shadowOffset: {
-      width: 1,
-      height: 1
-    },
-    shadowRadius: 2,
-    shadowOpacity: 1,
-    shadowColor: 'rgba(0, 0, 0, 0.08)',
   },
   host: {
     fontFamily: 'Poppins-Regular',
@@ -239,13 +225,25 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: '#1AA0FF'
   },
-  countdownContainer: {
-    position: 'absolute',
-    bottom: 8,
-    left: 16,
-    right: 16
-  },
   countdownBackground: {
     backgroundColor: 'rgba(0, 0, 0, 0.05)',
+  },
+  joinButton: {
+    height: 64,
+    left: 19,
+    right: 19,
+    bottom: 19,
+    backgroundColor: '#1AA0FF',
+    //box-shadow: 0px 20px 20px rgba(26, 160, 255, 0.25);
+    borderRadius: 8,
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  joinText: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#FFFFFF'
   }
 });

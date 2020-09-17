@@ -172,7 +172,8 @@ const styles = EStyleSheet.create({
   },
   gradient: {
     flex: 1,
-    marginBottom: 68
+    marginBottom: 68,
+    paddingTop: 36
   },
   heading: {
     fontFamily: 'Poppins-Bold',
@@ -193,6 +194,7 @@ const styles = EStyleSheet.create({
     borderRadius: 40,
     position: 'absolute',
     right: 16,
+    top: 30,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
