@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StatusBar, SafeAreaView } from 'react-native';
 import { Router, Scene, Reducer } from 'react-native-router-flux';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import Bugsnag from '@bugsnag/react-native'
 
 import { Provider } from 'react-redux';
 import store from './store';
@@ -42,6 +43,8 @@ import * as challengesActions from 'dash/src/actions/challenges';
 import themes from './themes';
 
 EStyleSheet.build(themes.light);
+
+Bugsnag.start()
 
 export let AuthPopupRef;
 
