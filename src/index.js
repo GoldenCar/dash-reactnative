@@ -30,6 +30,8 @@ import CreatePost from 'dash/src/pages/ChallengeDetail/Social/CreatePost';
 import Completed from './pages/Workout/Completed';
 import Workout from 'dash/src/pages/Workout/index';
 
+import Onboarding from './pages/Onboarding/Onboarding';
+
 // Profile
 import Profile from './pages/Profile';
 import Friends from './pages/Profile/Friends';
@@ -82,7 +84,10 @@ export default () => {
                     <>
                         <Router createReducer={createReducer}>
                             <Scene key="root" hideNavBar>
-                                <Scene key="HomePage" tabs={true} tabBarComponent={CustomTabBar} initial>
+
+                                <Scene key="HomePage" tabs={true} tabBarComponent={CustomTabBar}
+                                // initial
+                                >
                                     <Scene key="MyProfile">
                                         <Scene key="Profile" component={Profile} hideNavBar />
                                         <Scene key="PreviousChallenges" component={PreviousChallenges} hideNavBar />
@@ -90,9 +95,16 @@ export default () => {
                                         <Scene key="Friends" component={Friends} hideNavBar />
                                         <Scene key="Notifications" component={Notifications} hideNavBar />
                                     </Scene>
-                                    <Scene key="MyChallenges" component={MyChallenges} hideNavBar initial />
+                                    <Scene key="MyChallenges" component={MyChallenges} hideNavBar
+                                      //  initial
+                                    />
                                     <Scene key="Explore" component={Explore} hideNavBar />
                                 </Scene>
+
+                                <Scene key='Onboarding' component={Onboarding}
+                                 initial 
+                                />
+
 
                                 <Scene key="PlanOverview" component={PlanOverview} hideNavBar />
                                 <Scene key="InviteToChallenge" component={InviteToChallenge} hideNavBar />
