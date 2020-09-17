@@ -4,11 +4,15 @@ import { Actions } from 'react-native-router-flux';
 import { connect } from "react-redux";
 
 import ImageOne from './assets/imageOne.png';
+import ImageTwo from './assets/imageTwo.png';
+import ImageThree from './assets/imageThree.png';
 
 const DOTS = [0, 1, 2, 3];
 
 function getPage(index, setActivePage) {
     const onNext = () => setActivePage(index + 1);
+    const onEnd = () => Actions.MyChallenges();
+
     switch (index) {
         case 0:
             return (
@@ -23,34 +27,87 @@ function getPage(index, setActivePage) {
                         </Text>
                     </View>
                     <View style={styles.dotContainer}>
-                        {DOTS.map(() => <View style={styles.dot} />)}
+                        {DOTS.map((d, i) => <View style={[styles.dot, index === i && styles.whiteDot]} />)}
                     </View>
                     <TouchableOpacity style={styles.nextButton} onPress={onNext}>
                         <Text style={styles.nextText}>Next</Text>
                     </TouchableOpacity>
-                    <View style={styles.skipButton}>
+                    <TouchableOpacity style={styles.skipButton} onPress={onEnd}>
                         <Text style={styles.skipText}>Skip</Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
             )
         case 1:
             return (
                 <View style={styles.page}>
-                    <Text>Page 2</Text>
+                    <Image source={ImageTwo} style={styles.image} />
+                    <View style={styles.textContainer}>
+                        <Text style={styles.title}>
+                            Create Challenges
+                        </Text>
+                        <Text style={styles.subtitle}>
+                            Challenge friends and family. Build your own challenge, set unique goals, and complete tasks.
+                        </Text>
+                    </View>
+                    <View style={styles.dotContainer}>
+                        {DOTS.map((d, i) => <View style={[styles.dot, index === i && styles.whiteDot]} />)}
+                    </View>
+                    <TouchableOpacity style={styles.nextButton} onPress={onNext}>
+                        <Text style={styles.nextText}>Next</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.skipButton} onPress={onEnd}>
+                        <Text style={styles.skipText}>Skip</Text>
+                    </TouchableOpacity>
                 </View>
             )
         case 2:
             return (
                 <View style={styles.page}>
-                    <Text>Page 3</Text>
+                    <Image source={ImageThree} style={styles.image} />
+                    <View style={styles.textContainer}>
+                        <Text style={styles.title}>
+                            Explore Challenges
+                        </Text>
+                        <Text style={styles.subtitle}>
+                            Join our community challenges hosted by Dash and your favorite influencers.
+                        </Text>
+                    </View>
+                    <View style={styles.dotContainer}>
+                        {DOTS.map((d, i) => <View style={[styles.dot, index === i && styles.whiteDot]} />)}
+                    </View>
+                    <TouchableOpacity style={styles.nextButton} onPress={onNext}>
+                        <Text style={styles.nextText}>Next</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.skipButton} onPress={onEnd}>
+                        <Text style={styles.skipText}>Skip</Text>
+                    </TouchableOpacity>
                 </View>
             )
         case 3:
             return (
                 <View style={styles.page}>
-                    <Text>Page 4</Text>
+                    <Image source={ImageOne} style={styles.image} />
+                    <View style={styles.textContainer}>
+                        <Text style={styles.title}>
+                            Like, Comment, Share
+                        </Text>
+                        <Text style={styles.subtitle}>
+                            Track your progress and keep each other accountable in the challenge social feed.
+                        </Text>
+                    </View>
+                    <View style={styles.dotContainer}>
+                        {DOTS.map((d, i) => <View style={[styles.dot, index === i && styles.whiteDot]} />)}
+                    </View>
+                    <TouchableOpacity style={styles.nextButton} onPress={onEnd}>
+                        <Text style={styles.nextText}>Get Started!</Text>
+                    </TouchableOpacity>
+                    <View style={styles.skipButton}>
+                        <Text style={styles.skipText}></Text>
+                    </View>
                 </View>
             )
+        default:
+            return null;
     }
 
 }
@@ -75,7 +132,7 @@ const styles = StyleSheet.create({
         // linear-gradient(189.97deg, #007BFF -10.81%, #00A1FF 85.05%)
         backgroundColor: '#00A1FF',
         alignItems: 'center',
-        justifyContent: 'space-around'
+        //justifyContent: 'space-around'
     },
     image: {
         height: 304,
