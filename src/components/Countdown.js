@@ -54,9 +54,7 @@ class Countdown extends Component {
 
     render() {
         const { days, hours, minutes, seconds } = this.state;
-        const { showButton, countdownBackground, containerStyle, centerTitle, onPress } = this.props;
-
-        /* TODO: remove showButton & onPress props */
+        const { countdownBackground, containerStyle, centerTitle } = this.props;
 
         return (
             <View style={[styles.countdownContainer, containerStyle]}>
@@ -84,16 +82,6 @@ class Countdown extends Component {
                             <Text style={styles.columnLabel}>Secs</Text>
                         </View>
                     </View>
-                    {showButton && (
-                        <TouchableOpacity
-                            style={styles.joinButton}
-                            onPress={onPress}
-                        >
-                            <Text style={styles.joinText}>
-                                Join
-                            </Text>
-                        </TouchableOpacity>
-                    )}
                 </View>
             </View>
         )

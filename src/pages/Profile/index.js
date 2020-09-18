@@ -1,10 +1,13 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, Animated } from 'react-native';
+import { View, Animated } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LinearGradient from 'react-native-linear-gradient';
-import Menu from './Layout';
+
+import Menu from './Menu';
 import Top from './Top';
+
 export let ScrollViewRef;
+
 export default class Component extends React.Component {
   ScrollViewAnimation = new Animated.Value(0);
 
@@ -14,42 +17,42 @@ export default class Component extends React.Component {
       outputRange: [0, -280],
       extrapolate: 'clamp',
     });
+
     const opacity = this.ScrollViewAnimation.interpolate({
       inputRange: [0, 180],
       outputRange: [1, 0],
       extrapolate: 'clamp',
     });
+
+    const animatedContainerStyles = [
+      {
+        transform: [{ translateY }],
+        opacity
+      },
+      styles.containerBackground
+    ];
+
+    const onScroll = Animated.event(
+      [{ nativeEvent: { contentOffset: { y: this.ScrollViewAnimation } } }],
+      { useNativeDriver: true }
+    );
+
     return (
       <View style={styles.container}>
-        <Animated.View
-          style={[
-            {
-              transform: [{ translateY }],
-              opacity,
-            },
-            styles.containerBackground,
-          ]}>
+        <Animated.View style={animatedContainerStyles}>
           <LinearGradient
             colors={['#007BFF', '#00A1FF']}
             useAngle={true}
             angle={72}
-            style={styles.containerGradiend}
+            style={styles.containerGradient}
           />
         </Animated.View>
         <Animated.ScrollView
           ref={(e) => (ScrollViewRef = e)}
           scrollEventThrottle={16}
-          onScroll={Animated.event(
-            [
-              {
-                nativeEvent: { contentOffset: { y: this.ScrollViewAnimation } },
-              },
-            ],
-            {
-              useNativeDriver: true,
-            },
-          )}
-          contentContainerStyle={styles.contentContainerStyle}>
+          onScroll={onScroll}
+          contentContainerStyle={styles.contentContainerStyle}
+        >
           <Menu />
         </Animated.ScrollView>
         <Top ScrollViewAnimation={this.ScrollViewAnimation} />
@@ -59,7 +62,7 @@ export default class Component extends React.Component {
 }
 
 const styles = EStyleSheet.create({
-  containerGradiend: {
+  containerGradient: {
     position: 'absolute',
     left: 0,
     right: 0,
@@ -78,7 +81,7 @@ const styles = EStyleSheet.create({
     paddingBottom: 75,
   },
   container: {
-    flex: 1,
+    flex: 1
   },
 });
 
