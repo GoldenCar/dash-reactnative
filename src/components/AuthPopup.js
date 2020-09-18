@@ -16,6 +16,10 @@ const { height, width } = Dimensions.get('screen');
 
 // TODO: turn into page
 
+// TODO: test animation helper
+
+import { showPopup, hidePopup } from '../helpers/animations';
+
 export default class Component extends React.Component {
   translateY = new Animated.Value(1);
 
@@ -39,6 +43,8 @@ export default class Component extends React.Component {
     }
 
     this.setState({ visible: true }, () => this.showOpenAnimation());
+
+    // this.setState({ visible: true }, () => showPopup(this.translateY));
   }
 
   close = (user) => {
@@ -58,6 +64,14 @@ export default class Component extends React.Component {
 
       }
     });
+
+    // hidePopup(() => {
+    //   this.setState({ visible: false });
+
+    //   if (callback) {
+    //     callback(user);
+    //   }
+    // })
   }
 
   render() {
