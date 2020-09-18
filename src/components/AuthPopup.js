@@ -87,36 +87,54 @@ export default class Component extends React.Component {
       extrapolate: 'clamp',
     });
 
+    const containerStyles = [styles.container, { opacity }];
+
+    if (!this.state.visible) {
+      return null;
+    }
+
     return (
-      this.state.visible && (
-        <View style={styles.overlay}>
-          <TouchableWithoutFeedback onPress={this.close}>
-            <Animated.View style={[styles.container, { opacity }]} />
-          </TouchableWithoutFeedback>
-          <Animated.View
-            style={[
-              { transform: [{ translateY }] },
-              styles.modalContainer,
-            ]}>
-            <View style={styles.header}>
-              <TouchableOpacity style={styles.closeButton} onPress={this.close}>
-                <Icon name={'close'} color="#B6BCCA" size={20} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.content}>
-              <Text style={styles.title}>Join Dash</Text>
-              <Text style={styles.text}>Join Liza Koshy on her 30 day</Text>
-              <Text style={styles.text}>challenge and get healthier.</Text>
-              <AppleGoogleSignInButtons callback={this.close} />
-            </View>
-          </Animated.View>
-        </View>
-      )
+      <View style={styles.overlay}>
+        <TouchableWithoutFeedback onPress={this.close}>
+          <Animated.View style={containerStyles} />
+        </TouchableWithoutFeedback>
+        <Animated.View
+          style={[
+            { transform: [{ translateY }] },
+            styles.modalContainer,
+          ]}>
+          <View style={styles.header}>
+            <TouchableOpacity style={styles.closeButton} onPress={this.close}>
+              <Icon name={'close'} color="#B6BCCA" size={20} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.content}>
+            <Text style={styles.title}>Join Dash</Text>
+            <Text style={styles.text}>Join Liza Koshy on her 30 day</Text>
+            <Text style={styles.text}>challenge and get healthier.</Text>
+            <AppleGoogleSignInButtons callback={this.close} />
+          </View>
+        </Animated.View>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  overlay: {
+    width,
+    height,
+    position: 'absolute',
+    zIndex: 1000,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowRadius: 2,
+    shadowOpacity: 0.5,
+  },
   container: {
     width,
     height,
@@ -155,20 +173,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 30,
-  },
-  overlay: {
-    width,
-    height,
-    position: 'absolute',
-    zIndex: 1000,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowRadius: 2,
-    shadowOpacity: 0.5,
   },
   header: {
     flexDirection: 'row',

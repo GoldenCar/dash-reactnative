@@ -15,6 +15,59 @@ const PAST_HEIGHT = width / 2;
 const PAST_IMAGE_HEIGHT = width / 2 + 50;
 
 // TODO - CLEAN UP
+//      - used in Explore, MyChallenges, Past Challenges, Search
+
+function getStartDate(start) {
+  return Math.abs(moment(new Date()).diff(moment(new Date(value.startDate)), 'days'));
+}
+
+function exploreContent(plan) {
+  return (
+    <>
+      <View style={styles.seperator} />
+      <View>
+        <Text style={styles.plan}>Plan: {plan}</Text>
+      </View>
+    </>
+  )
+}
+
+function startedContent(value) {
+  return (
+    <>
+      {value.allStep && (
+        <View style={styles.progress}>
+          <View
+            style={[
+              styles.progressCompleted,
+              { width: `${(value.myStep * 100) / value.allStep}%` },
+            ]}></View>
+        </View>
+      )}
+      {value.allStep && (
+        <Text style={styles.completed}>
+          {`${value.myStep}/${value.allStep} Completed`}
+        </Text>
+      )}
+    </>
+  )
+}
+
+function notStartedContent(value, viewedBy, past) {
+  return (
+    <View style={styles.bottom}>
+      {past && <Text style={styles.date}>{value.date}</Text>}
+      {value.startDate && (
+        <Text style={styles.completed}>
+          Starts in{' '}
+          {getStartDate(value.startDate)}{' '}
+          Days
+        </Text>
+      )}
+      {viewedBy && <ViewedBy viewedBy={viewedBy} />}
+    </View>
+  )
+}
 
 export default function Component(props) {
   const { explore, value, past, viewedBy, cardWidth } = props;
@@ -54,46 +107,11 @@ export default function Component(props) {
       <View style={[styles.bottomContainer, explore && { alignItems: 'center' }]}>
         <Text style={[styles.title, explore && { textAlign: 'center' }]}>{value.title}</Text>
         {explore ? (
-          <>
-            <View style={styles.seperator} />
-            <View>
-              <Text style={styles.plan}>Plan: {value.Plan}</Text>
-            </View>
-          </>
+          exploreContent(value.Plan)
         ) : isStarted ? (
-          <>
-            {value.allStep && (
-              <View style={styles.progress}>
-                <View
-                  style={[
-                    styles.progressCompleted,
-                    { width: `${(value.myStep * 100) / value.allStep}%` },
-                  ]}></View>
-              </View>
-            )}
-            {value.allStep && (
-              <Text style={styles.completed}>
-                {`${value.myStep}/${value.allStep} Completed`}
-              </Text>
-            )}
-          </>
+          startedContent(value)
         ) : (
-              <View style={styles.bottom}>
-                {past && <Text style={styles.date}>{value.date}</Text>}
-                {value.startDate && (
-                  <Text style={styles.completed}>
-                    Starts in{' '}
-                    {Math.abs(
-                      moment(new Date()).diff(
-                        moment(new Date(value.startDate)),
-                        'days',
-                      ),
-                    )}{' '}
-                    Days
-                </Text>
-                )}
-                {viewedBy && <ViewedBy viewedBy={viewedBy} />}
-              </View>
+              notStartedContent(value, viewedBy, past)
             )}
       </View>
     </View>
