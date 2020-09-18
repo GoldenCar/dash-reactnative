@@ -14,7 +14,12 @@ export default class App extends React.Component {
         const titleText = (cardType === 'exercise' && title) && title;
 
         // TODO: pull out into own function
-        let repsText = '';
+        let repsText = (
+            <Text style={styles.reps}>
+                {repsCount} {reps}
+            </Text>
+        );
+
         if (reps === 'Seconds') {
             const { autoPlay } = currentWorkout;
             repsText = (
@@ -26,12 +31,6 @@ export default class App extends React.Component {
                     loading={loading}
                 />
             );
-        } else {
-            repsText = (
-                <Text style={styles.reps}>
-                    {repsCount} {reps}
-                </Text>
-            )
         }
 
         return (

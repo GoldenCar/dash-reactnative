@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, ScrollView, Animated } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import LinearGradient from 'react-native-linear-gradient';
-import Layout from './Layout';
+import Menu from './Layout';
 import Top from './Top';
 export let ScrollViewRef;
 export default class Component extends React.Component {
@@ -50,7 +50,7 @@ export default class Component extends React.Component {
             },
           )}
           contentContainerStyle={styles.contentContainerStyle}>
-          <Layout />
+          <Menu />
         </Animated.ScrollView>
         <Top ScrollViewAnimation={this.ScrollViewAnimation} />
       </View>

@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-// TODO: lots of special cases here that can be cleaned up
-
 export default class App extends React.Component {
     constructor(props) {
         super(props);
@@ -84,6 +82,7 @@ export default class App extends React.Component {
         let seconds = parseInt(total_seconds % 60);
         let minutes = parseInt(total_minutes % 60);
 
+        // TODO: lots of special cases here that can be cleaned up
         if (minutes === 0) {
             minutes = '00';
         }

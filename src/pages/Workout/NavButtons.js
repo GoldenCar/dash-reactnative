@@ -15,16 +15,31 @@ const { width } = Dimensions.get('screen');
 const NAV_BUTTON_CONTAINER = 224;
 const MARGIN = (width - NAV_BUTTON_CONTAINER) / 2;
 
+function getButtons(paused, sound) {
+    if (paused) {
+        const leftButton = sound ? <SoundOn /> : <SoundOff />
+        return {
+            leftButton,
+            centerButton: <Play />,
+            rightButton: <List />
+        }
+    }
+
+    return {
+        leftButton: <Previous />,
+        centerButton: <Pause />,
+        rightButton: <Next />
+    }
+}
+
 export default function Component(props) {
     const { onNext, onPause, onPrevious, paused } = props;
 
     const [sound, setSound] = useState(true);
     const onSoundPress = () => setSound(!sound);
 
-    // TODO: pull this out into another function
-    const leftButton = !paused ? <Previous /> : sound ? <SoundOn /> : <SoundOff />;
-    const centerButton = paused ? <Play /> : <Pause />;
-    const rightButton = paused ? <List /> : <Next />;
+    // TODO: test
+    const { leftButton, centerButton, rightButton } = getButtons(paused, sound);
 
     const backgroundColor = paused ? '#fff' : 'rgba(33, 41, 61, 0.5)';
 

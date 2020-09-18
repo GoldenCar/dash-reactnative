@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  Animated,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+import { StyleSheet, View, Text, Image, Animated, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
@@ -20,73 +12,78 @@ import { mediaHost } from 'dash/src/config';
 function Component(props) {
   const [loadingAvatar, setLoadingAvatar] = useState(false);
   const { ScrollViewAnimation, user } = props;
+  const { profileImage } = user;
+
   const translateY = ScrollViewAnimation.interpolate({
     inputRange: [0, 180],
     outputRange: [0, -280],
     extrapolate: 'clamp',
   });
+
   const opacity = ScrollViewAnimation.interpolate({
     inputRange: [0, 180],
     outputRange: [1, 0],
     extrapolate: 'clamp',
   });
+
+  const containerStyles = [{ transform: [{ translateY }], opacity }, styles.container];
+
+  if (!user) {
+    return null;
+  }
+
+  const showImage = profileImage && profileImage.length > 0;
+
   return (
-    user && (
-      <Animated.View
-        style={[
-          {
-            transform: [{ translateY }],
-            opacity,
-          },
-          styles.container,
-        ]}>
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.avatarContainer}
-            onPress={() => {
-              // TODO: clean this up
-              Actions.CameraRoll({
-                navBarTitle: 'Select New Profile Picture',
-                onePhoto: true,
-                callbackCamera: async (item) => {
-                  try {
-                    setLoadingAvatar(true);
-                    await userActions.editUserPicture(user, item.node.image);
-                    setLoadingAvatar(false);
-                  } catch (e) {
-                    setLoadingAvatar(false);
-                  }
-                },
-              });
-            }}>
-            {user.profileImage && user.profileImage.length > 0 ? (
-              <Image
-                style={styles.avatar}
-                resizeMode="cover"
-                source={{ uri: `${mediaHost}${user.profileImage}` }}
-              />
-            ) : (
-                <User height={80} width={80} />
-              )}
-            {loadingAvatar ? (
-              <View style={styles.loadingContainer}>
-                <ActivityIndicator size="small" color="#00A1FF" />
-              </View>
-            ) : null}
-          </TouchableOpacity>
-          <Text style={styles.name}>{user.username}</Text>
-          <Text style={styles.link}>@{user.username.replace(/\s/g, '')}</Text>
-        </View>
+    <Animated.View
+      style={containerStyles}>
+      <View style={styles.header}>
         <TouchableOpacity
-          style={styles.notificationContainer}
-          onPress={() => Actions.Notifications()}>
-          <View style={styles.notifCountContainer}>
-            <Text style={styles.countNotif}>2</Text>
-          </View>
-          <Bell color={'#292E3A'} width={20} height={20} />
+          style={styles.avatarContainer}
+          onPress={() => {
+            // TODO: clean this up
+            Actions.CameraRoll({
+              navBarTitle: 'Select New Profile Picture',
+              onePhoto: true,
+              callbackCamera: async (item) => {
+                try {
+                  setLoadingAvatar(true);
+                  await userActions.editUserPicture(user, item.node.image);
+                  setLoadingAvatar(false);
+                } catch (e) {
+                  setLoadingAvatar(false);
+                }
+              },
+            });
+          }}>
+          {showImage ? (
+            <Image
+              style={styles.avatar}
+              resizeMode="cover"
+              source={{ uri: `${mediaHost}${user.profileImage}` }}
+            />
+          ) : (
+              <User height={80} width={80} />
+            )}
+          {loadingAvatar && (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="small" color="#00A1FF" />
+            </View>
+          )}
         </TouchableOpacity>
-      </Animated.View>
-    )
+        <Text style={styles.name}>{user.username}</Text>
+        <Text style={styles.link}>@{user.username.replace(/\s/g, '')}</Text>
+      </View>
+      <TouchableOpacity
+        style={styles.notificationContainer}
+        onPress={() => Actions.Notifications()}
+      >
+        <View style={styles.notifCountContainer}>
+          <Text style={styles.countNotif}>2</Text>
+        </View>
+        <Bell color={'#292E3A'} width={20} height={20} />
+      </TouchableOpacity>
+    </Animated.View>
   );
 }
 

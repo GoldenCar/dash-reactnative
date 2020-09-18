@@ -62,9 +62,7 @@ const MENU_ITEMS = [
     },
 ];
 
-// TODO: rename this to something ore descriptive
-
-function Component(props) {
+function Menu(props) {
     return (
         <View style={styles.container}>
             {props.user && <MyFriendsContainer list={props.user.friendsIds} />}
@@ -125,17 +123,16 @@ const styles = StyleSheet.create({
         paddingBottom: 30,
         paddingHorizontal: 15,
     },
-
     container: {
         flex: 1,
         marginHorizontal: 15,
         backgroundColor: 'white',
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15,
-    },
+    }
 });
 
 export default connect(({ user }) => ({
     user,
-}))(Component);
+}))(Menu);
 

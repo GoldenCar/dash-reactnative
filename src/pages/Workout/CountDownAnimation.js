@@ -1,88 +1,85 @@
 import React from 'react';
-import { View, StyleSheet, Animated, Text } from 'react-native';
+import { StyleSheet, Animated, Text } from 'react-native';
 
 const GO = 'GO!';
-
-// TODO: clean up
 
 export default class extends React.Component {
   animation = new Animated.Value(0);
   state = {
     count: 3,
   };
+
   componentDidMount() {
-    setTimeout(() => {
-      this.start();
-    }, 500);
+    setTimeout(() => this.start(), 500);
   }
+
   start = () => {
     this.animation.setValue(0);
+
     Animated.timing(this.animation, {
       toValue: 1,
       duration: 500,
       useNativeDriver: true,
     }).start(() => {
-      setTimeout(() => {
-        Animated.timing(this.animation, {
-          toValue: 2,
-          duration: 500,
-          useNativeDriver: true,
-        }).start(() => {
-          this.setState(
-            (prev) => {
-              const count =
-                prev.count === GO
-                  ? -1
-                  : prev.count - 1 === 0
-                    ? GO
-                    : prev.count - 1;
-              return {
-                count,
-              };
-            },
-            () => {
-              if (this.state.count !== -1) {
-                this.start();
-              } else {
-                if (this.props.onEnd) {
-                  this.props.onEnd();
-                }
-              }
-            },
-          );
-        });
-      }, 333);
+      this.secondStage();
     });
   };
+
+  // TODO: what is each step doing? figure out and document
+  secondStage = () => {
+    setTimeout(() => {
+      Animated.timing(this.animation, {
+        toValue: 2,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        this.setState(
+          (prev) => {
+            const count = prev.count === GO ? -1 : prev.count - 1 === 0 ? GO : prev.count - 1;
+            return count;
+          }, () => {
+            this.animationEnd();
+          }
+        );
+      });
+    }, 333);
+  }
+
+  animationEnd = () => {
+    const { onEnd } = this.props;
+
+    if (this.state.count !== -1) {
+      this.start();
+    } else if (onEnd) {
+      onEnd();
+    }
+  }
+
   render() {
     const { count } = this.state;
+
     const opacity = this.animation.interpolate({
       inputRange: [0, 1, 2],
       outputRange: [0, 1, 0],
       extrapolate: 'clamp',
     });
+
     const scale = this.animation.interpolate({
       inputRange: [0, 1, 2],
       outputRange: [0, 1, 2],
       extrapolate: 'clamp',
     });
+
+    const containerStyles = [styles.container, { opacity, transform: [{ scale }] }]
+
+    const fontSize = count === GO ? 25 : 40;
+    const lineHeight = count === GO ? 35 : 55
+
+    const countStyles = [styles.count, { fontSize, lineHeight }];
+
     return (
-      <Animated.View
-        style={[
-          styles.container,
-          {
-            opacity,
-            transform: [{ scale }],
-          },
-        ]}>
-        <Text
-          style={[
-            styles.count,
-            {
-              fontSize: count === GO ? 25 : 40,
-              lineHeight: count === GO ? 35 : 55,
-            },
-          ]}>
+      <Animated.View style={containerStyles}>
+        <Text style={countStyles}>
           {count}
         </Text>
       </Animated.View>
