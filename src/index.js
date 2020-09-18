@@ -3,6 +3,7 @@ import { View, StatusBar, SafeAreaView } from 'react-native';
 import { Router, Scene, Reducer } from 'react-native-router-flux';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Bugsnag from '@bugsnag/react-native'
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { Provider } from 'react-redux';
 import store from './store';
@@ -60,6 +61,9 @@ const createReducer = (params) => {
 
 export default () => {
     const [loading, setLoading] = useState(true);
+
+    const [showOnboarding, setShowOnboarding] = useState(false);
+
     useEffect(() => {
         const init = async () => {
             const data = await settingsActions.getStorage();
@@ -69,7 +73,11 @@ export default () => {
 
             }
 
-            setLoading(false);
+            // TODO: test more
+            const hasUserSeenOnboarding = await AsyncStorage.getItem('hasUserSeenOnboarding');
+            if (!hasUserSeenOnboarding || hasUserSeenOnboarding !== 'true') {
+                setShowOnboarding(true);
+            }
 
         };
         init();
@@ -96,13 +104,13 @@ export default () => {
                                         <Scene key="Notifications" component={Notifications} hideNavBar />
                                     </Scene>
                                     <Scene key="MyChallenges" component={MyChallenges} hideNavBar
-                                      //  initial
+                                        initial={!showOnboarding}
                                     />
                                     <Scene key="Explore" component={Explore} hideNavBar />
                                 </Scene>
 
                                 <Scene key='Onboarding' component={Onboarding}
-                                 initial 
+                                    initial={showOnboarding}
                                 />
 
 

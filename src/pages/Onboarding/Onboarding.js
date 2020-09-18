@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { connect } from "react-redux";
+import AsyncStorage from '@react-native-community/async-storage';
 
 import ImageOne from './assets/imageOne.png';
 import ImageTwo from './assets/imageTwo.png';
@@ -41,7 +42,10 @@ function Component() {
     const [activePage, setActivePage] = useState(0);
 
     const onNext = () => setActivePage(activePage + 1);
-    const onSkip = () => Actions.MyChallenges();
+    const onSkip = () => {
+        AsyncStorage.setItem('hasUserSeenOnboarding', 'true');
+        Actions.MyChallenges();
+    };
 
     const page = PAGES[activePage];
     const { image, title, subtitle, nextText, hideSkip } = page;
@@ -50,26 +54,21 @@ function Component() {
     const onNextPress = activePage === 3 ? onSkip : onNext;
 
     return (
-        <View style={styles.container}>
-            <View style={styles.page}>
-                <Content
-                    image={image}
-                    title={title}
-                    subtitle={subtitle}
-                />
-                <Circles currentIndex={activePage} />
-                <View>
-                    <Buttons onSkip={onSkip} onNext={onNextPress} nextText={nextText} hideSkip={hideSkip} />
-                </View>
+        <View style={styles.page}>
+            <Content
+                image={image}
+                title={title}
+                subtitle={subtitle}
+            />
+            <Circles currentIndex={activePage} />
+            <View>
+                <Buttons onSkip={onSkip} onNext={onNextPress} nextText={nextText} hideSkip={hideSkip} />
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    },
     page: {
         flex: 1,
         // linear-gradient(189.97deg, #007BFF -10.81%, #00A1FF 85.05%)

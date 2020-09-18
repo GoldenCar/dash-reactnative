@@ -12,7 +12,6 @@ import { mediaHost } from 'dash/src/config';
 function Component(props) {
   const [loadingAvatar, setLoadingAvatar] = useState(false);
   const { ScrollViewAnimation, user } = props;
-  const { profileImage } = user;
 
   const translateY = ScrollViewAnimation.interpolate({
     inputRange: [0, 180],
@@ -32,6 +31,7 @@ function Component(props) {
     return null;
   }
 
+  const { profileImage } = user;
   const showImage = profileImage && profileImage.length > 0;
 
   return (

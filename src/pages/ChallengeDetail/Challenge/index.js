@@ -18,7 +18,6 @@ import DayOverview from './DayOverview';
 const { height } = Dimensions.get('window');
 
 class Component extends React.Component {
-  AuthPopupRef;
   PopupPostRef;
 
   // TODO: there should be a redux action here to push plan day data to store
